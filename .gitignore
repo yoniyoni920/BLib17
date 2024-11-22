@@ -25,3 +25,4 @@ replay_pid*
 
 *.bak_000f
 *.lck
+*.vpp.*

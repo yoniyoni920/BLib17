@@ -26,3 +26,4 @@ replay_pid*
 *.bak_000f
 *.lck
 *.vpp.*
+todolist_Log.csv

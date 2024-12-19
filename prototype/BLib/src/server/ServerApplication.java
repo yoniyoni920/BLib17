@@ -35,7 +35,7 @@ public class ServerApplication extends Application {
 		
 		serverGUI = loader.getController(); // Get controller for communicating with it later
 
-		libraryServer = new LibraryServer(this, DEFAULT_PORT);
+		libraryServer = new LibraryServer(DEFAULT_PORT);
 		
 		try {
 			libraryServer.listen();

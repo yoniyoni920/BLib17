@@ -41,9 +41,7 @@ public class ServerGUI implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		System.out.println(hashCode());
 		shownConnections = FXCollections.observableArrayList();
-		System.out.println(shownConnections);
 		connectionTable.setItems(shownConnections);
 
 		// Create 2 relevant columns

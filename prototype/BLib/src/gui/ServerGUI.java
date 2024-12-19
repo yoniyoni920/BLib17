@@ -1,41 +1,58 @@
 package gui;
 
+import java.net.InetAddress;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.ResourceBundle;
+
 import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import ocsf.server.ConnectionToClient;
 
-public class ServerGUI  {		
+public class ServerGUI implements Initializable {		
 	@FXML
 	private Button btnExit = null;
+
 	@FXML
-	private Button btnDone = null;
-	@FXML
-	private Label lbllist;
+	private TableView<String[]> connectionTable;
 	
-	@FXML
-	private TextField portxt;
-	ObservableList<String> list;
+	private ObservableList<String[]> shownConnections;
 	
-	public void Done(ActionEvent event) throws Exception {
+	/**
+	 * This receives connections from the ServerApplication and updates the connections list
+	 * @param connections
+	 */
+	public void updateConnections(Thread[] connections) {
+		shownConnections.clear();
+
+		for (Thread connectionThread : connections) {
+			InetAddress address = ((ConnectionToClient)connectionThread).getInetAddress();
+			shownConnections.add(new String[]{ address.getHostAddress(), address.getHostName() });
+		}
 		
+		connectionTable.setItems(shownConnections);
 	}
 
-	public void start(Stage primaryStage) throws Exception {	
-		Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/gui/ServerGUI.fxml")));
-		scene.getStylesheets().add(getClass().getResource("/gui/ServerGUI.css").toExternalForm());
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		System.out.println(hashCode());
+		shownConnections = FXCollections.observableArrayList();
+		System.out.println(shownConnections);
+		connectionTable.setItems(shownConnections);
 
-		primaryStage.setTitle("BLib Server Interface");
-		primaryStage.setScene(scene);
-		primaryStage.show();
-	}
-	
-	public void getExitBtn(ActionEvent event) throws Exception {
-		System.exit(0);			
+		// Create 2 relevant columns
+		TableColumn<String[], String> column1 = new TableColumn<>("IP");
+		TableColumn<String[], String> column2 = new TableColumn<>("Host");
+		// This maps the cells into the String[] value we set above
+		column1.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue()[0]));
+		column2.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue()[1]));
+		connectionTable.getColumns().add(column1);
+		connectionTable.getColumns().add(column2);
 	}
 }

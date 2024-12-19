@@ -31,7 +31,7 @@ public class LibraryClient extends AbstractClient
 		super(host, port); //Call the superclass constructor
 		this.clientUI = clientUI;
 		awaitingMessages = new ArrayList<>();      
-		//openConnection();
+		openConnection();
 	}
 
 	//Instance methods ************************************************
@@ -63,8 +63,6 @@ public class LibraryClient extends AbstractClient
 	 */
 	public Message sendMessageToServer(Message msgToServer) {
 		try {
-			openConnection(); //Open the connection if it's not open
-
 			msgToServer.setAwaiting(true);
 			awaitingMessages.add(msgToServer);
 			sendToServer(msgToServer);
@@ -104,6 +102,5 @@ public class LibraryClient extends AbstractClient
 			closeConnection();
 		}
 		catch(IOException e) {}
-		System.exit(0);
 	}
 }

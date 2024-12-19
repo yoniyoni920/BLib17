@@ -6,8 +6,8 @@ import logic.Faculty;
 import logic.Student;
 
 import java.util.Vector;
-import gui.AcademicFrameController;
-import gui.StudentFormController;
+import gui.LogInScreen;
+import gui.SubscriberMainScreen;
 import client.ClientController;
 
 public class ClientApplication extends Application {
@@ -23,7 +23,7 @@ public class ClientApplication extends Application {
 		 chat= new ClientController("localhost", 5555);
 		// TODO Auto-generated method stub
 						  		
-		AcademicFrameController aFrame = new AcademicFrameController(); // create StudentFrame
+		LogInScreen aFrame = new LogInScreen(); // create StudentFrame
 		 
 		aFrame.start(primaryStage);
 	}

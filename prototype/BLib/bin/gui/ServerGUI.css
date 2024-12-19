@@ -10,10 +10,9 @@
 .root {
 	-fx-font-family: "Segoe UI";
 	-fx-font-size: 14px;
-	-fx-text-fill: #5f1c1c;
-	-fx-background-color: #1f1f1f;
+	/* -fx-background-color: #1f1f1f; */
 }
 
 .btn {
-	-fx-background-color: #fff;
+	/* -fx-background-color: #fff; */
 }

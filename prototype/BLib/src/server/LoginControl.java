@@ -15,9 +15,18 @@ public class LoginControl {
 			
 			System.out.println("Login action connected to the database successfully ");
 			Statement stt = DBControl.getConnection().createStatement();
-			ResultSet rs =  stt.executeQuery("SELECT Id,FirstName,LastName,Password,Privilege FROM " +
-					"Subscriber WHERE password = '" + logger.getPassword() + "'"+
-					"And Id = "+ logger.getId()+ "'");
+			ResultSet rs =  stt.executeQuery("SELECT Id,FirstName,LastName FROM " +
+					"Subscriber WHERE" +
+					"Id = '"+ logger.getId()+ "'");
+			
+//			ResultSet rs =  stt.executeQuery("SELECT Id,FirstName,LastName,Password,Privilege FROM " +
+//					"Subscriber WHERE password = '" + logger.getPassword() + "'"+
+//					"And Id = "+ logger.getId()+ "'");
+//			
+//			
+			
+			
+			
 			
 		    Subscriber subscriber = null;
 		    boolean found = false;

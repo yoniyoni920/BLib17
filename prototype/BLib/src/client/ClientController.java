@@ -5,6 +5,7 @@ package client;
 import java.io.*;
 import client.*;
 import common.ChatIF;
+import server.serverEntities.Message;
 
 
 /**
@@ -46,22 +47,8 @@ public class ClientController implements ChatIF {
 
 
     //Instance methods ************************************************
-
-    /**
-     * This method waits for input from the console.  Once it is 
-     * received, it sends it to the client's message handler.
-     */
-    public void accept(String str) {
-//        client.handleMessageFromClientUI(str);
-    }
-
-    public void update(Object obj) {
-        try {
-            client.sendToServer(obj);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    public Message sendToServer(Message msg) {
+        return client.sendMessageToServer(msg);
     }
 
     /**

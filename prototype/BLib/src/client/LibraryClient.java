@@ -41,6 +41,7 @@ public class LibraryClient extends AbstractClient
 	 *
 	 * @param msg The message from the server.
 	 */
+	@Override
 	public void handleMessageFromServer(Object msg) {
 		Message msgFromServer = (Message)msg;		
 		System.out.println("--> handleMessageFromServer: " + msgFromServer);
@@ -60,7 +61,7 @@ public class LibraryClient extends AbstractClient
 	 *
 	 * @param message The message from the UI.    
 	 */
-	public Message sendMessageAwaited(Message msgToServer) {
+	public Message sendMessageToServer(Message msgToServer) {
 		try {
 			openConnection(); //Open the connection if it's not open
 

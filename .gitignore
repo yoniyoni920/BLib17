@@ -27,3 +27,5 @@ replay_pid*
 *.lck
 *.vpp.*
 todolist_Log.csv
+
+.metadata/*

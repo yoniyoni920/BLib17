@@ -30,3 +30,6 @@ todolist_Log.csv
 
 
 .metadata/*
+.settings
+prototype/BLibClient/bin
+prototype/BLibServer/bin

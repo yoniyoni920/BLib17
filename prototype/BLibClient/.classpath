@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OCSF"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+		<accessrules>
+			<accessrule kind="accessible" pattern="javafx/**"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="src" path="/BLibShared"/>
+	<classpathentry kind="lib" path="/BLibShared/lib/javafx.base.jar"/>
+	<classpathentry kind="lib" path="/BLibShared/lib/javafx.controls.jar"/>
+	<classpathentry kind="lib" path="/BLibShared/lib/javafx.fxml.jar"/>
+	<classpathentry kind="lib" path="/BLibShared/lib/javafx.graphics.jar"/>
+	<classpathentry kind="lib" path="/BLibShared/lib/javafx.media.jar"/>
+	<classpathentry kind="lib" path="/BLibShared/lib/javafx.swing.jar"/>
+	<classpathentry kind="lib" path="/BLibShared/lib/javafx.web.jar"/>
+	<classpathentry kind="lib" path="/BLibShared/lib/javafx-swt.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

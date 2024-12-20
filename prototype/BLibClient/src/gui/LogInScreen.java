@@ -63,27 +63,6 @@ public  class LogInScreen   {
 				primaryStage.setScene(scene);		
 				primaryStage.show();
 			}
-		
-//			if(LibraryClient.s1.getId().equals("Error"))
-//			{
-//				System.out.println("Student ID Not Found");
-//				
-//			}
-//			else {
-//				System.out.println("Student ID Found");
-//				((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-//				Stage primaryStage = new Stage();
-//				Pane root = loader.load(getClass().getResource("/gui/StudentForm.fxml").openStream());
-//				StudentFormController studentFormController = loader.getController();		
-//				studentFormController.loadStudent(LibraryClient.s1);
-//			
-//				Scene scene = new Scene(root);			
-//				scene.getStylesheets().add(getClass().getResource("/gui/StudentForm.css").toExternalForm());
-//				primaryStage.setTitle("Student Managment Tool");
-//	
-//				primaryStage.setScene(scene);		
-//				primaryStage.show();
-//			}
 		}
 	}
 	

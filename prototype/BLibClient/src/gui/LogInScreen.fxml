@@ -10,7 +10,10 @@
    <children>
       <Button id="btnStudentInfo" fx:id="btnSend" layoutX="389.0" layoutY="161.0" mnemonicParsing="false" onAction="#Send" prefWidth="64.0" text="Login" />
       <Label layoutX="22.0" layoutY="91.0" text="Subscriber ID" textFill="#f2f0f0" />
-      <TextField fx:id="idtxt" layoutX="22.0" layoutY="112.0" prefWidth="431.0" />
+      <TextField fx:id="idtxt" layoutX="22.0" layoutY="112.0" prefHeight="42.0" prefWidth="431.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
       <Label alignment="CENTER" layoutX="22.0" layoutY="25.0" prefHeight="25.0" prefWidth="438.0" text="BLib Login" textAlignment="CENTER">
          <font>
             <Font size="22.0" />

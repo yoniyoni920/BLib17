@@ -48,7 +48,7 @@ public  class LogInScreen   {
 		{
 			Message msg = ClientApplication.chat.sendToServer(new Message("login", id));
 			if(msg.isError()) {
-				System.out.print("Error in message handling");
+				System.out.print(msg.getObject());
 			}
 			else {
 				Subscriber sub = ((Subscriber)msg.getObject());

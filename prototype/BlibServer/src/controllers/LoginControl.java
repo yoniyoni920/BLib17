@@ -24,9 +24,6 @@ public class LoginControl {
 //			
 //			
 			
-			
-			
-			
 		    Subscriber subscriber = null;
 		    boolean found = false;
 		    if(rs.next()) {

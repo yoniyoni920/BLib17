@@ -3,6 +3,7 @@ package server;
 import java.io.*;
 
 import controllers.LoginControl;
+import controllers.SubscriberControl;
 import entities.Message;
 import entities.User;
 import ocsf.server.*;
@@ -58,6 +59,9 @@ public class LibraryServer extends AbstractServer
 		if (actionName.equals("login")) {
 			return login(msgFromClient, client);
 		}
+		else if(actionName.equals("update")) {
+			return update(msgFromClient, client);
+		}
 		else {
 			return msgFromClient.errorReply("Found no such action! " + msgFromClient.getAction());
 		}
@@ -70,6 +74,10 @@ public class LibraryServer extends AbstractServer
         } else {
             return msg.errorReply("Couldn't login user!");
         }
+    }
+    public Message update(Message msg, ConnectionToClient client) {
+    	SubscriberControl.updateInfo((String[])msg.getObject());
+    	return msg.reply("Success");
     }
 
 	/**

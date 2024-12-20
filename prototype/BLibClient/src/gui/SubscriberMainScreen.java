@@ -51,14 +51,24 @@ public class SubscriberMainScreen {
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/LogInScreen.fxml").openStream());
-	
+		Pane root = loader.load(getClass().getResource("/gui/LogInScreen.fxml").openStream());	
 		Scene scene = new Scene(root);			
 		scene.getStylesheets().add(getClass().getResource("/gui/LogInScreen.css").toExternalForm());
 		primaryStage.setTitle("Log In");
-
 		primaryStage.setScene(scene);		
 		primaryStage.show();
 	    
+	}
+	public void openConfigureScreen(ActionEvent event) throws Exception {
+		FXMLLoader loader = new FXMLLoader();
+		((Node)event.getSource()).getScene().getWindow().hide();
+		Stage primaryStage = new Stage();
+		Pane root = loader.load(getClass().getResource("/gui/SubscriberSettingsScreen.fxml").openStream());
+		SubscriberSettingsScreen subscriberSettingsScreen = loader.getController();
+		subscriberSettingsScreen.loadSubscriber(subscriber);
+		Scene scene = new Scene(root);			
+		primaryStage.setTitle("Subscriber Settings");
+		primaryStage.setScene(scene);		
+		primaryStage.show();
 	}
 }

@@ -14,7 +14,7 @@
       <Label layoutX="36.0" layoutY="126.0" text="Phone Number:" />
       <Label layoutX="36.0" layoutY="168.0" text="E-Mail:" />
       <Button layoutX="397.0" layoutY="216.0" mnemonicParsing="false" onAction="#closeWindow" text="Back" />
-      <Button layoutX="315.0" layoutY="216.0" mnemonicParsing="false" text="Configure" />
+      <Button layoutX="315.0" layoutY="216.0" mnemonicParsing="false" onAction="#openConfigureScreen" text="Configure" />
       <HBox alignment="TOP_RIGHT" layoutX="238.0" layoutY="23.0" prefHeight="17.0" prefWidth="200.0">
          <children>
             <Label fx:id="idLabel" text="Label" textAlignment="RIGHT" />

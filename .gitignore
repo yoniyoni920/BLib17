@@ -33,3 +33,4 @@ todolist_Log.csv
 .settings
 prototype/BLibClient/bin
 prototype/BLibServer/bin
+prototype/build

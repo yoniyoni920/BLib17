@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import client.LibraryClient;
+import entities.Subscriber;
 import client.ClientApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,36 +22,30 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import logic.Faculty;
-import logic.Student;
 
 public class SubscriberMainScreen implements Initializable {
-	private Student s;
+	private Subscriber subscriber;
 		
 	@FXML
-	private Label lblName;
+	private Label idLabel;
 	@FXML
-	private Label lblSurname;
+	private Label nameLabel;
 	@FXML
-	private Label lblFaculty;
-	
+	private Label historyLabel;
 	@FXML
-	private TextField txtName;
+	private Label phoneLabel;
 	@FXML
-	private TextField txtSurname;
-	@FXML
-	private TextField idTextBox;
-	
-	@FXML
-	private Button btnclose=null;	
+	private Label emailLabel;	
 	
 	ObservableList<String> list;
 		
-	public void loadStudent(Student s1) {
-		this.s=s1;
-		this.idTextBox.setText(s.getId());
-		this.txtName.setText(s.getPName());
-		this.txtSurname.setText(s.getLName());		
+	public void loadSubscriber(Subscriber sub) {
+		subscriber=sub;
+		idLabel.setText(sub.getId());
+		nameLabel.setText(sub.getFirstName());
+		historyLabel.setText("" +sub.getDetailedSubscriptionHistory());
+		phoneLabel.setText(sub.getPhoneNumber());
+		emailLabel.setText(sub.getEmail());
 	}
 	
 /*	public void saveStudent(ActionEvent event) throws Exception{
@@ -64,11 +59,11 @@ public class SubscriberMainScreen implements Initializable {
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
 		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/AcademicFrame.fxml").openStream());
+		Pane root = loader.load(getClass().getResource("/gui/LogInScreen.fxml").openStream());
 	
 		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/AcademicFrame.css").toExternalForm());
-		primaryStage.setTitle("Academic Managment Tool");
+		scene.getStylesheets().add(getClass().getResource("/gui/LogInScreen.css").toExternalForm());
+		primaryStage.setTitle("Log In");
 
 		primaryStage.setScene(scene);		
 		primaryStage.show();

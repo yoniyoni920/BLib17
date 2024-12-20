@@ -46,7 +46,7 @@ public class LibraryServer extends AbstractServer
 				msgFromServer.setId(msgFromClient.getId());
 				client.sendToClient(msgFromServer);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.err.println("Could not send to client");
 			System.err.println(e);
 		}
@@ -64,7 +64,7 @@ public class LibraryServer extends AbstractServer
 	}
 
     public Message login(Message msg, ConnectionToClient client) {
-    	User user = LoginControl.loginAction((User)msg.getObject());
+    	User user = LoginControl.loginAction((String)msg.getObject());
         if (user != null) {
             return msg.reply(user);
         } else {

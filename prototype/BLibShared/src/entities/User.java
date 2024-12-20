@@ -1,5 +1,7 @@
 package entities;
 
+import java.io.Serializable;
+
 /*
  * User class has three uses: 
  * 1. if needed to be used for unlogged users 
@@ -7,25 +9,20 @@ package entities;
  * 3. to be a parent for librarian and Subscriber 
  */
 
-public class User {
+public class User implements Serializable{
 	private String firstName;
-	private String lastName;	
+	//private String lastName;	
 	private String id;
-	private String password;	
-	private String role; // This will be used to differentiate between librarian and member. 
+	//private String password;	
+	//private String role; // This will be used to differentiate between librarian and member. 
 	
 	public User() {
 		
 	}
-	
-	public User(String id, String password) {
-		this.id = id;
-		this.password = password;
-	}
-	public User(String Id, String firstName, String lastName) {
+
+	public User(String Id, String firstName) {
 		this.id = Id;
 		this.setFirstName(firstName);
-		this.setLastName(lastName);
 	}
 
 	public String getId() {
@@ -34,22 +31,6 @@ public class User {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
 	}
 
 	public String getFirstName() {

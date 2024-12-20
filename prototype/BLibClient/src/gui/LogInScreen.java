@@ -19,7 +19,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import logic.Student;
 
 
 public  class LogInScreen   {
@@ -53,7 +52,16 @@ public  class LogInScreen   {
 			}
 			else {
 				Subscriber sub = ((Subscriber)msg.getObject());
-				
+				((Node)event.getSource()).getScene().getWindow().hide();//hiding primary window
+				Stage primaryStage = new Stage();
+				Pane root = loader.load(getClass().getResource("/gui/SubscriberMainScreen.fxml").openStream());
+				SubscriberMainScreen subscriberMainScreen = loader.getController();
+				subscriberMainScreen.loadSubscriber(sub);
+				Scene scene = new Scene(root);			
+				scene.getStylesheets().add(getClass().getResource("/gui/SubscriberMainScreen.css").toExternalForm());
+				primaryStage.setTitle("Main Screen");
+				primaryStage.setScene(scene);		
+				primaryStage.show();
 			}
 		
 //			if(LibraryClient.s1.getId().equals("Error"))
@@ -77,33 +85,6 @@ public  class LogInScreen   {
 //				primaryStage.show();
 //			}
 		}
-	}
-
-	public void start(Stage primaryStage) throws Exception {	
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/AcademicFrame.fxml"));
-				
-		Scene scene = new Scene(root);
-		scene.getStylesheets().add(getClass().getResource("/gui/AcademicFrame.css").toExternalForm());
-		primaryStage.setTitle("Academic Managment Tool");
-		primaryStage.setScene(scene);
-		
-		primaryStage.show();	 	   
-	}
-	
-	public void getExitBtn(ActionEvent event) throws Exception {
-		final Node source = (Node) event.getSource();
-	    final Stage stage = (Stage) source.getScene().getWindow();
-	    stage.close();
-	    System.exit(0);
-	}
-	
-	public void loadStudent(Student s1) {
-		this.sfc.loadStudent(s1);
-	}	
-	
-	public  void display(String message) {
-		System.out.println("message");
-		
 	}
 	
 }

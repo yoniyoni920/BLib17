@@ -1,9 +1,9 @@
 package client;
 import javafx.application.Application;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-import logic.Faculty;
-import logic.Student;
 
 import java.util.Vector;
 
@@ -20,10 +20,13 @@ public class ClientApplication extends Application {
 	 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		 chat = new ClientController("localhost", 5555);
-						  		
-		LogInScreen aFrame = new LogInScreen(); // create StudentFrame
-		aFrame.start(primaryStage);
+		chat = new ClientController("localhost", 5555);			  		
+		Parent root = FXMLLoader.load(getClass().getResource("/gui/LogInScreen.fxml"));	
+		Scene scene = new Scene(root);
+		scene.getStylesheets().add(getClass().getResource("/gui/LogInScreen.css").toExternalForm());
+		primaryStage.setTitle("Log In");
+		primaryStage.setScene(scene);
+		primaryStage.show();
 	}
 	
 	@Override

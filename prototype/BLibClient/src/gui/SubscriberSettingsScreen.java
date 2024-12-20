@@ -25,7 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class SubscriberSettingsScreen {
+public class SubscriberSettingsScreen extends AbstractScreen{
 	@FXML
 	private TextField phoneTxtField;
 	@FXML
@@ -41,6 +41,26 @@ public class SubscriberSettingsScreen {
 		changedInfo[0] = phoneTxtField.getText();
 		changedInfo[1] = emailTxtField.getText();
 		changedInfo[2] = (String)sub.getId();
+		
 		Message msg = ClientApplication.chat.sendToServer(new Message("update", changedInfo));
+		if( !msg.isError() ) {
+			sub.setPhoneNumber(changedInfo[0]);
+			sub.setEmail(changedInfo[1]);
+		}
+		close();
 	}
+	
+
+	public void backBtn(ActionEvent event) throws Exception{
+		close();
+		 
+	}
+	
+	public void close() throws Exception{
+		 SubscriberMainScreen prevScreen = (SubscriberMainScreen)screenManager.closeScreen();
+		 prevScreen.loadSubscriber(sub);
+		 
+	}
+	
+	
 }

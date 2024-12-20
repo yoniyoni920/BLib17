@@ -51,15 +51,18 @@ public class SubscriberMainScreen extends AbstractScreen {
 		screenManager.closeScreen();
 	}
 	public void openConfigureScreen(ActionEvent event) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide();
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/SubscriberSettingsScreen.fxml").openStream());
-		SubscriberSettingsScreen subscriberSettingsScreen = loader.getController();
-		subscriberSettingsScreen.loadSubscriber(subscriber);
-		Scene scene = new Scene(root);			
-		primaryStage.setTitle("Subscriber Settings");
-		primaryStage.setScene(scene);		
-		primaryStage.show();
+		SubscriberSettingsScreen screen = (SubscriberSettingsScreen)screenManager.openScreen("SubscriberSettingsScreen","Subscriber Settings");
+		screen.loadSubscriber(subscriber);
+		
+//		FXMLLoader loader = new FXMLLoader();
+//		((Node)event.getSource()).getScene().getWindow().hide();
+//		Stage primaryStage = new Stage();
+//		Pane root = loader.load(getClass().getResource("/gui/SubscriberSettingsScreen.fxml").openStream());
+//		SubscriberSettingsScreen subscriberSettingsScreen = loader.getController();
+//		subscriberSettingsScreen.loadSubscriber(subscriber);
+//		Scene scene = new Scene(root);			
+//		primaryStage.setTitle("Subscriber Settings");
+//		primaryStage.setScene(scene);		
+//		primaryStage.show();
 	}
 }

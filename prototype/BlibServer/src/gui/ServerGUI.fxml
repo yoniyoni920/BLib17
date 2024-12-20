@@ -4,7 +4,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane prefHeight="517.0" prefWidth="825.0" stylesheets="@ServerGUI.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ServerGUI">
+<Pane prefHeight="517.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ServerGUI">
    <children>
       <TableView fx:id="connectionTable" layoutX="28.0" layoutY="120.0" prefHeight="384.0" prefWidth="771.0">
          <columnResizePolicy>
@@ -13,6 +13,5 @@
       </TableView>
       <Label layoutX="28.0" layoutY="94.0" text="Connections" />
       <Label layoutX="356.0" layoutY="14.0" text="BLib Server Console" />
-      <Label layoutX="741.0" layoutY="14.0" text="Status: ON" />
    </children>
 </Pane>

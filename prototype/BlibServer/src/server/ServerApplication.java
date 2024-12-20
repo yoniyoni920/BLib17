@@ -3,11 +3,14 @@ package server;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import gui.ScreenManager;
 import gui.ServerGUI;
 
 public class ServerApplication extends Application {
@@ -25,23 +28,22 @@ public class ServerApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ServerGUI.fxml"));
-		Scene scene = new Scene(loader.load());
-
-		primaryStage.setTitle("BLib Server Console");
-		primaryStage.setScene(scene);
-		primaryStage.show();
-		
-		serverGUI = loader.getController(); // Get controller for communicating with it later
-
 		libraryServer = new LibraryServer(DEFAULT_PORT);
 		
 		try {
 			libraryServer.listen();
 		} catch (Exception e) {
-			System.out.println("ERROR - Could not listen for clients!");
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Could not start BLib server!");
+			alert.setHeaderText("Attempted to start the server at port 5555");
+			alert.setContentText(e.toString());
+			alert.showAndWait();
+			System.exit(0);
 		}
 		
+		ScreenManager manager = new ScreenManager(primaryStage);
+		serverGUI = (ServerGUI)manager.openScreen("ServerGUI", "BLib Server Console"); // Get controller for communicating with it later
+
 		timer = new Timer();
 		
 		// Check every 2 seconds for connections. May be useful for the reports generation ^^

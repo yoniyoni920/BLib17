@@ -93,7 +93,7 @@ public class LibraryServer extends AbstractServer
 	 * Called when the server stops listening for connections.
 	 */
     @Override
-	protected void serverStopped()  {
+	protected void serverStopped() {
 		System.out.println("Server has stopped listening for connections.");
 	}  
 }

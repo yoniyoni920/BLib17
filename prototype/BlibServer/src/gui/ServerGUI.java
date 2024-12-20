@@ -15,7 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import ocsf.server.ConnectionToClient;
 
-public class ServerGUI implements Initializable {		
+public class ServerGUI extends AbstractScreen implements Initializable {		
 	@FXML
 	private Button btnExit = null;
 

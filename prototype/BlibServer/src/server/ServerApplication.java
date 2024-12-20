@@ -53,4 +53,10 @@ public class ServerApplication extends Application {
 			}
 		}, 0, 2 * 1000);
 	}
+	
+	@Override
+	public void stop() throws Exception {
+		libraryServer.stopListening();
+		System.exit(0);
+	}
 }

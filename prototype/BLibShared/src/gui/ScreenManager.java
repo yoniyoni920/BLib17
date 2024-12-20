@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 
 public class ScreenManager {
 	private Stack<AbstractScreen> screens;
-	private AbstractScreen lastScreen;
 	private Stage primaryStage;
 	
 	public ScreenManager(Stage primaryStage) {
@@ -41,7 +40,6 @@ public class ScreenManager {
 		scene.getStylesheets().add(getClass().getResource("/gui/Main.css").toExternalForm());
 		
 		AbstractScreen screen = loader.getController();
-		lastScreen = screen;
 		screen.setScene(scene);
 		screen.setScreenManager(this);
 		screen.setTitle(title);
@@ -57,10 +55,10 @@ public class ScreenManager {
 	 * NOTE: if the last screen contained information it will still be loaded.
 	 * You must handle this.
 	 * 
-	 * @return
+	 * @return AbstractScreen
 	 */
 	public AbstractScreen closeScreen() {
-		AbstractScreen screen = screens.pop();
+		screens.pop(); // Pops the last screen
 		AbstractScreen lastScreen = screens.lastElement();
 		if (lastScreen != null) {
 			setScreen(lastScreen);
@@ -78,6 +76,5 @@ public class ScreenManager {
 		primaryStage.setScene(screen.getScene());
 		primaryStage.show();
 		primaryStage.setResizable(false);
-		lastScreen = screen;
 	}
 }

@@ -22,7 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class SubscriberMainScreen implements Initializable {
+public class SubscriberMainScreen {
 	private Subscriber subscriber;
 		
 	@FXML

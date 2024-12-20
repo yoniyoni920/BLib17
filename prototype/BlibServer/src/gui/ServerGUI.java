@@ -32,8 +32,10 @@ public class ServerGUI implements Initializable {
 		shownConnections.clear();
 
 		for (Thread connectionThread : connections) {
-			InetAddress address = ((ConnectionToClient)connectionThread).getInetAddress();
-			shownConnections.add(new String[]{ address.getHostAddress(), address.getHostName() });
+			if (connectionThread instanceof ConnectionToClient) {
+				InetAddress address = ((ConnectionToClient)connectionThread).getInetAddress();
+				shownConnections.add(new String[]{ address.getHostAddress(), address.getHostName() });
+			}
 		}
 		
 		connectionTable.setItems(shownConnections);

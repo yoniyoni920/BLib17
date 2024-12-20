@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 
 import client.LibraryClient;
 import entities.Subscriber;
-import client.ClientApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -48,13 +47,6 @@ public class SubscriberMainScreen implements Initializable {
 		emailLabel.setText(sub.getEmail());
 	}
 	
-/*	public void saveStudent(ActionEvent event) throws Exception{
-		Student newSt = new Student(s.getId(), txtName.getText(), txtSurname.getText(), s.getFc());
-		if(!s.Equals(newSt)) {
-			ClientApplication.chat.update(newSt);
-		}
-	}*/
-	
 	public void closeWindow(ActionEvent event) throws Exception  {
 		FXMLLoader loader = new FXMLLoader();
 		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
@@ -69,11 +61,4 @@ public class SubscriberMainScreen implements Initializable {
 		primaryStage.show();
 	    
 	}
-
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

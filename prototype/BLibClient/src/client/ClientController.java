@@ -5,6 +5,8 @@ package client;
 import java.io.*;
 import client.*;
 import entities.Message;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  * This class constructs the UI for a chat client.  It implements the
@@ -37,9 +39,15 @@ public class ClientController {
     public ClientController(String host, int port) {
         try {
             client = new LibraryClient(host, port, this);
-        } catch (IOException exception) {
+        } catch (IOException e) {
             System.out.println("Error: Can't setup connection!" + " Terminating client.");
-            System.exit(1);
+            
+        	Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Could not start BLib client!");
+			alert.setHeaderText(String.format("Couldn't find any server at: %s:%d", host, port));
+			alert.setContentText(e.toString());
+			alert.showAndWait();
+			System.exit(1);
         }
     }
 

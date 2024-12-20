@@ -4,8 +4,8 @@ import java.io.IOException;
 
 
 import client.LibraryClient;
-import client.ClientController;
 import client.ClientApplication;
+import client.ClientController;
 import entities.Message;
 import entities.Subscriber;
 import javafx.event.ActionEvent;
@@ -21,10 +21,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
-public  class LogInScreen   {
-	private SubscriberMainScreen sfc;	
-	private static int itemIndex = 3;
-	
+public class LogInScreen extends AbstractScreen {	
 	@FXML
 	private Button btnExit = null;
 	
@@ -52,16 +49,9 @@ public  class LogInScreen   {
 			}
 			else {
 				Subscriber sub = ((Subscriber)msg.getObject());
-				((Node)event.getSource()).getScene().getWindow().hide();//hiding primary window
-				Stage primaryStage = new Stage();
-				Pane root = loader.load(getClass().getResource("/gui/SubscriberMainScreen.fxml").openStream());
-				SubscriberMainScreen subscriberMainScreen = loader.getController();
-				subscriberMainScreen.loadSubscriber(sub);
-				Scene scene = new Scene(root);			
-				scene.getStylesheets().add(getClass().getResource("/gui/SubscriberMainScreen.css").toExternalForm());
-				primaryStage.setTitle("Main Screen");
-				primaryStage.setScene(scene);		
-				primaryStage.show();
+				
+				SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("SubscriberMainScreen", "Subscriber Main Screen");
+				subMainScreen.loadSubscriber(sub);
 			}
 		}
 	}

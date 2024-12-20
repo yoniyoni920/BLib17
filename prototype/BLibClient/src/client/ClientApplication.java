@@ -8,22 +8,25 @@ import javafx.stage.Stage;
 
 import java.util.Vector;
 
+import gui.ScreenManager;
+
 public class ClientApplication extends Application {
 	public static ClientController chat; //only one instance
-
+	private ScreenManager screenManager;
+	
 	public static void main(String args[]) throws Exception { 
 	    launch(args);  
+	}
+	
+	public ScreenManager getScreenManager() {
+		return screenManager;
 	}
 	 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		chat = new ClientController("localhost", 5555);			  		
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/LogInScreen.fxml"));	
-		Scene scene = new Scene(root);
-		scene.getStylesheets().add(getClass().getResource("/gui/LogInScreen.css").toExternalForm());
-		primaryStage.setTitle("Log In");
-		primaryStage.setScene(scene);
-		primaryStage.show();
+		screenManager = new ScreenManager(primaryStage);
+		screenManager.openScreen("LogInScreen", "Login");
+		chat = new ClientController("localhost", 5555);
 	}
 	
 	@Override

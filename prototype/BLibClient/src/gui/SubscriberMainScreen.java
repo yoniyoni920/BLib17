@@ -22,7 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class SubscriberMainScreen {
+public class SubscriberMainScreen extends AbstractScreen {
 	private Subscriber subscriber;
 		
 	@FXML
@@ -46,18 +46,9 @@ public class SubscriberMainScreen {
 		phoneLabel.setText(sub.getPhoneNumber());
 		emailLabel.setText(sub.getEmail());
 	}
-	
-	public void closeWindow(ActionEvent event) throws Exception  {
-		FXMLLoader loader = new FXMLLoader();
-		((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-		Stage primaryStage = new Stage();
-		Pane root = loader.load(getClass().getResource("/gui/LogInScreen.fxml").openStream());	
-		Scene scene = new Scene(root);			
-		scene.getStylesheets().add(getClass().getResource("/gui/LogInScreen.css").toExternalForm());
-		primaryStage.setTitle("Log In");
-		primaryStage.setScene(scene);		
-		primaryStage.show();
-	    
+
+	public void closeWindow(ActionEvent event) throws Exception {
+		screenManager.closeScreen();
 	}
 	public void openConfigureScreen(ActionEvent event) throws Exception {
 		FXMLLoader loader = new FXMLLoader();

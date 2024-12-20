@@ -27,7 +27,6 @@ public class ServerApplication extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ServerGUI.fxml"));
 		Scene scene = new Scene(loader.load());
-		scene.getStylesheets().add(getClass().getResource("/gui/ServerGUI.css").toExternalForm());
 
 		primaryStage.setTitle("BLib Server Console");
 		primaryStage.setScene(scene);

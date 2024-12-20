@@ -24,7 +24,7 @@ public class ClientController {
     /**
      * The instance of the client that created this ConsoleChat.
      */
-    LibraryClient client;
+    private LibraryClient client;
 
     //Constructors ****************************************************
 

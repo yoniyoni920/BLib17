@@ -43,12 +43,14 @@ public class ScreenManager {
 		return screen;
 	}
 	
-	public void closeScreen() {
+	public AbstractScreen closeScreen() {
 		AbstractScreen screen = screens.pop();
 		AbstractScreen lastScreen = screens.lastElement();
 		if (lastScreen != null) {
 			setScreen(lastScreen);
 		}
+		
+		return lastScreen;
 	}
 	
 	private void setScreen(AbstractScreen screen) {

@@ -9,19 +9,16 @@ import java.util.List;
 
 public class LibraryClient extends AbstractClient
 {
-	//Instance variables **********************************************
-
+	
 	/**
-	 * The interface type variable.  It allows the implementation of 
-	 * the display method in the client.
+	 * This Class is the message handles between server and Client
 	 */
 	ClientController clientUI; 
 	public static List<Message> awaitingMessages;    
 
-	//Constructors ****************************************************
-
+	
 	/**
-	 * Constructs an instance of the chat client.
+	 * Constructs an instance of the LibraryClient.
 	 *
 	 * @param host The server to connect to.
 	 * @param port The port number to connect on.
@@ -68,6 +65,10 @@ public class LibraryClient extends AbstractClient
 			sendToServer(msgToServer);
 
 			int timePassed = 0;
+			/*
+			 * Checks if a message sent to the server has been
+			 * processed and a response has been received.
+			 */
 			while (msgToServer.isAwaiting()) {
 				try {
 					Thread.sleep(100);

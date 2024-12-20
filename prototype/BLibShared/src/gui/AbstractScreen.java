@@ -1,7 +1,10 @@
 package gui;
 
 import javafx.scene.Scene;
-
+/*
+ * AbstractScreen is the base class for ScrenManager. 
+ * help prevent code DRY-(Don't Repeat Yourself)
+ */
 public abstract class AbstractScreen {
 	protected Scene scene;
 

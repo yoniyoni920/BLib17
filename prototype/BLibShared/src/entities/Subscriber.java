@@ -1,7 +1,9 @@
 package entities;
 
 import java.io.Serializable;
-
+/*
+ * Subscribers are the members of the library
+ */
 public class Subscriber extends User implements Serializable {
 	private String status;
 	private int detailedSubscriptionHistory;

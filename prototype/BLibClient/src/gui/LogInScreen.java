@@ -20,7 +20,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-
+/*
+ * controller for LogInScreen.fxml
+ */
 public class LogInScreen extends AbstractScreen {	
 	@FXML
 	private Button btnExit = null;
@@ -31,6 +33,11 @@ public class LogInScreen extends AbstractScreen {
 	@FXML
 	private TextField idtxt;
 	
+	/*
+	 * gets the info from fields and sends it
+	 * to be Checked by the system and move to the 
+	 * main Screen after being logged in
+	 */
 	public void Send(ActionEvent event) throws Exception {
 		String id;
 		FXMLLoader loader = new FXMLLoader();

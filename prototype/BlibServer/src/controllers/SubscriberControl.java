@@ -8,8 +8,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import entities.Subscriber;
-
+/*
+ * This class is the control  for Subscriber
+ */
 public class SubscriberControl {
+	/*
+	 * changes the information on the DB to input.
+	 */
 	public static void updateInfo(String[] changedInfo) {
 		try {
 			PreparedStatement stt = DBControl.getConnection().prepareStatement("UPDATE blib.subscriber SET " +

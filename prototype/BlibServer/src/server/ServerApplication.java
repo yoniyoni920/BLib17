@@ -14,7 +14,7 @@ import gui.ScreenManager;
 import gui.ServerGUI;
 
 public class ServerApplication extends Application {
-	final public static int DEFAULT_PORT = 5555;
+	final private static int DEFAULT_PORT = 5555;
 
 	private ServerGUI serverGUI;
 	

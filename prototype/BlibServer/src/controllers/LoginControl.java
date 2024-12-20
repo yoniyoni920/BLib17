@@ -8,22 +8,28 @@ import java.sql.Statement;
 
 import entities.Subscriber;
 import entities.User;
-
+/*
+ * The class handles login logic. 
+ * 
+ */
 public class LoginControl {
-	// need to add later that privilege will detect type of user and return the correct obj type
+	//need to add later that privilege will detect
+	//type of user and return the correct obj type
+	//--after adding status can add the option to check
+	//if user is already logged in and if so make sure 
+	//he can't log in again and display warning
+	
+	/*
+	 * Login to the Database checks
+	 * for the user and starts the session.
+	 */
 	public static Subscriber loginAction(String logger){
 		try {
 			
 			System.out.println("Login action connected to the database successfully ");
 			Statement stt = DBControl.getConnection().createStatement();
 			ResultSet rs =  stt.executeQuery("SELECT * FROM blib.subscriber WHERE subscriber_id = '"+ logger+ "'");
-			
-//			ResultSet rs =  stt.executeQuery("SELECT Id,FirstName,LastName,Password,Privilege FROM " +
-//					"Subscriber WHERE password = '" + logger.getPassword() + "'"+
-//					"And Id = "+ logger.getId()+ "'");
-//			
-//			
-			
+		
 		    Subscriber subscriber = null;
 		    boolean found = false;
 		    if(rs.next()) {

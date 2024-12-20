@@ -9,16 +9,11 @@ import entities.User;
 import ocsf.server.*;
 
 public class LibraryServer extends AbstractServer 
-{
-  //Class variables *************************************************
-  
-  
-  
+{  
   /**
-   * Constructs an instance of the echo server.
-   *
-   * @param port The port number to connect on.
-   * 
+   * Constructs an instance of the LibraryServer. 
+   * handles messages between: client - server
+   *                           server - DB.
    */
 	public LibraryServer(int port) 
 	{
@@ -52,7 +47,10 @@ public class LibraryServer extends AbstractServer
 			System.err.println(e);
 		}
 	}
-	
+	/*
+	 * receives message from client  
+	 * Interpretate the action and initiates it.
+	 */
 	public Message handleAction(Message msgFromClient, ConnectionToClient client) {
 		String actionName = msgFromClient.getAction();
 		// Find and handle any action from client
@@ -66,7 +64,9 @@ public class LibraryServer extends AbstractServer
 			return msgFromClient.errorReply("Found no such action! " + msgFromClient.getAction());
 		}
 	}
-
+	/*
+	 * Initiates the login action and reply to caller.
+	 */
     public Message login(Message msg, ConnectionToClient client) {
     	User user = LoginControl.loginAction((String)msg.getObject());
         if (user != null) {

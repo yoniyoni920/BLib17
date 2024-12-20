@@ -13,6 +13,12 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+/*
+ * Base code for presenting screen and controlling FXML files.
+ * Helps keep the code DRY.
+ */
+
+
 public class ScreenManager {
 	private Stack<AbstractScreen> screens;
 	private Stage primaryStage;
@@ -33,12 +39,9 @@ public class ScreenManager {
 	 */
 	public AbstractScreen openScreen(String screenName, String title) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/" + screenName + ".fxml"));
-
 		Parent root = loader.load();	
 		Scene scene = new Scene(root);
-
 		scene.getStylesheets().add(getClass().getResource("/gui/Main.css").toExternalForm());
-		
 		AbstractScreen screen = loader.getController();
 		screen.setScene(scene);
 		screen.setScreenManager(this);

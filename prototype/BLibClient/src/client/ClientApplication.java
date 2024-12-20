@@ -9,11 +9,22 @@ import javafx.stage.Stage;
 import java.util.Vector;
 
 import gui.ScreenManager;
+/*
+ * The runnable for client side.
+ * 
+ */
 
+/**
+ * Constructs an instance of client Controller which 
+ * starts LiberaryClient. 
+ *
+ * @param host The host to connect to.
+ * @param port The port to connect on.
+ */
 public class ClientApplication extends Application {
 	public static ClientController chat; //only one instance
 	private ScreenManager screenManager;
-	
+	final static int default_port = 5555; 
 	public static void main(String args[]) throws Exception { 
 	    launch(args);  
 	}
@@ -21,12 +32,16 @@ public class ClientApplication extends Application {
 	public ScreenManager getScreenManager() {
 		return screenManager;
 	}
-	 
+	/**
+     * Constructs an instance of the ScreenManager .
+     * and opens  Login screen
+     */
+     
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		screenManager = new ScreenManager(primaryStage);
 		screenManager.openScreen("LogInScreen", "Login");
-		chat = new ClientController("localhost", 5555);
+		chat = new ClientController("localhost", default_port);
 	}
 	
 	@Override

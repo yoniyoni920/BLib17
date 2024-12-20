@@ -1,4 +1,5 @@
 package client;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -6,10 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.util.Vector;
-
-import client.ClientController;
-import gui.LogInScreen;
-import gui.SubscriberMainScreen;
 
 public class ClientApplication extends Application {
 	public static ClientController chat; //only one instance
@@ -31,6 +28,6 @@ public class ClientApplication extends Application {
 	
 	@Override
 	public void stop() {
-		chat.client.quit();
+		chat.getClient().quit();
 	}
 }

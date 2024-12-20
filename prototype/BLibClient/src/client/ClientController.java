@@ -43,6 +43,9 @@ public class ClientController {
         }
     }
 
+    public LibraryClient getClient() {
+    	return client;
+    }
 
     //Instance methods ************************************************
     public Message sendToServer(Message msg) {

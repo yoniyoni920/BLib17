@@ -38,7 +38,7 @@ public class LogInScreen extends AbstractScreen {
 	 * to be Checked by the system and move to the 
 	 * main Screen after being logged in
 	 */
-	public void Send(ActionEvent event) throws Exception {
+	public void Login(ActionEvent event) throws Exception {
 		String id;
 		FXMLLoader loader = new FXMLLoader();
 		

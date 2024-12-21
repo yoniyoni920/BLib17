@@ -56,7 +56,6 @@ public class LogInScreen extends AbstractScreen {
 			}
 			else {
 				Subscriber sub = ((Subscriber)msg.getObject());
-				
 				SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("SubscriberMainScreen", "Subscriber Main Screen");
 				subMainScreen.loadSubscriber(sub);
 			}

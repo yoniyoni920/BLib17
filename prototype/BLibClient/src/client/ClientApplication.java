@@ -24,7 +24,6 @@ import gui.ScreenManager;
 public class ClientApplication extends Application {
 	public static ClientController chat; //only one instance
 	private ScreenManager screenManager;
-	final static int default_port = 5555; 
 	public static void main(String args[]) throws Exception { 
 	    launch(args);  
 	}
@@ -40,8 +39,7 @@ public class ClientApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		screenManager = new ScreenManager(primaryStage);
-		screenManager.openScreen("LogInScreen", "Login");
-		chat = new ClientController("localhost", default_port);
+		screenManager.openScreen("ClientSocket", "Client Socket Screen");
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,10 +15,9 @@ import gui.ScreenManager;
 import gui.ServerGUI;
 
 public class ServerApplication extends Application {
-	final private static int DEFAULT_PORT = 5555;
-
+	private static ServerApplication serverApplication;
 	private ServerGUI serverGUI;
-	
+	private ScreenManager screenManager;
 	private LibraryServer libraryServer;
 	
 	Timer timer;
@@ -25,27 +25,30 @@ public class ServerApplication extends Application {
 	public static void main(String args[]) throws Exception {   
 		launch(args);
 	}
-
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		libraryServer = new LibraryServer(DEFAULT_PORT);
+		serverApplication = this;
+		screenManager = new ScreenManager(primaryStage);
+		screenManager.openScreen("ServerSocket", "Server Socket Screen"); // Get controller for communicating with it later
 		
+	}
+	
+	public void createServer(String port) throws IOException {
+		libraryServer = new LibraryServer(Integer.valueOf(port));
 		try {
 			libraryServer.listen();
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Could not start BLib server!");
-			alert.setHeaderText("Attempted to start the server at port 5555");
+			alert.setHeaderText("Attempted to start the server at port: " + port );
 			alert.setContentText(e.toString());
 			alert.showAndWait();
 			System.exit(0);
 		}
-		
-		ScreenManager manager = new ScreenManager(primaryStage);
-		serverGUI = (ServerGUI)manager.openScreen("ServerGUI", "BLib Server Console"); // Get controller for communicating with it later
 
-		timer = new Timer();
+		serverGUI = (ServerGUI)screenManager.openScreen("ServerGUI", "BLib Server Console"); // Get controller for communicating with it later
 		
+		timer = new Timer();
 		// Check every 2 seconds for connections. May be useful for the reports generation ^^
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
@@ -54,9 +57,14 @@ public class ServerApplication extends Application {
 		}, 0, 2 * 1000);
 	}
 	
-	@Override
-	public void stop() throws Exception {
-		libraryServer.stopListening();
-		System.exit(0);
-	}
+	public static ServerApplication getInstance () {
+			return serverApplication;
+		}
+//	@Override
+//	public void stop() throws Exception {
+//		   if (libraryServer != null) {
+//	            libraryServer.stopListening();
+//	        }
+//	        System.exit(0);
+//	}
 }

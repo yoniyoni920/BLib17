@@ -77,12 +77,14 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 		for (TableConnection tableConnection : shownConnections) {
 			tableConnection.connected = false;
 			for (Thread connectionThread : connections) {
-				InetAddress conAddress = ((ConnectionToClient)connectionThread).getInetAddress();
-				TableConnection addressTableConnection = new TableConnection(conAddress);
-
-				if (tableConnection.equals(addressTableConnection)) {
-					tableConnection.connected = true;
-					break;
+				if (connectionThread instanceof ConnectionToClient) {
+					InetAddress conAddress = ((ConnectionToClient)connectionThread).getInetAddress();
+					TableConnection addressTableConnection = new TableConnection(conAddress);
+					
+					if (tableConnection.equals(addressTableConnection)) {
+						tableConnection.connected = true;
+						break;
+					}
 				}
 			}
 		}

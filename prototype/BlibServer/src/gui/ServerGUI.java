@@ -2,10 +2,17 @@ package gui;
 
 import java.net.InetAddress;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,30 +24,70 @@ import ocsf.server.ConnectionToClient;
 /*
  * 
  */
-public class ServerGUI extends AbstractScreen implements Initializable {		
+public class ServerGUI extends AbstractScreen implements Initializable {
+	public class TableConnection {
+		public InetAddress address;
+		public boolean connected = false;
+		
+		public TableConnection(InetAddress address) {
+			this.address = address;
+		}
+
+		public String getStatus() {
+			return connected ? "Connected" : "Disconnected";
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			TableConnection other = (TableConnection) obj;
+			return Objects.equals(address.getHostAddress(), other.address.getHostAddress())
+					&& Objects.equals(address.getHostName(), other.address.getHostName());
+		}
+	}
+
 	@FXML
 	private Button btnExit = null;
 
 	@FXML
-	private TableView<String[]> connectionTable;
+	private TableView<TableConnection> connectionTable;
 	
-	private ObservableList<String[]> shownConnections;
+	private ObservableList<TableConnection> shownConnections;
 	
 	/**
 	 * This receives connections from the ServerApplication and updates the connections list
 	 * @param connections
 	 */
-	public void updateConnections(Thread[] connections) {
-		shownConnections.clear();
-
+	public void updateConnections(Thread[] connections) {		
 		for (Thread connectionThread : connections) {
 			if (connectionThread instanceof ConnectionToClient) {
 				InetAddress address = ((ConnectionToClient)connectionThread).getInetAddress();
-				shownConnections.add(new String[]{ address.getHostAddress(), address.getHostName() });
+				TableConnection tableConnection = new TableConnection(address);
+				if (!shownConnections.contains(tableConnection)) {
+					shownConnections.add(tableConnection);
+				}
 			}
 		}
 		
-		connectionTable.setItems(shownConnections);
+		for (TableConnection tableConnection : shownConnections) {
+			tableConnection.connected = false;
+			for (Thread connectionThread : connections) {
+				InetAddress conAddress = ((ConnectionToClient)connectionThread).getInetAddress();
+				TableConnection addressTableConnection = new TableConnection(conAddress);
+
+				if (tableConnection.equals(addressTableConnection)) {
+					tableConnection.connected = true;
+					break;
+				}
+			}
+		}
+		
+		connectionTable.refresh();
 	}
 
 	@Override
@@ -49,12 +96,15 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 		connectionTable.setItems(shownConnections);
 
 		// Create 2 relevant columns
-		TableColumn<String[], String> column1 = new TableColumn<>("IP");
-		TableColumn<String[], String> column2 = new TableColumn<>("Host");
+		TableColumn<TableConnection, String> ipColumn = new TableColumn<>("IP");
+		TableColumn<TableConnection, String> hostColumn = new TableColumn<>("Host");
+		TableColumn<TableConnection, String> statusColumn = new TableColumn<>("Status");
 		// This maps the cells into the String[] value we set above
-		column1.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue()[0]));
-		column2.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue()[1]));
-		connectionTable.getColumns().add(column1);
-		connectionTable.getColumns().add(column2);
+		ipColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().address.getHostAddress()));
+		hostColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().address.getHostName()));
+		statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
+		connectionTable.getColumns().add(ipColumn);
+		connectionTable.getColumns().add(hostColumn);
+		connectionTable.getColumns().add(statusColumn);
 	}
 }

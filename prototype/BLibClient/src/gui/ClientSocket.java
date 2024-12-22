@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -29,22 +30,35 @@ public class ClientSocket extends AbstractScreen {
 	@FXML
 	private TextField Porttxt = null;
 	
+	@FXML 
+	private Label errorIp;
+	
+	@FXML
+	private Label errorPort;
+	
 	/*
 	 * connects to server with wanted Ip and port
 	 */
 	public void Connect(ActionEvent event) throws Exception {
 		String ip,port;
+		boolean flag=true;
 		ip=IPtxt.getText();
 		port = Porttxt.getText();
-		if(ip.trim().isEmpty()|| port.trim().isEmpty())
+		errorIp.setVisible(false);
+		errorPort.setVisible(false);
+		if(ip.trim().isEmpty())
 		{
-
-			System.out.println("You must enter an IP and port number");	
+			errorIp.setVisible(true);
+			flag = false;
+			
 		}
-		else
+		if(port.trim().isEmpty()) {
+			errorPort.setVisible(true);
+			flag = false;
+		}
+		if(flag)
 		{
-			ClientApplication.chat = new ClientController(ip, Integer.valueOf(port));
-			screenManager.openScreen("LogInScreen", "Log In Screen");
+			ClientApplication.getInstance().createClient(ip, Integer.valueOf(port));
 			
 		}
 	}

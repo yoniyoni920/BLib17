@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -33,6 +34,9 @@ public class LogInScreen extends AbstractScreen {
 	@FXML
 	private TextField idtxt;
 	
+	@FXML
+	private Label errorLabel;
+	
 	/*
 	 * gets the info from fields and sends it
 	 * to be Checked by the system and move to the 
@@ -45,16 +49,18 @@ public class LogInScreen extends AbstractScreen {
 		id=idtxt.getText();
 		if(id.trim().isEmpty())
 		{
-
-			System.out.println("You must enter an id number");	
+			errorLabel.setText("You must enter an ID number");	
+			errorLabel.setVisible(true);
 		}
 		else
 		{
 			Message msg = ClientApplication.chat.sendToServer(new Message("login", id));
 			if(msg.isError()) {
-				System.out.print(msg.getObject());
+				errorLabel.setText("Could not Find ID");
+				errorLabel.setVisible(true);
 			}
 			else {
+				errorLabel.setVisible(false);
 				Subscriber sub = ((Subscriber)msg.getObject());
 				SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("SubscriberMainScreen", "Subscriber Main Screen");
 				subMainScreen.loadSubscriber(sub);

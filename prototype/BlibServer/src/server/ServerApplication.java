@@ -59,13 +59,15 @@ public class ServerApplication extends Application {
 	}
 	
 	public static ServerApplication getInstance () {
-			return serverApplication;
-		}
-//	@Override
-//	public void stop() throws Exception {
-//		   if (libraryServer != null) {
-//	            libraryServer.stopListening();
-//	        }
-//	        System.exit(0);
-//	}
+		return serverApplication;
+	}
+
+	@Override
+	public void stop() throws Exception {
+	   if (libraryServer != null) {
+            libraryServer.stopListening();
+       }
+       System.exit(0);
+       timer.cancel();     
+	}
 }

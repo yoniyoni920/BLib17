@@ -30,7 +30,8 @@ public class ServerApplication extends Application {
 		serverApplication = this;
 		screenManager = new ScreenManager(primaryStage);
 		screenManager.openScreen("ServerSocket", "Server Socket Screen"); // Get controller for communicating with it later
-		
+
+		setUserAgentStylesheet("/gui/Main.css");
 	}
 	
 	public void createServer(String port) throws IOException {

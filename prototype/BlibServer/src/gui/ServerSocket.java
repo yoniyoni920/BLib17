@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -25,19 +26,22 @@ import server.ServerApplication;
  */
 
 public class ServerSocket extends AbstractScreen{
-  @FXML
-  private TextField Porttxt = null;
+	@FXML
+	private TextField Porttxt = null;
 
-  /*
-   * Creates Server with wanted port
-   */
+	@FXML
+	private Label portWarning;
 
-  public void Create(ActionEvent event) throws Exception {
-    String port = Porttxt.getText();
-    if (port.trim().isEmpty()) {
-      System.out.println("You must enter port number");
-    } else {
-      ServerApplication.getInstance().createServer(port);
-    }
-  }
+	/*
+	* Creates Server with wanted port
+	*/
+	public void Create(ActionEvent event) throws Exception {
+		String port = Porttxt.getText();
+		portWarning.setVisible(false);
+		if (port.trim().isEmpty()) {
+			portWarning.setVisible(true);
+		} else {
+			ServerApplication.getInstance().createServer(port);
+		}
+	}
 }

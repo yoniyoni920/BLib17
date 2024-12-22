@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="200.0" maxWidth="481.0" prefHeight="200.0" prefWidth="481.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LogInScreen">
+
+<VBox alignment="TOP_RIGHT" prefWidth="502.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LogInScreen">
    <children>
-      <Button id="btnStudentInfo" fx:id="btnSend" layoutX="389.0" layoutY="161.0" mnemonicParsing="false" onAction="#Login" prefWidth="64.0" text="Login" />
-      <Label layoutX="22.0" layoutY="91.0" text="Subscriber ID" textFill="#f2f0f0" />
-      <TextField fx:id="idtxt" layoutX="22.0" layoutY="112.0" prefHeight="42.0" prefWidth="431.0">
-         <font>
-            <Font size="14.0" />
-         </font></TextField>
-      <Label alignment="CENTER" layoutX="22.0" layoutY="25.0" prefHeight="25.0" prefWidth="438.0" text="BLib Login" textAlignment="CENTER">
+      <Label alignment="CENTER" prefHeight="25.0" prefWidth="438.0" text="BLib Login" textAlignment="CENTER">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
-      <Label fx:id="errorLabel" layoutX="22.0" layoutY="165.0" text="Label" visible="false" />
+      <VBox prefHeight="0.0" prefWidth="438.0">
+         <children>
+            <Label text="Subscriber ID" />
+            <TextField fx:id="idtxt" prefHeight="42.0" prefWidth="431.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <Label fx:id="errorLabel" styleClass="danger" text="Label" visible="false" />
+         </children>
+      </VBox>
+      <Button id="btnStudentInfo" fx:id="btnSend" mnemonicParsing="false" onAction="#Login" prefHeight="36.0" prefWidth="463.0" text="Login" />
    </children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+   </padding>
+</VBox>

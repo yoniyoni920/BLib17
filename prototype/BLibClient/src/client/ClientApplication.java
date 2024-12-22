@@ -42,6 +42,8 @@ public class ClientApplication extends Application {
 		clientApplication = this;
 		screenManager = new ScreenManager(primaryStage);
 		screenManager.openScreen("ClientSocket", "Client Socket Screen");
+		
+		setUserAgentStylesheet("/gui/Main.css");
 	}
 	
 	public void createClient( String ip, int port) throws Exception{

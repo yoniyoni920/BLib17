@@ -41,7 +41,6 @@ public class ScreenManager {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/" + screenName + ".fxml"));
 		Parent root = loader.load();	
 		Scene scene = new Scene(root);
-		scene.getStylesheets().add(getClass().getResource("/gui/Main.css").toExternalForm());
 		AbstractScreen screen = loader.getController();
 		screen.setScene(scene);
 		screen.setScreenManager(this);

@@ -16,7 +16,7 @@
       </Label>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <VBox prefHeight="157.0" prefWidth="100.0" spacing="16.0">
+            <VBox prefHeight="164.0" prefWidth="138.0" spacing="16.0">
                <children>
                   <Label text="ID: " />
                   <Label text="Name:" />

@@ -77,10 +77,10 @@ public class LibraryClient extends AbstractClient
 					System.out.println("Interrupted..");
 				}
 
-				if (timePassed > 5 * 1000) {
-					System.out.println(String.format("Warning: request %d has timed out after 60 seconds...", msgToServer.getId()));
+				if (timePassed > 30 * 1000) {
+					System.out.println(String.format("Warning: request %d has timed out after 30 seconds...", msgToServer.getId()));
 					awaitingMessages.remove(msgToServer);
-					return null; //TODO: implement timeout exception
+					return msgToServer.errorReply("Timed out");
 				}
 			}
 
@@ -89,10 +89,9 @@ public class LibraryClient extends AbstractClient
 		catch(IOException e) {
 			e.printStackTrace();
 			clientUI.display("Could not send message to server: Terminating client."+ e);
-			quit();
+			System.exit(1);
+			return null; // This will never happen
 		}
-
-		return null;
 	}
 
 	/**

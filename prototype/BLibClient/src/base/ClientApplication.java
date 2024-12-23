@@ -52,7 +52,9 @@ public class ClientApplication extends Application {
 	}
 	@Override
 	public void stop() {
-		chat.getClient().quit();
+		if (chat != null) {			
+			chat.getClient().quit();
+		}
 	}
 	public static ClientApplication getInstance () {
 		return clientApplication;

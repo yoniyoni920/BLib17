@@ -5,8 +5,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import client.ClientApplication;
-import client.LibraryClient;
+import base.ClientApplication;
+import base.LibraryClient;
 import entities.Message;
 import entities.Subscriber;
 import javafx.collections.FXCollections;

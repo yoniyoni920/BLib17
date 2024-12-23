@@ -1,4 +1,4 @@
-package client;
+package base;
 
 import ocsf.client.*;
 import entities.Message;

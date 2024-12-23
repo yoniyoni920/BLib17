@@ -1,7 +1,8 @@
 
-package client;
+package base;
 import java.io.*;
-import client.*;
+
+import base.*;
 import entities.Message;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

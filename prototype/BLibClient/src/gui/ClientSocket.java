@@ -2,10 +2,9 @@ package gui;
 
 import java.io.IOException;
 
-
-import client.LibraryClient;
-import client.ClientApplication;
-import client.ClientController;
+import base.ClientApplication;
+import base.ClientController;
+import base.LibraryClient;
 import entities.Message;
 import entities.Subscriber;
 import javafx.event.ActionEvent;

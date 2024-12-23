@@ -55,7 +55,7 @@ public class LogInScreen extends AbstractScreen {
 		{
 			Message msg = ClientApplication.chat.sendToServer(new Message("login", id));
 			if(msg.isError()) {
-				errorLabel.setText("Could not Find ID");
+				errorLabel.setText(msg.getObject() + "");
 				errorLabel.setVisible(true);
 			}
 			else {

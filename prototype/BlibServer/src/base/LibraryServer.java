@@ -72,7 +72,7 @@ public class LibraryServer extends AbstractServer
         if (user != null) {
             return msg.reply(user);
         } else {
-            return msg.errorReply("Couldn't login user!");
+            return msg.errorReply("Couldn't login user! ID may be wrong.");
         }
     }
     public Message update(Message msg, ConnectionToClient client) {

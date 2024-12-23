@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<VBox alignment="TOP_RIGHT" prefWidth="502.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LogInScreen">
+<VBox alignment="TOP_RIGHT" prefHeight="233.0" prefWidth="502.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LogInScreen">
    <children>
       <Label alignment="CENTER" prefHeight="25.0" prefWidth="438.0" text="BLib Login" textAlignment="CENTER">
          <font>

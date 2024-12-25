@@ -1,7 +1,7 @@
 package base;
 
-import ocsf.client.*;
 import entities.Message;
+import ocsf.client.AbstractClient;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class LibraryClient extends AbstractClient
 	/**
 	 * This method handles all data coming from the UI            
 	 *
-	 * @param message The message from the UI.    
+	 * @param msgToServer The message from the UI.
 	 */
 	public Message sendMessageToServer(Message msgToServer) {
 		try {

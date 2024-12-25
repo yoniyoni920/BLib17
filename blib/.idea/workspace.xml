@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e3aaeba8-23b0-43d5-bd5c-f99fe6f48a91" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BLibClient/BLibClient.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BLibClient/src/gui/ClientSocket.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BLibClient/src/gui/LogInScreen.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BLibClient/src/gui/SubscriberMainScreen.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BLibClient/src/gui/SubscriberSettingsScreen.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BLibShared/BLibShared.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OCSF/OCSF.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/.project" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/BLibClient.launch" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/BLibClient.launch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/base/ClientApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/base/ClientApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/base/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/base/ClientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/base/LibraryClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/base/LibraryClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/gui/ClientSocket.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/bin/gui/ClientSocket.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/gui/ClientSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/gui/ClientSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/gui/LogInScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/bin/gui/LogInScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/gui/LogInScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/gui/LogInScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/gui/SubscriberMainScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/bin/gui/SubscriberMainScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/gui/SubscriberMainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/gui/SubscriberMainScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/gui/SubscriberSettingsScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/bin/gui/SubscriberSettingsScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibClient/src/gui/SubscriberSettingsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/gui/SubscriberSettingsScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/.project" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/lib/javafx-swt.jar" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/lib/javafx-swt.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/lib/javafx.base.jar" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/lib/javafx.base.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/lib/javafx.controls.jar" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/lib/javafx.controls.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/lib/javafx.fxml.jar" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/lib/javafx.fxml.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/lib/javafx.graphics.jar" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/lib/javafx.graphics.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/lib/javafx.media.jar" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/lib/javafx.media.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/lib/javafx.properties" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/lib/javafx.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/lib/javafx.swing.jar" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/lib/javafx.swing.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/lib/javafx.web.jar" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/lib/javafx.web.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/src/entities/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/src/entities/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/src/entities/Subscriber.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/src/entities/Subscriber.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/src/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/src/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/src/gui/AbstractScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/src/gui/AbstractScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/src/gui/Main.css" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/src/gui/Main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BLibShared/src/gui/ScreenManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/src/gui/ScreenManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/.project" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/BlibServer.launch" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/BlibServer.launch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/lib/mysql-connector-java-8.0.13.jar" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/lib/mysql-connector-java-8.0.13.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/src/base/LibraryServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/base/LibraryServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/src/base/ServerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/base/ServerApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/src/controllers/DBControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/controllers/DBControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/src/controllers/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/controllers/LoginControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/src/controllers/SubscriberControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/controllers/SubscriberControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/src/gui/ServerGUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/gui/ServerGUI.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/src/gui/ServerGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/gui/ServerGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/src/gui/ServerSocket.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/gui/ServerSocket.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/BlibServer/src/gui/ServerSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/gui/ServerSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/.project" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/axisclient.properties" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/axisclient.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/axisservice.properties" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/axisservice.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/src/ocsf/client/AbstractClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/src/ocsf/client/AbstractClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/src/ocsf/client/AdaptableClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/src/ocsf/client/AdaptableClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/src/ocsf/client/ObservableClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/src/ocsf/client/ObservableClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/src/ocsf/server/AbstractServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/src/ocsf/server/AbstractServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/src/ocsf/server/AdaptableServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/src/ocsf/server/AdaptableServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/src/ocsf/server/ConnectionToClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/src/ocsf/server/ConnectionToClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/src/ocsf/server/ObservableOriginatorServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/src/ocsf/server/ObservableOriginatorServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/src/ocsf/server/ObservableServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/src/ocsf/server/ObservableServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/src/ocsf/server/OriginatorMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/src/ocsf/server/OriginatorMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/OCSF/wsgen.xml" beforeDir="false" afterPath="$PROJECT_DIR$/OCSF/wsgen.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prototype/blib_subscriber.sql" beforeDir="false" afterPath="$PROJECT_DIR$/blib_subscriber.sql" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2qiamhN0X61Bx25C3zDiM5pZnjh" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Client.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Server.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Daniel/Braude-Src/BLib17/blib/BlibServer&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Daniel\Braude-Src\BLib17\java-project\BLibClient\src" />
+      <recent name="C:\Users\Daniel\Braude-Src\BLib17\java-project\client\src" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Server">
+    <configuration name="Client" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="base.ClientApplication" />
+      <module name="BLibClient" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Server" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="base.ServerApplication" />
+      <module name="BlibServer" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run Client Server" type="CompoundRunConfigurationType">
+      <toRun name="Client" type="Application" />
+      <toRun name="Server" type="Application" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.Client" />
+      <item itemvalue="Application.Server" />
+      <item itemvalue="Compound.Run Client Server" />
+    </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e3aaeba8-23b0-43d5-bd5c-f99fe6f48a91" name="Changes" comment="" />
+      <created>1735148010485</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1735148010485</updated>
+      <workItem from="1735148012264" duration="523000" />
+      <workItem from="1735148632598" duration="1343000" />
+      <workItem from="1735161753015" duration="476000" />
+      <workItem from="1735162396373" duration="224000" />
+      <workItem from="1735162709674" duration="2384000" />
+      <workItem from="1735165133856" duration="265000" />
+      <workItem from="1735165436925" duration="21000" />
+      <workItem from="1735165509501" duration="24000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

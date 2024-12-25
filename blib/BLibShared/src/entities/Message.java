@@ -54,7 +54,6 @@ public class Message implements Serializable{
 	/**
 	 * Replies to the message by changing the object and isError value
 	 * @param object
-	 * @param isError
 	 * @return Message
 	 */
 	public Message reply(Object object) {

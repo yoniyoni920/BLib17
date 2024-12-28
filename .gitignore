@@ -35,3 +35,4 @@ prototype/BLibClient/bin
 prototype/BLibServer/bin
 prototype/build
 /.metadata/
+.lock

@@ -2,12 +2,12 @@ package controllers;
 
 public class CommunicationManager {
 
-	public void sendMail() {
+	public static void sendMail() {
 		// TODO - implement CommunicationManager.sendMail
 		throw new UnsupportedOperationException();
 	}
 
-	public void sendSMS() {
+	public static void sendSMS() {
 		// TODO - implement CommunicationManager.sendSMS
 		throw new UnsupportedOperationException();
 	}

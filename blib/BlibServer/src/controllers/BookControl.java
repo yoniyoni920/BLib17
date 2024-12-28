@@ -2,67 +2,67 @@ package controllers;
 
 public class BookControl {
 
-	public void searchBooks() {
+	public static void searchBooks() {
 		// TODO - implement BookControl.searchBooks
 		throw new UnsupportedOperationException();
 	}
 
-	public void lendBook() {
+	public static void lendBook() {
 		// TODO - implement BookControl.lendBook
 		throw new UnsupportedOperationException();
 	}
 
-	private void checkBookLendable() {
+	private static void checkBookLendable() {
 		// TODO - implement BookControl.checkBookLendable
 		throw new UnsupportedOperationException();
 	}
 
-	public void lendBookToSubscriber() {
+	public static void lendBookToSubscriber() {
 		// TODO - implement BookControl.lendBookToSubscriber
 		throw new UnsupportedOperationException();
 	}
 
-	public void searchBookById() {
+	public static void searchBookById() {
 		// TODO - implement BookControl.searchBookById
 		throw new UnsupportedOperationException();
 	}
 
-	public void allBookCopiesLoaned() {
+	public static void allBookCopiesLoaned() {
 		// TODO - implement BookControl.allBookCopiesLoaned
 		throw new UnsupportedOperationException();
 	}
 
-	public void orderBook() {
+	public static void orderBook() {
 		// TODO - implement BookControl.orderBook
 		throw new UnsupportedOperationException();
 	}
 
-	public void bookOrderExists() {
+	public static void bookOrderExists() {
 		// TODO - implement BookControl.bookOrderExists
 		throw new UnsupportedOperationException();
 	}
 
-	public void sendMessageToLibrarian() {
+	public static void sendMessageToLibrarian() {
 		// TODO - implement BookControl.sendMessageToLibrarian
 		throw new UnsupportedOperationException();
 	}
 
-	public void returnBook() {
+	public static void returnBook() {
 		// TODO - implement BookControl.returnBook
 		throw new UnsupportedOperationException();
 	}
 
-	public void updateBookCopyReturnDate() {
+	public static void updateBookCopyReturnDate() {
 		// TODO - implement BookControl.updateBookCopyReturnDate
 		throw new UnsupportedOperationException();
 	}
 
-	public void generateBorrowBookTimes() {
+	public static void generateBorrowBookTimes() {
 		// TODO - implement BookControl.generateBorrowBookTimes
 		throw new UnsupportedOperationException();
 	}
 
-	public void searchBookByBarcode() {
+	public static void searchBookByBarcode() {
 		// TODO - implement BookControl.searchBookByBarcode
 		throw new UnsupportedOperationException();
 	}

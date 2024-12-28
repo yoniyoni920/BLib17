@@ -5,13 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaeba8-23b0-43d5-bd5c-f99fe6f48a91" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/BLibShared/src/services/MapUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BLibClient/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BlibServer/src/controllers/DBControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/controllers/DBControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BlibServer/src/controllers/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/controllers/LoginControl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -55,7 +64,7 @@
       <recent name="C:\Users\Daniel\Braude-Src\BLib17\java-project\client\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Client">
+  <component name="RunManager" selected="Compound.Run Client Server">
     <configuration name="Client" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -109,7 +118,7 @@
       <workItem from="1735165133856" duration="265000" />
       <workItem from="1735165436925" duration="21000" />
       <workItem from="1735165509501" duration="24000" />
-      <workItem from="1735402539369" duration="481000" />
+      <workItem from="1735402539369" duration="9656000" />
     </task>
     <servers />
   </component>

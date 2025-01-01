@@ -3,10 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <VBox alignment="TOP_RIGHT" prefHeight="233.0" prefWidth="502.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LogInScreen">
    <children>
@@ -17,13 +17,20 @@
       </Label>
       <VBox prefHeight="0.0" prefWidth="438.0">
          <children>
-            <Label text="Subscriber ID" />
-            <TextField fx:id="idtxt" prefHeight="42.0" prefWidth="431.0">
+            <Label text="ID" />
+            <TextField fx:id="idtxt" prefHeight="42.0" prefWidth="431.0" promptText="id...">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Label fx:id="errorLabel" styleClass="danger" text="Label" visible="false" />
+            <Label fx:id="idErrorLabel" styleClass="danger" text="Label" visible="false" />
+         </children>
+      </VBox>
+      <VBox prefHeight="0.0" prefWidth="438.0">
+         <children>
+            <Label text="Password" />
+            <PasswordField fx:id="passTxt" promptText="password..." />
+            <Label fx:id="passErrorLabel" styleClass="danger" text="Label" visible="false" />
          </children>
       </VBox>
       <Button id="btnStudentInfo" fx:id="btnSend" mnemonicParsing="false" onAction="#Login" prefHeight="36.0" prefWidth="463.0" text="Login" />

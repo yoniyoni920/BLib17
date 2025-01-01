@@ -2,11 +2,14 @@ package gui;
 
 import java.io.IOException;
 
+import base.Action;
 import base.ClientApplication;
 import base.ClientController;
 import base.LibraryClient;
 import entities.Message;
+import entities.Role;
 import entities.Subscriber;
+import entities.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -32,37 +36,62 @@ public class LogInScreen extends AbstractScreen {
 	
 	@FXML
 	private TextField idtxt;
+
+	@FXML
+	private PasswordField passTxt;
 	
 	@FXML
-	private Label errorLabel;
-	
+	private Label idErrorLabel;
+
+	@FXML
+	private Label passErrorLabel;
+
 	/*
 	 * gets the info from fields and sends it
 	 * to be Checked by the system and move to the 
 	 * main Screen after being logged in
 	 */
 	public void Login(ActionEvent event) throws Exception {
-		String id;
-		FXMLLoader loader = new FXMLLoader();
-		
-		id=idtxt.getText();
-		if(id.trim().isEmpty())
+		String id = idtxt.getText();
+		String pass = passTxt.getText();
+
+		boolean idEmpty = id.trim().isEmpty();
+		boolean passEmpty = pass.trim().isEmpty();
+
+		idErrorLabel.setVisible(false);
+		passErrorLabel.setVisible(false);
+
+		if(idEmpty)
 		{
-			errorLabel.setText("You must enter an ID number");	
-			errorLabel.setVisible(true);
+			idErrorLabel.setText("You must enter an ID number");
+			idErrorLabel.setVisible(true);
 		}
-		else
+		if(passEmpty)
 		{
-			Message msg = ClientApplication.chat.sendToServer(new Message("login", id));
-			if(msg.isError()) {
-				errorLabel.setText(msg.getObject() + "");
-				errorLabel.setVisible(true);
+			passErrorLabel.setText("You must enter a password");
+			passErrorLabel.setVisible(true);
+		}
+
+		if (!idEmpty && !passEmpty)
+		{
+			// Attempt to login via server
+			Message msg = ClientApplication.chat.sendToServer(new Message(Action.LOGIN, new String[]{ id, pass }));
+			if(!msg.isError()) {
+				idErrorLabel.setVisible(false);
+				User user = ((User)msg.getObject());
+
+				// Check which user this is to show the appropriate screen
+				if (user.getRole() == Role.SUBSCRIBER) {
+					SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("SubscriberMainScreen", "Subscriber Main Screen");
+					subMainScreen.loadSubscriber((Subscriber)user);
+				} else {
+					LibrarianMainScreen libMainScreen = (LibrarianMainScreen)screenManager.openScreen("LibrarianMainScreen", "Librarian Main Screen");
+					libMainScreen.loadUser(user);
+				}
 			}
 			else {
-				errorLabel.setVisible(false);
-				Subscriber sub = ((Subscriber)msg.getObject());
-				SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("SubscriberMainScreen", "Subscriber Main Screen");
-				subMainScreen.loadSubscriber(sub);
+				idErrorLabel.setText(msg.getObject() + "");
+				idErrorLabel.setVisible(true);
 			}
 		}
 	}

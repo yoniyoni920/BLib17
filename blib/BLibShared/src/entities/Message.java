@@ -1,5 +1,7 @@
 package entities;
 
+import base.Action;
+
 import java.io.Serializable;
 
 public class Message implements Serializable{
@@ -30,7 +32,7 @@ public class Message implements Serializable{
 	/* ------- Basic information -----*/
 	private static int idCounter; // For counting IDs automatically
 	private int id;
-	private String action;
+	private Action action;
 	/* ------- Entities Sent-----*/
 	private Object object;
 	
@@ -45,7 +47,7 @@ public class Message implements Serializable{
 		id = idCounter++;
 	}
 
-	public Message(String action, Object object) {
+	public Message(Action action, Object object) {
 		this();
 		this.action = action;
 		this.object = object;
@@ -77,11 +79,11 @@ public class Message implements Serializable{
 		this.id = id;
 	}
 
-	public String getAction() {
+	public Action getAction() {
 		return action;
 	}
 
-	public void setAction(String action) {
+	public void setAction(Action action) {
 		this.action = action;
 	}
 

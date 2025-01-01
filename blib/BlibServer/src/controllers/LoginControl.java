@@ -20,19 +20,38 @@ public class LoginControl {
 	 * Login to the Database checks
 	 * for the user and starts the session.
 	 */
-	public static Subscriber loginAction(String loginId){
+	public static User loginAction(String loginId, String loginPassword) {
 		try {
 			// This is called the try-with-resource block, it automatically closes the prepared statement and result set when it's done.
-			try (PreparedStatement ps = DBControl.getInstance().selectQuery("subscriber", "subscriber_id", loginId);
-				ResultSet rs = ps.executeQuery()
+			try (PreparedStatement ps = DBControl
+					.getInstance()
+					.selectQuery("user","id", loginId, "password", loginPassword)
 			) {
-				if(rs.next()) {
-					String id = rs.getString("subscriber_id");
-					String subscriberName = rs.getString("subscriber_name");
-					int history = rs.getInt("detailed_subscription_history");
-					String phoneNumber = rs.getString("subscriber_phone_number");
-					String email = rs.getString("subscriber_email");
-					return new Subscriber(id, subscriberName, history, phoneNumber, email);
+				ResultSet rs = ps.executeQuery();
+				if(!rs.next()) {
+					return null;
+				}
+
+				// Get user values
+				String role = rs.getString("role");
+				String id = rs.getString("id");
+				String name = rs.getString("name");
+				String lastName = rs.getString("last_name");
+
+				if (role.equals("subscriber")) {
+					try (PreparedStatement ps2 = DBControl.getInstance().selectQuery("subscriber", "user_id", loginId)) {
+						ResultSet resultSubscriber = ps2.executeQuery();
+						if (!resultSubscriber.next()) {
+							return null;
+						}
+
+						// Get subscriber-specific values
+						String phoneNumber = resultSubscriber.getString("phone_number");
+						String email = resultSubscriber.getString("email");
+						return new Subscriber(id, name, lastName, role, phoneNumber, email);
+					}
+				} else {
+					return new User(id, name, lastName, role);
 				}
 			}
 		} catch (SQLException e) {

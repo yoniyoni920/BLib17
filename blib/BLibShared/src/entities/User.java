@@ -10,37 +10,47 @@ import java.io.Serializable;
  */
 
 public class User implements Serializable{
-	private String firstName;
-	//private String lastName;	
+	private String name;
+	private String lastName;
 	private String id;
-	//private String password;	
-	//private String role; // This will be used to differentiate between librarian and member. 
-	
-	public User() {
-		
-	}
+	private Role role;
 
-	public User(String Id, String firstName) {
-		this.id = Id;
-		this.setFirstName(firstName);
+	public User() {}
+
+	public User(String id, String name, String lastName, String role) {
+		this.id = id;
+		this.name = name;
+		this.lastName = lastName;
+		this.role = Role.valueOf(role.toUpperCase());
 	}
 
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public String getName() {
+		return name;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public void setName(String Name) {
+		this.name = name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public String getLastName() {
+		return lastName;
 	}
-	
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
 }
 	
 	

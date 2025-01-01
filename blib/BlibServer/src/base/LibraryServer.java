@@ -35,7 +35,7 @@ public class LibraryServer extends AbstractServer
 
 		try {
 			// Handle the action. Usually coming with a response back
-			Message msgFromServer = handleAction(msgFromClient, client);
+			Message msgFromServer = ClientMessageHandler.handleMessage(msgFromClient, client);
 
 			// Once done, we can send a reply back to the client
 			if (msgFromServer != null) {
@@ -47,38 +47,6 @@ public class LibraryServer extends AbstractServer
 			System.err.println(e);
 		}
 	}
-	/*
-	 * receives message from client  
-	 * Interpretate the action and initiates it.
-	 */
-	public Message handleAction(Message msgFromClient, ConnectionToClient client) {
-		String actionName = msgFromClient.getAction();
-		// Find and handle any action from client
-		if (actionName.equals("login")) {
-			return login(msgFromClient, client);
-		}
-		else if(actionName.equals("update")) {
-			return update(msgFromClient, client);
-		}
-		else {
-			return msgFromClient.errorReply("Found no such action! " + msgFromClient.getAction());
-		}
-	}
-	/*
-	 * Initiates the login action and reply to caller.
-	 */
-    public Message login(Message msg, ConnectionToClient client) {
-    	User user = LoginControl.loginAction((String)msg.getObject());
-        if (user != null) {
-            return msg.reply(user);
-        } else {
-            return msg.errorReply("Couldn't login user! ID may be wrong.");
-        }
-    }
-    public Message update(Message msg, ConnectionToClient client) {
-    	SubscriberControl.updateInfo((String[])msg.getObject());
-    	return msg.reply("Success");
-    }
 
 	/**
 	 * Called when the server starts listening for connections.

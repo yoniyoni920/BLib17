@@ -5,8 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaeba8-23b0-43d5-bd5c-f99fe6f48a91" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BLibShared/src/services/MapUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BLibClient/src/gui/LibrarianMainScreen.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BLibShared/src/base/Action.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BLibShared/src/entities/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BlibServer/src/base/ClientMessageHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BLibClient/bin/gui/LogInScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/bin/gui/LogInScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BLibClient/src/gui/LibrarianMainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/gui/LibrarianMainScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BLibClient/src/gui/LogInScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/gui/LogInScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BLibClient/src/gui/LogInScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/gui/LogInScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BLibClient/src/gui/SubscriberMainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/gui/SubscriberMainScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BLibClient/src/gui/SubscriberSettingsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibClient/src/gui/SubscriberSettingsScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BLibShared/src/entities/BookOrder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BLibShared/src/entities/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/src/entities/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BLibShared/src/entities/Subscriber.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/src/entities/Subscriber.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BLibShared/src/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/BLibShared/src/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BlibServer/src/base/LibraryServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/base/LibraryServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BlibServer/src/controllers/DBControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/controllers/DBControl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BlibServer/src/controllers/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlibServer/src/controllers/LoginControl.java" afterDir="false" />
     </list>
@@ -18,6 +32,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
+        <option value="JavaFXApplication" />
+        <option value="FxmlFile" />
         <option value="Class" />
       </list>
     </option>
@@ -46,7 +63,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Daniel/Braude-Src/BLib17/blib/BLibClient",
+    "last_opened_file_path": "C:/Users/Daniel/AppData/Local/SceneBuilder/SceneBuilder.exe",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -119,6 +136,9 @@
       <workItem from="1735165436925" duration="21000" />
       <workItem from="1735165509501" duration="24000" />
       <workItem from="1735402539369" duration="9656000" />
+      <workItem from="1735497866040" duration="818000" />
+      <workItem from="1735571872706" duration="6526000" />
+      <workItem from="1735756006741" duration="8261000" />
     </task>
     <servers />
   </component>

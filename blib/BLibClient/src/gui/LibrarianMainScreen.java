@@ -1,5 +1,8 @@
 package gui;
 
+import entities.User;
+import javafx.event.ActionEvent;
+
 public class LibrarianMainScreen extends AbstractScreen {
 
 	public void registerSubscriber() {
@@ -22,4 +25,15 @@ public class LibrarianMainScreen extends AbstractScreen {
 		throw new UnsupportedOperationException();
 	}
 
+	//TODO: implement
+	public void loadUser(User user) {
+
+	}
+
+	/*
+	 * close Window and returns to previous screen
+	 */
+	public void closeWindow(ActionEvent event) throws Exception {
+		screenManager.closeScreen();
+	}
 }

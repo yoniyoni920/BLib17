@@ -45,8 +45,8 @@ public class SubscriberMainScreen extends AbstractScreen {
 	public void loadSubscriber(Subscriber sub) {
 		subscriber=sub;
 		idLabel.setText(sub.getId());
-		nameLabel.setText(sub.getFirstName());
-		historyLabel.setText("" +sub.getDetailedSubscriptionHistory());
+		nameLabel.setText(sub.getName());
+//		historyLabel.setText("" +sub.getDetailedSubscriptionHistory());
 		phoneLabel.setText(sub.getPhoneNumber());
 		emailLabel.setText(sub.getEmail());
 	}

@@ -72,18 +72,18 @@ public class DBControl {
 	 * br>
 	 * selectQuery("users", "id", 1, "something", "else")
 	 *
-	 * @param table
-	 * @param where
+	 * @param tableName
+	 * @param whereArgs
 	 * @return PreparedStatement
 	 */
-	public PreparedStatement selectQuery(String table, Object ...where) {
-		Map<String, Object> whereMap = MapUtils.mapOf(where);
+	public PreparedStatement selectQuery(String tableName, Object ...whereArgs) {
+		Map<String, Object> whereMap = MapUtils.mapOf(whereArgs);
 
         try {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("SELECT * FROM ");
-			sb.append(table);
+			sb.append(tableName);
 
 			if (!whereMap.isEmpty()) {
 				sb.append(" WHERE ");

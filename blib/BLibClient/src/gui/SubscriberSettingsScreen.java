@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import base.Action;
 import base.ClientApplication;
 import base.LibraryClient;
 import entities.Message;
@@ -51,7 +52,7 @@ public class SubscriberSettingsScreen extends AbstractScreen{
 		changedInfo[1] = emailTxtField.getText();
 		changedInfo[2] = (String)sub.getId();
 		
-		Message msg = ClientApplication.chat.sendToServer(new Message("update", changedInfo));
+		Message msg = ClientApplication.chat.sendToServer(new Message(Action.UPDATE_SUBSCRIBER, changedInfo));
 		if( !msg.isError() ) {
 			sub.setPhoneNumber(changedInfo[0]);
 			sub.setEmail(changedInfo[1]);

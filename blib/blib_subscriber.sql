@@ -25,13 +25,16 @@ DROP TABLE IF EXISTS `subscriber`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscriber` (
-  `subscriber_id` int NOT NULL,
-  `subscriber_name` varchar(45) DEFAULT NULL,
-  `detailed_subscription_history` int DEFAULT NULL,
-  `subscriber_phone_number` varchar(45) DEFAULT NULL,
-  `subscriber_email` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`subscriber_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `phone_number` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  KEY `user_id_idx` (`user_id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=123458 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,8 +43,35 @@ CREATE TABLE `subscriber` (
 
 LOCK TABLES `subscriber` WRITE;
 /*!40000 ALTER TABLE `subscriber` DISABLE KEYS */;
-INSERT INTO `subscriber` VALUES (12,'Yosi',0,'0549874123','yosi362@gmail.com'),(123,'Roni',0,'0549991435','roni61@walla.com'),(1234,'Avi',0,'0522217954','avi333@gmail.com'),(12345,'Dan',0,'05397857789','dan1@walla.com'),(123456,'Ran',0,'0503336184','ran091@gmail.com');
+INSERT INTO `subscriber` VALUES (123457,1,'05012345678','hi@gmail.com');
 /*!40000 ALTER TABLE `subscriber` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `role` enum('librarian','subscriber') DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'Daniel','Student','123','subscriber'),(2,'Safranit','Lol','321','librarian');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +83,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-20 14:48:31
+-- Dump completed on 2025-01-01 23:22:45

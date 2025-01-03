@@ -36,3 +36,4 @@ prototype/BLibServer/bin
 prototype/build
 /.metadata/
 .lock
+/blib/.idea

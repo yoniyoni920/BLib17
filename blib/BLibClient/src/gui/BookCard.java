@@ -22,7 +22,8 @@ public class BookCard {
 
         // Set the book's image
         Image image;
-		image = new Image(getClass().getResource(book.getImage()).toExternalForm());
+		image = new Image(book.getImage());
+		System.out.println(book.getImage());
 		bookImageView.setImage(image);
 	    if (image.isError()) {
 	         System.out.println("Error loading image: " + image.getException().getMessage());

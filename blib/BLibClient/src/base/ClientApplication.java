@@ -41,7 +41,8 @@ public class ClientApplication extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		clientApplication = this;
 		screenManager = new ScreenManager(primaryStage);
-		screenManager.openScreen("ClientSocket", "Client Socket Screen");
+		//screenManager.openScreen("ClientSocket", "Client Socket Screen");
+		screenManager.openScreen("SearchBooksScreen", "Search Books Screen");
 		
 		setUserAgentStylesheet("/gui/Main.css");
 	}

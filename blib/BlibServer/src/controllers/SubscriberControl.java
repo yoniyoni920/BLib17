@@ -17,13 +17,16 @@ public class SubscriberControl {
 	 */
 	public static void updateInfo(String[] changedInfo) {
 		try {
-			PreparedStatement stt = DBControl.getConnection().prepareStatement("UPDATE blib.subscriber SET " +
-					"subscriber_phone_number = ?, subscriber_email = ? WHERE subscriber_id = ?");
-			stt.setString(1,changedInfo[0]);
-			stt.setString(2,changedInfo[1]);
-			stt.setString(3, changedInfo[2]);
-			stt.executeUpdate();
-		}catch(SQLException e){
+			try(PreparedStatement stt = DBControl
+					.getConnection()
+					.prepareStatement("UPDATE subscriber SET phone_number = ?, email = ? WHERE user_id = ?")
+			) {
+				stt.setString(1,changedInfo[0]);
+				stt.setString(2,changedInfo[1]);
+				stt.setString(3, changedInfo[2]);
+				stt.executeUpdate();
+			}
+		} catch(SQLException e){
 			e.printStackTrace();
 		} 
 	}

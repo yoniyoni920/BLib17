@@ -9,5 +9,5 @@ public class Book {
 	private String genre;
 	private String description;
 	private String image;
-	private int location;
+	private String location;
 }

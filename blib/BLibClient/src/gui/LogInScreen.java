@@ -82,6 +82,7 @@ public class LogInScreen extends AbstractScreen {
 
 				// Check which user this is to show the appropriate screen
 				if (user.getRole() == Role.SUBSCRIBER) {
+					
 					SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("SubscriberMainScreen", "Subscriber Main Screen");
 					subMainScreen.loadSubscriber((Subscriber)user);
 				} else {

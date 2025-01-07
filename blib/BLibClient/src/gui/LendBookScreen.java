@@ -1,10 +1,14 @@
 package gui;
 
 import controllers.BookScanner;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+
 
 public class LendBookScreen extends AbstractScreen {
+	@FXML
+	TextField bookIdTextField;
 
-	BookScanner scanner;
 
 	public void searchBooskByName() {
 		// TODO - implement LendBookScreen.searchBooskByName
@@ -12,8 +16,16 @@ public class LendBookScreen extends AbstractScreen {
 	}
 
 	public void activateScanner() {
-		// TODO - implement LendBookScreen.activateScanner
-		throw new UnsupportedOperationException();
+		Thread thread = new Thread(() -> {
+			try{
+				String bookId = BookScanner.getInstance().Scan();
+				bookIdTextField.setText(bookId);
+
+			}catch (InterruptedException ex){
+				System.out.println(ex.getMessage());
+			}
+		});
+		thread.start();
 	}
 
 	public void submitLend() {

@@ -35,7 +35,7 @@ public class LoginControl {
 				// Get user values
 				String role = rs.getString("role");
 				String id = rs.getString("id");
-				String name = rs.getString("name");
+				String name = rs.getString("first_name");
 				String lastName = rs.getString("last_name");
 
 				if (role.equals("subscriber")) {

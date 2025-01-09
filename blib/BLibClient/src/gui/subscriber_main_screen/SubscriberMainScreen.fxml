@@ -15,7 +15,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Line?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="771.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SubscriberMainScreen">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber_main_screen.SubscriberMainScreen">
    <children>
       <AnchorPane prefHeight="63.0" prefWidth="795.0">
          <children>
@@ -48,25 +48,25 @@
                   </LinearGradient>
                </stroke>
             </Line>
-            <MenuButton fx:id="profilePicMenu" layoutX="655.0" layoutY="9.0" mnemonicParsing="false" style="-fx-background-color: transparent;" textAlignment="RIGHT" textFill="#070707" textOverrun="CLIP">
+            <MenuButton fx:id="profilePicMenu" layoutX="681.0" layoutY="9.0" mnemonicParsing="false" style="-fx-background-color: transparent;" textAlignment="RIGHT" textFill="#070707" textOverrun="CLIP">
               <items>
                 <MenuItem fx:id="infoMenuItem" mnemonicParsing="false" onAction="#openSubInfoScreen" text="info" />
-                <MenuItem fx:id="historyMenuItem" mnemonicParsing="false" text="history" />
+                <MenuItem fx:id="historyMenuItem" mnemonicParsing="false" onAction="#openSubscriberHistoryScreen" text="history" />
                   <MenuItem fx:id="signoutMenuItem" mnemonicParsing="false" onAction="#closeWindow" text="sign out" />
               </items>
                <graphic>
                   <ImageView fitHeight="39.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../pics/user.png" />
+                        <Image url="@/resources/subscriber_main_screen_photos/user.png" />
                      </image>
                   </ImageView>
                </graphic>
             </MenuButton>
-            <Button alignment="CENTER" layoutX="507.0" layoutY="18.0" minWidth="28.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="148.0" text="Borrow">
+            <Button alignment="CENTER" layoutX="533.0" layoutY="15.0" minWidth="28.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="148.0" text="Browse">
                <graphic>
                   <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
                   	<image>
-                        <Image url="@../pics/search.png" />
+                        <Image url="@/resources/subscriber_main_screen_photos/search.png" />
                      </image>
                </graphic>
             </Button>
@@ -77,8 +77,9 @@
             <Insets bottom="11.0" left="11.0" right="11.0" top="51.0" />
          </VBox.margin>
          <padding>
-            <Insets top="11.0" bottom="11"/>
+            <Insets bottom="11" top="11.0" />
          </padding>
       </ListView>
+      <Label fx:id="borrowedBooksCount" alignment="CENTER" prefHeight="18.0" prefWidth="800.0" text="you have 0 books in your library" textAlignment="JUSTIFY" textFill="RED" />
    </children>
 </VBox>

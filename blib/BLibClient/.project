@@ -20,13 +20,6 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/gui/SubscriberMainScreen.fxml</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/Desktop/helal.fxml</locationURI>
-		</link>
-	</linkedResources>
 	<filteredResources>
 		<filter>
 			<id>1734608704694</id>

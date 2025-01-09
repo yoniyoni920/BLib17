@@ -13,8 +13,7 @@ public class LibraryClient extends AbstractClient
 	/**
 	 * This Class is the message handles between server and Client
 	 */
-	ClientController clientUI; 
-	public static List<Message> awaitingMessages;    
+	public static List<Message> awaitingMessages;
 
 	
 	/**
@@ -22,12 +21,10 @@ public class LibraryClient extends AbstractClient
 	 *
 	 * @param host The server to connect to.
 	 * @param port The port number to connect on.
-	 * @param clientUI The interface type variable.
 	 */
-	public LibraryClient(String host, int port, ClientController clientUI) throws IOException {
+	public LibraryClient(String host, int port) throws IOException {
 		super(host, port); //Call the superclass constructor
-		this.clientUI = clientUI;
-		awaitingMessages = new ArrayList<>();      
+		awaitingMessages = new ArrayList<>();
 		openConnection();
 	}
 
@@ -88,7 +85,6 @@ public class LibraryClient extends AbstractClient
 		}
 		catch(IOException e) {
 			e.printStackTrace();
-			clientUI.display("Could not send message to server: Terminating client."+ e);
 			System.exit(1);
 			return null; // This will never happen
 		}

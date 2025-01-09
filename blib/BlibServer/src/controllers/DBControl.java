@@ -37,20 +37,12 @@ public class DBControl {
 		}
 	}
 
-	public Statement createStatement() {
-        try {
-            return connection.createStatement();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+	public static Statement createStatement() throws SQLException {
+		return getConnection().createStatement();
     }
 
-	public PreparedStatement prepareStatement(String sql) {
-		try {
-			return connection.prepareStatement(sql);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+	public static PreparedStatement prepareStatement(String sql) throws SQLException {
+		return getConnection().prepareStatement(sql);
 	}
 
 	/**

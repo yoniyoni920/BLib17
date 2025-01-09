@@ -1,11 +1,13 @@
 package base;
 
+import controllers.BookControl;
 import controllers.LoginControl;
 import controllers.SubscriberControl;
 import entities.Message;
 import entities.User;
 import ocsf.server.ConnectionToClient;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -50,6 +52,10 @@ public class ClientMessageHandler {
     private void setupActions() {
         actions.put(Action.LOGIN, ClientMessageHandler::login);
         actions.put(Action.UPDATE_SUBSCRIBER, ClientMessageHandler::updateSubscriber);
+        actions.put(Action.SEARCH_BOOKS,ClientMessageHandler::searchBooks);
+        actions.put(Action.GET_BORROW_TIMES_REPORT, ClientMessageHandler::getBorrowTimesReport);
+        actions.put(Action.GET_SUBSCRIBER_STATUS_REPORT, ClientMessageHandler::getSubscriberStatusReport);
+        actions.put(Action.GER_REPORT_DATES, ClientMessageHandler::getReportDates);
     }
 
     /**
@@ -73,5 +79,23 @@ public class ClientMessageHandler {
     public static Message updateSubscriber(Message msg, ConnectionToClient client) {
         SubscriberControl.updateInfo((String[])msg.getObject());
         return msg.reply("Success");
+    }
+
+    public static Message searchBooks(Message msg, ConnectionToClient client) {
+        String[] search = (String[])msg.getObject();
+        return msg.reply(BookControl.searchBooks(search[0], search[1]));
+    }
+
+    public static Message getBorrowTimesReport(Message msg, ConnectionToClient client) {
+        Object[] params = (Object[])msg.getObject();
+        return msg.reply(BookControl.getBorrowTimesReport((LocalDate)params[0], (Integer)params[1]));
+    }
+
+    public static Message getSubscriberStatusReport(Message msg, ConnectionToClient client) {
+        return msg.reply(SubscriberControl.getSubscriberStatusReport((LocalDate)msg.getObject()));
+    }
+
+    public static Message getReportDates(Message msg, ConnectionToClient client) {
+        return msg.reply(SubscriberControl.getReportDates());
     }
 }

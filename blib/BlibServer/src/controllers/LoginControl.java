@@ -1,6 +1,7 @@
 package controllers;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import entities.Subscriber;
@@ -35,7 +36,7 @@ public class LoginControl {
 				// Get user values
 				String role = rs.getString("role");
 				String id = rs.getString("id");
-				String name = rs.getString("name");
+				String name = rs.getString("first_name");
 				String lastName = rs.getString("last_name");
 
 				if (role.equals("subscriber")) {
@@ -48,7 +49,8 @@ public class LoginControl {
 						// Get subscriber-specific values
 						String phoneNumber = resultSubscriber.getString("phone_number");
 						String email = resultSubscriber.getString("email");
-						return new Subscriber(id, name, lastName, role, phoneNumber, email);
+						LocalDate date = resultSubscriber.getDate("frozen_until").toLocalDate();
+						return new Subscriber(id, name, lastName, role, phoneNumber, email, date);
 					}
 				} else {
 					return new User(id, name, lastName, role);

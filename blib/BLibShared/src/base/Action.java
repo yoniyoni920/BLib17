@@ -3,4 +3,8 @@ package base;
 public enum Action {
     LOGIN,
     UPDATE_SUBSCRIBER,
+    SEARCH_BOOKS,
+    GET_BORROW_TIMES_REPORT,
+    GET_SUBSCRIBER_STATUS_REPORT,
+    GER_REPORT_DATES
 }

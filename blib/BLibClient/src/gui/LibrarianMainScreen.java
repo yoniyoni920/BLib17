@@ -3,6 +3,8 @@ package gui;
 import entities.User;
 import javafx.event.ActionEvent;
 
+import java.io.IOException;
+
 public class LibrarianMainScreen extends AbstractScreen {
 
 	public void registerSubscriber() {
@@ -36,4 +38,8 @@ public class LibrarianMainScreen extends AbstractScreen {
 	public void closeWindow(ActionEvent event) throws Exception {
 		screenManager.closeScreen();
 	}
+
+    public void openReportScreen(ActionEvent event) throws IOException {
+		screenManager.openScreen("ReportScreen", "Reports");
+    }
 }

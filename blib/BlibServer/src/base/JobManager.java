@@ -39,11 +39,13 @@ public class JobManager {
      */
     public void generateReports() {
         LocalDateTime date = getJobDate("generate-reports");
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate nowMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
 
-        if (date == null || !date.getMonth().equals(now.getMonth())) {
+        if (date == null || !date.getMonth().equals(nowMonth.getMonth())) {
             // The moment that the next month enters, the last month "ends".
             // We want to also ensure that the report is generated in case the app isn't on by the 1st of the month.
+            generateSubscriberStatusReport(nowMonth);
+            generateBorrowTimesReport(nowMonth);
 
             try {
                 markJobDone("generate-reports");
@@ -52,6 +54,59 @@ public class JobManager {
             }
         }
     }
+
+    public void generateSubscriberStatusReport(LocalDate date) {
+        String query = "SELECT * FROM subscriber_history " +
+                "WHERE action = 'freeze' AND date >= ? AND date <= ?";
+        try (PreparedStatement st = DBControl.prepareStatement(query)) {
+            st.setObject(1, date);
+            st.setObject(2, date);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                String query2 = "INSERT INTO subscriber_status_report (freeze_date, freeze_end_date, report_date) " +
+                        "VALUES (?, ?, ?)";
+
+                try (PreparedStatement st2 = DBControl.prepareStatement(query2)) {
+                    st2.setInt(1, rs.getInt("date"));
+                    st2.setInt(2, rs.getInt("end_date"));
+                    st2.setObject(3, date);
+                }
+            }
+        }  catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void generateBorrowTimesReport(LocalDate date) {
+        //TODO: get late returns
+        String query = "SELECT borrow.*, book_copy.book_id, late.date AS late_return_date " +
+                "FROM subscriber_history AS borrow " +
+                "INNER JOIN book_copy ON book_copy_id = book_copy.id " +
+                "LEFT JOIN subscriber_history AS late ON late.book_copy_id = borrow.book_copy_id AND late.action = 'late'" +
+                "WHERE borrow.action = 'borrow' AND borrow.date >= ? AND borrow.date <= ? ";
+        try (PreparedStatement st = DBControl.prepareStatement(query)) {
+            st.setDate(1, Date.valueOf(date));
+            st.setDate(2, Date.valueOf(date.plusMonths(1).minusDays(1)));
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                String query2 = "INSERT INTO borrow_report (book_id, book_copy_id, start_date, return_date, late_return_date, report_date) " +
+                        "VALUES (?, ?, ?, ?, ?, ?)";
+
+                try (PreparedStatement st2 = DBControl.prepareStatement(query2)) {
+                    st2.setInt(1, rs.getInt("book_id"));
+                    st2.setInt(2, rs.getInt("book_copy_id"));
+                    st2.setTimestamp(3, rs.getTimestamp("date"));
+                    st2.setTimestamp(4, rs.getTimestamp("end_date"));
+                    st2.setObject(5, rs.getDate("late_return_date"));
+                }catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }  catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /**
      * Checks for any late return. If it detects a week late return it punishes the offending subscriber
@@ -110,13 +165,12 @@ public class JobManager {
     public void markJobDone(String jobName) throws SQLException {
         PreparedStatement st;
         if (getJobDate(jobName) == null) {
-            st = DBControl.getConnection().prepareStatement("INSERT INTO job (date, name) VALUES (now(), ?)");
+            st = DBControl.prepareStatement("INSERT INTO job (date, name) VALUES (now(), ?)");
         } else {
-            st = DBControl.getConnection().prepareStatement("UPDATE job SET date = now() WHERE name = ?");
+            st = DBControl.prepareStatement("UPDATE job SET date = now() WHERE name = ?");
         }
         st.setString(1, jobName);
         st.execute();
         st.close();
-        System.out.println("Hi!!! " + jobName);
     }
 }

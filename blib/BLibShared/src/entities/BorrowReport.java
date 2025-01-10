@@ -6,6 +6,7 @@ import java.time.LocalDate;
 public class BorrowReport implements Serializable {
     private int bookId;
     private int bookCopyId;
+    private Book book;
     private LocalDate startDate;
     private LocalDate returnDate;
     private LocalDate lateReturnDate;
@@ -37,5 +38,13 @@ public class BorrowReport implements Serializable {
 
     public LocalDate getLateReturnDate() {
         return lateReturnDate;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
     }
 }

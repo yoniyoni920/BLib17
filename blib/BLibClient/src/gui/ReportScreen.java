@@ -139,7 +139,8 @@ public class ReportScreen extends AbstractScreen implements Initializable {
 
                 int startD = report.getStartDate().getDayOfMonth();
                 int endD = report.getReturnDate().getDayOfMonth();
-                String yVal = "Copy " + report.getBookCopyId();
+
+                String yVal =  report.getBook().getTitle() + " (Copy " + report.getBookCopyId() + ")";
 
                 // Create XY for start->end borrow
                 XYChart.Data<Integer, String> startData = new XYChart.Data<>(startD, yVal);

@@ -14,20 +14,20 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="583.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReportScreen">
+<AnchorPane prefHeight="658.0" prefWidth="1057.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReportScreen">
     <children>
-        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="25.0" layoutY="13.0" prefHeight="54.0" prefWidth="817.0" text="Reports" textAlignment="JUSTIFY">
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="18.0" layoutY="13.0" prefHeight="54.0" prefWidth="1023.0" text="Reports" textAlignment="JUSTIFY">
             <font>
                 <Font name="System Bold" size="25.0" />
             </font>
         </Label>
-        <TabPane layoutX="14.0" layoutY="100.0" prefHeight="469.0" prefWidth="838.0" tabClosingPolicy="UNAVAILABLE">
+        <TabPane layoutX="7.0" layoutY="99.0" prefHeight="559.0" prefWidth="1044.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab fx:id="subscriberStatusTab" onSelectionChanged="#onSelectionChanged" text="Subscriber Status">
                     <content>
                         <AnchorPane prefHeight="363.0" prefWidth="569.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
                             <children>
-                                <LineChart fx:id="subscriberStatusChart" layoutX="11.0" layoutY="27.0" legendVisible="false" prefHeight="400.0" prefWidth="787.0">
+                                <LineChart fx:id="subscriberStatusChart" layoutX="11.0" layoutY="27.0" legendVisible="false" prefHeight="480.0" prefWidth="1023.0">
                                     <xAxis>
                                         <NumberAxis autoRanging="false" label="day" lowerBound="1.0" minorTickCount="1" prefHeight="35.0" prefWidth="608.0" side="BOTTOM" tickLabelGap="0.0" tickLength="1.0" tickUnit="1.0" upperBound="31.0" />
                                     </xAxis>
@@ -43,7 +43,7 @@
                     <content>
                         <AnchorPane prefHeight="448.0" prefWidth="773.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
                             <children>
-                                <TextField fx:id="searchBook" layoutX="214.0" layoutY="14.0" onKeyPressed="#searchBooks" prefHeight="25.0" prefWidth="317.0" promptText="Search book...">
+                                <TextField fx:id="searchBook" layoutX="318.0" layoutY="14.0" onKeyPressed="#searchBooks" prefHeight="25.0" prefWidth="317.0" promptText="Search book...">
                                     <contextMenu>
                                         <ContextMenu fx:id="searchBooksContextMenu" onAction="#onChoseBook">
                                             <items>
@@ -51,23 +51,23 @@
                                             </items>
                                         </ContextMenu>
                                     </contextMenu></TextField>
-                                <LineChart fx:id="borrowTimesChart" layoutX="7.0" layoutY="48.0" legendVisible="false" prefHeight="384.0" prefWidth="817.0">
+                                <LineChart fx:id="borrowTimesChart" layoutX="7.0" layoutY="48.0" legendVisible="false" prefHeight="465.0" prefWidth="1031.0">
                                     <xAxis>
                                         <NumberAxis autoRanging="false" label="day" lowerBound="1.0" minorTickCount="1" prefHeight="38.0" prefWidth="682.0" side="BOTTOM" tickLabelGap="0.0" tickLength="1.0" tickUnit="1.0" upperBound="31.0" />
                                     </xAxis>
                                     <yAxis>
-                                        <CategoryAxis animated="false" label="Copy" prefHeight="318.0" prefWidth="90.0" side="LEFT" tickLabelGap="10.0" />
+                                        <CategoryAxis animated="false" label="Copy" prefHeight="399.0" prefWidth="225.0" side="LEFT" tickLabelGap="2.0" />
                                     </yAxis>
                                 </LineChart>
-                        <Button fx:id="clearFilter" disable="true" layoutX="534.0" layoutY="14.0" mnemonicParsing="false" onAction="#clearFilter" text="Clear Filter" />
+                        <Button fx:id="clearFilter" disable="true" layoutX="638.0" layoutY="14.0" mnemonicParsing="false" onAction="#clearFilter" text="Clear Filter" />
                             </children>
                         </AnchorPane>
                     </content>
                 </Tab>
             </tabs>
         </TabPane>
-      <ChoiceBox fx:id="reportDate" layoutX="347.0" layoutY="67.0" minHeight="10.0" onAction="#onChoseDate" prefHeight="32.0" prefWidth="174.0" />
-      <Button layoutX="789.0" layoutY="22.0" mnemonicParsing="false" onAction="#closeScreen" text="Back" />
+      <ChoiceBox fx:id="reportDate" layoutX="443.0" layoutY="67.0" minHeight="10.0" onAction="#onChoseDate" prefHeight="32.0" prefWidth="174.0" />
+      <Button layoutX="988.0" layoutY="22.0" mnemonicParsing="false" onAction="#closeScreen" text="Back" />
 
     </children>
 </AnchorPane>

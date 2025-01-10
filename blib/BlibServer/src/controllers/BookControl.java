@@ -103,9 +103,11 @@ public class BookControl {
 	public static List<BorrowReport> getBorrowTimesReport(LocalDate date, Integer bookId) {
 		String query;
 		if (bookId == null) {
-			query = "SELECT * FROM borrow_report WHERE report_date = ?";
+			query = "SELECT *, book.* FROM borrow_report INNER JOIN book ON book.id = borrow_report.book_id " +
+					"WHERE report_date = ?";
 		} else {
-			query = "SELECT * FROM borrow_report WHERE report_date = ? AND book_id = ?";
+			query = "SELECT *, book.* FROM borrow_report INNER JOIN book ON book.id = borrow_report.book_id " +
+					"WHERE report_date = ? AND book_id = ?";
 		}
 
 		try (PreparedStatement st = DBControl.prepareStatement(query)) {
@@ -119,13 +121,23 @@ public class BookControl {
 			List<BorrowReport> list = new ArrayList<>();
 			while (rs.next()) {
 				Date lateDate = rs.getDate("late_return_date");
-				list.add(new BorrowReport(
+				BorrowReport report = new BorrowReport(
 					rs.getInt("book_id"),
 					rs.getInt("book_copy_id"),
 					rs.getDate("start_date").toLocalDate(),
 					rs.getDate("return_date").toLocalDate(),
 					lateDate != null ? lateDate.toLocalDate() : null
+				);
+				report.setBook(new Book(
+					rs.getInt("book_id"),
+					rs.getString("title"),
+					rs.getString("authors"),
+					rs.getString("genre"),
+					rs.getString("description"),
+					rs.getString("image"),
+					rs.getString("location")
 				));
+				list.add(report);
 			}
 
 			return list;

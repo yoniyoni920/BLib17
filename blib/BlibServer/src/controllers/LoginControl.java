@@ -1,6 +1,7 @@
 package controllers;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import entities.DetailedSubscriptionHistory;
@@ -50,9 +51,10 @@ public class LoginControl {
 						// Get subscriber-specific values
 						String phoneNumber = resultSubscriber.getString("phone_number");
 						String email = resultSubscriber.getString("email");
+  					LocalDate date = resultSubscriber.getDate("frozen_until").toLocalDate();
 						DetailedSubscriptionHistory history = new DetailedSubscriptionHistory() ;
 						history.setActionsHistory(DetailedSubscriptionHistoryControl.retrieveActionsHistory());
-						return new Subscriber(id, name, lastName, role, phoneNumber, email, loginPassword, history);
+						return new Subscriber(id, name, lastName, role, loginPassword, phoneNumber, email, date, history);
 					}
 				} else {
 					return new User(id, name, lastName, role, loginPassword);

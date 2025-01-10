@@ -1,5 +1,9 @@
 package controllers;
 
+import entities.BorrowReport;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,14 +14,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import entities.Book;
 
 public class BookControl {
 
 	public static List<Book> searchBooks(String search, String searchType) {
 		List<Book> books = new ArrayList<>();
-		if(searchType.equals("title") ||searchType.equals("genre") || searchType.equals("description")) {
+		if(searchType.equals("title") || searchType.equals("genre") || searchType.equals("description")) {
 			String query = "SELECT * FROM book WHERE " + searchType + " LIKE ?";
 			String query1 = "SELECT * FROM book_copy\r\n"
 					+ "WHERE book_id = ? AND borrow_subscriber_id IS NULL AND order_subscriber_id IS NULL;";
@@ -37,6 +40,8 @@ public class BookControl {
 					String description = rs.getString("description");
 					String image = rs.getString("image");
 					String location = rs.getString("location");
+				}
+
 					String locationOrDate = "jljl";
 					try(PreparedStatement preparedStatement1 = DBControl.getConnection().prepareStatement(query1)){
 						preparedStatement1.setInt(1, id);
@@ -58,12 +63,11 @@ public class BookControl {
 					 
 					books.add(new Book(id, title, authors, genre, description, image, location, locationOrDate));
 				}
-	        
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-	    return books;
+	  return books;
 	}
 	
 
@@ -127,4 +131,54 @@ public class BookControl {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * Returns borrow times report for a specific book
+	 * @param bookId
+	 */
+	public static List<BorrowReport> getBorrowTimesReport(LocalDate date, Integer bookId) {
+		String query;
+		if (bookId == null) {
+			query = "SELECT *, book.* FROM borrow_report INNER JOIN book ON book.id = borrow_report.book_id " +
+					"WHERE report_date = ?";
+		} else {
+			query = "SELECT *, book.* FROM borrow_report INNER JOIN book ON book.id = borrow_report.book_id " +
+					"WHERE report_date = ? AND book_id = ?";
+		}
+
+		try (PreparedStatement st = DBControl.prepareStatement(query)) {
+			st.setObject(1, date);
+
+			if (bookId != null) {
+				st.setInt(2, bookId);
+			}
+
+			ResultSet rs = st.executeQuery();
+			List<BorrowReport> list = new ArrayList<>();
+			while (rs.next()) {
+				Date lateDate = rs.getDate("late_return_date");
+				BorrowReport report = new BorrowReport(
+					rs.getInt("book_id"),
+					rs.getInt("book_copy_id"),
+					rs.getDate("start_date").toLocalDate(),
+					rs.getDate("return_date").toLocalDate(),
+					lateDate != null ? lateDate.toLocalDate() : null
+				);
+				report.setBook(new Book(
+					rs.getInt("book_id"),
+					rs.getString("title"),
+					rs.getString("authors"),
+					rs.getString("genre"),
+					rs.getString("description"),
+					rs.getString("image"),
+					rs.getString("location")
+				));
+				list.add(report);
+			}
+
+			return list;
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

@@ -9,6 +9,7 @@ import entities.Message;
 import entities.Subscriber;
 import entities.User;
 import ocsf.server.ConnectionToClient;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,10 @@ public class ClientMessageHandler {
     private void setupActions() {
         actions.put(Action.LOGIN, ClientMessageHandler::login);
         actions.put(Action.UPDATE_SUBSCRIBER, ClientMessageHandler::updateSubscriber);
+        actions.put(Action.SEARCH_BOOKS,ClientMessageHandler::searchBooks);
+        actions.put(Action.GET_BORROW_TIMES_REPORT, ClientMessageHandler::getBorrowTimesReport);
+        actions.put(Action.GET_SUBSCRIBER_STATUS_REPORT, ClientMessageHandler::getSubscriberStatusReport);
+        actions.put(Action.GER_REPORT_DATES, ClientMessageHandler::getReportDates);
         actions.put(Action.RETRIEVE_BORROWEDBOOKS, ClientMessageHandler::retrieveBorrowedBooks);
         actions.put(Action.SEARCH_BOOKS, ClientMessageHandler::searchBooks);
     }
@@ -79,6 +84,19 @@ public class ClientMessageHandler {
 	  public static Message updateSubscriber(Message msg, ConnectionToClient client) {
         SubscriberControl.updateInfo((List<String>)msg.getObject());
         return msg.reply("Success");
+    }
+
+    public static Message getBorrowTimesReport(Message msg, ConnectionToClient client) {
+        Object[] params = (Object[])msg.getObject();
+        return msg.reply(BookControl.getBorrowTimesReport((LocalDate)params[0], (Integer)params[1]));
+    }
+
+    public static Message getSubscriberStatusReport(Message msg, ConnectionToClient client) {
+        return msg.reply(SubscriberControl.getSubscriberStatusReport((LocalDate)msg.getObject()));
+    }
+
+    public static Message getReportDates(Message msg, ConnectionToClient client) {
+        return msg.reply(SubscriberControl.getReportDates());
     }
   
     //handles retrieving the borrowed books for a specific subscriber 

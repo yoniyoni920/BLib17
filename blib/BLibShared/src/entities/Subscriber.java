@@ -1,6 +1,10 @@
 package entities;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+
 /*
  * Subscribers are the members of the library
  */
@@ -8,6 +12,8 @@ public class Subscriber extends User implements Serializable {
 	private String status;
 	private String phoneNumber;
 	private String email;
+	private LocalDate frozenUntil;
+
 	private DetailedSubscriptionHistory detailedSubscriptionHistory;
 	public Subscriber() {
 		super();
@@ -18,14 +24,16 @@ public class Subscriber extends User implements Serializable {
 		String name,
 		String lastName,
 		String role,
+    String password,
 		String phoneNumber,
 		String email,
-		String password,
+		LocalDate frozenUntil,
 		DetailedSubscriptionHistory detailedSubscriptionHistory
 	) {
 		super(id, name, lastName, role, password);
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+		this.frozenUntil = frozenUntil;
 		this.detailedSubscriptionHistory = detailedSubscriptionHistory;
 	}
 
@@ -33,8 +41,8 @@ public class Subscriber extends User implements Serializable {
 		return status;
 	}
 
-	public boolean isFrozen() { //TODO: implement via a date check of frozenUntil
-		return false;
+	public boolean isFrozen() {
+		return frozenUntil == null || frozenUntil.isBefore(LocalDate.now());
 	}
 
 	public void setStatus(String status) {

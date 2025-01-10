@@ -53,6 +53,11 @@ public class Message implements Serializable{
 		this.object = object;
 	}
 
+	public Message(Action action) {
+		this();
+		this.action = action;
+	}
+
 	/**
 	 * Replies to the message by changing the object and isError value
 	 * @param object

@@ -11,7 +11,7 @@ public class Book implements Serializable {
 	private String image;
   private String location;
 	private String locationOrDate;
-	
+
 	public Book(int id, String title, String authors, String genre, String description, String image, String location, String locationOrDate) {
 		this.title = title;
 		this.authors = authors;

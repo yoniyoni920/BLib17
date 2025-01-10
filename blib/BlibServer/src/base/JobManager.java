@@ -40,8 +40,9 @@ public class JobManager {
     public void generateReports() {
         LocalDateTime date = getJobDate("generate-reports");
         LocalDate nowMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
+        LocalDate now = LocalDate.now().withDayOfMonth(1);
 
-        if (date == null || !date.getMonth().equals(nowMonth.getMonth())) {
+        if (date == null || !date.getMonth().equals(now.getMonth())) {
             // The moment that the next month enters, the last month "ends".
             // We want to also ensure that the report is generated in case the app isn't on by the 1st of the month.
             generateSubscriberStatusReport(nowMonth);
@@ -78,7 +79,6 @@ public class JobManager {
     }
 
     public void generateBorrowTimesReport(LocalDate date) {
-        //TODO: get late returns
         String query = "SELECT borrow.*, book_copy.book_id, late.date AS late_return_date " +
                 "FROM subscriber_history AS borrow " +
                 "INNER JOIN book_copy ON book_copy_id = book_copy.id " +
@@ -98,7 +98,8 @@ public class JobManager {
                     st2.setTimestamp(3, rs.getTimestamp("date"));
                     st2.setTimestamp(4, rs.getTimestamp("end_date"));
                     st2.setObject(5, rs.getDate("late_return_date"));
-                }catch (SQLException e) {
+                    st2.execute();
+                } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
             }

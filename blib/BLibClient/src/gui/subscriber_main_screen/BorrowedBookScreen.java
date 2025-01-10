@@ -98,7 +98,7 @@ public class BorrowedBookScreen extends AbstractScreen {
             daysLeft.setText("You Are Late");
         }
 
-        if (copy.getOrderSubscriberId() == 0) {
+        if (copy.getOrderSubscriberId() == 0 && daysBetween <= 7) {
             borrowExtend.setVisible(true);
         } else {
             isOrdered.setText("yes");

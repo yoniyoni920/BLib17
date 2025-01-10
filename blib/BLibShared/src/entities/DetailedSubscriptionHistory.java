@@ -9,7 +9,10 @@ public class DetailedSubscriptionHistory implements Serializable{
 	public static class HistoryItem implements Serializable {
 		private int id ;
 		private String action ;
+		private int subscriberId ;
+		private int bookCopyId ;
 		private LocalDate actionDate ;
+		private LocalDate endDate ;
 		
 		public HistoryItem(int id,String action, LocalDate actionDate) {
 			this.id = id;

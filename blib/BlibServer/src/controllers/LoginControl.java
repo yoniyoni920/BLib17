@@ -41,6 +41,8 @@ public class LoginControl {
 				String name = rs.getString("first_name");
 				String lastName = rs.getString("last_name");
 
+				System.out.println("I am here 2 xd");
+
 				if (role.equals("subscriber")) {
 					try (PreparedStatement ps2 = DBControl.getInstance().selectQuery("subscriber", "user_id", loginId)) {
 						ResultSet resultSubscriber = ps2.executeQuery();
@@ -51,16 +53,29 @@ public class LoginControl {
 						// Get subscriber-specific values
 						String phoneNumber = resultSubscriber.getString("phone_number");
 						String email = resultSubscriber.getString("email");
-  					LocalDate date = resultSubscriber.getDate("frozen_until").toLocalDate();
-						DetailedSubscriptionHistory history = new DetailedSubscriptionHistory() ;
+  						Date date = resultSubscriber.getDate("frozen_until");
+
+						Subscriber subscriber = new Subscriber(
+							id,
+							name,
+							lastName,
+							role,
+							loginPassword,
+							phoneNumber,
+							email,
+							date != null ? date.toLocalDate() : null
+						);
+
+						DetailedSubscriptionHistory history = new DetailedSubscriptionHistory();
 						history.setActionsHistory(DetailedSubscriptionHistoryControl.retrieveActionsHistory());
-						return new Subscriber(id, name, lastName, role, loginPassword, phoneNumber, email, date, history);
+						subscriber.setDetailedSubscriptionHistory(history);
+						return subscriber;
 					}
 				} else {
 					return new User(id, name, lastName, role, loginPassword);
 				}
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -9,17 +9,16 @@ public class Book implements Serializable {
 	private String genre;
 	private String description;
 	private String image;
-  private String location;
+  	private String location;
 	private String locationOrDate;
 
-	public Book(int id, String title, String authors, String genre, String description, String image, String location, String locationOrDate) {
+	public Book(int id, String title, String authors, String genre, String description, String image, String location) {
 		this.title = title;
 		this.authors = authors;
 		this.genre = genre;
 		this.description = description;
 		this.image = image;
-    this.location = location;
-		this.locationOrDate = locationOrDate;
+		this.location = location;
 	}
 
 	public int getId() {

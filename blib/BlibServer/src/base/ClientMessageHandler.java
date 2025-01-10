@@ -55,10 +55,9 @@ public class ClientMessageHandler {
     private void setupActions() {
         actions.put(Action.LOGIN, ClientMessageHandler::login);
         actions.put(Action.UPDATE_SUBSCRIBER, ClientMessageHandler::updateSubscriber);
-        actions.put(Action.SEARCH_BOOKS,ClientMessageHandler::searchBooks);
         actions.put(Action.GET_BORROW_TIMES_REPORT, ClientMessageHandler::getBorrowTimesReport);
         actions.put(Action.GET_SUBSCRIBER_STATUS_REPORT, ClientMessageHandler::getSubscriberStatusReport);
-        actions.put(Action.GER_REPORT_DATES, ClientMessageHandler::getReportDates);
+        actions.put(Action.GET_REPORT_DATES, ClientMessageHandler::getReportDates);
         actions.put(Action.RETRIEVE_BORROWEDBOOKS, ClientMessageHandler::retrieveBorrowedBooks);
         actions.put(Action.SEARCH_BOOKS, ClientMessageHandler::searchBooks);
     }

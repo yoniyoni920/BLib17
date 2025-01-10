@@ -26,8 +26,8 @@ public class BookCard {
         locationOrDateLabel.setText(book.getLocationOrDate());
         
         // Set the book's image
-        Image image;
-		image = new Image("/"+book.getImage());
+        String url = getClass().getResource("/resources/book_covers/" + book.getImage()).toExternalForm();
+        Image image = new Image(url);
 		bookImageView.setImage(image);
 	    if (image.isError()) {
 	         System.out.println("Error loading image: " + image.getException().getMessage());

@@ -75,7 +75,9 @@ public class BookCopyControl {
                     String genre = rs.getString(4);
                     String description = rs.getString(5);
                     String image = rs.getString(6);
-                    copy.setBook(new Book(id, title, authors, genre, description, image));
+                    String location = rs.getString("location");
+
+                    copy.setBook(new Book(id, title, authors, genre, description, image, location));
                 }
 
             } catch (SQLException e) {

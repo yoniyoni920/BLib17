@@ -13,7 +13,6 @@ public class Subscriber extends User implements Serializable {
 	private String phoneNumber;
 	private String email;
 	private LocalDate frozenUntil;
-
 	private DetailedSubscriptionHistory detailedSubscriptionHistory;
 	public Subscriber() {
 		super();
@@ -27,14 +26,12 @@ public class Subscriber extends User implements Serializable {
     String password,
 		String phoneNumber,
 		String email,
-		LocalDate frozenUntil,
-		DetailedSubscriptionHistory detailedSubscriptionHistory
+		LocalDate frozenUntil
 	) {
 		super(id, name, lastName, role, password);
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.frozenUntil = frozenUntil;
-		this.detailedSubscriptionHistory = detailedSubscriptionHistory;
 	}
 
 	public String getStatus() {
@@ -61,9 +58,14 @@ public class Subscriber extends User implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public DetailedSubscriptionHistory getDetailedSubscriptionHistory() {
 		return detailedSubscriptionHistory ;
 	}
+	public void setDetailedSubscriptionHistory(DetailedSubscriptionHistory detailedSubscriptionHistory) {
+		this.detailedSubscriptionHistory = detailedSubscriptionHistory;
+	}
+
 	@Override
 	public String toString() {
 		return "Subscriber : " + super.getName();

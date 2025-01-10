@@ -61,7 +61,7 @@ public class ReportScreen extends AbstractScreen implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Message msg = ClientUtils.sendMessage(Action.GER_REPORT_DATES);
+        Message msg = ClientUtils.sendMessage(Action.GET_REPORT_DATES);
         if (!msg.isError()) {
             List<LocalDate> dates = (List<LocalDate>)msg.getObject();
             for (LocalDate date : dates) {

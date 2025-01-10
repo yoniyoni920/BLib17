@@ -43,4 +43,4 @@ prototype/build
 /blib/.idea/**/usage.statistics.xml
 /blib/.idea/**/dictionaries
 /blib/.idea/**/shelf
-
+blib/BLibClient/bin

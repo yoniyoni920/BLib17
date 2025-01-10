@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import entities.Book;
 
@@ -40,7 +39,6 @@ public class BookControl {
 					String description = rs.getString("description");
 					String image = rs.getString("image");
 					String location = rs.getString("location");
-				}
 
 					String locationOrDate = "jljl";
 					try(PreparedStatement preparedStatement1 = DBControl.getConnection().prepareStatement(query1)){
@@ -60,8 +58,10 @@ public class BookControl {
 							}	
 						}
 					}
-					 
-					books.add(new Book(id, title, authors, genre, description, image, location, locationOrDate));
+
+					Book book = new Book(id, title, authors, genre, description, image, location);
+					book.setLocationOrDate(locationOrDate);
+					books.add(book);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

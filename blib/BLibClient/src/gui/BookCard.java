@@ -15,15 +15,19 @@ public class BookCard {
     private Label titleLabel;
     @FXML
     private Label authorLabel;
-
+    @FXML
+    private Label genreLabel;
+    @FXML
+    private Label locationOrDateLabel;
     public void setBookData(Book book) {
         titleLabel.setText(book.getTitle());
         authorLabel.setText(book.getAuthors());
-
+        genreLabel.setText(book.getGenre());
+        locationOrDateLabel.setText(book.getLocationOrDate());
+        
         // Set the book's image
         Image image;
-		image = new Image(book.getImage());
-		System.out.println(book.getImage());
+		image = new Image("/"+book.getImage());
 		bookImageView.setImage(image);
 	    if (image.isError()) {
 	         System.out.println("Error loading image: " + image.getException().getMessage());

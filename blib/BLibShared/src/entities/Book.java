@@ -1,8 +1,9 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Book {
+public class Book implements Serializable {
 
 	private int bookId;
 	private String title;
@@ -10,14 +11,18 @@ public class Book {
 	private String genre;
 	private String description;
 	private String image;
+	private String location;
+	private String locationOrDate;
 	//private List<BookCopy> copies;
-	public Book(int bookId, String title, String authors, String genre, String description, String image) {
+	public Book(int bookId, String title, String authors, String genre, String description, String image, String location, String locationOrDate) {
 		this.bookId = bookId;
 		this.title = title;
 		this.authors = authors;
 		this.genre = genre;
 		this.description = description;
 		this.image = image;
+		this.location = location;
+		this.locationOrDate = locationOrDate;
 	}
 
 	public int getBookId() {
@@ -47,6 +52,15 @@ public class Book {
 	public String getDescription() {
 		return description;
 	}
+
+	public String getLocationOrDate() {
+		return locationOrDate;
+	}
+
+	public void setLocationOrDate(String locationOrDate) {
+		this.locationOrDate = locationOrDate;
+	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}

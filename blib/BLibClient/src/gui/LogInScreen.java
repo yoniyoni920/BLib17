@@ -45,6 +45,7 @@ public class LogInScreen extends AbstractScreen {
 
 	@FXML
 	private Label passErrorLabel;
+	
 
 	/*
 	 * gets the info from fields and sends it
@@ -94,6 +95,9 @@ public class LogInScreen extends AbstractScreen {
 				idErrorLabel.setVisible(true);
 			}
 		}
+	}
+	public void searchBooksScreen(ActionEvent event) throws Exception{
+		screenManager.openScreen("SearchBooksScreen", "Search Book");
 	}
 	
 }

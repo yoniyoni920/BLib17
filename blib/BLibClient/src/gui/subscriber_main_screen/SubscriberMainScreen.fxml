@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Line?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber_main_screen.SubscriberMainScreen">
+   <children>
+      <AnchorPane prefHeight="63.0" prefWidth="795.0">
+         <children>
+            <Label fx:id="welcomeText" layoutX="53.0" layoutY="18.0" opacity="0.38" prefHeight="29.0" prefWidth="321.0" style="-fx-font-size: 24;" text="Welcome Back , UserName " wrapText="true" />
+            <Line endX="694.0" endY="7.0" layoutX="13.0" layoutY="56.0" opacity="0.5" startX="40.0" startY="7.0">
+               <stroke>
+                  <LinearGradient cycleMethod="REFLECT" endX="0.49763033175355453" endY="0.5071090047393366" startX="1.0" startY="0.4976303317535545">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.006711409395973154">
+                           <color>
+                              <Color />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.0436241610738255">
+                           <color>
+                              <Color />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </stroke>
+            </Line>
+            <MenuButton fx:id="profilePicMenu" layoutX="681.0" layoutY="9.0" mnemonicParsing="false" style="-fx-background-color: transparent;" textAlignment="RIGHT" textFill="#070707" textOverrun="CLIP">
+              <items>
+                <MenuItem fx:id="infoMenuItem" mnemonicParsing="false" onAction="#openSubInfoScreen" text="info" />
+                <MenuItem fx:id="historyMenuItem" mnemonicParsing="false" onAction="#openSubscriberHistoryScreen" text="history" />
+                  <MenuItem fx:id="signoutMenuItem" mnemonicParsing="false" onAction="#closeWindow" text="sign out" />
+              </items>
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/resources/subscriber_main_screen_photos/user.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuButton>
+            <Button alignment="CENTER" layoutX="533.0" layoutY="15.0" minWidth="28.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="148.0" text="Browse">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
+                  	<image>
+                        <Image url="@/resources/subscriber_main_screen_photos/search.png" />
+                     </image>
+               </graphic>
+            </Button>
+         </children>
+      </AnchorPane>
+      <ListView fx:id="borrowedBooksListView" orientation="HORIZONTAL" prefHeight="279.0" prefWidth="749.0">
+         <VBox.margin>
+            <Insets bottom="11.0" left="11.0" right="11.0" top="51.0" />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="11" top="11.0" />
+         </padding>
+      </ListView>
+      <Label fx:id="borrowedBooksCount" alignment="CENTER" prefHeight="18.0" prefWidth="800.0" text="you have 0 books in your library" textAlignment="JUSTIFY" textFill="RED" />
+   </children>
+</VBox>

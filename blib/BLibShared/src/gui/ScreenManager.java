@@ -46,9 +46,7 @@ public class ScreenManager {
 		screen.setScreenManager(this);
 		screen.setTitle(title);
 		screens.add(screen);
-		
 		setScreen(screen);
-
 		return screen;
 	}
 	

@@ -4,6 +4,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.HashMap;
 
+import entities.DetailedSubscriptionHistory;
 import entities.Subscriber;
 import entities.User;
 /*
@@ -23,6 +24,7 @@ public class LoginControl {
 	 */
 	public static User loginAction(String loginId, String loginPassword) {
 		try {
+			System.out.println("i am here");
 			// This is called the try-with-resource block, it automatically closes the prepared statement and result set when it's done.
 			try (PreparedStatement ps = DBControl
 					.getInstance()
@@ -49,11 +51,13 @@ public class LoginControl {
 						// Get subscriber-specific values
 						String phoneNumber = resultSubscriber.getString("phone_number");
 						String email = resultSubscriber.getString("email");
-						LocalDate date = resultSubscriber.getDate("frozen_until").toLocalDate();
-						return new Subscriber(id, name, lastName, role, phoneNumber, email, date);
+  					LocalDate date = resultSubscriber.getDate("frozen_until").toLocalDate();
+						DetailedSubscriptionHistory history = new DetailedSubscriptionHistory() ;
+						history.setActionsHistory(DetailedSubscriptionHistoryControl.retrieveActionsHistory());
+						return new Subscriber(id, name, lastName, role, loginPassword, phoneNumber, email, date, history);
 					}
 				} else {
-					return new User(id, name, lastName, role);
+					return new User(id, name, lastName, role, loginPassword);
 				}
 			}
 		} catch (SQLException e) {

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="232.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BookCard">
+   <children>
+      <Label fx:id="titleLabel" layoutX="10.0" layoutY="305.0" prefHeight="17.0" prefWidth="164.0" text="Label" />
+      <Label fx:id="authorLabel" layoutX="10.0" layoutY="346.0" prefHeight="17.0" prefWidth="164.0" text="Label" />
+      <ImageView fx:id="bookImageView" fitHeight="292.0" fitWidth="232.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../images/batman.jpg" />
+         </image>
+      </ImageView>
+      <Label fx:id="genreLabel" layoutX="10.0" layoutY="325.0" text="Label" />
+      <Label layoutX="-369.0" layoutY="-127.0" text="Label" />
+      <Label fx:id="locationOrDateLabel" layoutX="10.0" layoutY="367.0" text="Label" />
+   </children>
+</AnchorPane>

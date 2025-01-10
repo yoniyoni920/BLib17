@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Book implements Serializable {
-
-	private int bookId;
+	private int id;
 	private String title;
 	private String authors;
 	private String genre;
@@ -13,9 +12,9 @@ public class Book implements Serializable {
 	private String image;
 	private String location;
 	private String locationOrDate;
-	//private List<BookCopy> copies;
-	public Book(int bookId, String title, String authors, String genre, String description, String image, String location, String locationOrDate) {
-		this.bookId = bookId;
+
+	public Book(int id, String title, String authors, String genre, String description, String image, String location, String locationOrDate) {
+		this.id = id;
 		this.title = title;
 		this.authors = authors;
 		this.genre = genre;
@@ -25,11 +24,11 @@ public class Book implements Serializable {
 		this.locationOrDate = locationOrDate;
 	}
 
-	public int getBookId() {
-		return bookId;
+	public int getId() {
+		return id;
 	}
-	public void setBookId(int bookId) {
-		this.bookId = bookId;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public String getTitle() {
 		return title;

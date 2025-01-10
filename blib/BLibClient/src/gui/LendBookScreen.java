@@ -1,21 +1,23 @@
 package gui;
 
+import base.Action;
+import base.ClientApplication;
 import controllers.BookScanner;
+import entities.Book;
+import entities.Message;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
 
 
 public class LendBookScreen extends AbstractScreen {
 	@FXML
 	TextField bookIdTextField;
 	@FXML
-	Label noBookCopyErrLabel;
+	Label bookIdAlert;
 	@FXML
-	Label subFrozenErrLabel;
+	Label userAlert;
 	@FXML
 	DatePicker returnDatePicker;
 	@FXML
@@ -42,6 +44,22 @@ public class LendBookScreen extends AbstractScreen {
 		});
 
 		lendDatePicker.setValue(LocalDate.now());
+
+		bookIdTextField.focusedProperty().addListener((observableValue, aBoolean, t1) ->{
+			if(!t1) bookTextFieldChanged();
+		});
+	}
+
+	public void bookTextFieldChanged(){
+		Message	reply = ClientApplication.chat.sendToServer(new Message(Action.GET_BOOK_BY_ID, bookIdTextField.getText()));
+		if(reply.isError()){
+			bookIdAlert.setText(reply.getObject().toString());
+			bookIdAlert.setVisible(true);
+		}else{
+			Book book = (Book) reply.getObject();
+			bookIdAlert.setText(book.getTitle());
+			bookIdAlert.setVisible(true);
+		}
 	}
 
 	public void searchBooskByName() {
@@ -54,6 +72,7 @@ public class LendBookScreen extends AbstractScreen {
 			try{
 				String bookId = BookScanner.getInstance().Scan();
 				bookIdTextField.setText(bookId);
+				bookTextFieldChanged();
 
 			}catch (InterruptedException ex){
 				System.out.println(ex.getMessage());

@@ -1,7 +1,9 @@
 package base;
 
+import controllers.BookControl;
 import controllers.LoginControl;
 import controllers.SubscriberControl;
+import entities.Book;
 import entities.Message;
 import entities.User;
 import ocsf.server.ConnectionToClient;
@@ -23,7 +25,7 @@ public class ClientMessageHandler {
     }
 
     // Define all actions here
-    public ClientMessageHandler() {
+    private ClientMessageHandler() {
         actions = new HashMap<>();
         setupActions();
     }
@@ -50,6 +52,26 @@ public class ClientMessageHandler {
     private void setupActions() {
         actions.put(Action.LOGIN, ClientMessageHandler::login);
         actions.put(Action.UPDATE_SUBSCRIBER, ClientMessageHandler::updateSubscriber);
+        actions.put(Action.GET_BOOK_BY_ID, ClientMessageHandler::getBookById);
+    }
+
+    /**
+     *Handles getting book by id
+     */
+    public static Message getBookById(Message msg, ConnectionToClient client) {
+
+        Integer bookId = null;
+        try {
+            bookId = Integer.parseInt(msg.getObject().toString());
+        }catch (NumberFormatException e) {
+            return msg.errorReply("Book ID is valid!");
+        }
+        Book book = BookControl.searchBookById(bookId);
+        if(book == null) {
+            return msg.errorReply("Book not found!");
+        }else{
+            return msg.reply(book);
+        }
     }
 
     /**

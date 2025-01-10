@@ -1,5 +1,10 @@
 package controllers;
 
+import entities.Book;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class BookControl {
 
 	public static void searchBooks() {
@@ -22,9 +27,24 @@ public class BookControl {
 		throw new UnsupportedOperationException();
 	}
 
-	public static void searchBookById() {
-		// TODO - implement BookControl.searchBookById
-		throw new UnsupportedOperationException();
+	public static Book searchBookById(int bookId) {
+		try(PreparedStatement stt = DBControl.getInstance().selectQuery("book", "id", bookId)){
+			ResultSet rs = stt.executeQuery();
+			if(rs.next()){
+				int id = rs.getInt("id");
+				String title = rs.getString("title");
+				String author = rs.getString("authors");
+				String genre = rs.getString("genre");
+				String description = rs.getString("description");
+				String image = rs.getString("image");
+				String location = rs.getString("location");
+                return new Book(id, title, author, genre, description, image, location);
+			}
+
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static void allBookCopiesLoaned() {

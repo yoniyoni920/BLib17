@@ -85,8 +85,10 @@ public class LogInScreen extends AbstractScreen {
 					SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("SubscriberMainScreen", "Subscriber Main Screen");
 					subMainScreen.loadSubscriber((Subscriber)user);
 				} else {
-					LibrarianMainScreen libMainScreen = (LibrarianMainScreen)screenManager.openScreen("LibrarianMainScreen", "Librarian Main Screen");
-					libMainScreen.loadUser(user);
+					//TODO remove comment when finished testing
+					LendBookScreen lendBookScreen = (LendBookScreen) screenManager.openScreen("LendBookScreen", "Lend Book Screen");
+//					LibrarianMainScreen libMainScreen = (LibrarianMainScreen)screenManager.openScreen("LibrarianMainScreen", "Librarian Main Screen");
+//					libMainScreen.loadUser(user);
 				}
 			}
 			else {

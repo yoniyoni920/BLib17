@@ -1,5 +1,6 @@
 package base;
 
+import controllers.BookControl;
 import controllers.LoginControl;
 import controllers.SubscriberControl;
 import entities.Message;
@@ -50,6 +51,7 @@ public class ClientMessageHandler {
     private void setupActions() {
         actions.put(Action.LOGIN, ClientMessageHandler::login);
         actions.put(Action.UPDATE_SUBSCRIBER, ClientMessageHandler::updateSubscriber);
+        actions.put(Action.SEARCH_BOOKS, ClientMessageHandler::searchBooks);
     }
 
     /**
@@ -73,5 +75,9 @@ public class ClientMessageHandler {
     public static Message updateSubscriber(Message msg, ConnectionToClient client) {
         SubscriberControl.updateInfo((String[])msg.getObject());
         return msg.reply("Success");
+    }
+    public static Message searchBooks(Message msg, ConnectionToClient client) {
+    	String[] searchInfo = (String[]) msg.getObject();
+    	return msg.reply(BookControl.searchBooks(searchInfo[0], searchInfo[1]));
     }
 }

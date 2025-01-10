@@ -38,7 +38,6 @@ public class ClientApplication extends Application {
 		clientApplication = this;
 		screenManager = new ScreenManager(primaryStage);
 		screenManager.openScreen("ClientSocket", "Client Socket Screen");
-
 		setUserAgentStylesheet("/gui/Main.css");
 	}
 

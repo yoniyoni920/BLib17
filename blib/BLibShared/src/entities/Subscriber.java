@@ -8,7 +8,7 @@ public class Subscriber extends User implements Serializable {
 	private String status;
 	private String phoneNumber;
 	private String email;
-
+	private DetailedSubscriptionHistory detailedSubscriptionHistory;
 	public Subscriber() {
 		super();
 	}
@@ -19,11 +19,14 @@ public class Subscriber extends User implements Serializable {
 		String lastName,
 		String role,
 		String phoneNumber,
-		String email
+		String email,
+		String password,
+		DetailedSubscriptionHistory detailedSubscriptionHistory
 	) {
-		super(id, name, lastName, role);
+		super(id, name, lastName, role, password);
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+		this.detailedSubscriptionHistory = detailedSubscriptionHistory;
 	}
 
 	public String getStatus() {
@@ -49,5 +52,12 @@ public class Subscriber extends User implements Serializable {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public DetailedSubscriptionHistory getDetailedSubscriptionHistory() {
+		return detailedSubscriptionHistory ;
+	}
+	@Override
+	public String toString() {
+		return "Subscriber : " + super.getName();
 	}
 }

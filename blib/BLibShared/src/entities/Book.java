@@ -1,7 +1,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Book implements Serializable {
 	private int id;
@@ -10,17 +9,16 @@ public class Book implements Serializable {
 	private String genre;
 	private String description;
 	private String image;
-	private String location;
+  private String location;
 	private String locationOrDate;
-
+	
 	public Book(int id, String title, String authors, String genre, String description, String image, String location, String locationOrDate) {
-		this.id = id;
 		this.title = title;
 		this.authors = authors;
 		this.genre = genre;
 		this.description = description;
 		this.image = image;
-		this.location = location;
+    this.location = location;
 		this.locationOrDate = locationOrDate;
 	}
 
@@ -30,6 +28,7 @@ public class Book implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+  
 	public String getTitle() {
 		return title;
 	}
@@ -63,11 +62,17 @@ public class Book implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+ 
 	public String getImage() {
 		return image;
 	}
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	@Override
+	public String toString() {
+		return title;
 	}
 }

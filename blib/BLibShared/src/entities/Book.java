@@ -2,35 +2,33 @@ package entities;
 
 import java.io.Serializable;
 
-public class Book implements Serializable{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int bookId;
+public class Book implements Serializable {
+	private int id;
 	private String title;
 	private String authors;
 	private String genre;
 	private String description;
 	private String image;
+  private String location;
+	private String locationOrDate;
 	
-	//private List<BookCopy> copies;
-	public Book(int bookId, String title, String authors, String genre, String description, String image) {
-		this.bookId = bookId;
+	public Book(int id, String title, String authors, String genre, String description, String image, String location, String locationOrDate) {
 		this.title = title;
 		this.authors = authors;
 		this.genre = genre;
 		this.description = description;
 		this.image = image;
+    this.location = location;
+		this.locationOrDate = locationOrDate;
 	}
 
-	public int getBookId() {
-		return bookId;
+	public int getId() {
+		return id;
 	}
-	public void setBookId(int bookId) {
-		this.bookId = bookId;
+	public void setId(int id) {
+		this.id = id;
 	}
+  
 	public String getTitle() {
 		return title;
 	}
@@ -52,9 +50,19 @@ public class Book implements Serializable{
 	public String getDescription() {
 		return description;
 	}
+
+	public String getLocationOrDate() {
+		return locationOrDate;
+	}
+
+	public void setLocationOrDate(String locationOrDate) {
+		this.locationOrDate = locationOrDate;
+	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+ 
 	public String getImage() {
 		return image;
 	}
@@ -62,9 +70,9 @@ public class Book implements Serializable{
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
+
 	@Override
 	public String toString() {
-		return title ;
+		return title;
 	}
 }

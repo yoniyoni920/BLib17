@@ -1,6 +1,7 @@
 package base;
 
 import controllers.BookCopyControl;
+import controllers.BookControl;
 import controllers.LoginControl;
 import controllers.SubscriberControl;
 import entities.BookCopy;
@@ -8,7 +9,6 @@ import entities.Message;
 import entities.Subscriber;
 import entities.User;
 import ocsf.server.ConnectionToClient;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +55,7 @@ public class ClientMessageHandler {
         actions.put(Action.LOGIN, ClientMessageHandler::login);
         actions.put(Action.UPDATE_SUBSCRIBER, ClientMessageHandler::updateSubscriber);
         actions.put(Action.RETRIEVE_BORROWEDBOOKS, ClientMessageHandler::retrieveBorrowedBooks);
+        actions.put(Action.SEARCH_BOOKS, ClientMessageHandler::searchBooks);
     }
 
     /**
@@ -75,15 +76,19 @@ public class ClientMessageHandler {
      * @param client
      * @return Message
      */
-	public static Message updateSubscriber(Message msg, ConnectionToClient client) {
+	  public static Message updateSubscriber(Message msg, ConnectionToClient client) {
         SubscriberControl.updateInfo((List<String>)msg.getObject());
         return msg.reply("Success");
     }
-    
-    
+  
     //handles retrieving the borrowed books for a specific subscriber 
-	public static Message retrieveBorrowedBooks(Message msg , ConnectionToClient client) {
-    	List<BookCopy> borrowedBooks = BookCopyControl.retrieveBorrowedBooks((Subscriber)msg.getObject());
-    	return msg.reply(borrowedBooks);
+    public static Message retrieveBorrowedBooks(Message msg , ConnectionToClient client) {
+        List<BookCopy> borrowedBooks = BookCopyControl.retrieveBorrowedBooks((Subscriber)msg.getObject());
+        return msg.reply(borrowedBooks);
+    }
+
+    public static Message searchBooks(Message msg, ConnectionToClient client) {
+        String[] searchInfo = (String[]) msg.getObject();
+        return msg.reply(BookControl.searchBooks(searchInfo[0], searchInfo[1]));
     }
 }

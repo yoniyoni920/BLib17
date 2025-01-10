@@ -15,6 +15,7 @@
             <Font size="22.0" />
          </font>
       </Label>
+      <Button mnemonicParsing="false" onAction="#searchBooksScreen" text="Search" />
       <VBox prefHeight="0.0" prefWidth="438.0">
          <children>
             <Label text="ID" />

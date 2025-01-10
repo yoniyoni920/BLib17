@@ -12,7 +12,6 @@
 	<classpathentry kind="lib" path="/BLibShared/lib/javafx.swing.jar"/>
 	<classpathentry kind="lib" path="/BLibShared/lib/javafx.web.jar"/>
 	<classpathentry kind="lib" path="/BLibShared/lib/javafx-swt.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/Java/jre1.8.0_202/lib/charsets.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/Java/jre1.8.0_202/lib/deploy.jar"/>
+	<classpathentry kind="src" path="images"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

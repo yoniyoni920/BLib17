@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 
+import java.io.IOException;
+
 public class LibrarianMainScreen extends AbstractScreen {
 	User user;
 	@FXML
@@ -47,4 +49,8 @@ public class LibrarianMainScreen extends AbstractScreen {
 	public void closeWindow(ActionEvent event) throws Exception {
 		screenManager.closeScreen();
 	}
+
+    public void openReportScreen(ActionEvent event) throws IOException {
+		screenManager.openScreen("ReportScreen", "Reports");
+    }
 }

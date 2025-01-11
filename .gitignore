@@ -36,3 +36,11 @@ prototype/BLibServer/bin
 prototype/build
 /.metadata/
 .lock
+
+# User-specific stuff Intellij
+/blib/.idea/**/workspace.xml
+/blib/.idea/**/tasks.xml
+/blib/.idea/**/usage.statistics.xml
+/blib/.idea/**/dictionaries
+/blib/.idea/**/shelf
+blib/BLibClient/bin

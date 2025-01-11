@@ -48,7 +48,9 @@ public class ServerApplication extends Application {
 		}
 
 		serverGUI = (ServerGUI)screenManager.openScreen("ServerGUI", "BLib Server Console"); // Get controller for communicating with it later
-		
+
+		new JobManager(); // Start the job manager
+
 		timer = new Timer();
 		// Check every 2 seconds for connections. May be useful for the reports generation ^^
 		timer.scheduleAtFixedRate(new TimerTask() {

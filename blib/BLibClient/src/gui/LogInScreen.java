@@ -84,9 +84,10 @@ public class LogInScreen extends AbstractScreen {
 				if (user.getRole() == Role.SUBSCRIBER) {
 					SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("SubscriberMainScreen", "Subscriber Main Screen");
 					subMainScreen.loadSubscriber((Subscriber)user);
-				} else {
+				} else {// if roll is Librarian
 					LibrarianMainScreen libMainScreen = (LibrarianMainScreen)screenManager.openScreen("LibrarianMainScreen", "Librarian Main Screen");
 					libMainScreen.loadUser(user);
+					libMainScreen.startUp(user.getName());
 				}
 			}
 			else {

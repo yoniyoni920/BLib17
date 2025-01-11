@@ -23,9 +23,11 @@ public class LoginControl {
 	public static User loginAction(String loginId, String loginPassword) {
 		try {
 			// This is called the try-with-resource block, it automatically closes the prepared statement and result set when it's done.
+			System.out.println("login:" + loginId + "password:" + loginPassword);
 			try (PreparedStatement ps = DBControl
 					.getInstance()
 					.selectQuery("user","id", loginId, "password", loginPassword)
+					
 			) {
 				ResultSet rs = ps.executeQuery();
 				if(!rs.next()) {
@@ -35,7 +37,7 @@ public class LoginControl {
 				// Get user values
 				String role = rs.getString("role");
 				String id = rs.getString("id");
-				String name = rs.getString("name");
+				String name = rs.getString("first_name");
 				String lastName = rs.getString("last_name");
 
 				if (role.equals("subscriber")) {

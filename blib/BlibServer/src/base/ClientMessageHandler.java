@@ -1,6 +1,7 @@
 package base;
 
 import controllers.LoginControl;
+import controllers.RegisterUser;
 import controllers.SubscriberControl;
 import entities.Message;
 import entities.User;
@@ -50,6 +51,8 @@ public class ClientMessageHandler {
     private void setupActions() {
         actions.put(Action.LOGIN, ClientMessageHandler::login);
         actions.put(Action.UPDATE_SUBSCRIBER, ClientMessageHandler::updateSubscriber);
+        actions.put(Action.REGISTER, ClientMessageHandler::RegisterSubscriber);
+        
     }
 
     /**
@@ -74,4 +77,24 @@ public class ClientMessageHandler {
         SubscriberControl.updateInfo((String[])msg.getObject());
         return msg.reply("Success");
     }
+    
+    
+    
+    public static Message RegisterSubscriber(Message msg, ConnectionToClient client) {
+    	String[] args = (String[])msg.getObject();
+    	msg = RegisterUser.registerAction(args[0], args[1],args[2],args[3],args[4]);
+        return msg;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
+
+

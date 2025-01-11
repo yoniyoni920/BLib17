@@ -93,6 +93,7 @@ public class LogInScreen extends AbstractScreen {
 				} else {
 					LibrarianMainScreen libMainScreen = (LibrarianMainScreen)screenManager.openScreen("LibrarianMainScreen", "Librarian Main Screen");
 					libMainScreen.loadUser(user);
+					libMainScreen.startUp(user.getName());
 				}
 			}
 			else {

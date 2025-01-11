@@ -1,17 +1,28 @@
 package gui;
 
+import entities.Subscriber;
 import entities.User;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 
 import java.io.IOException;
 
 public class LibrarianMainScreen extends AbstractScreen {
-
-	public void registerSubscriber() {
-		// TODO - implement LibrarianMainScreen.registerSubscriber
-		throw new UnsupportedOperationException();
+	User user;
+	@FXML
+	private Label nameTxt;
+	
+	
+	public void RegisterSubscriber(ActionEvent event) throws Exception {
+		RegisterViaLibrerianScreen librarianRegister =  (RegisterViaLibrerianScreen)screenManager.openScreen("RegisterViaLibrerianScreen", "Register Screen");		
+		librarianRegister.startUp(user.getName());
 	}
-
+	public void startUp(String name) throws Exception {
+		nameTxt.setText(name);
+	}
 	public void lendBook() {
 		// TODO - implement LibrarianMainScreen.lendBook
 		throw new UnsupportedOperationException();
@@ -29,7 +40,7 @@ public class LibrarianMainScreen extends AbstractScreen {
 
 	//TODO: implement
 	public void loadUser(User user) {
-
+		this.user = user;
 	}
 
 	/*

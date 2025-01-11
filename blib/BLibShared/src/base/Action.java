@@ -2,6 +2,7 @@ package base;
 
 public enum Action {
     LOGIN,
+    REGISTER,
     UPDATE_SUBSCRIBER,
     SEARCH_BOOKS,
     GET_BORROW_TIMES_REPORT,

@@ -26,9 +26,11 @@ public class LoginControl {
 		try {
 			System.out.println("i am here");
 			// This is called the try-with-resource block, it automatically closes the prepared statement and result set when it's done.
+			System.out.println("login:" + loginId + "password:" + loginPassword);
 			try (PreparedStatement ps = DBControl
 					.getInstance()
 					.selectQuery("user","id", loginId, "password", loginPassword)
+					
 			) {
 				ResultSet rs = ps.executeQuery();
 				if(!rs.next()) {

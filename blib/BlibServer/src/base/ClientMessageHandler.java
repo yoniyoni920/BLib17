@@ -3,6 +3,7 @@ package base;
 import controllers.BookCopyControl;
 import controllers.BookControl;
 import controllers.LoginControl;
+import controllers.RegisterUser;
 import controllers.SubscriberControl;
 import entities.BookCopy;
 import entities.Message;
@@ -55,6 +56,7 @@ public class ClientMessageHandler {
     private void setupActions() {
         actions.put(Action.LOGIN, ClientMessageHandler::login);
         actions.put(Action.UPDATE_SUBSCRIBER, ClientMessageHandler::updateSubscriber);
+        actions.put(Action.REGISTER, ClientMessageHandler::RegisterSubscriber);
         actions.put(Action.GET_BORROW_TIMES_REPORT, ClientMessageHandler::getBorrowTimesReport);
         actions.put(Action.GET_SUBSCRIBER_STATUS_REPORT, ClientMessageHandler::getSubscriberStatusReport);
         actions.put(Action.GET_REPORT_DATES, ClientMessageHandler::getReportDates);
@@ -84,7 +86,13 @@ public class ClientMessageHandler {
         SubscriberControl.updateInfo((List<String>)msg.getObject());
         return msg.reply("Success");
     }
-
+    
+    public static Message RegisterSubscriber(Message msg, ConnectionToClient client) {
+    	String[] args = (String[])msg.getObject();
+    	msg = RegisterUser.registerAction(args[0], args[1],args[2],args[3],args[4]);
+        return msg;
+    }
+    
     public static Message getBorrowTimesReport(Message msg, ConnectionToClient client) {
         Object[] params = (Object[])msg.getObject();
         return msg.reply(BookControl.getBorrowTimesReport((LocalDate)params[0], (Integer)params[1]));
@@ -109,3 +117,5 @@ public class ClientMessageHandler {
         return msg.reply(BookControl.searchBooks(searchInfo[0], searchInfo[1]));
     }
 }
+
+

@@ -5,6 +5,7 @@ import controllers.LoginControl;
 import controllers.SubscriberControl;
 import entities.Book;
 import entities.Message;
+import entities.Subscriber;
 import entities.User;
 import ocsf.server.ConnectionToClient;
 
@@ -53,6 +54,7 @@ public class ClientMessageHandler {
         actions.put(Action.LOGIN, ClientMessageHandler::login);
         actions.put(Action.UPDATE_SUBSCRIBER, ClientMessageHandler::updateSubscriber);
         actions.put(Action.GET_BOOK_BY_ID, ClientMessageHandler::getBookById);
+        actions.put(Action.GET_SUBSCRIBER_BY_ID, ClientMessageHandler::getSubscriberById);
     }
 
     /**
@@ -64,7 +66,7 @@ public class ClientMessageHandler {
         try {
             bookId = Integer.parseInt(msg.getObject().toString());
         }catch (NumberFormatException e) {
-            return msg.errorReply("Book ID is valid!");
+            return msg.errorReply("Book ID is not valid!");
         }
         Book book = BookControl.searchBookById(bookId);
         if(book == null) {
@@ -72,6 +74,20 @@ public class ClientMessageHandler {
         }else{
             return msg.reply(book);
         }
+    }
+
+    public static Message getSubscriberById(Message msg, ConnectionToClient client) {
+        Integer subscriberId = null;
+        try {
+            subscriberId = Integer.parseInt(msg.getObject().toString());
+        }catch (NumberFormatException e) {
+            return msg.errorReply("Subscriber ID is not valid!");
+        }
+        Subscriber subscriber = SubscriberControl.getSubscriberById(subscriberId);
+        if (subscriber == null) {
+            return msg.errorReply("Subscriber not found!");
+        }
+        return msg.reply(subscriber);
     }
 
     /**

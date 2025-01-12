@@ -10,16 +10,16 @@ import java.io.Serializable;
  */
 
 public class User implements Serializable{
-	private String name;
+	private String firstName;
 	private String lastName;
 	private String id;
 	private Role role;
 
 	public User() {}
 
-	public User(String id, String name, String lastName, String role) {
+	public User(String id, String firstName, String lastName, String role) {
 		this.id = id;
-		this.name = name;
+		this.firstName = firstName;
 		this.lastName = lastName;
 		this.role = Role.valueOf(role.toUpperCase());
 	}
@@ -28,12 +28,12 @@ public class User implements Serializable{
 		return id;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String Name) {
-		this.name = name;
+	public void setFirstName(String Name) {
+		this.firstName = firstName;
 	}
 
 	public String getLastName() {

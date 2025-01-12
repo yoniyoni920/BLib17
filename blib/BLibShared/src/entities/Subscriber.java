@@ -15,15 +15,17 @@ public class Subscriber extends User implements Serializable {
 
 	public Subscriber(
 		String id,
-		String name,
+		String firstName,
 		String lastName,
 		String role,
 		String phoneNumber,
 		String email
+
 	) {
-		super(id, name, lastName, role);
+		super(id, firstName, lastName, role);
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+
 	}
 
 	public String getStatus() {

@@ -5,6 +5,7 @@ import base.ClientApplication;
 import controllers.BookScanner;
 import entities.Book;
 import entities.Message;
+import entities.Subscriber;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -22,6 +23,8 @@ public class LendBookScreen extends AbstractScreen {
 	DatePicker returnDatePicker;
 	@FXML
 	DatePicker lendDatePicker;
+	@FXML
+	TextField subID;
 
 	@FXML
 	public void initialize() {
@@ -48,6 +51,9 @@ public class LendBookScreen extends AbstractScreen {
 		bookIdTextField.focusedProperty().addListener((observableValue, aBoolean, t1) ->{
 			if(!t1) bookTextFieldChanged();
 		});
+		subID.focusedProperty().addListener((observableValue, aBoolean, t1) ->{
+			if(!t1)userTextFieldChanged();
+		});
 	}
 
 	public void bookTextFieldChanged(){
@@ -59,6 +65,18 @@ public class LendBookScreen extends AbstractScreen {
 			Book book = (Book) reply.getObject();
 			bookIdAlert.setText(book.getTitle());
 			bookIdAlert.setVisible(true);
+		}
+	}
+
+	public void userTextFieldChanged(){
+		Message reply = ClientApplication.chat.sendToServer(new Message(Action.GET_SUBSCRIBER_BY_ID, subID.getText()));
+		if(reply.isError()){
+			userAlert.setText(reply.getObject().toString());
+			userAlert.setVisible(true);
+		}else{
+			Subscriber user = (Subscriber) reply.getObject();
+			userAlert.setText(user.getFirstName() + " " + user.getLastName());
+			userAlert.setVisible(true);
 		}
 	}
 

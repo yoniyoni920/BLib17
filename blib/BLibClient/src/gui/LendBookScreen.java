@@ -58,27 +58,29 @@ public class LendBookScreen extends AbstractScreen {
     }
 
     public void bookTextFieldChanged() {
-        Message reply = ClientApplication.chat.sendToServer(new Message(Action.GET_BOOK_BY_ID, bookIdTextField.getText()));
-        if (reply.isError()) {
-            bookIdAlert.setText(reply.getObject().toString());
-            bookIdAlert.setVisible(true);
-        } else {
-            Book book = (Book) reply.getObject();
-            bookIdAlert.setText(book.getTitle());
-            bookIdAlert.setVisible(true);
-        }
+        ClientApplication.chat.sendToServer(new Message(Action.GET_BOOK_BY_ID, bookIdTextField.getText()), message -> {
+            if (message.isError()) {
+                bookIdAlert.setText(message.getObject().toString());
+                bookIdAlert.setVisible(true);
+            } else {
+                Book book = (Book) message.getObject();
+                bookIdAlert.setText(book.getTitle());
+                bookIdAlert.setVisible(true);
+            }
+        });
     }
 
     public void userTextFieldChanged() {
-        Message reply = ClientApplication.chat.sendToServer(new Message(Action.GET_SUBSCRIBER_BY_ID, subID.getText()));
-        if (reply.isError()) {
-            userAlert.setText(reply.getObject().toString());
-            userAlert.setVisible(true);
-        } else {
-            Subscriber user = (Subscriber) reply.getObject();
-            userAlert.setText(user.getFirstName() + " " + user.getLastName());
-            userAlert.setVisible(true);
-        }
+        ClientApplication.chat.sendToServer(new Message(Action.GET_SUBSCRIBER_BY_ID, subID.getText()), message -> {
+            if (message.isError()) {
+                userAlert.setText(message.getObject().toString());
+                userAlert.setVisible(true);
+            } else {
+                Subscriber user = (Subscriber) message.getObject();
+                userAlert.setText(user.getFirstName() + " " + user.getLastName());
+                userAlert.setVisible(true);
+            }
+        });
     }
 
     public void searchBooskByName() {

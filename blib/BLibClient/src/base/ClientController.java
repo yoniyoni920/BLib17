@@ -1,9 +1,13 @@
 
 package base;
 import java.io.*;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import base.*;
 import entities.Message;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -46,6 +50,14 @@ public class ClientController {
 
     public Message sendToServer(Message msg) {
         return client.sendMessageToServer(msg);
+    }
+
+    public void sendToServer(Message msg, Consumer<Message> then) {
+        Thread t = new Thread(() -> {
+            Message result = sendToServer(msg);
+            Platform.runLater(() -> then.accept(result));
+        });
+        t.start();
     }
 
     /**

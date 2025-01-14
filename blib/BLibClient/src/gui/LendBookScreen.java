@@ -139,7 +139,8 @@ public class LendBookScreen extends AbstractScreen {
                 } else if (bookCopy.getBorrowerId() == -1) {
                     alert.setAlertType(Alert.AlertType.CONFIRMATION);
                     alert.setHeaderText("Can't lend book");
-                    alert.setContentText("Would you like to order a copy of " + bookIdAlert.getText() + " it instead?");
+                    alert.setContentText(bookIdAlert.getText() + " isn't available until " + bookCopy.getReturnDate() + " would you like to order it?");
+                    alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
                     alert.showAndWait();
                 }else {
                     alert.setAlertType(Alert.AlertType.INFORMATION);

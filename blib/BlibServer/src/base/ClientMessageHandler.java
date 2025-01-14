@@ -74,20 +74,21 @@ public class ClientMessageHandler {
         }
 
         if (BookControl.searchBookById(bookCopy.getBookId()) != null) {
-            Integer bookCopyId = BookControl.checkBookLendable(bookCopy.getBookId());
-            if (bookCopyId == null) {
+            BookCopy foundCopy = BookControl.checkBookLendable(bookCopy.getBookId());
+            if (foundCopy == null) {
                 bookCopy.setBorrowerId(-1);
-                bookCopyId = BookControl.checkBookOrderable(bookCopy.getBookId());
-                if (bookCopyId == null) {
+                foundCopy = BookControl.checkBookOrderable(bookCopy.getBookId());
+                if (foundCopy == null) {
                     bookCopy.setOrdererID(-1);
                     return msg.reply(bookCopy);
                 }
-                bookCopy.setCopyId(bookCopyId);
+                bookCopy.setCopyId(foundCopy.getCopyId());
+                bookCopy.setReturnDate(foundCopy.getReturnDate());
                 return msg.reply(bookCopy);
             }
-            bookCopy.setCopyId(bookCopyId);
+            bookCopy.setCopyId(foundCopy.getCopyId());
             if (BookControl.lendBookToSubscriber(bookCopy)) {
-                bookCopy.setCopyId(bookCopyId);
+                bookCopy.setCopyId(foundCopy.getCopyId());
                 return msg.reply(bookCopy);
             } else {
                 return msg.errorReply("Failed to lend book!");

@@ -21,40 +21,44 @@ public class BookControl {
         throw new UnsupportedOperationException();
     }
 
-    public static Integer checkBookLendable(int bookId) {
-        try (PreparedStatement stt = DBControl.getInstance().selectQuery("book_copy", "book_id", bookId)) {
-            ResultSet rs = stt.executeQuery();
-            while (rs.next()) {
-                int copyId = rs.getInt("id");
-                Date returnDate = rs.getDate("return_date");
-                int orderSubscriberId = rs.getInt("order_subscriber_id");
-                if (orderSubscriberId == 0 && (returnDate == null || returnDate.toLocalDate().isBefore(LocalDate.now()))) {
-                    return copyId;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+    public static BookCopy checkBookLendable(int bookId) {
+		try (PreparedStatement stt = DBControl.getInstance().selectQuery("book_copy", "book_id", bookId)) {
+			ResultSet rs = stt.executeQuery();
+			while (rs.next()) {
+				int copyId = rs.getInt("id");
+				Date returnDate = rs.getDate("return_date");
+				int orderSubscriberId = rs.getInt("order_subscriber_id");
+				if (orderSubscriberId == 0 && (returnDate == null || returnDate.toLocalDate().isBefore(LocalDate.now()))) {
+					Date lendDate = rs.getDate("lend_date");
+					int borrowerId = rs.getInt("borrow_subscriber_id");
+					return new BookCopy(copyId, bookId, lendDate == null?null:lendDate.toLocalDate(),
+                            returnDate == null? null:returnDate.toLocalDate(), borrowerId, orderSubscriberId);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-    public static Integer checkBookOrderable(int bookId) {
+    public static BookCopy checkBookOrderable(int bookId) {
         try (PreparedStatement stt = DBControl.getInstance().selectQuery("book_copy", "book_id", bookId)) {
             ResultSet rs = stt.executeQuery();
-            Date earliestReturnDate = null;
-            int earliestBookCopyId = 0;
+            BookCopy earliestCopy = null;
             while (rs.next()) {
                 int copyId = rs.getInt("id");
                 Date returnDate = rs.getDate("return_date");
                 int orderSubscriberId = rs.getInt("order_subscriber_id");
                 if (orderSubscriberId == 0) {
-                    if (earliestReturnDate == null || returnDate.before(earliestReturnDate)) {
-                        earliestReturnDate = returnDate;
-                        earliestBookCopyId = copyId;
+                    if (earliestCopy == null ||  returnDate.toLocalDate().isBefore(earliestCopy.getReturnDate())) {
+                        Date lendDate = rs.getDate("lend_date");
+                        int borrowerSubscriberId = rs.getInt("borrow_subscriber_id");
+                       earliestCopy = new BookCopy(copyId, bookId, lendDate == null?null:lendDate.toLocalDate(),
+                               returnDate == null ? null : returnDate.toLocalDate(),borrowerSubscriberId, orderSubscriberId );
                     }
                 }
             }
-            return earliestBookCopyId == 0 ? null : earliestBookCopyId;
+            return earliestCopy;
         } catch (Exception e) {
             e.printStackTrace();
         }

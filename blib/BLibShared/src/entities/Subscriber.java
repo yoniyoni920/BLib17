@@ -28,7 +28,7 @@ public class Subscriber extends User implements Serializable {
 		String email,
 		LocalDate frozenUntil
 	) {
-		super(id, name, lastName, role, password);
+		super(id, firstName, lastName, role, password);
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.frozenUntil = frozenUntil;

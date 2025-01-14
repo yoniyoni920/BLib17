@@ -79,7 +79,7 @@ public class LendBookScreen extends AbstractScreen {
                 userAlert.setVisible(true);
             } else {
                 Subscriber user = (Subscriber) message.getObject();
-                userAlert.setText(user.getFirstName() + " " + user.getLastName());
+                userAlert.setText(user.getName() + " " + user.getLastName());
                 userAlert.setVisible(true);
             }
         });
@@ -132,11 +132,11 @@ public class LendBookScreen extends AbstractScreen {
                 alert.showAndWait();
             } else {
                 BookCopy bookCopy = (BookCopy) message.getObject();
-                if (bookCopy.getOrdererID() == -1) {
+                if (bookCopy.getOrderSubscriberId() == -1) {
                     alert.setHeaderText("Can't lend book");
                     alert.setContentText(bookIdAlert.getText() + " has no available copies for ordering or borrowing!");
                     alert.showAndWait();
-                } else if (bookCopy.getBorrowerId() == -1) {
+                } else if (bookCopy.getBorrowSubscriberId() == -1) {
                     alert.setAlertType(Alert.AlertType.CONFIRMATION);
                     alert.setHeaderText("Can't lend book");
                     alert.setContentText(bookIdAlert.getText() + " isn't available until " + bookCopy.getReturnDate() + " would you like to order it?");

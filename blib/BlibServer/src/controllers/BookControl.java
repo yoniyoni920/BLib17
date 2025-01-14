@@ -1,5 +1,6 @@
 package controllers;
 
+import entities.BookCopy;
 import entities.BorrowReport;
 import java.sql.*;
 import java.time.LocalDate;
@@ -120,7 +121,7 @@ public static BookCopy checkBookLendable(int bookId) {
                 "UPDATE book_copy SET lend_date = ?, return_date = ?, borrow_subscriber_id = ? WHERE id = ?")) {
             stt.setDate(1, Date.valueOf(bookCopy.getLendDate()));
             stt.setDate(2, Date.valueOf(bookCopy.getReturnDate()));
-            stt.setInt(3, bookCopy.getBorrowerId());
+            stt.setInt(3, bookCopy.getBorrowSubscriberId());
             stt.setInt(4, bookCopy.getCopyId());
             stt.executeUpdate();
             return true;

@@ -82,7 +82,7 @@ public class ClientMessageHandler {
             return msg.errorReply("Return date is not valid!");
         }
 
-        Subscriber subscriber = SubscriberControl.getSubscriberById(bookCopy.getBorrowerId());
+        Subscriber subscriber = SubscriberControl.getSubscriberById(bookCopy.getBorrowSubscriberId());
         if (subscriber == null || subscriber.isFrozen()) {
             return msg.errorReply("Subscriber is frozen or doesn't exist!");
         }
@@ -90,10 +90,10 @@ public class ClientMessageHandler {
         if (BookControl.searchBookById(bookCopy.getBookId()) != null) {
             BookCopy foundCopy = BookControl.checkBookLendable(bookCopy.getBookId());
             if (foundCopy == null) {
-                bookCopy.setBorrowerId(-1);
+                bookCopy.setBorrowSubscriberId(-1);
                 foundCopy = BookControl.checkBookOrderable(bookCopy.getBookId());
                 if (foundCopy == null) {
-                    bookCopy.setOrdererID(-1);
+                    bookCopy.setBorrowSubscriberId(-1);
                     return msg.reply(bookCopy);
                 }
                 bookCopy.setCopyId(foundCopy.getCopyId());

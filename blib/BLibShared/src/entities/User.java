@@ -24,7 +24,7 @@ public class User implements Serializable{
 
 	public User(String id, String name, String lastName, String role, String password) {
 		this.id = id;
-		this.firstName = firstName;
+		this.name = name;
 		this.lastName = lastName;
 		this.role = Role.valueOf(role.toUpperCase());
 		this.password = password ;
@@ -34,8 +34,8 @@ public class User implements Serializable{
 		return id;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
 	public void setName(String name) {

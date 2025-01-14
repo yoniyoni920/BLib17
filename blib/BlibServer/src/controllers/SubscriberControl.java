@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import entities.BookCopy;
 import entities.Subscriber;
@@ -61,8 +60,8 @@ public class SubscriberControl {
 					}
 					else {
 						status = "frozen";
-					}
-					Subscriber sub = new Subscriber(String.valueOf(id), firstName, lastName, role, phoneNumber, email);
+					}//TODO update frozen until
+					Subscriber sub = new Subscriber(String.valueOf(id), firstName, lastName, role, null, phoneNumber, email, null);
 					sub.setStatus(status);
 					return sub;
 				}

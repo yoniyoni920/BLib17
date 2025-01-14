@@ -44,4 +44,11 @@ prototype/build
 /blib/.idea/**/usage.statistics.xml
 /blib/.idea/**/dictionaries
 /blib/.idea/**/shelf
-
+/blib/.idea/**/dataSources/
+/blib/.idea/**/dataSources.ids
+/blib/.idea/**/dataSources.local.xml
+/blib/.idea/**/sqlDataSources.xml
+/blib/.idea/**/dynamic.xml
+/blib/.idea/**/uiDesigner.xml
+/blib/.idea/**/dbnavigator.xml
+/blib/.idea/dataSources.xml

@@ -52,3 +52,4 @@ prototype/build
 /blib/.idea/**/uiDesigner.xml
 /blib/.idea/**/dbnavigator.xml
 /blib/.idea/dataSources.xml
+blib/BLibClient/bin

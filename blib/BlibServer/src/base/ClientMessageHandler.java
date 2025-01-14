@@ -1,13 +1,21 @@
 package base;
 
+import controllers.BookCopyControl;
 import controllers.BookControl;
 import controllers.LoginControl;
+import controllers.RegisterUser;
 import controllers.SubscriberControl;
 import entities.*;
 import ocsf.server.ConnectionToClient;
 
+import entities.BookCopy;
+import entities.Message;
+import entities.Subscriber;
+import entities.User;
+import ocsf.server.ConnectionToClient;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
@@ -40,7 +48,7 @@ public class ClientMessageHandler {
         if (actionFunc != null) {
             return actionFunc.apply(msgFromClient, client);
         }
-
+        System.out.println(msgFromClient);
         return msgFromClient.errorReply("Found no such action! " + msgFromClient.getAction());
     }
 
@@ -55,6 +63,12 @@ public class ClientMessageHandler {
         actions.put(Action.GET_BOOK_BY_ID, ClientMessageHandler::getBookById);
         actions.put(Action.GET_SUBSCRIBER_BY_ID, ClientMessageHandler::getSubscriberById);
         actions.put(Action.LEND_BOOK, ClientMessageHandler::lendBook);
+        actions.put(Action.REGISTER, ClientMessageHandler::RegisterSubscriber);
+        actions.put(Action.GET_BORROW_TIMES_REPORT, ClientMessageHandler::getBorrowTimesReport);
+        actions.put(Action.GET_SUBSCRIBER_STATUS_REPORT, ClientMessageHandler::getSubscriberStatusReport);
+        actions.put(Action.GET_REPORT_DATES, ClientMessageHandler::getReportDates);
+        actions.put(Action.RETRIEVE_BORROWEDBOOKS, ClientMessageHandler::retrieveBorrowedBooks);
+        actions.put(Action.SEARCH_BOOKS, ClientMessageHandler::searchBooks);
     }
 
     public static Message lendBook(Message msg, ConnectionToClient client) {
@@ -150,8 +164,40 @@ public class ClientMessageHandler {
      * @param client
      * @return Message
      */
-    public static Message updateSubscriber(Message msg, ConnectionToClient client) {
-        SubscriberControl.updateInfo((String[]) msg.getObject());
+	  public static Message updateSubscriber(Message msg, ConnectionToClient client) {
+        SubscriberControl.updateInfo((List<String>)msg.getObject());
         return msg.reply("Success");
     }
+    
+    public static Message RegisterSubscriber(Message msg, ConnectionToClient client) {
+    	String[] args = (String[])msg.getObject();
+    	msg = RegisterUser.registerAction(args[0], args[1],args[2],args[3],args[4]);
+        return msg;
+    }
+    
+    public static Message getBorrowTimesReport(Message msg, ConnectionToClient client) {
+        Object[] params = (Object[])msg.getObject();
+        return msg.reply(BookControl.getBorrowTimesReport((LocalDate)params[0], (Integer)params[1]));
+    }
+
+    public static Message getSubscriberStatusReport(Message msg, ConnectionToClient client) {
+        return msg.reply(SubscriberControl.getSubscriberStatusReport((LocalDate)msg.getObject()));
+    }
+
+    public static Message getReportDates(Message msg, ConnectionToClient client) {
+        return msg.reply(SubscriberControl.getReportDates());
+    }
+  
+    //handles retrieving the borrowed books for a specific subscriber 
+    public static Message retrieveBorrowedBooks(Message msg , ConnectionToClient client) {
+        List<BookCopy> borrowedBooks = BookCopyControl.retrieveBorrowedBooks((Subscriber)msg.getObject());
+        return msg.reply(borrowedBooks);
+    }
+
+    public static Message searchBooks(Message msg, ConnectionToClient client) {
+        String[] searchInfo = (String[]) msg.getObject();
+        return msg.reply(BookControl.searchBooks(searchInfo[0], searchInfo[1]));
+    }
 }
+
+

@@ -4,6 +4,7 @@ import base.Action;
 import base.ClientApplication;
 import controllers.BookScanner;
 import entities.Book;
+import entities.BookCopy;
 import entities.Message;
 import entities.Subscriber;
 import javafx.application.Platform;
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 public class LendBookScreen extends AbstractScreen {
@@ -50,10 +52,10 @@ public class LendBookScreen extends AbstractScreen {
         lendDatePicker.setValue(LocalDate.now());
 
         bookIdTextField.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (!t1) bookTextFieldChanged();
+            if (!t1 && aBoolean) bookTextFieldChanged();
         });
         subID.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (!t1) userTextFieldChanged();
+            if (!t1 && aBoolean) userTextFieldChanged();
         });
     }
 
@@ -105,8 +107,48 @@ public class LendBookScreen extends AbstractScreen {
     }
 
     public void submitLend() {
-        // TODO - implement LendBookScreen.submitLend
-        throw new UnsupportedOperationException();
+        Integer sub = null, bookId = null;
+        try {
+            sub = Integer.parseInt(subID.getText());
+        } catch (NumberFormatException e) {
+            userAlert.setText("Subscriber ID is not valid!");
+            userAlert.setVisible(true);
+            return;
+        }
+        try {
+            bookId = Integer.parseInt(bookIdTextField.getText());
+        } catch (NumberFormatException e) {
+            bookIdAlert.setText("Book ID is not valid!");
+            bookIdAlert.setVisible(true);
+            return;
+        }
+        Message msg = new Message(Action.LEND_BOOK, new BookCopy(0, bookId, lendDatePicker.getValue(), returnDatePicker.getValue(), sub, sub));
+        ClientApplication.chat.sendToServer(msg, message -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            if (message.isError()) {
+                alert.setAlertType(Alert.AlertType.ERROR);
+                alert.setHeaderText("Lending Error");
+                alert.setContentText(message.getObject().toString());
+                alert.showAndWait();
+            } else {
+                BookCopy bookCopy = (BookCopy) message.getObject();
+                if (bookCopy.getOrdererID() == -1) {
+                    alert.setHeaderText("Can't lend book");
+                    alert.setContentText(bookIdAlert.getText() + " has no available copies for ordering or borrowing!");
+                    alert.showAndWait();
+                } else if (bookCopy.getBorrowerId() == -1) {
+                    alert.setAlertType(Alert.AlertType.CONFIRMATION);
+                    alert.setHeaderText("Can't lend book");
+                    alert.setContentText("Would you like to order a copy of " + bookIdAlert.getText() + " it instead?");
+                    alert.showAndWait();
+                }else {
+                    alert.setAlertType(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Lent Successfully");
+                    alert.setContentText(bookIdAlert.getText() + " was lent successfully to " + userAlert.getText() + " with a return date of " + bookCopy.getReturnDate());
+                    alert.showAndWait();
+                }
+            }
+        });
     }
 
 }

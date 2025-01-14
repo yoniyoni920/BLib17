@@ -45,7 +45,7 @@ public class BookControl {
 						preparedStatement1.setInt(1, id);
 						ResultSet rs1 = preparedStatement1.executeQuery();
 						if(rs1.next())
-							locationOrDate = "Located on Shelf "+location+".";
+							locationOrDate = "Shelf "+location;
 						else {
 							try(PreparedStatement preparedStatement2 = DBControl.getConnection().prepareStatement(query2)){
 								preparedStatement2.setInt(1, id);
@@ -53,8 +53,8 @@ public class BookControl {
 								if(rs2.next()) {
 									LocalDate originalDate = rs2.getDate("return_date").toLocalDate();
 									locationOrDate = originalDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-									locationOrDate = "Not available, closest return date: "+locationOrDate+".";
-						        	} 
+									locationOrDate = "Available By: "+locationOrDate;
+						        	}
 							}	
 						}
 					}

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="TOP_CENTER" prefHeight="413.0" prefWidth="502.0" spacing="8.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LendBookScreen">
+<VBox alignment="TOP_CENTER" prefHeight="413.0" prefWidth="502.0" spacing="8.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.librarian.LendBookScreen">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" text="Lend Book" textAlignment="CENTER">
          <font>

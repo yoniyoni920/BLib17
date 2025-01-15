@@ -3,10 +3,7 @@ package gui.subscriber_main_screen;
 import java.io.IOException;
 import java.util.List;
 
-import base.Action;
-import entities.Book;
 import entities.BookCopy;
-import entities.Message;
 import entities.Subscriber;
 import gui.AbstractScreen;
 import gui.BookCard;
@@ -15,16 +12,12 @@ import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
-import services.ClientUtils;
 import services.InterfaceUtils;
 
 /**

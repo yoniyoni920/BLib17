@@ -1,6 +1,7 @@
-package gui;
+package gui.librarian;
 
 import entities.User;
+import gui.AbstractScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

@@ -1,4 +1,4 @@
-package gui;
+package gui.librarian;
 
 import base.Action;
 import base.ClientApplication;
@@ -7,13 +7,13 @@ import entities.Book;
 import entities.BookCopy;
 import entities.Message;
 import entities.Subscriber;
+import gui.AbstractScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 
 public class LendBookScreen extends AbstractScreen {

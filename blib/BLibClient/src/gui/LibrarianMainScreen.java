@@ -1,12 +1,9 @@
 package gui;
 
-import entities.Subscriber;
 import entities.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 
 import java.io.IOException;
 
@@ -17,11 +14,11 @@ public class LibrarianMainScreen extends AbstractScreen {
 	
 	
 	public void RegisterSubscriber(ActionEvent event) throws Exception {
-		RegisterViaLibrerianScreen librarianRegister =  (RegisterViaLibrerianScreen)screenManager.openScreen("RegisterViaLibrerianScreen", "Register Screen");		
+		RegisterViaLibrerianScreen librarianRegister =  (RegisterViaLibrerianScreen)screenManager.openScreen("RegisterViaLibrerianScreen", "Register Screen");
 		librarianRegister.startUp(user.getName());
 	}
 	public void startUp(String name) throws Exception {
-		nameTxt.setText(name);
+		nameTxt.setText("Welcome, " + name);
 	}
 	public void lendBook() throws IOException {
 		screenManager.openScreen("LendBookScreen", "Reports");

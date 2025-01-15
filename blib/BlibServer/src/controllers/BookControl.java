@@ -156,9 +156,17 @@ public static BookCopy checkBookLendable(int bookId) {
         throw new UnsupportedOperationException();
     }
 
-    public static void orderBook() {
-        // TODO - implement BookControl.orderBook
-        throw new UnsupportedOperationException();
+    public static boolean orderBook(BookCopy bookCopy) {
+        try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
+                "UPDATE book_copy SET order_subscriber_id = ? WHERE id = ?")) {
+            stt.setInt(1, bookCopy.getOrdererID());
+            stt.setInt(2, bookCopy.getCopyId());
+            stt.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static void bookOrderExists() {

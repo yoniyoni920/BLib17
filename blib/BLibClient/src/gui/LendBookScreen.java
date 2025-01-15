@@ -144,7 +144,28 @@ public class LendBookScreen extends AbstractScreen {
                     alert.setHeaderText("Can't lend book");
                     alert.setContentText(bookIdAlert.getText() + " isn't available until " + bookCopy.getReturnDate() + " would you like to order it?");
                     alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-                    alert.showAndWait();
+                    alert.showAndWait().ifPresent(buttonType -> {
+                        if(buttonType == ButtonType.NO) return;
+                        Alert orderAlert = new Alert(Alert.AlertType.INFORMATION);
+                        orderAlert.setHeaderText("Ordering book");
+                        orderAlert.setContentText("Trying to make an order for " + bookIdAlert.getText());
+                        ClientApplication.chat.sendToServer(new Message(Action.ORDER_BOOK, bookCopy), message1 -> {
+                            Alert orderResultAlert = new Alert(Alert.AlertType.INFORMATION);
+                            if(message1.isError()) {
+                                orderResultAlert.setAlertType(Alert.AlertType.ERROR);
+                                orderResultAlert.setHeaderText("Ordering Error");
+                                orderResultAlert.setContentText(message1.getObject().toString());
+                            }else {
+                                orderResultAlert.setAlertType(Alert.AlertType.INFORMATION);
+                                orderResultAlert.setHeaderText("Book Ordered successfully");
+                                BookCopy copy = (BookCopy) message1.getObject();
+                                orderResultAlert.setContentText(bookIdAlert.getText() + " has been ordered for subscriber " + userAlert.getText() + " and will be available on " + copy.getReturnDate());
+                            }
+                            orderResultAlert.show();
+                            orderAlert.close();
+                        });
+                        orderAlert.showAndWait();
+                    });
                 }else {
                     alert.setAlertType(Alert.AlertType.INFORMATION);
                     alert.setHeaderText("Lent Successfully");

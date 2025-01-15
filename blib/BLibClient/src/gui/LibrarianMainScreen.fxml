@@ -8,7 +8,8 @@
    <children>
       <Label fx:id="nameTxt" layoutX="411.0" layoutY="36.0" text="Librarian Name" />
       <Button layoutX="516.0" layoutY="28.0" mnemonicParsing="false" onAction="#closeWindow" styleClass="danger" text="Logout" />
-      <Button layoutX="243.0" layoutY="188.0" mnemonicParsing="false" onAction="#RegisterSubscriber" text="RegisterSubscriber" />
-      <Button layoutX="25.0" layoutY="28.0" mnemonicParsing="false" onAction="#openReportScreen" text="Reports" />
+      <Button layoutX="25.0" layoutY="70.0" mnemonicParsing="false" onAction="#RegisterSubscriber" prefHeight="36.0" prefWidth="173.0" text="Subscriber Registration" />
+      <Button layoutX="25.0" layoutY="28.0" mnemonicParsing="false" onAction="#openReportScreen" prefHeight="36.0" prefWidth="173.0" text="Reports" />
+      <Button layoutX="25.0" layoutY="114.0" mnemonicParsing="false" onAction="#lendBook" prefHeight="36.0" prefWidth="173.0" text="Lend a Book" />
    </children>
 </AnchorPane>

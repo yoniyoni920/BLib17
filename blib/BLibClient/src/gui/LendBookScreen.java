@@ -10,6 +10,7 @@ import entities.Subscriber;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -76,10 +77,12 @@ public class LendBookScreen extends AbstractScreen {
         ClientApplication.chat.sendToServer(new Message(Action.GET_SUBSCRIBER_BY_ID, subID.getText()), message -> {
             if (message.isError()) {
                 userAlert.setText(message.getObject().toString());
+                userAlert.setTextFill(Color.RED);
                 userAlert.setVisible(true);
             } else {
                 Subscriber user = (Subscriber) message.getObject();
                 userAlert.setText(user.getName() + " " + user.getLastName());
+                userAlert.setTextFill(Color.DODGERBLUE);
                 userAlert.setVisible(true);
             }
         });

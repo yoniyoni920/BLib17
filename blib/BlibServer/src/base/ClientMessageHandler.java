@@ -77,7 +77,7 @@ public class ClientMessageHandler {
         //TODO check subscriber valid and not frozen
         BookCopy foundCopy = BookControl.checkBookOrderable(bookCopy.getBookId());
         if (foundCopy == null) {
-            bookCopy.setOrdererID(-1);
+            bookCopy.setOrderSubscriberId(-1);
             return msg.reply(bookCopy);
         } else {
             bookCopy.setCopyId(foundCopy.getCopyId());

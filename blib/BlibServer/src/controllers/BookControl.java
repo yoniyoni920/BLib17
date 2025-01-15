@@ -159,7 +159,7 @@ public static BookCopy checkBookLendable(int bookId) {
     public static boolean orderBook(BookCopy bookCopy) {
         try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
                 "UPDATE book_copy SET order_subscriber_id = ? WHERE id = ?")) {
-            stt.setInt(1, bookCopy.getOrdererID());
+            stt.setInt(1, bookCopy.getOrderSubscriberId());
             stt.setInt(2, bookCopy.getCopyId());
             stt.executeUpdate();
             return true;

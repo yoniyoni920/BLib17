@@ -23,9 +23,8 @@ public class LibrarianMainScreen extends AbstractScreen {
 	public void startUp(String name) throws Exception {
 		nameTxt.setText(name);
 	}
-	public void lendBook() {
-		// TODO - implement LibrarianMainScreen.lendBook
-		throw new UnsupportedOperationException();
+	public void lendBook() throws IOException {
+		screenManager.openScreen("LendBookScreen", "Reports");
 	}
 
 	public void getMemberStatus() {

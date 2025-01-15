@@ -80,6 +80,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
         lastNameTxtField.setText(sub.getLastName());
         phoneTxtField.setText(sub.getPhoneNumber());
         emailTxtField.setText(sub.getEmail());
+
         fadeInLabelTransition(welcomeText);
     }
 
@@ -199,7 +200,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
         welcomeText.setOpacity(0.0); // Start with the text invisible
 
         // First Fade-In Transition (Welcome Message)
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(5), welcomeText);
         fadeIn.setFromValue(0.0); // Start fully transparent
         fadeIn.setToValue(1.0);   // Fade to fully visible
         fadeIn.setCycleCount(1);

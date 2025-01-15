@@ -9,11 +9,11 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 public class BookCard {
     @FXML
-    private AnchorPane anchorPane;
-
+    private VBox vbox;
 	@FXML
     private ImageView bookImageView;
     @FXML
@@ -24,12 +24,22 @@ public class BookCard {
     private Label genreLabel;
     @FXML
     private Label locationOrDateLabel;
+
+    public void setExtraDetailsVisible(boolean visible) {
+        locationOrDateLabel.setVisible(visible);
+    }
+
     public void setBookData(Book book) {
         titleLabel.setText(book.getTitle());
         authorLabel.setText(book.getAuthors());
         genreLabel.setText(book.getGenre());
-        locationOrDateLabel.setText(book.getLocationOrDate());
-        
+
+        if (book.getLocationOrDate() != null) {
+            locationOrDateLabel.setText(book.getLocationOrDate());
+        } else {
+            locationOrDateLabel.setText("Shelf " + book.getLocation());
+        }
+
         // Set the book's image
         String url = getClass().getResource("/resources/book_covers/" + book.getImage()).toExternalForm();
         Image image = new Image(url);
@@ -41,6 +51,6 @@ public class BookCard {
         Tooltip tooltip = new Tooltip(book.getDescription());
         tooltip.setWrapText(true);
         tooltip.setWidth(200);
-        Tooltip.install(anchorPane, tooltip);
+        Tooltip.install(vbox, tooltip);
     }
 }

@@ -1,17 +1,22 @@
 package gui.subscriber_main_screen;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 import entities.BookCopy;
 import gui.AbstractScreen;
+import gui.BookCard;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 /**
@@ -26,21 +31,12 @@ public class BorrowedBookScreen extends AbstractScreen {
 
     @FXML
     private Label welcomeText;
-    
-    @FXML
-    private ImageView coverImage;
-    
-    @FXML
-    private Label bookTitle;
-    
+
     @FXML
     private Label borrowDate;
     
     @FXML
     private Label returnDate;
-    
-    @FXML
-    private Label isOrdered;
     
     @FXML
     private Label copyId;
@@ -49,9 +45,12 @@ public class BorrowedBookScreen extends AbstractScreen {
     private Label daysLeft;
     
     @FXML
-    private HBox borrowExtend;
+    private VBox borrowExtend;
 
     private BookCopy copy;
+
+    @FXML
+    private BookCard bookCardController;
 
     /**
      * Initializes the screen with the provided book copy information.
@@ -82,13 +81,11 @@ public class BorrowedBookScreen extends AbstractScreen {
      * order status, copy ID, and the number of days left before the book is due for return.
      */
     private void renderData() {
-        String url = getClass().getResource("/resources/book_covers/" + copy.getBook().getImage()).toExternalForm();
-        Image image = new Image(url);
-        coverImage.setImage(image);
-        bookTitle.setText(copy.getBook().getTitle());
+        bookCardController.setBookData(copy.getBook());
+
         borrowDate.setText(copy.getLendDate().toString());
         returnDate.setText(copy.getReturnDate().toString());
-        isOrdered.setText("no");
+//        isOrdered.setText("no");
         copyId.setText(copy.getCopyId() + "");
         
         int daysBetween = (int) ChronoUnit.DAYS.between(LocalDate.now(), copy.getReturnDate());
@@ -101,7 +98,7 @@ public class BorrowedBookScreen extends AbstractScreen {
         if (copy.getOrderSubscriberId() == 0 && daysBetween <= 7) {
             borrowExtend.setVisible(true);
         } else {
-            isOrdered.setText("yes");
+//            isOrdered.setText("yes");
         }
     }
 

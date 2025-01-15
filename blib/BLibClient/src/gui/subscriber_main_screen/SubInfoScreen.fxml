@@ -9,45 +9,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
-<?import javafx.scene.shape.Line?>
 
-<VBox alignment="TOP_CENTER" prefHeight="572.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber_main_screen.SubInfoScreen">
+<VBox alignment="TOP_CENTER" prefHeight="478.0" prefWidth="797.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber_main_screen.SubInfoScreen">
    <children>
-      <AnchorPane prefHeight="63.0" prefWidth="795.0">
+      <AnchorPane prefHeight="63.0" prefWidth="795.0" styleClass="underline">
          <children>
-            <Label fx:id="welcomeText" layoutX="53.0" layoutY="15.0" prefHeight="29.0" prefWidth="321.0" style="-fx-font-size: 24;" text="My Info" wrapText="true" />
-            <Line endX="694.0" endY="7.0" layoutX="13.0" layoutY="56.0" opacity="0.5" startX="40.0" startY="7.0">
-               <stroke>
-                  <LinearGradient cycleMethod="REFLECT" endX="0.49763033175355453" endY="0.5071090047393366" startX="1.0" startY="0.4976303317535545">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color />
-                           </color>
-                        </Stop>
-                        <Stop offset="0.006711409395973154">
-                           <color>
-                              <Color />
-                           </color>
-                        </Stop>
-                        <Stop offset="0.0436241610738255">
-                           <color>
-                              <Color />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </stroke>
-            </Line>
-            <Button layoutX="679.0" layoutY="15.0" mnemonicParsing="false" onAction="#closeWindow" prefHeight="35.0" prefWidth="104.0" styleClass="danger" text="Back">
+            <Label fx:id="welcomeText" layoutX="3.0" layoutY="-3.0" prefHeight="63.0" prefWidth="321.0" style="-fx-font-size: 24;" text="My Info" wrapText="true" AnchorPane.leftAnchor="2.0" />
+            <Button layoutX="693.0" layoutY="11.0" mnemonicParsing="false" onAction="#closeWindow" prefHeight="35.0" prefWidth="104.0" styleClass="danger" text="Back" AnchorPane.rightAnchor="0.0">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -61,7 +29,7 @@
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
             <Pane prefHeight="149.0" prefWidth="84.0" />
-            <VBox prefHeight="164.0" prefWidth="138.0" spacing="16.0">
+            <VBox prefHeight="164.0" prefWidth="534.0" spacing="16.0">
                <children>
                   <Label text="ID: " />
                   <Label text="Name:" />
@@ -70,7 +38,7 @@
                   <Label text="Status:" />
                </children>
             </VBox>
-            <VBox prefHeight="164.0" prefWidth="368.0" spacing="16.0">
+            <VBox prefHeight="164.0" prefWidth="489.0" spacing="16.0">
                <children>
                   <HBox alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="200.0">
                      <children>
@@ -104,11 +72,13 @@
             <Insets bottom="11.0" left="11.0" right="11.0" top="91.0" />
          </VBox.margin>
       </HBox>
-      <Pane prefHeight="64.0" prefWidth="771.0" />
       <AnchorPane prefHeight="45.0" prefWidth="741.0">
          <children>
-            <Button layoutX="327.0" layoutY="10.0" mnemonicParsing="false" onAction="#openConfigureScreen" text="Subscriber Settings" />
+            <Button layoutX="295.0" layoutY="5.0" mnemonicParsing="false" onAction="#openConfigureScreen" text="Subscriber Settings" />
          </children>
       </AnchorPane>
    </children>
+   <padding>
+      <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+   </padding>
 </VBox>

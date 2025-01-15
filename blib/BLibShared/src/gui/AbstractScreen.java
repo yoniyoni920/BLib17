@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 /*
  * AbstractScreen is the base class for ScrenManager. 
@@ -34,5 +35,15 @@ public abstract class AbstractScreen {
 
 	public void setScene(Scene scene) {
 		this.scene = scene;
+	}
+
+	/**
+	 * Closes the current screen and returns to the previous screen.
+	 *
+	 * @param event The action event triggered by the close button.
+	 * @throws Exception If an error occurs during screen closing.
+	 */
+	public void closeScreen(ActionEvent event) {
+		screenManager.closeScreen();
 	}
 }

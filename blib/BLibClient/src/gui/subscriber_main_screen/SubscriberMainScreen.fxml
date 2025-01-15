@@ -3,56 +3,26 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
-<?import javafx.scene.shape.Line?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber_main_screen.SubscriberMainScreen">
+
+<VBox spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber_main_screen.SubscriberMainScreen">
    <children>
-      <AnchorPane prefHeight="63.0" prefWidth="795.0">
+      <AnchorPane prefHeight="65.0" prefWidth="895.0" styleClass="underline">
          <children>
-            <Label fx:id="welcomeText" layoutX="53.0" layoutY="18.0" opacity="0.38" prefHeight="29.0" prefWidth="321.0" style="-fx-font-size: 24;" text="Welcome Back , UserName " wrapText="true" />
-            <Line endX="694.0" endY="7.0" layoutX="13.0" layoutY="56.0" opacity="0.5" startX="40.0" startY="7.0">
-               <stroke>
-                  <LinearGradient cycleMethod="REFLECT" endX="0.49763033175355453" endY="0.5071090047393366" startX="1.0" startY="0.4976303317535545">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color />
-                           </color>
-                        </Stop>
-                        <Stop offset="0.006711409395973154">
-                           <color>
-                              <Color />
-                           </color>
-                        </Stop>
-                        <Stop offset="0.0436241610738255">
-                           <color>
-                              <Color />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color blue="1.0" green="1.0" red="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </stroke>
-            </Line>
-            <MenuButton fx:id="profilePicMenu" layoutX="681.0" layoutY="9.0" mnemonicParsing="false" style="-fx-background-color: transparent;" textAlignment="RIGHT" textFill="#070707" textOverrun="CLIP">
+            <Label fx:id="welcomeText" layoutX="37.0" layoutY="15.0" opacity="0.38" prefHeight="29.0" prefWidth="371.0" style="-fx-font-size: 24;" text="Welcome Back, UserName " wrapText="true" AnchorPane.leftAnchor="0.0" />
+            <MenuButton fx:id="profilePicMenu" layoutX="725.0" layoutY="5.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="73.0" style="-fx-background-color: transparent;" textAlignment="RIGHT" textFill="#070707" textOverrun="CLIP" AnchorPane.rightAnchor="0.0">
               <items>
-                <MenuItem fx:id="infoMenuItem" mnemonicParsing="false" onAction="#openSubInfoScreen" text="info" />
-                <MenuItem fx:id="historyMenuItem" mnemonicParsing="false" onAction="#openSubscriberHistoryScreen" text="history" />
-                  <MenuItem fx:id="signoutMenuItem" mnemonicParsing="false" onAction="#closeWindow" text="sign out" />
+                <MenuItem fx:id="infoMenuItem" mnemonicParsing="false" onAction="#openSubInfoScreen" text="Info" />
+                <MenuItem fx:id="historyMenuItem" mnemonicParsing="false" onAction="#openSubscriberHistoryScreen" text="History" />
+                  <MenuItem fx:id="signoutMenuItem" mnemonicParsing="false" onAction="#closeScreen" text="Logout" />
               </items>
                <graphic>
                   <ImageView fitHeight="39.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
@@ -62,7 +32,7 @@
                   </ImageView>
                </graphic>
             </MenuButton>
-            <Button alignment="CENTER" layoutX="533.0" layoutY="15.0" minWidth="28.0" mnemonicParsing="false" onAction="#openSearchBooksScreen" prefHeight="35.0" prefWidth="148.0" text="Browse">
+            <Button alignment="CENTER" layoutX="634.0" layoutY="12.0" minWidth="28.0" mnemonicParsing="false" onAction="#openSearchBooksScreen" prefHeight="35.0" prefWidth="148.0" text="Search" AnchorPane.rightAnchor="81.0">
                <graphic>
                   <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
                   	<image>
@@ -72,14 +42,14 @@
             </Button>
          </children>
       </AnchorPane>
-      <ListView fx:id="borrowedBooksListView" orientation="HORIZONTAL" prefHeight="279.0" prefWidth="749.0">
-         <VBox.margin>
-            <Insets bottom="11.0" left="11.0" right="11.0" top="51.0" />
-         </VBox.margin>
-         <padding>
-            <Insets bottom="11" top="11.0" />
-         </padding>
-      </ListView>
-      <Label fx:id="borrowedBooksCount" alignment="CENTER" prefHeight="18.0" prefWidth="800.0" text="you have 0 books in your library" textAlignment="JUSTIFY" textFill="RED" />
+      <ScrollPane fx:id="borrowedBooksScrollPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="551.0" prefWidth="831.0">
+        <content>
+          <GridPane fx:id="borrowedBooksGrid" />
+        </content>
+      </ScrollPane>
+      <Label fx:id="borrowedBooksCount" alignment="CENTER" contentDisplay="RIGHT" prefHeight="20.0" prefWidth="896.0" text="You have 0 books in your library" textAlignment="JUSTIFY" />
    </children>
+   <padding>
+      <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+   </padding>
 </VBox>

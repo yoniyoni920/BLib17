@@ -36,6 +36,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.FormatStringConverter;
 import services.ClientUtils;
+import services.InterfaceUtils;
 
 
 public class SearchBooksScreen extends AbstractScreen implements Initializable{
@@ -107,51 +108,21 @@ public class SearchBooksScreen extends AbstractScreen implements Initializable{
 		String[] searchInfo = {searchId.getText(), choiceBox.getValue()};
 
 		ClientUtils.sendMessage(new Message(Action.SEARCH_BOOKS, searchInfo), msg -> {
+			List<Book> books = (List<Book>)msg.getObject();
 			textId.setVisible(false);
 
-			int definedColumns = 4;
-			int row = 0, col = 0;
-
-			// Clear previous row constraints
-			gridPane.getChildren().clear();
-			gridPane.getRowConstraints().clear();
-			gridPane.getColumnConstraints().clear();
-
-			System.out.println("Received object type: " + msg.getObject().getClass().getName());
-			List<Book> books = (List<Book>) msg.getObject();
 			if(!books.isEmpty()) {
-				RowConstraints rc = new RowConstraints();
-				double rowCount = Math.ceil((double)books.size()/definedColumns);
-				rc.setPercentHeight(100 / rowCount);
-
-				for (int i = 0; i < rowCount; i++) {
-					gridPane.getRowConstraints().add(rc);
-				}
-
-				ColumnConstraints cc = new ColumnConstraints();
-				cc.setPercentWidth(100 / definedColumns);
-
-				for (int i = 0; i < definedColumns; i++) {
-					gridPane.getColumnConstraints().add(cc);
-				}
-
-				for(Book book : books) {
-					try {
-						FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BookCard.fxml"));
+				InterfaceUtils.makeGrid(gridPane, 4, books, book -> {
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BookCard.fxml"));
+                    try {
 						Node card = loader.load();
-						GridPane.setVgrow(card, Priority.ALWAYS);
 						BookCard bookCard = loader.getController();
 						bookCard.setBookData(book);
-						gridPane.add(card, col, row);
-						col++;
-						if (col == definedColumns) { // definedColumns cards per row
-							col = 0;
-							row++;
-						}
-					} catch(IOException e) {
-						e.printStackTrace();
-					}
-				}
+						return card;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+				});
 			}
 			else {
 				textId.setVisible(true);

@@ -3,24 +3,23 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="387.0" prefWidth="232.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BookCard">
+<VBox fx:id="vbox" alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="383.0" prefWidth="188.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BookCard">
    <children>
-      <ImageView fx:id="bookImageView" fitHeight="292.0" fitWidth="232.0" pickOnBounds="true">
+      <ImageView fx:id="bookImageView" fitHeight="299.0" fitWidth="199.0" pickOnBounds="true">
          <image>
             <Image url="@../resources/book_covers/batman.jpg" />
          </image>
       </ImageView>
-      <Label fx:id="titleLabel" alignment="CENTER" layoutY="292.0" prefHeight="17.0" prefWidth="232.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Batman" />
-      <VBox layoutX="3.0" layoutY="319.0" prefHeight="58.0" prefWidth="226.0" spacing="4.0">
+      <Label fx:id="titleLabel" alignment="CENTER" prefHeight="17.0" prefWidth="199.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Batman" />
+      <VBox prefHeight="58.0" prefWidth="600.0" spacing="4.0">
          <children>
-            <Label fx:id="authorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="233.0" text="Bob Kane, Bill Finger" />
-            <Label fx:id="genreLabel" alignment="CENTER" prefHeight="17.0" prefWidth="252.0" text="Superhero" />
-            <Label fx:id="locationOrDateLabel" alignment="CENTER" prefHeight="17.0" prefWidth="306.0" text="Shelf A" />
+            <Label fx:id="authorLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="199.0" text="Bob Kane, Bill Finger" />
+            <Label fx:id="genreLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="199.0" text="Superhero" />
+            <Label fx:id="locationOrDateLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="199.0" text="Shelf A" />
          </children>
       </VBox>
    </children>
-</AnchorPane>
+</VBox>

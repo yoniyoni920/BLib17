@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -8,15 +9,20 @@
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <VBox prefHeight="826.0" prefWidth="1088.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SearchBooksScreen">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="1023.0" styleClass="title-1" text="Search Books" textAlignment="CENTER" />
+      <Pane>
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="1056.0" styleClass="title-1" text="Search Books" textAlignment="CENTER" />
+            <Button layoutX="997.0" layoutY="2.0" mnemonicParsing="false" onAction="#closeScreen" text="Close" />
+         </children>
+      </Pane>
       <HBox alignment="TOP_CENTER" prefWidth="951.0" spacing="4.0">
          <children>
             <TextField fx:id="searchId" onKeyReleased="#onSearch" prefHeight="46.0" prefWidth="385.0" />

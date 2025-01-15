@@ -211,8 +211,4 @@ public class ReportScreen extends AbstractScreen implements Initializable {
             setSubscriberStatusData();
         }
     }
-
-    public void closeScreen(ActionEvent event) {
-        screenManager.closeScreen();
-    }
 }

@@ -2,6 +2,7 @@ package base;
 
 import javafx.application.Application;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import entities.Message;
 import gui.ScreenManager;
@@ -39,6 +40,7 @@ public class ClientApplication extends Application {
 		screenManager = new ScreenManager(primaryStage);
 		screenManager.openScreen("ClientSocket", "Client Socket Screen");
 		setUserAgentStylesheet("/gui/Main.css");
+		primaryStage.getIcons().add(new Image(getClass().getResource("/resources/icon.png").toExternalForm()));
 	}
 
 	public void createClient( String ip, int port) throws Exception{

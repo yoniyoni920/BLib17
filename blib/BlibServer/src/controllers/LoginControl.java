@@ -71,6 +71,7 @@ public class LoginControl {
 						DetailedSubscriptionHistory history = new DetailedSubscriptionHistory();
 						history.setActionsHistory(DetailedSubscriptionHistoryControl.retrieveActionsHistory());
 						subscriber.setDetailedSubscriptionHistory(history);
+						subscriber.setBorrowedBooks(BookControl.retrieveBorrowedBooks(subscriber.getId()));
 						return subscriber;
 					}
 				} else {

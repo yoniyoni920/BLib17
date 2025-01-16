@@ -51,16 +51,15 @@ public class SubscriberMainScreen extends AbstractScreen {
      * This method sets up the screen with the subscriber's name and their borrowed books.
      *
      * @param sub The logged-in subscriber.
-     * @param borrowedBooks A list of books borrowed by the subscriber.
      */
-    public void onStart(Subscriber sub, List<BookCopy> borrowedBooks) {
+    public void onStart(Subscriber sub) {
         final double SCROLL_SPEED = 0.005;
         borrowedBooksScrollPane.getContent().setOnScroll(scrollEvent -> {
             double deltaY = scrollEvent.getDeltaY() * SCROLL_SPEED;
             borrowedBooksScrollPane.setVvalue(borrowedBooksScrollPane.getVvalue() - deltaY);
         });
 
-        loadData(sub, borrowedBooks);
+        loadData(sub);
         renderData();
     }
 
@@ -68,11 +67,10 @@ public class SubscriberMainScreen extends AbstractScreen {
      * Loads the subscriber and their borrowed books into the screen.
      *
      * @param sub The logged-in subscriber.
-     * @param borrowedBooks A list of books borrowed by the subscriber.
      */
-    private void loadData(Subscriber sub, List<BookCopy> borrowedBooks) {
+    private void loadData(Subscriber sub) {
         subscriber = sub;
-        this.borrowedBooks.addAll(borrowedBooks);
+        this.borrowedBooks.addAll(sub.getBorrowedBooks());
     }
     
     /**
@@ -134,8 +132,6 @@ public class SubscriberMainScreen extends AbstractScreen {
      * Sets up custom rendering and event handling for each item in the list.
      */
     private void showBorrowedBooks() {
-//        borrowedBooksListView.setItems(borrowedBooks);
-
         InterfaceUtils.makeGrid(borrowedBooksGrid, 3, borrowedBooks, copy -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BookCard.fxml"));
             try {

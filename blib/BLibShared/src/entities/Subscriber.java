@@ -14,6 +14,9 @@ public class Subscriber extends User implements Serializable {
 	private String email;
 	private LocalDate frozenUntil;
 	private DetailedSubscriptionHistory detailedSubscriptionHistory;
+
+	private List<BookCopy> borrowedBooks;
+
 	public Subscriber() {
 		super();
 	}
@@ -64,6 +67,14 @@ public class Subscriber extends User implements Serializable {
 	}
 	public void setDetailedSubscriptionHistory(DetailedSubscriptionHistory detailedSubscriptionHistory) {
 		this.detailedSubscriptionHistory = detailedSubscriptionHistory;
+	}
+
+	public List<BookCopy> getBorrowedBooks() {
+		return borrowedBooks;
+	}
+
+	public void setBorrowedBooks(List<BookCopy> borrowedBooks) {
+		this.borrowedBooks = borrowedBooks;
 	}
 
 	@Override

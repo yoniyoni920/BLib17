@@ -1,6 +1,5 @@
 package base;
 
-import controllers.BookCopyControl;
 import controllers.BookControl;
 import controllers.LoginControl;
 import controllers.RegisterUser;
@@ -12,7 +11,7 @@ import entities.BookCopy;
 import entities.Message;
 import entities.Subscriber;
 import entities.User;
-import ocsf.server.ConnectionToClient;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -209,7 +208,7 @@ public class ClientMessageHandler {
 
     //handles retrieving the borrowed books for a specific subscriber
     public static Message retrieveBorrowedBooks(Message msg , ConnectionToClient client) {
-        List<BookCopy> borrowedBooks = BookCopyControl.retrieveBorrowedBooks((Subscriber)msg.getObject());
+        List<BookCopy> borrowedBooks = BookControl.retrieveBorrowedBooks((int)msg.getObject());
         return msg.reply(borrowedBooks);
     }
 

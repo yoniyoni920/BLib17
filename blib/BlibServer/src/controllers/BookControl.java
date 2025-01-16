@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import entities.Book;
+import entities.Subscriber;
 
 public class BookControl {
 
@@ -46,7 +47,7 @@ public class BookControl {
 						preparedStatement1.setInt(1, id);
 						ResultSet rs1 = preparedStatement1.executeQuery();
 						if(rs1.next())
-							locationOrDate = "Located on Shelf "+location+".";
+							locationOrDate = "Shelf "+location;
 						else {
 							try(PreparedStatement preparedStatement2 = DBControl.getConnection().prepareStatement(query2)){
 								preparedStatement2.setInt(1, id);
@@ -54,8 +55,8 @@ public class BookControl {
 								if(rs2.next()) {
 									LocalDate originalDate = rs2.getDate("return_date").toLocalDate();
 									locationOrDate = originalDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-									locationOrDate = "Not available, closest return date: "+locationOrDate+".";
-						        	} 
+									locationOrDate = "Available By: "+locationOrDate;
+						        	}
 							}	
 						}
 					}
@@ -151,10 +152,70 @@ public static BookCopy checkBookLendable(int bookId) {
         return null;
     }
 
-    public static void allBookCopiesLoaned() {
-        // TODO - implement BookControl.allBookCopiesLoaned
-        throw new UnsupportedOperationException();
-    }
+	/**
+	 * Retrieves a list of borrowed books by a subscriber from the database.
+	 * This method fetches book copy details, including the lending and return dates, as well as the subscriber's IDs,
+	 * and then associates the book copy with the corresponding book details (e.g., title, authors, genre).
+	 *
+	 * @param subscriber The subscriber whose borrowed books are being retrieved.
+	 * @return A list of borrowed `BookCopy` objects associated with the given subscriber.
+	 */
+	public static List<BookCopy> retrieveBorrowedBooks(int subscriberId) {
+		ResultSet rs;
+
+		// Retrieving borrowed books for a subscriber
+		List<BookCopy> borrowedBooks = new ArrayList<>();
+		try {
+			PreparedStatement stmt = DBControl.getConnection().prepareStatement("SELECT * FROM book_copy WHERE borrow_subscriber_id = ?");
+			stmt.setInt(1, subscriberId);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				int copyId = rs.getInt(1);
+				int bookId = rs.getInt(2);
+				Date sqlDate = rs.getDate(3);
+				LocalDate lendDate = sqlDate.toLocalDate();
+				sqlDate = rs.getDate(4);
+				LocalDate returnDate = sqlDate.toLocalDate();
+				int borrowSubscriberId = rs.getInt(5);
+				int orderSubscriberId = rs.getInt(6);
+				borrowedBooks.add(new BookCopy(copyId, bookId, lendDate, returnDate, borrowSubscriberId, orderSubscriberId));
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// Retrieving the book details (covers, title, etc.)
+		Connection con = DBControl.getConnection();
+		Statement stmt1 = null;
+		try {
+			stmt1 = con.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		for (BookCopy copy : borrowedBooks) {
+			int bookId = copy.getBookId();
+			try {
+				rs = stmt1.executeQuery("SELECT * FROM book WHERE id = '" + bookId + "'");
+				if (rs.next()) {
+					int id = rs.getInt(1);
+					String title = rs.getString(2);
+					String authors = rs.getString(3);
+					String genre = rs.getString(4);
+					String description = rs.getString(5);
+					String image = rs.getString(6);
+					String location = rs.getString("location");
+
+					copy.setBook(new Book(id, title, authors, genre, description, image, location));
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return borrowedBooks;
+	}
 
     public static boolean orderBook(BookCopy bookCopy) {
         try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
@@ -167,36 +228,6 @@ public static BookCopy checkBookLendable(int bookId) {
             e.printStackTrace();
         }
         return false;
-    }
-
-    public static void bookOrderExists() {
-        // TODO - implement BookControl.bookOrderExists
-        throw new UnsupportedOperationException();
-    }
-
-    public static void sendMessageToLibrarian() {
-        // TODO - implement BookControl.sendMessageToLibrarian
-        throw new UnsupportedOperationException();
-    }
-
-    public static void returnBook() {
-        // TODO - implement BookControl.returnBook
-        throw new UnsupportedOperationException();
-    }
-
-    public static void updateBookCopyReturnDate() {
-        // TODO - implement BookControl.updateBookCopyReturnDate
-        throw new UnsupportedOperationException();
-    }
-
-    public static void generateBorrowBookTimes() {
-        // TODO - implement BookControl.generateBorrowBookTimes
-        throw new UnsupportedOperationException();
-    }
-
-    public static void searchBookByBarcode() {
-        // TODO - implement BookControl.searchBookByBarcode
-        throw new UnsupportedOperationException();
     }
 
 	/**

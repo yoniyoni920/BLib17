@@ -76,5 +76,10 @@ public class ScreenManager {
 		primaryStage.setScene(screen.getScene());
 		primaryStage.show();
 		primaryStage.setResizable(false);
+		primaryStage.sizeToScene();
+	}
+
+	public Stage getPrimaryStage() {
+		return primaryStage;
 	}
 }

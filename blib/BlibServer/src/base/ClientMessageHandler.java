@@ -1,6 +1,5 @@
 package base;
 
-import controllers.BookCopyControl;
 import controllers.BookControl;
 import controllers.LoginControl;
 import controllers.RegisterUser;
@@ -12,7 +11,7 @@ import entities.BookCopy;
 import entities.Message;
 import entities.Subscriber;
 import entities.User;
-import ocsf.server.ConnectionToClient;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +69,7 @@ public class ClientMessageHandler {
         actions.put(Action.RETRIEVE_BORROWEDBOOKS, ClientMessageHandler::retrieveBorrowedBooks);
         actions.put(Action.SEARCH_BOOKS, ClientMessageHandler::searchBooks);
         actions.put(Action.ORDER_BOOK, ClientMessageHandler::orderBook);
+        actions.put(Action.SEARCH_SUBSCRIBERS, ClientMessageHandler::searchSubscribers);
     }
 
     public static Message orderBook(Message msg, ConnectionToClient client) {
@@ -209,13 +209,18 @@ public class ClientMessageHandler {
 
     //handles retrieving the borrowed books for a specific subscriber
     public static Message retrieveBorrowedBooks(Message msg , ConnectionToClient client) {
-        List<BookCopy> borrowedBooks = BookCopyControl.retrieveBorrowedBooks((Subscriber)msg.getObject());
+        List<BookCopy> borrowedBooks = BookControl.retrieveBorrowedBooks((int)msg.getObject());
         return msg.reply(borrowedBooks);
     }
 
     public static Message searchBooks(Message msg, ConnectionToClient client) {
         String[] searchInfo = (String[]) msg.getObject();
         return msg.reply(BookControl.searchBooks(searchInfo[0], searchInfo[1]));
+    }
+
+    public static Message searchSubscribers(Message msg, ConnectionToClient client) {
+        String[] searchInfo = (String[])msg.getObject();
+        return msg.reply(SubscriberControl.searchSubscribers(searchInfo[0], searchInfo[1]));
     }
 }
 

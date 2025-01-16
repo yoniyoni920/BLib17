@@ -105,8 +105,6 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 		ipColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().address.getHostAddress()));
 		hostColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().address.getHostName()));
 		statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
-		connectionTable.getColumns().add(ipColumn);
-		connectionTable.getColumns().add(hostColumn);
-		connectionTable.getColumns().add(statusColumn);
+		connectionTable.getColumns().addAll(ipColumn, hostColumn, statusColumn);
 	}
 }

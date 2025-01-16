@@ -2,6 +2,7 @@ package base;
 
 import javafx.application.Application;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import entities.Message;
 import gui.ScreenManager;
@@ -37,15 +38,25 @@ public class ClientApplication extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		clientApplication = this;
 		screenManager = new ScreenManager(primaryStage);
-		screenManager.openScreen("ClientSocket", "Client Socket Screen");
+
+		String ip = System.getProperty("ip", "localhost");
+		String port = System.getProperty("port");
+		if (port != null) {
+			createClient(ip, Integer.valueOf(port));
+		} else {
+			screenManager.openScreen("ClientSocket", "Client Socket Screen");
+		}
+
+
 		setUserAgentStylesheet("/gui/Main.css");
+		primaryStage.getIcons().add(new Image(getClass().getResource("/resources/icon.png").toExternalForm()));
 	}
 
-	public void createClient( String ip, int port) throws Exception{
+	public void createClient(String ip, int port) throws Exception{
 		ClientApplication.chat = new ClientController();
 
 		try {
-			libraryClient = new LibraryClient(ip, Integer.valueOf(port));
+			libraryClient = new LibraryClient(ip, port);
 		} catch (IOException e) {
 			System.out.println("Error: Can't setup connection!" + " Terminating client.");
 

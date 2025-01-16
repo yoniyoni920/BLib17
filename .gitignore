@@ -53,3 +53,4 @@ prototype/build
 /blib/.idea/**/dbnavigator.xml
 /blib/.idea/dataSources.xml
 blib/BLibClient/bin
+blib/BLibClient/bin

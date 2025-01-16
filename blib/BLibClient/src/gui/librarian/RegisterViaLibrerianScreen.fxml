@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.RegisterViaLibrerianScreen">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.librarian.RegisterViaLibrerianScreen">
    <children>
       <Label fx:id="LibraranNamefx" layoutX="411.0" layoutY="36.0" text="Librarian Name" />
       <Button layoutX="516.0" layoutY="28.0" mnemonicParsing="false" onAction="#Exit" styleClass="danger" text="Close" />

@@ -4,26 +4,30 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 /*
  * Subscribers are the members of the library
  */
 public class Subscriber extends User implements Serializable {
-	private String status;
 	private String phoneNumber;
 	private String email;
+
 	private LocalDate frozenUntil;
 	private DetailedSubscriptionHistory detailedSubscriptionHistory;
+
+	private List<BookCopy> borrowedBooks;
+
 	public Subscriber() {
 		super();
 	}
 
 	public Subscriber(
-		String id,
+		int id,
 		String firstName,
 		String lastName,
 		String role,
-    String password,
+    	String password,
 		String phoneNumber,
 		String email,
 		LocalDate frozenUntil
@@ -34,16 +38,8 @@ public class Subscriber extends User implements Serializable {
 		this.frozenUntil = frozenUntil;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
 	public boolean isFrozen() {
-		return frozenUntil != null && frozenUntil.isBefore(LocalDate.now());
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
+		return frozenUntil != null && frozenUntil.isAfter(LocalDate.now());
 	}
 
 	public String getPhoneNumber() {
@@ -64,6 +60,22 @@ public class Subscriber extends User implements Serializable {
 	}
 	public void setDetailedSubscriptionHistory(DetailedSubscriptionHistory detailedSubscriptionHistory) {
 		this.detailedSubscriptionHistory = detailedSubscriptionHistory;
+	}
+
+	public LocalDate getFrozenUntil() {
+		return frozenUntil;
+	}
+
+	public void setFrozenUntil(LocalDate frozenUntil) {
+		this.frozenUntil = frozenUntil;
+	}
+
+	public List<BookCopy> getBorrowedBooks() {
+		return borrowedBooks;
+	}
+
+	public void setBorrowedBooks(List<BookCopy> borrowedBooks) {
+		this.borrowedBooks = borrowedBooks;
 	}
 
 	@Override

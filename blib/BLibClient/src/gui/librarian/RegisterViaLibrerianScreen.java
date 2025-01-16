@@ -1,6 +1,7 @@
-package gui;
+package gui.librarian;
 
 import entities.User;
+import gui.AbstractScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -13,23 +14,10 @@ import java.io.IOException;
 
 import base.Action;
 import base.ClientApplication;
-import base.ClientController;
-import base.LibraryClient;
 import entities.Message;
-import entities.Role;
-import entities.Subscriber;
-
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 
 import javafx.scene.control.PasswordField;
 
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 public class RegisterViaLibrerianScreen extends AbstractScreen {
 	
 	
@@ -155,7 +143,7 @@ public class RegisterViaLibrerianScreen extends AbstractScreen {
 				User user = ((User)msg.getObject());
 					LibrarianMainScreen LibMainScreen;
 					try {
-						LibMainScreen = (LibrarianMainScreen)screenManager.openScreen("LibrarianMainScreen", "Librarian Main Screen");
+						LibMainScreen = (LibrarianMainScreen)screenManager.openScreen("librarian/LibrarianMainScreen", "Librarian Main Screen");
 						LibMainScreen.loadUser(user);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

@@ -16,13 +16,13 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String lastName;
-	private String id;
+	private int id;
 	private Role role;
 	private String password;
 
 	public User() {}
 
-	public User(String id, String name, String lastName, String role, String password) {
+	public User(int id, String name, String lastName, String role, String password) {
 		this.id = id;
 		this.name = name;
 		this.lastName = lastName;
@@ -30,7 +30,7 @@ public class User implements Serializable{
 		this.password = password ;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 

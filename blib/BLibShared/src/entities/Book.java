@@ -54,6 +54,10 @@ public class Book implements Serializable {
 		return locationOrDate;
 	}
 
+	public String getLocation() {
+		return location;
+	}
+
 	public void setLocationOrDate(String locationOrDate) {
 		this.locationOrDate = locationOrDate;
 	}

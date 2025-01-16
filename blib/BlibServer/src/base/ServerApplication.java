@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,7 +20,9 @@ public class ServerApplication extends Application {
 	private ServerGUI serverGUI;
 	private ScreenManager screenManager;
 	private LibraryServer libraryServer;
-	
+
+	private String argPort;
+
 	Timer timer;
 
 	public static void main(String args[]) throws Exception {   
@@ -29,9 +32,16 @@ public class ServerApplication extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		serverApplication = this;
 		screenManager = new ScreenManager(primaryStage);
-		screenManager.openScreen("ServerSocket", "Server Socket Screen"); // Get controller for communicating with it later
+
+		String port = System.getProperty("port");
+		if (port != null) {
+			createServer(port);
+		} else {
+			screenManager.openScreen("ServerSocket", "Server Socket Screen"); // Get controller for communicating with it later
+		}
 
 		setUserAgentStylesheet("/gui/Main.css");
+		primaryStage.getIcons().add(new Image(getClass().getResource("/resources/icon.png").toExternalForm()));
 	}
 	
 	public void createServer(String port) throws IOException {

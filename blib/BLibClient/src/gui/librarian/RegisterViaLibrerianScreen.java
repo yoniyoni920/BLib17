@@ -143,7 +143,7 @@ public class RegisterViaLibrerianScreen extends AbstractScreen {
 				User user = ((User)msg.getObject());
 					LibrarianMainScreen LibMainScreen;
 					try {
-						LibMainScreen = (LibrarianMainScreen)screenManager.openScreen("LibrarianMainScreen", "Librarian Main Screen");
+						LibMainScreen = (LibrarianMainScreen)screenManager.openScreen("librarian/LibrarianMainScreen", "Librarian Main Screen");
 						LibMainScreen.loadUser(user);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

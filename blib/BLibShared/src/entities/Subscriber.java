@@ -62,6 +62,14 @@ public class Subscriber extends User implements Serializable {
 		this.detailedSubscriptionHistory = detailedSubscriptionHistory;
 	}
 
+	public LocalDate getFrozenUntil() {
+		return frozenUntil;
+	}
+
+	public void setFrozenUntil(LocalDate frozenUntil) {
+		this.frozenUntil = frozenUntil;
+	}
+
 	public List<BookCopy> getBorrowedBooks() {
 		return borrowedBooks;
 	}

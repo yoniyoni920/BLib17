@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import services.ClientUtils;
 
 /*
  * controller for LogInScreen.fxml
@@ -81,7 +82,7 @@ public class LogInScreen extends AbstractScreen {
 					SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("subscriber_main_screen/SubscriberMainScreen", "Subscriber Main Screen");
 					subMainScreen.onStart((Subscriber)user);
 				} else {
-					LibrarianMainScreen libMainScreen = (LibrarianMainScreen)screenManager.openScreen("LibrarianMainScreen", "Librarian Main Screen");
+					LibrarianMainScreen libMainScreen = (LibrarianMainScreen)screenManager.openScreen("librarian/LibrarianMainScreen", "Librarian Main Screen");
 					libMainScreen.loadUser(user);
 					libMainScreen.startUp(user.getName());
 				}

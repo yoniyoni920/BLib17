@@ -1,10 +1,14 @@
 package gui.librarian;
 
+import base.Action;
+import entities.Message;
+import entities.Subscriber;
 import entities.User;
 import gui.AbstractScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import services.ClientUtils;
 
 import java.io.IOException;
 
@@ -22,7 +26,7 @@ public class LibrarianMainScreen extends AbstractScreen {
 		nameTxt.setText("Welcome, " + name);
 	}
 	public void lendBook() throws IOException {
-		screenManager.openScreen("LendBookScreen", "Reports");
+		screenManager.openScreen("librarian/LendBookScreen", "Reports");
 	}
 
 	public void getMemberStatus() {
@@ -48,6 +52,18 @@ public class LibrarianMainScreen extends AbstractScreen {
 	}
 
     public void openReportScreen(ActionEvent event) throws IOException {
-		screenManager.openScreen("ReportScreen", "Reports");
+		screenManager.openScreen("librarian/ReportScreen", "Reports");
     }
+
+	public void searchSubscribers(ActionEvent event) throws Exception {
+		SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("/librarian/SubscriberCardScreen", "Subscriber Card Screen");
+
+		Message sub = ClientUtils.sendMessage(Action.GET_SUBSCRIBER_BY_ID, 1);
+
+		try {
+			card.setSubscriber((Subscriber)sub.getObject());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

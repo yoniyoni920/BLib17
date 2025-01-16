@@ -18,6 +18,9 @@ import entities.Message;
 
 import javafx.scene.control.PasswordField;
 
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import services.ClientUtils;
 public class RegisterViaLibrerianScreen extends AbstractScreen {
 	
 	
@@ -135,7 +138,7 @@ public class RegisterViaLibrerianScreen extends AbstractScreen {
 		if (!pass2Empty && !passEmpty && !FirstNameEmpty && !LastNameEmpty && !PhoneEmpty && !EmailAddressEmpty && ((pass2.equals(pass)) && valid))
 		{
 			// Attempt to Send message to Server To REGISTER USER
-			Message msg = ClientApplication.chat.sendToServer(new Message(Action.REGISTER, new String[]{ pass,FirstName,LastName,Phone,EmailAddress }));
+			Message msg = ClientUtils.sendMessage(new Message(Action.REGISTER, new String[]{ pass,FirstName,LastName,Phone,EmailAddress }));
 			
 			
 			if(!msg.isError()) {

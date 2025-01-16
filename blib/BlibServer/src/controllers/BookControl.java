@@ -309,4 +309,21 @@ public static BookCopy checkBookLendable(int bookId) {
 
 		return false;
 	}
+
+	public static boolean extendBorrowTime(BookCopy copy) {
+		int changed = 0 ;
+		try {
+			PreparedStatement stmt = DBControl.getConnection().prepareStatement("UPDATE book_copy SET return_date = ? WHERE id = ?");
+			stmt.setString(1,copy.getReturnDate().toString());
+			stmt.setString(2, copy.getCopyId()+"");
+			changed = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false ;
+		}
+		if(changed == 1)
+			return true ;
+		else
+			return false ;
+	}
 }

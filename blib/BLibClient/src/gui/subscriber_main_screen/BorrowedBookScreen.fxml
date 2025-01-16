@@ -64,7 +64,7 @@
             <VBox fx:id="borrowExtend" alignment="CENTER" layoutX="5.0" layoutY="415.0" prefHeight="93.0" prefWidth="805.0">
                <children>
                   <Label text="You can extend the borrow duration" textFill="RED" />
-                  <Button mnemonicParsing="false" text="Extend" />
+                  <Button mnemonicParsing="false" text="Extend" onAction="#openExtendBorrowTimeScreen"/>
                </children>
             </VBox>
          </children>

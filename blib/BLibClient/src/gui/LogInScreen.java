@@ -72,13 +72,14 @@ public class LogInScreen extends AbstractScreen {
 		if (!idEmpty && !passEmpty)
 		{
 			// Attempt to login via server
-			Message msg = ClientApplication.chat.sendToServer(new Message(Action.LOGIN, new String[]{ id, pass }));
+			Message msg = ClientUtils.sendMessage(new Message(Action.LOGIN, new String[]{ id, pass }));
 			if(!msg.isError()) {
 				idErrorLabel.setVisible(false);
 				User user = ((User)msg.getObject());
 
 				// Check which user this is to show the appropriate screen
 				if (user.getRole() == Role.SUBSCRIBER) {
+					Message msg2 = ClientUtils.sendMessage(new Message(Action.RETRIEVE_BORROWEDBOOKS, (Subscriber) user));
 					SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("subscriber_main_screen/SubscriberMainScreen", "Subscriber Main Screen");
 					subMainScreen.onStart((Subscriber)user);
 				} else {

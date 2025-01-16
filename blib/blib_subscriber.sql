@@ -29,7 +29,7 @@ CREATE TABLE `book` (
   `title` varchar(45) DEFAULT NULL,
   `authors` varchar(45) DEFAULT NULL,
   `genre` varchar(45) DEFAULT NULL,
-  `description` varchar(200) DEFAULT NULL,
+  `description` varchar(1000) DEFAULT NULL,
   `image` varchar(100) DEFAULT NULL,
   `location` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -42,7 +42,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'B','bb','drama','bb1','superman.jpg','A'),(2,'C','cc','doc','cc1','batman.jpg','B'),(3,'D','dd','horror','dd1','luffy.jpg','C'),(4,'A','aa','fatnasy','aa1','pic1.jpg','D'),(5,'The Let Them Theory','Mel Robbins','Motivation','A Life-Changing Tool Millions Of People Can\'t Stop Talking About','TheLetThemTheoryBookCover.jpg',NULL),(6,'The Women','Kristin Hannah','Fiction','From the celebrated author of The Nightingale and The Four Winds comes Kristin Hannah\'s The Women—at once an intimate portrait of coming of age in a dangerous time and an epic tale of a nation divided','TheWomenBookCover.jpg',NULL),(7,'The God of the Woods','Liz Moore','Fiction','When a teenager vanishes from her Adirondack summer camp, two worlds collide','TheGodOfTheWoodsBookCover.jpg',NULL),(8,'The Unseen World','Liz Moore','Fiction','The moving story of a daughter’s quest to discover the truth about her beloved father’s hidden past.','TheUnseenWorldBookCover.jpg',NULL);
+INSERT INTO `book` VALUES (1,'Superman',' John Byrne','Superhero',' Born in England and raised in Canada, John Byrne discovered superheroes through The Adventures of Superman on television. After studying at the Alberta College of Art and Design, he broke into comics first with Skywald and then at Charlton, where he created the character Rog-2000. Following his tenure at Charlton, Byrne moved to Marvel, where his acclaimed runs on The Uncanny X-Men and The Fantastic Four soon made him one of the most popular artists in the industry. In 1986 he came to DC to revamp Superman from the ground up, and since then he has gone on to draw and/or write every major character at both DC and Marvel. ','superman.jpg','A'),(2,'Batman Vol. 1','Bob Kane, John Broome','Superhero','cc1','batman.jpg','B'),(3,'One Piece Vol. 1','Eichiro Oda','Shounen','The One Piece is Real','luffy.jpg','C'),(4,'City of Orange','David Yoon','Sci-Fi','aa1','pic1.jpg','D'),(5,'The Let Them Theory','Mel Robbins','Motivation','A Life-Changing Tool Millions Of People Can\'t Stop Talking About','TheLetThemTheoryBookCover.jpg','E'),(6,'The Women','Kristin Hannah','Fiction','From the celebrated author of The Nightingale and The Four Winds comes Kristin Hannah\'s The Women—at once an intimate portrait of coming of age in a dangerous time and an epic tale of a nation divided','TheWomenBookCover.jpg','F'),(7,'The God of the Woods','Liz Moore','Fiction','When a teenager vanishes from her Adirondack summer camp, two worlds collide','TheGodOfTheWoodsBookCover.jpg','G'),(8,'The Unseen World','Liz Moore','Fiction','The moving story of a daughter’s quest to discover the truth about her beloved father’s hidden past.','TheUnseenWorldBookCover.jpg','H');
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,7 +66,7 @@ CREATE TABLE `book_copy` (
   KEY `order_subscriber_id_idx` (`order_subscriber_id`),
   CONSTRAINT `borrow_subscriber_id` FOREIGN KEY (`borrow_subscriber_id`) REFERENCES `subscriber` (`id`),
   CONSTRAINT `order_subscriber_id` FOREIGN KEY (`order_subscriber_id`) REFERENCES `subscriber` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `book_copy` (
 
 LOCK TABLES `book_copy` WRITE;
 /*!40000 ALTER TABLE `book_copy` DISABLE KEYS */;
-INSERT INTO `book_copy` VALUES (1,1,NULL,NULL,NULL,NULL),(2,3,NULL,NULL,NULL,NULL),(3,1,'2025-01-02','2025-01-16',1,NULL),(4,2,'2025-01-03','2025-01-17',5,3),(5,2,'2025-01-04','2025-01-16',3,1),(6,4,'2023-03-16','2025-03-30',2,NULL),(7,0,NULL,NULL,NULL,NULL);
+INSERT INTO `book_copy` VALUES (1,1,'2025-01-15','2025-01-29',1,NULL),(2,3,NULL,NULL,NULL,NULL),(3,1,'2025-01-02','2025-01-16',1,NULL),(4,2,'2025-01-03','2025-01-17',1,3),(5,2,'2025-01-04','2025-01-16',1,1),(6,4,'2023-03-16','2025-03-30',1,NULL),(7,5,NULL,NULL,NULL,NULL),(8,6,NULL,NULL,NULL,NULL),(9,7,NULL,NULL,NULL,NULL),(10,8,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `book_copy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +131,7 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
-INSERT INTO `job` VALUES (1,'2025-01-10 16:54:32','generate-reports'),(2,'2025-01-10 16:54:32','check-borrows');
+INSERT INTO `job` VALUES (1,'2025-01-10 16:54:32','generate-reports'),(2,'2025-01-16 13:53:23','check-borrows');
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +161,7 @@ CREATE TABLE `subscriber` (
 
 LOCK TABLES `subscriber` WRITE;
 /*!40000 ALTER TABLE `subscriber` DISABLE KEYS */;
-INSERT INTO `subscriber` VALUES (1,1,'0501234567','hi@gmail.com',NULL),(2,5,'0521479856','shalom@gmail.com',NULL),(3,3,'0548975642','bye@walla.com',NULL),(4,4,'0508797841','ma@gmail.com','2025-01-10'),(5,6,'0508797111','elias@elias.elias',NULL);
+INSERT INTO `subscriber` VALUES (1,1,'0501234567','hi@gmail.com','2025-01-16'),(2,5,'0521479856','shalom@gmail.com',NULL),(3,3,'0548975642','bye@walla.com',NULL),(4,4,'0508797841','ma@gmail.com','2025-01-10'),(5,6,'0508797111','elias@elias.elias',NULL);
 /*!40000 ALTER TABLE `subscriber` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,4 +255,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-10 17:55:37
+-- Dump completed on 2025-01-16 14:46:59

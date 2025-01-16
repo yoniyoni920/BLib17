@@ -75,7 +75,6 @@ public class SubInfoScreen extends AbstractScreen {
         // historyLabel.setText("" + sub.getDetailedSubscriptionHistory());
         phoneLabel.setText(subscriber.getPhoneNumber());
         emailLabel.setText(subscriber.getEmail());
-        statusLabel.setText(subscriber.getStatus());
         fadeInLabelTransition(welcomeText);
     }
 

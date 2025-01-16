@@ -38,16 +38,8 @@ public class Subscriber extends User implements Serializable {
 		this.frozenUntil = frozenUntil;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
 	public boolean isFrozen() {
 		return frozenUntil != null && frozenUntil.isAfter(LocalDate.now());
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	public String getPhoneNumber() {

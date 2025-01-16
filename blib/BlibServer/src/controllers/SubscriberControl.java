@@ -39,9 +39,10 @@ public class SubscriberControl {
 			System.out.println("Error in updating the user data in the DataBase");
 		} 
 	}
+
 	public static Subscriber getSubscriberById(int id) {
 		try {
-			String query = "SELECT * FROM subscriber join user on user.id=subscriber.user_id where user_id=?";
+			String query = "SELECT * FROM subscriber JOIN user ON user.id=subscriber.user_id WHERE user_id=?";
 			try(PreparedStatement stt = DBControl.getConnection().prepareStatement(query)) {
 				stt.setInt(1,id);
 				ResultSet rs = stt.executeQuery();
@@ -84,6 +85,38 @@ public class SubscriberControl {
 		sub.setBorrowedBooks(BookControl.retrieveBorrowedBooks(id));
 
 		return sub;
+	}
+
+	public static List<Subscriber> searchSubscribers(String search, String searchType) {
+		try {
+			if (searchType.equals("user_id") || searchType.equals("first_name") || searchType.equals("last_name")) {
+				String query = "SELECT * FROM subscriber JOIN user ON user.id=subscriber.user_id";
+				if (searchType.equals("user_id")) {
+					query += " WHERE user_id = ?";
+				} else {
+					query += " WHERE " + searchType + " LIKE ?";
+				}
+
+				try (PreparedStatement stt = DBControl.getConnection().prepareStatement(query)) {
+					if (searchType.equals("user_id")) {
+						stt.setInt(1, Integer.parseInt(search));
+					} else {
+						stt.setString(1, "%" + search + "%");
+					}
+
+					ResultSet rs = stt.executeQuery();
+					List<Subscriber> list = new ArrayList<>();
+					while(rs.next()) {
+						list.add(getSubscriberFromResultSet(rs));
+					}
+
+					return list;
+				}
+			}
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**

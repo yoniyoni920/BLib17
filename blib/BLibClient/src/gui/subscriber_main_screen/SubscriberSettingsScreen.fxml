@@ -19,7 +19,7 @@
       <AnchorPane prefHeight="63.0" prefWidth="795.0" styleClass="underline">
          <children>
             <Label fx:id="welcomeText" layoutX="2.0" layoutY="-2.0" prefHeight="52.0" prefWidth="321.0" style="-fx-font-size: 24;" text="Settings" wrapText="true" AnchorPane.leftAnchor="1.0" />
-            <Button layoutX="693.0" layoutY="6.0" mnemonicParsing="false" onAction="#close" prefHeight="35.0" prefWidth="104.0" styleClass="danger" text="Back" AnchorPane.rightAnchor="0.0">
+            <Button layoutX="693.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeScreen" prefHeight="35.0" prefWidth="104.0" styleClass="danger" text="Back" AnchorPane.rightAnchor="0.0">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                      <image>

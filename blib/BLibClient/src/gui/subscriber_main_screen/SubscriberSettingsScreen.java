@@ -101,7 +101,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
         // Check if no changes were made
         if (hasNoChanges()) {
             System.out.println("no changes");
-            close();
+            closeScreen(null);
             return;
         }
 
@@ -130,7 +130,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
             sub.setPassword(changedInfo.get(5));
         }
 
-        close();
+        closeScreen(null);
     }
 
     /**
@@ -173,21 +173,6 @@ public class SubscriberSettingsScreen extends AbstractScreen {
                ((trimSpaces(oldPasswordTxtField.getText()).isEmpty() && trimSpaces(newPasswordTxtField.getText()).isEmpty()) ||
                 (!trimSpaces(oldPasswordTxtField.getText()).isEmpty() && 
                   trimSpaces(newPasswordTxtField.getText()).equals(sub.getPassword())));
-    }
-
-    /**
-     * Closes the current screen and loads the latest information into the previous screen.
-     * If the subscriber's information was updated, the previous screen will display the updated information.
-     *
-     * @throws Exception If an error occurs while closing the screen.
-     */
-    public void close() throws Exception {
-        if (isUpdatedInfo) {
-            SubInfoScreen prevScreen = (SubInfoScreen) screenManager.closeScreen();
-            prevScreen.onStart(sub);
-        } else {
-            screenManager.closeScreen();
-        }
     }
 
     /**

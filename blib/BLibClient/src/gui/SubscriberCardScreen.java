@@ -1,20 +1,17 @@
-package gui.librarian;
+package gui;
 
-import entities.Book;
 import entities.BookCopy;
 import entities.Subscriber;
-import gui.AbstractScreen;
+import javafx.animation.FadeTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -29,8 +26,10 @@ public class SubscriberCardScreen extends AbstractScreen {
 	@FXML private Label frozenText;
 	@FXML private HBox frozenBox;
 	@FXML private TableView<BookCopy> borrowedBooks;
+	@FXML private Label welcomeText;
+	@FXML private VBox borrowedBooksVBox;
 
-	public void setSubscriber(Subscriber subscriber) {
+	public void setData(Subscriber subscriber, boolean isMe) {
 		this.subscriber = subscriber;
 
 		idLabel.setText(subscriber.getId() + "");
@@ -48,16 +47,29 @@ public class SubscriberCardScreen extends AbstractScreen {
 			frozenText.setText("Frozen Until " + subscriber.getFrozenUntil().format(DateTimeFormatter.ofPattern("dd-MM-yy")));
 		}
 
-		borrowedBooks.setItems(FXCollections.observableList(subscriber.getBorrowedBooks()));
+		if (!isMe) {
+			borrowedBooks.setItems(FXCollections.observableList(subscriber.getBorrowedBooks()));
 
-		TableColumn<BookCopy, String> idColumn = new TableColumn<>("Id");
-		idColumn.prefWidthProperty().bind(borrowedBooks.widthProperty().multiply(0.1));
-		idColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getBookId() + ""));
+			TableColumn<BookCopy, String> idColumn = new TableColumn<>("Id");
+			idColumn.prefWidthProperty().bind(borrowedBooks.widthProperty().multiply(0.1));
+			idColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getBookId() + ""));
 
-		TableColumn<BookCopy, String> titleColumn = new TableColumn<>("Title");
-		titleColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getBook().getTitle() + ""));
-		titleColumn.prefWidthProperty().bind(borrowedBooks.widthProperty().multiply(0.4));
-		borrowedBooks.getColumns().addAll(idColumn, titleColumn, getActionColumn(subscriber));
+			TableColumn<BookCopy, String> titleColumn = new TableColumn<>("Title");
+			titleColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getBook().getTitle() + ""));
+			titleColumn.prefWidthProperty().bind(borrowedBooks.widthProperty().multiply(0.4));
+			borrowedBooks.getColumns().addAll(idColumn, titleColumn, getActionColumn(subscriber));
+
+			borrowedBooksVBox.setPrefHeight(300);
+		} else {
+			borrowedBooksVBox.setPrefHeight(0);
+		}
+
+		borrowedBooksVBox.setVisible(!isMe);
+		borrowedBooksVBox.setManaged(!isMe);
+
+		fadeInLabelTransition(welcomeText);
+
+		screenManager.getPrimaryStage().sizeToScene();
 	}
 
 	private TableColumn<BookCopy, Void> getActionColumn(Subscriber subscriber) {
@@ -99,22 +111,25 @@ public class SubscriberCardScreen extends AbstractScreen {
 		//TODO: implement changing duration of borrowing
 	}
 
-	private ListCell<BookCopy> createListCell() {
-		return new ListCell<BookCopy>() {
-			@Override
-			protected void updateItem(BookCopy bookCopy, boolean empty) {
-				super.updateItem(bookCopy, empty);
-				if (!empty) {
-					//				setGraphic(bookCopy.getBook().getImage());
-					setText(bookCopy.getBook().getTitle() + " By " + bookCopy.getBook().getAuthors());
-				}
-			}
-		};
-	}
-
 	public void updateBookCopyReturnDate() {
 		// TODO - implement SubscriberCardScreen.updateBookCopyReturnDate
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * Performs a fade-in animation on the welcome label.
+	 * This method animates the opacity of the welcome text from 0 (invisible) to 1 (fully visible).
+	 *
+	 * @param welcomeText The label to apply the fade-in transition on.
+	 */
+	private void fadeInLabelTransition(Label welcomeText) {
+		welcomeText.setOpacity(0.0); // Start with the text invisible
+
+		// First Fade-In Transition (Welcome Message)
+		FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
+		fadeIn.setFromValue(0.0); // Start fully transparent
+		fadeIn.setToValue(1.0);   // Fade to fully visible
+		fadeIn.setCycleCount(1);
+		fadeIn.play();
+	}
 }

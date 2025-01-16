@@ -5,6 +5,7 @@ import entities.Message;
 import entities.Subscriber;
 import entities.User;
 import gui.AbstractScreen;
+import gui.SubscriberCardScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -39,7 +40,6 @@ public class LibrarianMainScreen extends AbstractScreen {
 		throw new UnsupportedOperationException();
 	}
 
-	//TODO: implement
 	public void loadUser(User user) {
 		this.user = user;
 	}
@@ -56,12 +56,11 @@ public class LibrarianMainScreen extends AbstractScreen {
     }
 
 	public void searchSubscribers(ActionEvent event) throws Exception {
-		SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("/librarian/SubscriberCardScreen", "Subscriber Card Screen");
-
-		Message sub = ClientUtils.sendMessage(Action.GET_SUBSCRIBER_BY_ID, 1);
+		SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("SubscriberCardScreen", "Subscriber Card Screen");
+		Message sub = ClientUtils.sendMessage(Action.GET_SUBSCRIBER_BY_ID, 1); // TODO: implement searching for real
 
 		try {
-			card.setSubscriber((Subscriber)sub.getObject());
+			card.setData((Subscriber)sub.getObject(), false);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

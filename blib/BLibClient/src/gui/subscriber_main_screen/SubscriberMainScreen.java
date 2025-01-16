@@ -3,10 +3,13 @@ package gui.subscriber_main_screen;
 import java.io.IOException;
 import java.util.List;
 
+import base.Action;
 import entities.BookCopy;
+import entities.Message;
 import entities.Subscriber;
 import gui.AbstractScreen;
 import gui.BookCard;
+import gui.SubscriberCardScreen;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
@@ -18,6 +21,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
+import services.ClientUtils;
 import services.InterfaceUtils;
 
 /**
@@ -90,8 +94,8 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSubInfoScreen(ActionEvent event) throws Exception {
-        SubInfoScreen screen = (SubInfoScreen) screenManager.openScreen("subscriber_main_screen/SubInfoScreen", "Subscriber Info Screen");
-        screen.onStart(subscriber);
+        SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("SubscriberCardScreen", "Subscriber Card Screen");
+        card.setData(subscriber, true);
     }
 
     /**
@@ -125,6 +129,18 @@ public class SubscriberMainScreen extends AbstractScreen {
     public void openBorrowedBookScreen(ActionEvent event, BookCopy copy) throws Exception {
         BorrowedBookScreen screen = (BorrowedBookScreen)screenManager.openScreen("subscriber_main_screen/BorrowedBookScreen", "Borrowed Book Screen");
         screen.onStart(copy);
+    }
+
+    /**
+     * Opens the Subscriber Settings screen and loads the necessary subscriber information into it.
+     * This allows the subscriber to edit their information.
+     *
+     * @param event The action event triggered by the open configure screen action.
+     * @throws Exception If an error occurs while opening the Subscriber Settings screen.
+     */
+    public void openConfigureScreen(ActionEvent event) throws Exception {
+        SubscriberSettingsScreen screen = (SubscriberSettingsScreen) screenManager.openScreen("subscriber_main_screen/SubscriberSettingsScreen", "Subscriber Settings");
+        screen.onStart(subscriber);
     }
 
     /**

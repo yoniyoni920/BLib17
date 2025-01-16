@@ -43,7 +43,7 @@ public class Subscriber extends User implements Serializable {
 	}
 
 	public boolean isFrozen() {
-		return frozenUntil != null && frozenUntil.isBefore(LocalDate.now());
+		return frozenUntil != null && frozenUntil.isAfter(LocalDate.now());
 	}
 
 	public void setStatus(String status) {

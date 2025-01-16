@@ -70,7 +70,7 @@ public class SubInfoScreen extends AbstractScreen {
      * Displays subscriber's ID, name, phone, email, and status.
      */
     private void renderData() {
-        idLabel.setText(subscriber.getId());
+        idLabel.setText(subscriber.getId() + "");
         nameLabel.setText(subscriber.getName() + " " + subscriber.getLastName());
         // historyLabel.setText("" + sub.getDetailedSubscriptionHistory());
         phoneLabel.setText(subscriber.getPhoneNumber());

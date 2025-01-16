@@ -41,36 +41,49 @@ public class SubscriberControl {
 	}
 	public static Subscriber getSubscriberById(int id) {
 		try {
-			try(PreparedStatement stt = DBControl
-					.getConnection()
-					.prepareStatement("SELECT phone_number, email, frozen_until, role, first_name, last_name FROM blib.subscriber join blib.user on user.id=subscriber.user_id where user_id=?")
-			) {
+			String query = "SELECT * FROM subscriber join user on user.id=subscriber.user_id where user_id=?";
+			try(PreparedStatement stt = DBControl.getConnection().prepareStatement(query)) {
 				stt.setInt(1,id);
-				ResultSet result = stt.executeQuery();
-				if(result.next()) {
-					String phoneNumber = result.getString("phone_number");
-					String email = result.getString("email");
-					Date frozenUntil = result.getDate("frozen_until");
-					String role = result.getString("role");
-					String firstName = result.getString("first_name");
-					String lastName = result.getString("last_name");
-					String status;
-					if(frozenUntil == null || frozenUntil.before(Date.valueOf(LocalDate.now()))) {
-						status = "valid";
-					}
-					else {
-						status = "frozen";
-					}//TODO update frozen until
-					Subscriber sub = new Subscriber(String.valueOf(id), firstName, lastName, role, null, phoneNumber, email, null);
-					sub.setStatus(status);
-					return sub;
+				ResultSet rs = stt.executeQuery();
+				if(rs.next()) {
+					return getSubscriberFromResultSet(rs);
 				}
-
 			}
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * Returns an object of a subscriber using a ResultSet
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	public static Subscriber getSubscriberFromResultSet(ResultSet rs) throws SQLException {
+		int id = rs.getInt("id");
+		String phoneNumber = rs.getString("phone_number");
+		String email = rs.getString("email");
+		Date frozenUntil = rs.getDate("frozen_until");
+		String role = rs.getString("role");
+		String firstName = rs.getString("first_name");
+		String lastName = rs.getString("last_name");
+
+		Subscriber sub = new Subscriber(
+			id,
+			firstName,
+			lastName,
+			role,
+			null,
+			phoneNumber,
+			email,
+			frozenUntil != null ? frozenUntil.toLocalDate() : null
+		);
+
+		sub.setBorrowedBooks(BookControl.retrieveBorrowedBooks(id));
+
+		return sub;
 	}
 
 	/**

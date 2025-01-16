@@ -4,14 +4,15 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 /*
  * Subscribers are the members of the library
  */
 public class Subscriber extends User implements Serializable {
-	private String status;
 	private String phoneNumber;
 	private String email;
+
 	private LocalDate frozenUntil;
 	private DetailedSubscriptionHistory detailedSubscriptionHistory;
 
@@ -22,11 +23,11 @@ public class Subscriber extends User implements Serializable {
 	}
 
 	public Subscriber(
-		String id,
+		int id,
 		String firstName,
 		String lastName,
 		String role,
-    String password,
+    	String password,
 		String phoneNumber,
 		String email,
 		LocalDate frozenUntil

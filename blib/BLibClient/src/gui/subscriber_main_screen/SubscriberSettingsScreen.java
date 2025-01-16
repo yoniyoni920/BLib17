@@ -110,7 +110,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
 
         // Construct the updated info list
         List<String> changedInfo = Arrays.asList(
-            sub.getId().toString(),
+            sub.getId() + "",
             trimSpaces(firstNameTxtField.getText()),
             trimSpaces(lastNameTxtField.getText()),
             trimSpaces(phoneTxtField.getText()),

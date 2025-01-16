@@ -74,7 +74,7 @@ public class RegisterUser {
 
 	        // Return a new User object (assuming you have a User class)
 	        Message msg = new Message();
-            msg.setObject(new User(generatedId + "", FirstName, LastName, Password, "subscriber"));
+            msg.setObject(new User(generatedId, FirstName, LastName, Password, "subscriber"));
             return msg;
 
 	    }catch (SQLException rollbackEx) {

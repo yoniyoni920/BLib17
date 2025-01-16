@@ -30,7 +30,6 @@ public class LoginControl {
 			try (PreparedStatement ps = DBControl
 					.getInstance()
 					.selectQuery("user","id", loginId, "password", loginPassword)
-					
 			) {
 				ResultSet rs = ps.executeQuery();
 				if(!rs.next()) {
@@ -39,11 +38,9 @@ public class LoginControl {
 
 				// Get user values
 				String role = rs.getString("role");
-				String id = rs.getString("id");
+				int id = rs.getInt("id");
 				String name = rs.getString("first_name");
 				String lastName = rs.getString("last_name");
-
-				System.out.println("I am here 2 xd");
 
 				if (role.equals("subscriber")) {
 					try (PreparedStatement ps2 = DBControl.getInstance().selectQuery("subscriber", "user_id", loginId)) {

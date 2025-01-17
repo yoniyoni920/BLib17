@@ -60,6 +60,7 @@ CREATE TABLE `book_copy` (
   `return_date` date DEFAULT NULL,
   `borrow_subscriber_id` int DEFAULT NULL,
   `order_subscriber_id` int DEFAULT NULL,
+  `is_lost` tinyint DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `bookId_idx` (`book_id`),
   KEY `subscriber_id_idx` (`borrow_subscriber_id`),
@@ -75,7 +76,7 @@ CREATE TABLE `book_copy` (
 
 LOCK TABLES `book_copy` WRITE;
 /*!40000 ALTER TABLE `book_copy` DISABLE KEYS */;
-INSERT INTO `book_copy` VALUES (1,1,'2025-01-15','2025-01-29',1,NULL),(2,3,NULL,NULL,NULL,NULL),(3,1,'2025-01-02','2025-01-16',1,NULL),(4,2,'2025-01-03','2025-01-17',1,3),(5,2,'2025-01-04','2025-01-16',1,1),(6,4,'2023-03-16','2025-03-30',1,NULL),(7,5,NULL,NULL,NULL,NULL),(8,6,NULL,NULL,NULL,NULL),(9,7,NULL,NULL,NULL,NULL),(10,8,NULL,NULL,NULL,NULL);
+INSERT INTO `book_copy` VALUES (1,1,'2025-01-15','2025-01-29',1,NULL,0),(2,3,NULL,NULL,NULL,NULL,0),(3,1,'2025-01-02','2025-01-16',1,NULL,0),(4,2,'2025-01-03','2025-01-17',1,3,0),(5,2,'2025-01-04','2025-01-16',1,1,0),(6,4,'2023-03-16','2025-03-30',1,NULL,0),(7,5,NULL,NULL,NULL,NULL,0),(8,6,NULL,NULL,NULL,NULL,0),(9,7,NULL,NULL,NULL,NULL,0),(10,8,NULL,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `book_copy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +132,7 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
-INSERT INTO `job` VALUES (1,'2025-01-10 16:54:32','generate-reports'),(2,'2025-01-16 13:53:23','check-borrows');
+INSERT INTO `job` VALUES (1,'2025-01-10 16:54:32','generate-reports'),(2,'2025-01-17 03:58:47','check-borrows');
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +162,7 @@ CREATE TABLE `subscriber` (
 
 LOCK TABLES `subscriber` WRITE;
 /*!40000 ALTER TABLE `subscriber` DISABLE KEYS */;
-INSERT INTO `subscriber` VALUES (1,1,'0501234567','hi@gmail.com','2025-01-16'),(2,5,'0521479856','shalom@gmail.com',NULL),(3,3,'0548975642','bye@walla.com',NULL),(4,4,'0508797841','ma@gmail.com','2025-01-10'),(5,6,'0508797111','elias@elias.elias',NULL);
+INSERT INTO `subscriber` VALUES (1,1,'0501234567','hi@gmail.com','2025-02-16'),(2,5,'0521479856','shalom@gmail.com',NULL),(3,3,'0548975642','bye@walla.com',NULL),(4,4,'0508797841','ma@gmail.com','2025-01-10'),(5,6,'0508797111','elias@elias.elias',NULL);
 /*!40000 ALTER TABLE `subscriber` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,4 +256,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-16 14:46:59
+-- Dump completed on 2025-01-17  4:23:58

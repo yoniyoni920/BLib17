@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class BookCopy implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private int Id;
+	private int id;
 	private int bookId ;
 	private LocalDate lendDate;
 	private LocalDate returnDate;
@@ -22,8 +22,8 @@ public class BookCopy implements Serializable{
 	private int orderSubscriberID;
 	private Book book ;
 
-	public BookCopy(int Id, int bookId , LocalDate lendDate , LocalDate returnDate , int borrowSubscriberId, int orderSubscriberId) {
-		this.Id = Id ;
+	public BookCopy(int id, int bookId , LocalDate lendDate , LocalDate returnDate , int borrowSubscriberId, int orderSubscriberId) {
+		this.id = id ;
 		this.bookId = bookId ;
 		this.lendDate = lendDate ;
 		this.returnDate = returnDate ; 
@@ -41,11 +41,11 @@ public class BookCopy implements Serializable{
 	}
 	
 	public int getId() {
-		return this.Id;
+		return this.id;
 	}
 	
 	public void setCopyId(int copyId) {
-		this.Id = copyId;
+		this.id = copyId;
 	}
 	
 	public LocalDate getLendDate() {
@@ -90,7 +90,7 @@ public class BookCopy implements Serializable{
  	
 	@Override
 	public String toString() {
-		return "copy " + Id + " is borrowed from date " + lendDate + " to " + returnDate;
+		return "copy " + id + " is borrowed from date " + lendDate + " to " + returnDate;
 	}
 	
 }

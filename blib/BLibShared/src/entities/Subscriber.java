@@ -27,7 +27,7 @@ public class Subscriber extends User implements Serializable {
 		String firstName,
 		String lastName,
 		String role,
-    	String password,
+		String password,
 		String phoneNumber,
 		String email,
 		LocalDate frozenUntil

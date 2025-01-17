@@ -4,6 +4,7 @@ import base.Action;
 import entities.BookCopy;
 import entities.Message;
 import entities.Subscriber;
+import gui.librarian.ExtendBorrowTimeScreen;
 import javafx.animation.FadeTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -16,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import services.ClientUtils;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -95,7 +97,14 @@ public class SubscriberCardScreen extends AbstractScreen {
 
 			private final Button changeDurationBtn = new Button("Change Borrow Duration");
 			{
-				changeDurationBtn.setOnAction(event -> onChangeDurationBookPressed(copies.get(getIndex())));
+				changeDurationBtn.setOnAction(event -> {
+					try {
+						onChangeDurationBookPressed(copies.get(getIndex()));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				});
 			}
 
 			private final Button markAsLost = new Button("Mark as Lost");
@@ -121,8 +130,9 @@ public class SubscriberCardScreen extends AbstractScreen {
 		//TODO: implement returning books
 	}
 
-	private void onChangeDurationBookPressed(BookCopy bookCopy) {
-		//TODO: implement changing duration of borrowing
+	private void onChangeDurationBookPressed(BookCopy bookCopy) throws IOException {
+		ExtendBorrowTimeScreen screen = (ExtendBorrowTimeScreen) screenManager.openScreen("librarian/ExtendBorrowTimeScreen", "Extend Duration Screen");
+		screen.onStart(bookCopy);
 	}
 
 	private void onMarkBookAsLostPressed(BookCopy bookCopy) {

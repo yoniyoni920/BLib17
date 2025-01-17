@@ -1,25 +1,28 @@
 package gui.subscriber_main_screen;
 
+import java.io.IOException;
 import java.util.List;
 
+import base.Action;
 import entities.BookCopy;
+import entities.Message;
 import entities.Subscriber;
 import gui.AbstractScreen;
+import gui.BookCard;
+import gui.SubscriberCardScreen;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
+import services.ClientUtils;
+import services.InterfaceUtils;
 
 /**
  * This class represents the main screen for a library subscriber.
@@ -34,7 +37,10 @@ public class SubscriberMainScreen extends AbstractScreen {
     private Label welcomeText;
 
     @FXML
-    private ListView<BookCopy> borrowedBooksListView;
+    private GridPane borrowedBooksGrid;
+
+    @FXML
+    private ScrollPane borrowedBooksScrollPane;
 
     @FXML
     private Label borrowedBooksCount;
@@ -49,10 +55,15 @@ public class SubscriberMainScreen extends AbstractScreen {
      * This method sets up the screen with the subscriber's name and their borrowed books.
      *
      * @param sub The logged-in subscriber.
-     * @param borrowedBooks A list of books borrowed by the subscriber.
      */
-    public void onStart(Subscriber sub, List<BookCopy> borrowedBooks) {
-        loadData(sub, borrowedBooks);
+    public void onStart(Subscriber sub) {
+        final double SCROLL_SPEED = 0.005;
+        borrowedBooksScrollPane.getContent().setOnScroll(scrollEvent -> {
+            double deltaY = scrollEvent.getDeltaY() * SCROLL_SPEED;
+            borrowedBooksScrollPane.setVvalue(borrowedBooksScrollPane.getVvalue() - deltaY);
+        });
+
+        loadData(sub);
         renderData();
     }
 
@@ -60,11 +71,10 @@ public class SubscriberMainScreen extends AbstractScreen {
      * Loads the subscriber and their borrowed books into the screen.
      *
      * @param sub The logged-in subscriber.
-     * @param borrowedBooks A list of books borrowed by the subscriber.
      */
-    private void loadData(Subscriber sub, List<BookCopy> borrowedBooks) {
+    private void loadData(Subscriber sub) {
         subscriber = sub;
-        this.borrowedBooks.addAll(borrowedBooks);
+        this.borrowedBooks.addAll(sub.getBorrowedBooks());
     }
     
     /**
@@ -78,24 +88,14 @@ public class SubscriberMainScreen extends AbstractScreen {
     }
 
     /**
-     * Closes the current screen and returns to the previous screen.
-     *
-     * @param event The action event triggered by the close button.
-     * @throws Exception If an error occurs during screen closing.
-     */
-    public void closeWindow(ActionEvent event) throws Exception {
-        screenManager.closeScreen();
-    }
-
-    /**
      * Opens the subscriber information screen.
      *
      * @param event The action event triggered by the corresponding button.
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSubInfoScreen(ActionEvent event) throws Exception {
-        SubInfoScreen screen = (SubInfoScreen) screenManager.openScreen("subscriber_main_screen/SubInfoScreen", "Subscriber Info Screen");
-        screen.onStart(subscriber);
+        SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("SubscriberCardScreen", "Subscriber Card Screen");
+        card.setData(subscriber, true);
     }
 
     /**
@@ -127,8 +127,20 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openBorrowedBookScreen(ActionEvent event, BookCopy copy) throws Exception {
-        BorrowedBookScreen screen = (BorrowedBookScreen) screenManager.openScreen("subscriber_main_screen/BorrowedBookScreen", "Borrowed Book Screen");
+        BorrowedBookScreen screen = (BorrowedBookScreen)screenManager.openScreen("subscriber_main_screen/BorrowedBookScreen", "Borrowed Book Screen");
         screen.onStart(copy);
+    }
+
+    /**
+     * Opens the Subscriber Settings screen and loads the necessary subscriber information into it.
+     * This allows the subscriber to edit their information.
+     *
+     * @param event The action event triggered by the open configure screen action.
+     * @throws Exception If an error occurs while opening the Subscriber Settings screen.
+     */
+    public void openConfigureScreen(ActionEvent event) throws Exception {
+        SubscriberSettingsScreen screen = (SubscriberSettingsScreen) screenManager.openScreen("subscriber_main_screen/SubscriberSettingsScreen", "Subscriber Settings");
+        screen.onStart(subscriber);
     }
 
     /**
@@ -136,45 +148,23 @@ public class SubscriberMainScreen extends AbstractScreen {
      * Sets up custom rendering and event handling for each item in the list.
      */
     private void showBorrowedBooks() {
-        borrowedBooksListView.setItems(borrowedBooks);
-
-        borrowedBooksListView.setCellFactory(p -> new ListCell<BookCopy>() {
-            private final ImageView imageView;
-            Image image;
-            Button button;
-
-            {
-                imageView = new ImageView();
-                imageView.setFitWidth(150); // Adjust to your desired width
-                imageView.setFitHeight(300); // Adjust to your desired height
-                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                button = new Button();
-            }
-
-            @Override
-            protected void updateItem(BookCopy item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setGraphic(null);
-                } else {
-                    String url = getClass().getResource("/resources/book_covers/" + item.getBook().getImage()).toExternalForm();
-                    image = new Image(url);
-                    imageView.setImage(image);
-                    button.setGraphic(imageView);
-                    button.setOnAction(new EventHandler<ActionEvent>() {
-
-                        @Override
-                        public void handle(ActionEvent arg0) {
-                            try {
-                                openBorrowedBookScreen(arg0, item);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    });
-                    setGraphic(button);
-                }
+        InterfaceUtils.makeGrid(borrowedBooksGrid, 3, borrowedBooks, copy -> {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BookCard.fxml"));
+            try {
+                Node card = loader.load();
+                BookCard bookCard = loader.getController();
+                bookCard.setBookData(copy.getBook());
+                bookCard.setExtraDetailsVisible(false);
+                card.setOnMousePressed(event -> {
+                    try {
+                        openBorrowedBookScreen(null, copy);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                return card;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         });
     }

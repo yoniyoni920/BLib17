@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="658.0" prefWidth="1057.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReportScreen">
+<AnchorPane prefHeight="658.0" prefWidth="1057.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.librarian.ReportScreen">
     <children>
-        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="18.0" layoutY="13.0" prefHeight="54.0" prefWidth="1023.0" text="Reports" textAlignment="JUSTIFY">
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="18.0" layoutY="13.0" prefHeight="54.0" prefWidth="1010.0" text="Reports" textAlignment="JUSTIFY">
             <font>
                 <Font name="System Bold" size="25.0" />
             </font>
@@ -43,7 +43,7 @@
                     <content>
                         <AnchorPane prefHeight="448.0" prefWidth="773.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
                             <children>
-                                <TextField fx:id="searchBook" layoutX="318.0" layoutY="14.0" onKeyPressed="#searchBooks" prefHeight="25.0" prefWidth="317.0" promptText="Search book...">
+                                <TextField fx:id="searchBook" layoutX="318.0" layoutY="14.0" onKeyReleased="#searchBooks" prefHeight="25.0" prefWidth="317.0" promptText="Search book...">
                                     <contextMenu>
                                         <ContextMenu fx:id="searchBooksContextMenu" onAction="#onChoseBook">
                                             <items>

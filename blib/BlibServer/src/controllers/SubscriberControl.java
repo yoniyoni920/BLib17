@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import entities.BookCopy;
@@ -39,33 +40,79 @@ public class SubscriberControl {
 			System.out.println("Error in updating the user data in the DataBase");
 		} 
 	}
+
 	public static Subscriber getSubscriberById(int id) {
 		try {
-			try(PreparedStatement stt = DBControl
-					.getConnection()
-					.prepareStatement("SELECT phone_number, email, frozen_until, role, first_name, last_name FROM blib.subscriber join blib.user on user.id=subscriber.user_id where user_id=?")
-			) {
+			String query = "SELECT * FROM subscriber JOIN user ON user.id=subscriber.user_id WHERE user_id=?";
+			try(PreparedStatement stt = DBControl.getConnection().prepareStatement(query)) {
 				stt.setInt(1,id);
-				ResultSet result = stt.executeQuery();
-				if(result.next()) {
-					String phoneNumber = result.getString("phone_number");
-					String email = result.getString("email");
-					Date frozenUntil = result.getDate("frozen_until");
-					String role = result.getString("role");
-					String firstName = result.getString("first_name");
-					String lastName = result.getString("last_name");
-					String status;
-					if(frozenUntil == null || frozenUntil.before(Date.valueOf(LocalDate.now()))) {
-						status = "valid";
-					}
-					else {
-						status = "frozen";
-					}//TODO update frozen until
-					Subscriber sub = new Subscriber(String.valueOf(id), firstName, lastName, role, null, phoneNumber, email, null);
-					sub.setStatus(status);
-					return sub;
+				ResultSet rs = stt.executeQuery();
+				if(rs.next()) {
+					return getSubscriberFromResultSet(rs);
+				}
+			}
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Returns an object of a subscriber using a ResultSet
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	public static Subscriber getSubscriberFromResultSet(ResultSet rs) throws SQLException {
+		int id = rs.getInt("id");
+		String phoneNumber = rs.getString("phone_number");
+		String email = rs.getString("email");
+		Date frozenUntil = rs.getDate("frozen_until");
+		String role = rs.getString("role");
+		String firstName = rs.getString("first_name");
+		String lastName = rs.getString("last_name");
+
+		Subscriber sub = new Subscriber(
+			id,
+			firstName,
+			lastName,
+			role,
+			null,
+			phoneNumber,
+			email,
+			frozenUntil != null ? frozenUntil.toLocalDate() : null
+		);
+
+		sub.setBorrowedBooks(BookControl.retrieveBorrowedBooks(id));
+
+		return sub;
+	}
+
+	public static List<Subscriber> searchSubscribers(String search, String searchType) {
+		try {
+			if (searchType.equals("user_id") || searchType.equals("first_name") || searchType.equals("last_name")) {
+				String query = "SELECT * FROM subscriber JOIN user ON user.id=subscriber.user_id";
+				if (searchType.equals("user_id")) {
+					query += " WHERE user_id = ?";
+				} else {
+					query += " WHERE " + searchType + " LIKE ?";
 				}
 
+				try (PreparedStatement stt = DBControl.getConnection().prepareStatement(query)) {
+					if (searchType.equals("user_id")) {
+						stt.setInt(1, Integer.parseInt(search));
+					} else {
+						stt.setString(1, "%" + search + "%");
+					}
+
+					ResultSet rs = stt.executeQuery();
+					List<Subscriber> list = new ArrayList<>();
+					while(rs.next()) {
+						list.add(getSubscriberFromResultSet(rs));
+					}
+
+					return list;
+				}
 			}
 		} catch(SQLException e){
 			e.printStackTrace();
@@ -137,4 +184,23 @@ public class SubscriberControl {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	 * Freezes a subscriber to a duration of 30 days. If the subscriber is already frozen,
+	 * it'll increase the duration back to 30 days.
+	 * @param subscriberId The ID of the subscriber
+	 * @return Whether the operation succeeded
+	 */
+	public static boolean freezeSubscriber(int subscriberId) {
+		String query = "UPDATE subscriber SET frozen_until = ? WHERE id = ?";
+
+		try (PreparedStatement st2 = DBControl.prepareStatement(query)) {
+			LocalDateTime now = LocalDateTime.now();
+			st2.setTimestamp(1, Timestamp.valueOf(now.plusDays(30)));
+			st2.setInt(2, subscriberId);
+			return st2.executeUpdate() == 1;
+		} catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

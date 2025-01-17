@@ -80,6 +80,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
         lastNameTxtField.setText(sub.getLastName());
         phoneTxtField.setText(sub.getPhoneNumber());
         emailTxtField.setText(sub.getEmail());
+
         fadeInLabelTransition(welcomeText);
     }
 
@@ -100,7 +101,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
         // Check if no changes were made
         if (hasNoChanges()) {
             System.out.println("no changes");
-            close();
+            closeScreen(null);
             return;
         }
 
@@ -109,7 +110,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
 
         // Construct the updated info list
         List<String> changedInfo = Arrays.asList(
-            sub.getId().toString(),
+            sub.getId() + "",
             trimSpaces(firstNameTxtField.getText()),
             trimSpaces(lastNameTxtField.getText()),
             trimSpaces(phoneTxtField.getText()),
@@ -129,7 +130,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
             sub.setPassword(changedInfo.get(5));
         }
 
-        close();
+        closeScreen(null);
     }
 
     /**
@@ -175,21 +176,6 @@ public class SubscriberSettingsScreen extends AbstractScreen {
     }
 
     /**
-     * Closes the current screen and loads the latest information into the previous screen.
-     * If the subscriber's information was updated, the previous screen will display the updated information.
-     *
-     * @throws Exception If an error occurs while closing the screen.
-     */
-    public void close() throws Exception {
-        if (isUpdatedInfo) {
-            SubInfoScreen prevScreen = (SubInfoScreen) screenManager.closeScreen();
-            prevScreen.onStart(sub);
-        } else {
-            screenManager.closeScreen();
-        }
-    }
-
-    /**
      * Performs a fade-in animation on the welcome label.
      * This method animates the opacity of the welcome text from 0 (invisible) to 1 (fully visible).
      *
@@ -199,7 +185,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
         welcomeText.setOpacity(0.0); // Start with the text invisible
 
         // First Fade-In Transition (Welcome Message)
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(5), welcomeText);
         fadeIn.setFromValue(0.0); // Start fully transparent
         fadeIn.setToValue(1.0);   // Fade to fully visible
         fadeIn.setCycleCount(1);

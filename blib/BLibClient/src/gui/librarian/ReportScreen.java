@@ -1,10 +1,10 @@
-package gui;
+package gui.librarian;
 
 import base.Action;
-import base.ClientApplication;
 import entities.Book;
 import entities.BorrowReport;
 import entities.Message;
+import gui.AbstractScreen;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -16,17 +16,13 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 import services.ClientUtils;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ReportScreen extends AbstractScreen implements Initializable {
@@ -210,9 +206,5 @@ public class ReportScreen extends AbstractScreen implements Initializable {
         } else {
             setSubscriberStatusData();
         }
-    }
-
-    public void closeScreen(ActionEvent event) {
-        screenManager.closeScreen();
     }
 }

@@ -1,11 +1,5 @@
 package controllers;
 
-import gui.LendBookScreen;
-
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Callable;
-
 public class BookScanner {
 	private BookScanner(){
 

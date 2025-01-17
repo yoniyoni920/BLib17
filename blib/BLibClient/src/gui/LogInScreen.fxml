@@ -5,21 +5,26 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_RIGHT" prefHeight="233.0" prefWidth="502.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LogInScreen">
+<VBox alignment="TOP_RIGHT" prefHeight="351.0" prefWidth="502.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LogInScreen">
    <children>
-      <Label alignment="CENTER" prefHeight="25.0" prefWidth="438.0" text="BLib Login" textAlignment="CENTER">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
-      <Button mnemonicParsing="false" onAction="#searchBooksScreen" text="Search" />
+      <AnchorPane prefHeight="62.0" prefWidth="438.0">
+         <children>
+            <Label alignment="CENTER" layoutY="11.0" prefHeight="25.0" prefWidth="438.0" styleClass="title-1" text="BLib Login" textAlignment="CENTER">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+            <Button layoutX="372.0" layoutY="13.0" mnemonicParsing="false" onAction="#searchBooksScreen" text="Search" AnchorPane.bottomAnchor="13.0" AnchorPane.topAnchor="13.0" />
+         </children>
+      </AnchorPane>
       <VBox prefHeight="0.0" prefWidth="438.0">
          <children>
             <Label text="ID" />
-            <TextField fx:id="idtxt" prefHeight="42.0" prefWidth="431.0" promptText="id...">
+            <TextField fx:id="idtxt" prefHeight="42.0" prefWidth="431.0" promptText="ID...">
                <font>
                   <Font size="14.0" />
                </font>
@@ -30,7 +35,7 @@
       <VBox prefHeight="0.0" prefWidth="438.0">
          <children>
             <Label text="Password" />
-            <PasswordField fx:id="passTxt" promptText="password..." />
+            <PasswordField fx:id="passTxt" promptText="Password..." />
             <Label fx:id="passErrorLabel" styleClass="danger" text="Label" visible="false" />
          </children>
       </VBox>

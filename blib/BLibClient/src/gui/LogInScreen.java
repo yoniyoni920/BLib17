@@ -72,7 +72,7 @@ public class LogInScreen extends AbstractScreen {
 		if (!idEmpty && !passEmpty)
 		{
 			// Attempt to login via server
-			Message msg = ClientApplication.chat.sendToServer(new Message(Action.LOGIN, new String[]{ id, pass }));
+			Message msg = ClientUtils.sendMessage(new Message(Action.LOGIN, new String[]{ id, pass }));
 			if(!msg.isError()) {
 				idErrorLabel.setVisible(false);
 				User user = ((User)msg.getObject());

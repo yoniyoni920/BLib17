@@ -6,12 +6,6 @@ import controllers.RegisterUser;
 import controllers.SubscriberControl;
 import entities.*;
 import ocsf.server.ConnectionToClient;
-
-import entities.BookCopy;
-import entities.Message;
-import entities.Subscriber;
-import entities.User;
-
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +65,7 @@ public class ClientMessageHandler {
         actions.put(Action.ORDER_BOOK, ClientMessageHandler::orderBook);
         actions.put(Action.SEARCH_SUBSCRIBERS, ClientMessageHandler::searchSubscribers);
         actions.put(Action.MARK_BOOK_COPY_AS_LOST, ClientMessageHandler::markBookCopyAsLost);
+        actions.put(Action.EXTEND_BORROW_TIME , ClientMessageHandler :: extendBorrowTime);
     }
 
     public static Message orderBook(Message msg, ConnectionToClient client) {
@@ -172,7 +167,7 @@ public class ClientMessageHandler {
      * Handles logging subscribers or librarians
      */
     public static Message login(Message msg, ConnectionToClient client) {
-        String[] args = (String[]) msg.getObject();
+        String[] args = (String[])msg.getObject();
         User user = LoginControl.loginAction(args[0], args[1]);
         if (user != null) {
             return msg.reply(user);
@@ -229,6 +224,11 @@ public class ClientMessageHandler {
 
     public static Message markBookCopyAsLost(Message msg, ConnectionToClient client) {
         return msg.reply(BookControl.markBookCopyAsLost((Integer)msg.getObject()));
+    }
+
+    public static Message extendBorrowTime(Message msg , ConnectionToClient client) {
+    	boolean successfullyChanged = BookControl.extendBorrowTime((BookCopy )msg.getObject());
+    	return msg.reply(successfullyChanged);
     }
 }
 

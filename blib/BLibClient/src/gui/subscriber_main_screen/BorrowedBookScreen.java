@@ -1,5 +1,6 @@
 package gui.subscriber_main_screen;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -53,7 +54,6 @@ public class BorrowedBookScreen extends AbstractScreen {
      * @param copy The book copy that was borrowed and whose information will be displayed.
      */
     public void onStart(BookCopy copy) {
-        System.out.println(copy);
         fadeInLabelTransition(welcomeText);
         loadData(copy);
         renderData();
@@ -66,7 +66,6 @@ public class BorrowedBookScreen extends AbstractScreen {
      * @param copy The book copy whose information will be loaded.
      */
     private void loadData(BookCopy copy) {
-        System.out.println(copy.getBook());
         this.copy = copy;
     }
 
@@ -94,6 +93,11 @@ public class BorrowedBookScreen extends AbstractScreen {
         } else {
 //            isOrdered.setText("yes");
         }
+    }
+    
+    public void openExtendBorrowTimeScreen(ActionEvent event) throws IOException {
+    	ExtendBorrowTimeScreen screen = (ExtendBorrowTimeScreen)screenManager.openScreen("subscriber_main_screen/ExtendBorrowTimeScreen", "Extension Screen");
+    	screen.onStart(copy);
     }
 
     /**

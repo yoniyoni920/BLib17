@@ -43,7 +43,7 @@ public class LibraryServer extends AbstractServer
 				client.sendToClient(msgFromServer);
 			}
 		} catch (Exception e) {
-			System.err.println("Could not send to client");
+			System.err.println("Failed to handle message: " + msgFromClient);
 			System.err.println(e);
 		}
 	}

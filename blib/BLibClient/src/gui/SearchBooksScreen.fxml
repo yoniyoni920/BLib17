@@ -7,6 +7,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -17,38 +18,48 @@
 
 <VBox prefHeight="826.0" prefWidth="1088.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SearchBooksScreen">
    <children>
-      <Pane>
+      <AnchorPane styleClass="underline">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="1056.0" styleClass="title-1" text="Search Books" textAlignment="CENTER" />
-            <Button layoutX="997.0" layoutY="2.0" mnemonicParsing="false" onAction="#closeScreen" text="Close" />
+            <Pane>
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="1056.0" styleClass="title-1" text="Search Books" textAlignment="CENTER" />
+                  <Button layoutX="997.0" layoutY="2.0" mnemonicParsing="false" onAction="#closeScreen" text="Close" />
+               </children>
+            </Pane>
+            <HBox alignment="TOP_CENTER" layoutY="44.0" prefHeight="46.0" prefWidth="1056.0" spacing="4.0">
+               <children>
+                  <TextField fx:id="searchId" onKeyReleased="#onSearch" prefHeight="46.0" prefWidth="385.0" />
+                  <ChoiceBox fx:id="choiceBox" prefHeight="46.0" prefWidth="105.0">
+                     <effect>
+                        <Blend />
+                     </effect>
+                  </ChoiceBox>
+               </children>
+            </HBox>
          </children>
-      </Pane>
-      <HBox alignment="TOP_CENTER" prefWidth="951.0" spacing="4.0">
-         <children>
-            <TextField fx:id="searchId" onKeyReleased="#onSearch" prefHeight="46.0" prefWidth="385.0" />
-            <ChoiceBox fx:id="choiceBox" prefHeight="46.0" prefWidth="105.0">
-               <effect>
-                  <Blend />
-               </effect>
-            </ChoiceBox>
-         </children>
-      </HBox>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+         </padding>
+      </AnchorPane>
       <StackPane prefHeight="692.0" prefWidth="951.0">
          <children>
-            <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="692.0" prefWidth="1051.0">
-               <content>
-                  <GridPane fx:id="gridPane" hgap="16.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="949.0" vgap="32.0" />
-               </content>
-            </ScrollPane>
             <Text fx:id="textId" strokeType="OUTSIDE" strokeWidth="0.0" text="Book Not Found...">
                <font>
                   <Font size="20.0" />
                </font>
             </Text>
+            <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="692.0" prefWidth="1051.0">
+               <content>
+                  <GridPane fx:id="gridPane" hgap="16.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="949.0" vgap="32.0" />
+               </content>
+            </ScrollPane>
          </children>
       </StackPane>
    </children>
    <padding>
-      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+      <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
    </padding>
 </VBox>

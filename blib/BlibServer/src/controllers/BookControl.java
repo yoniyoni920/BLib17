@@ -280,4 +280,33 @@ public static BookCopy checkBookLendable(int bookId) {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	 * Marks a book as lost. This also automatically freezes the subscriber and makes a history point about that
+	 * @param bookCopyId
+	 */
+	public static boolean markBookCopyAsLost(int bookCopyId) {
+		String query = "SELECT * FROM book_copy WHERE id = ? AND is_lost = 0 LIMIT 1";
+		try (PreparedStatement st = DBControl.prepareStatement(query)) {
+			st.setInt(1, bookCopyId);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				String upQuery = "UPDATE book_copy " +
+						"SET is_lost = 1, borrow_subscriber_id = null, order_subscriber_id = null, lend_date = NULL, return_date = NULL " +
+						"WHERE id = ?";
+				try (PreparedStatement st2 = DBControl.prepareStatement(upQuery)) {
+					st2.setInt(1, bookCopyId);
+					//TODO: log history
+
+					// Punish subscriber for losing the book
+					SubscriberControl.freezeSubscriber(rs.getInt("borrow_subscriber_id"));
+					return st2.executeUpdate() == 1;
+				}
+			}
+		} catch (SQLException ex) {
+			throw new RuntimeException(ex);
+		}
+
+		return false;
+	}
 }

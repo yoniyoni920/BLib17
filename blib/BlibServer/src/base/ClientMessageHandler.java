@@ -70,6 +70,7 @@ public class ClientMessageHandler {
         actions.put(Action.SEARCH_BOOKS, ClientMessageHandler::searchBooks);
         actions.put(Action.ORDER_BOOK, ClientMessageHandler::orderBook);
         actions.put(Action.SEARCH_SUBSCRIBERS, ClientMessageHandler::searchSubscribers);
+        actions.put(Action.MARK_BOOK_COPY_AS_LOST, ClientMessageHandler::markBookCopyAsLost);
     }
 
     public static Message orderBook(Message msg, ConnectionToClient client) {
@@ -221,6 +222,10 @@ public class ClientMessageHandler {
     public static Message searchSubscribers(Message msg, ConnectionToClient client) {
         String[] searchInfo = (String[])msg.getObject();
         return msg.reply(SubscriberControl.searchSubscribers(searchInfo[0], searchInfo[1]));
+    }
+
+    public static Message markBookCopyAsLost(Message msg, ConnectionToClient client) {
+        return msg.reply(BookControl.markBookCopyAsLost((Integer)msg.getObject()));
     }
 }
 

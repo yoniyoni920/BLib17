@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import entities.BookCopy;
@@ -183,4 +184,23 @@ public class SubscriberControl {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	 * Freezes a subscriber to a duration of 30 days. If the subscriber is already frozen,
+	 * it'll increase the duration back to 30 days.
+	 * @param subscriberId The ID of the subscriber
+	 * @return Whether the operation succeeded
+	 */
+	public static boolean freezeSubscriber(int subscriberId) {
+		String query = "UPDATE subscriber SET frozen_until = ? WHERE id = ?";
+
+		try (PreparedStatement st2 = DBControl.prepareStatement(query)) {
+			LocalDateTime now = LocalDateTime.now();
+			st2.setTimestamp(1, Timestamp.valueOf(now.plusDays(30)));
+			st2.setInt(2, subscriberId);
+			return st2.executeUpdate() == 1;
+		} catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

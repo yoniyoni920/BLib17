@@ -74,7 +74,10 @@ public class ClientMessageHandler {
 
     public static Message orderBook(Message msg, ConnectionToClient client) {
         BookCopy bookCopy = (BookCopy) msg.getObject();
-        //TODO check subscriber valid and not frozen
+        Subscriber subscriber = SubscriberControl.getSubscriberById(bookCopy.getBorrowSubscriberId());
+        if (subscriber == null || subscriber.isFrozen()) {
+            return msg.errorReply("Subscriber is frozen or doesn't exist!");
+        }
         BookCopy foundCopy = BookControl.checkBookOrderable(bookCopy.getBookId());
         if (foundCopy == null) {
             bookCopy.setOrderSubscriberId(-1);

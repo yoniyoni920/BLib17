@@ -327,7 +327,7 @@ public static BookCopy checkBookLendable(int bookId) {
       try {
         PreparedStatement stmt = DBControl.getConnection().prepareStatement("UPDATE book_copy SET return_date = ? WHERE id = ?");
         stmt.setString(1,copy.getReturnDate().toString());
-        stmt.setString(2, copy.getCopyId()+"");
+        stmt.setString(2, copy.getId()+"");
         changed = stmt.executeUpdate();
       } catch (SQLException e) {
         e.printStackTrace();

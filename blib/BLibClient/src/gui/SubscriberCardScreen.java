@@ -146,7 +146,7 @@ public class SubscriberCardScreen extends AbstractScreen {
 		alert.showAndWait();
 
 		if (alert.getResult() == ButtonType.OK) {
-			Message msg = ClientUtils.sendMessage(Action.MARK_BOOK_COPY_AS_LOST, bookCopy.getCopyId());
+			Message msg = ClientUtils.sendMessage(Action.MARK_BOOK_COPY_AS_LOST, bookCopy.getId());
 			if (msg.getObject().equals(true)) {
 				Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
 				successAlert.setTitle("Mark Book as Lost");

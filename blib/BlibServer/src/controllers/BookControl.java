@@ -4,18 +4,13 @@ import entities.BookCopy;
 import entities.BorrowReport;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import entities.Book;
-import entities.Subscriber;
 
 public class BookControl {
 
@@ -65,7 +60,7 @@ public class BookControl {
 					book.setLocationOrDate(locationOrDate);
 					books.add(book);
 				}
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -123,7 +118,7 @@ public static BookCopy checkBookLendable(int bookId) {
             stt.setDate(1, Date.valueOf(bookCopy.getLendDate()));
             stt.setDate(2, Date.valueOf(bookCopy.getReturnDate()));
             stt.setInt(3, bookCopy.getBorrowSubscriberId());
-            stt.setInt(4, bookCopy.getCopyId());
+            stt.setInt(4, bookCopy.getId());
             stt.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -221,7 +216,7 @@ public static BookCopy checkBookLendable(int bookId) {
         try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
                 "UPDATE book_copy SET order_subscriber_id = ? WHERE id = ?")) {
             stt.setInt(1, bookCopy.getOrderSubscriberId());
-            stt.setInt(2, bookCopy.getCopyId());
+            stt.setInt(2, bookCopy.getId());
             stt.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -278,6 +273,18 @@ public static BookCopy checkBookLendable(int bookId) {
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
+		}
+	}
+	public static void returnBook(int bookCopyId) {
+		String query = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
+		try(PreparedStatement preparedStatemen = DBControl.getConnection().prepareStatement(query)){
+			preparedStatemen.setNull(1, Types.INTEGER);
+			preparedStatemen.setNull(2, java.sql.Types.DATE);
+			preparedStatemen.setNull(3, java.sql.Types.DATE);
+			preparedStatemen.setInt(4, bookCopyId);
+			preparedStatemen.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }

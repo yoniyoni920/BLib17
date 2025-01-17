@@ -1,6 +1,8 @@
 package gui;
 
+import base.Action;
 import entities.BookCopy;
+import entities.Message;
 import entities.Subscriber;
 import javafx.animation.FadeTransition;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,6 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import services.ClientUtils;
+import javafx.collections.ObservableList;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -28,6 +32,8 @@ public class SubscriberCardScreen extends AbstractScreen {
 	@FXML private TableView<BookCopy> borrowedBooks;
 	@FXML private Label welcomeText;
 	@FXML private VBox borrowedBooksVBox;
+
+	private ObservableList<BookCopy> borrowedBooksObservableList;
 
 	public void setData(Subscriber subscriber, boolean isMe) {
 		this.subscriber = subscriber;
@@ -48,7 +54,8 @@ public class SubscriberCardScreen extends AbstractScreen {
 		}
 
 		if (!isMe) {
-			borrowedBooks.setItems(FXCollections.observableList(subscriber.getBorrowedBooks()));
+			borrowedBooksObservableList = FXCollections.observableList(subscriber.getBorrowedBooks());
+			borrowedBooks.setItems(borrowedBooksObservableList);
 
 			TableColumn<BookCopy, String> idColumn = new TableColumn<>("Id");
 			idColumn.prefWidthProperty().bind(borrowedBooks.widthProperty().multiply(0.1));
@@ -104,7 +111,16 @@ public class SubscriberCardScreen extends AbstractScreen {
 	}
 
 	private void onReturnBookPressed(BookCopy bookCopy) {
-		//TODO: implement returning books
+		int bookCopyId = bookCopy.getId();
+		ClientUtils.sendMessage(new Message(Action.RETURN_BOOK, bookCopyId));
+		List<BookCopy> copies = subscriber.getBorrowedBooks();
+		copies.remove(bookCopy);
+		borrowedBooks.setItems(borrowedBooksObservableList);
+		borrowedBooks.refresh();
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Returned Book Successfully");
+		alert.setHeaderText("The book returned successfully");
+		alert.showAndWait();
 	}
 
 	private void onChangeDurationBookPressed(BookCopy bookCopy) {

@@ -80,7 +80,7 @@ public class BorrowedBookScreen extends AbstractScreen {
         borrowDate.setText(copy.getLendDate().toString());
         returnDate.setText(copy.getReturnDate().toString());
 //        isOrdered.setText("no");
-        copyId.setText(copy.getCopyId() + "");
+        copyId.setText(copy.getId() + "");
         
         int daysBetween = (int) ChronoUnit.DAYS.between(LocalDate.now(), copy.getReturnDate());
         if (daysBetween < 14) {

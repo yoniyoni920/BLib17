@@ -18,40 +18,45 @@ public class BookControl {
 		List<Book> books = new ArrayList<>();
 		if(searchType.equals("title") || searchType.equals("genre") || searchType.equals("description")) {
 			String query = "SELECT * FROM book WHERE " + searchType + " LIKE ?";
-			String query1 = "SELECT * FROM book_copy\r\n"
-					+ "WHERE book_id = ? AND borrow_subscriber_id IS NULL AND order_subscriber_id IS NULL;";
-			String query2 = "SELECT *\r\n" + "FROM book_copy\r\n"
-					+ "WHERE book_id = ? \r\n"+ "ORDER BY ABS(DATEDIFF(return_date, CURDATE())) ASC\r\n"
-					+ "LIMIT 1;";
-			try (PreparedStatement preparedStatement = DBControl.getConnection().prepareStatement(query)) {
-				preparedStatement.setString(1, "%"+search+"%");
-				
-				ResultSet rs = preparedStatement.executeQuery();
 
-				while (rs.next()) {
-					int id = rs.getInt("id");
-					String title = rs.getString("title");
-					String authors = rs.getString("authors");
-					String genre = rs.getString("genre");
-					String description = rs.getString("description");
-					String image = rs.getString("image");
-					String location = rs.getString("location");
+			// Query tries to find at lesat one copy that isn't borrowed or ordered.
+			String queryAvailable = "SELECT 1 FROM book_copy "
+					+ "WHERE book_id = ? AND borrow_subscriber_id IS NULL AND order_subscriber_id IS NULL LIMIT 1";
 
-					String locationOrDate = "jljl";
-					try(PreparedStatement preparedStatement1 = DBControl.getConnection().prepareStatement(query1)){
-						preparedStatement1.setInt(1, id);
-						ResultSet rs1 = preparedStatement1.executeQuery();
-						if(rs1.next())
+			// Query selects one copy that is not being ordered and has the closest return date
+			String queryOrderable = "SELECT * FROM book_copy "
+					+ "WHERE book_id = ? AND return_date IS NOT NULL AND order_subscriber_id IS NULL " +
+					"ORDER BY ABS(DATEDIFF(return_date, CURDATE())) ASC LIMIT 1";
+
+			try (PreparedStatement ps = DBControl.prepareStatement(query)) {
+				ps.setString(1, "%"+search+"%");
+				ResultSet bookResult = ps.executeQuery();
+
+				while (bookResult.next()) {
+					int id = bookResult.getInt("id");
+					String title = bookResult.getString("title");
+					String authors = bookResult.getString("authors");
+					String genre = bookResult.getString("genre");
+					String description = bookResult.getString("description");
+					String image = bookResult.getString("image");
+					String location = bookResult.getString("location");
+
+					String locationOrDate;
+					try(PreparedStatement ps2 = DBControl.prepareStatement(queryAvailable)){
+						ps2.setInt(1, id);
+						if (ps2.executeQuery().next())
 							locationOrDate = "Shelf "+location;
 						else {
-							try(PreparedStatement preparedStatement2 = DBControl.getConnection().prepareStatement(query2)){
-								preparedStatement2.setInt(1, id);
-								ResultSet rs2 = preparedStatement2.executeQuery();
-								if(rs2.next()) {
-									LocalDate originalDate = rs2.getDate("return_date").toLocalDate();
+							try(PreparedStatement ps3 = DBControl.prepareStatement(queryOrderable)){
+								ps3.setInt(1, id);
+								ResultSet orderResult = ps3.executeQuery();
+								if(orderResult.next()) {
+									LocalDate originalDate = orderResult.getDate("return_date").toLocalDate();
 									locationOrDate = originalDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 									locationOrDate = "Available By: "+locationOrDate;
-						        	}
+								} else {
+									locationOrDate = "Unavailable";
+								}
 							}	
 						}
 					}
@@ -275,7 +280,8 @@ public static BookCopy checkBookLendable(int bookId) {
 			throw new RuntimeException(e);
 		}
 	}
-	public static void returnBook(int bookCopyId) {
+
+  public static void returnBook(int bookCopyId) {
 		String query = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
 		try(PreparedStatement preparedStatemen = DBControl.getConnection().prepareStatement(query)){
 			preparedStatemen.setNull(1, Types.INTEGER);
@@ -286,5 +292,50 @@ public static BookCopy checkBookLendable(int bookId) {
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
+  }
+	/**
+	 * Marks a book as lost. This also automatically freezes the subscriber and makes a history point about that
+	 * @param bookCopyId
+	 */
+	public static boolean markBookCopyAsLost(int bookCopyId) {
+		String query = "SELECT * FROM book_copy WHERE id = ? AND is_lost = 0 LIMIT 1";
+		try (PreparedStatement st = DBControl.prepareStatement(query)) {
+			st.setInt(1, bookCopyId);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				String upQuery = "UPDATE book_copy " +
+						"SET is_lost = 1, borrow_subscriber_id = null, order_subscriber_id = null, lend_date = NULL, return_date = NULL " +
+						"WHERE id = ?";
+				try (PreparedStatement st2 = DBControl.prepareStatement(upQuery)) {
+					st2.setInt(1, bookCopyId);
+					//TODO: log history
+
+					// Punish subscriber for losing the book
+					SubscriberControl.freezeSubscriber(rs.getInt("borrow_subscriber_id"));
+					return st2.executeUpdate() == 1;
+				}
+			}
+		} catch (SQLException ex) {
+			throw new RuntimeException(ex);
+		}
+
+		return false;
 	}
+
+	public static boolean extendBorrowTime(BookCopy copy) {
+      int changed = 0 ;
+      try {
+        PreparedStatement stmt = DBControl.getConnection().prepareStatement("UPDATE book_copy SET return_date = ? WHERE id = ?");
+        stmt.setString(1,copy.getReturnDate().toString());
+        stmt.setString(2, copy.getCopyId()+"");
+        changed = stmt.executeUpdate();
+      } catch (SQLException e) {
+        e.printStackTrace();
+        return false ;
+      }
+      if(changed == 1)
+        return true ;
+      else
+        return false ;
+  }
 }

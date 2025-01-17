@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
+import services.ClientUtils;
 
 /**
  * Controller for the Subscriber Settings Screen.
@@ -119,7 +120,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
         );
 
         // Send the changes to the server
-        Message msg = ClientApplication.chat.sendToServer(new Message(Action.UPDATE_SUBSCRIBER, changedInfo));
+        Message msg = ClientUtils.sendMessage(new Message(Action.UPDATE_SUBSCRIBER, changedInfo));
 
         // Update in-memory data if the server update is successful
         if (!msg.isError()) {

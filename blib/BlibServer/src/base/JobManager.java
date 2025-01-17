@@ -1,6 +1,7 @@
 package base;
 
 import controllers.DBControl;
+import controllers.SubscriberControl;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -129,13 +130,7 @@ public class JobManager {
             try (Statement st = DBControl.getConnection().createStatement()) {
                 ResultSet rs = st.executeQuery(query);
                 while (rs.next()) {
-                    try (PreparedStatement st2 = DBControl.getConnection()
-                            .prepareStatement("UPDATE subscriber SET frozen_until = ? WHERE id = ?")
-                    ) {
-                        st2.setTimestamp(1, Timestamp.valueOf(now.plusDays(30)));
-                        st2.setInt(2, rs.getInt("borrow_subscriber_id"));
-                        st2.execute();
-                    }
+                    SubscriberControl.freezeSubscriber(rs.getInt("borrow_subscriber_id"));
                 }
                 markJobDone("check-borrows");
             } catch (SQLException e) {

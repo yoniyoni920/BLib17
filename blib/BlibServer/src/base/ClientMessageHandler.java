@@ -6,12 +6,6 @@ import controllers.RegisterUser;
 import controllers.SubscriberControl;
 import entities.*;
 import ocsf.server.ConnectionToClient;
-
-import entities.BookCopy;
-import entities.Message;
-import entities.Subscriber;
-import entities.User;
-
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -71,11 +65,16 @@ public class ClientMessageHandler {
         actions.put(Action.ORDER_BOOK, ClientMessageHandler::orderBook);
         actions.put(Action.SEARCH_SUBSCRIBERS, ClientMessageHandler::searchSubscribers);
         actions.put(Action.RETURN_BOOK, ClientMessageHandler::returnBook);
+        actions.put(Action.MARK_BOOK_COPY_AS_LOST, ClientMessageHandler::markBookCopyAsLost);
+        actions.put(Action.EXTEND_BORROW_TIME , ClientMessageHandler :: extendBorrowTime);
     }
 
     public static Message orderBook(Message msg, ConnectionToClient client) {
         BookCopy bookCopy = (BookCopy) msg.getObject();
-        //TODO check subscriber valid and not frozen
+        Subscriber subscriber = SubscriberControl.getSubscriberById(bookCopy.getBorrowSubscriberId());
+        if (subscriber == null || subscriber.isFrozen()) {
+            return msg.errorReply("Subscriber is frozen or doesn't exist!");
+        }
         BookCopy foundCopy = BookControl.checkBookOrderable(bookCopy.getBookId());
         if (foundCopy == null) {
             bookCopy.setOrderSubscriberId(-1);
@@ -169,7 +168,7 @@ public class ClientMessageHandler {
      * Handles logging subscribers or librarians
      */
     public static Message login(Message msg, ConnectionToClient client) {
-        String[] args = (String[]) msg.getObject();
+        String[] args = (String[])msg.getObject();
         User user = LoginControl.loginAction(args[0], args[1]);
         if (user != null) {
             return msg.reply(user);
@@ -227,6 +226,15 @@ public class ClientMessageHandler {
     public static Message searchSubscribers(Message msg, ConnectionToClient client) {
         String[] searchInfo = (String[])msg.getObject();
         return msg.reply(SubscriberControl.searchSubscribers(searchInfo[0], searchInfo[1]));
+    }
+
+    public static Message markBookCopyAsLost(Message msg, ConnectionToClient client) {
+        return msg.reply(BookControl.markBookCopyAsLost((Integer)msg.getObject()));
+    }
+
+    public static Message extendBorrowTime(Message msg , ConnectionToClient client) {
+    	boolean successfullyChanged = BookControl.extendBorrowTime((BookCopy )msg.getObject());
+    	return msg.reply(successfullyChanged);
     }
 }
 

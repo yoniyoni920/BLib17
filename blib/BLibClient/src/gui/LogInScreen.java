@@ -79,7 +79,6 @@ public class LogInScreen extends AbstractScreen {
 
 				// Check which user this is to show the appropriate screen
 				if (user.getRole() == Role.SUBSCRIBER) {
-					Message msg2 = ClientUtils.sendMessage(new Message(Action.RETRIEVE_BORROWEDBOOKS, (Subscriber) user));
 					SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("subscriber_main_screen/SubscriberMainScreen", "Subscriber Main Screen");
 					subMainScreen.onStart((Subscriber)user);
 				} else {

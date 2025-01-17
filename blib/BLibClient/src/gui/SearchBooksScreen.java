@@ -111,6 +111,7 @@ public class SearchBooksScreen extends AbstractScreen implements Initializable{
 			List<Book> books = (List<Book>)msg.getObject();
 			textId.setVisible(false);
 
+			gridPane.getChildren().clear();
 			if(!books.isEmpty()) {
 				InterfaceUtils.makeGrid(gridPane, 4, books, book -> {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/BookCard.fxml"));

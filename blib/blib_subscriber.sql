@@ -245,6 +245,17 @@ LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` VALUES (1,'Daniel','Student','123','subscriber'),(2,'Safranit','Lol','321','librarian'),(3,'yeled','haha','852','subscriber'),(4,'bery','hi','963','subscriber'),(5,'moti','lochim','258','subscriber'),(6,'Elias','Yes','elias','subscriber'),(7,'Helal','Hammoud','123','subscriber');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
+CREATE TABLE `notification` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `subscriber_id` int NOT NULL,
+  `subscriber_name` varchar(100) NOT NULL,
+  `message` varchar(150) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `isNew` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

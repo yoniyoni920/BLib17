@@ -1,0 +1,174 @@
+package gui.librarian;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import base.Action;
+import entities.Notification;
+import entities.Subscriber;
+import gui.AbstractScreen;
+import gui.SubscriberCardScreen;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import services.ClientUtils;
+
+/**
+ * NotificationsScreen is a JavaFX controller class responsible for managing
+ * the display of notifications for the librarian interface. It displays new
+ * and all notifications in separate TableViews, allowing the user to interact
+ * with the data and perform actions like viewing subscriber details.
+ *
+ * This class extends {@code AbstractScreen} to integrate with the application's
+ * screen management system.
+ */
+public class NotificationsScreen extends AbstractScreen {
+
+    /**
+     * TableView to display new notifications.
+     */
+    @FXML
+    private TableView<Notification> newNotifications;
+
+    /**
+     * TableView to display all notifications.
+     */
+    @FXML
+    private TableView<Notification> allNotifications;
+
+    /**
+     * Method executed when the screen starts. It initializes the data and configures the TableViews.
+     */
+    public void onStart() {
+        loadData();
+        prepareTableView();
+    }
+
+    /**
+     * Loads notification data from the server and populates the TableViews.
+     * 
+     * <p>
+     * Notifications are retrieved from the server using the {@code RETRIEVE_NOTIFICATIONS}
+     * action. New notifications are added to the {@code newNotifications} TableView,
+     * while all notifications are added to the {@code allNotifications} TableView.
+     * </p>
+     */
+    @SuppressWarnings("unchecked")
+    private void loadData() {
+        List<Notification> list = (List<Notification>) ClientUtils.sendMessage(Action.RETRIEVE_NOTIFICATIONS, null).getObject();
+        allNotifications.getItems().addAll(list);
+        for (Notification n : list) {
+            if (n.getIsNew()) {
+                newNotifications.getItems().add(n);
+            }
+        }
+    }
+
+    /**
+     * Configures the TableViews by adding columns for subscriber, message, and date.
+     * 
+     * <p>
+     * Each column is customized to display specific attributes of the Notification objects,
+     * including a button in the "From" column that allows the user to view details about
+     * the subscriber.
+     * </p>
+     */
+    private void prepareTableView() {
+        TableColumn<Notification, String> messageColumn = new TableColumn<>("Message");
+        messageColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
+        messageColumn.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
+
+        TableColumn<Notification, String> dateColumn = new TableColumn<>("Date");
+        dateColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
+        dateColumn.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
+
+        TableColumn<Notification, Button> subscriberCardColumn = getSubscriberCardColumn();
+
+        newNotifications.getColumns().addAll(subscriberCardColumn, messageColumn, dateColumn);
+        allNotifications.getColumns().addAll(subscriberCardColumn, messageColumn, dateColumn);
+    }
+
+    /**
+     * Creates a TableColumn for displaying subscriber information.
+     * 
+     * <p>
+     * Each cell in this column contains a button that shows the subscriber's name
+     * and ID. Clicking the button opens the subscriber's detailed information screen.
+     * </p>
+     * 
+     * @return A configured TableColumn with buttons for subscriber details.
+     */
+    private TableColumn<Notification, Button> getSubscriberCardColumn() {
+        TableColumn<Notification, Button> subscriberColumn = new TableColumn<>("From");
+        subscriberColumn.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.17));
+
+        subscriberColumn.setCellFactory(col -> new TableCell<Notification, Button>() {
+            @Override
+            protected void updateItem(Button item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    Notification notification = (Notification) getTableRow().getItem();
+                    Button subscriberCardBtn = new Button(notification.getSubscriberName() + "(" + notification.getSubscriberId() + ")");
+                    subscriberCardBtn.setOnAction(event -> {
+                        try {
+                            openSubscriberCardScreen(notification.getSubscriberId());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    subscriberCardBtn.setPrefWidth(col.getPrefWidth());
+                    subscriberCardBtn.setStyle("-fx-background-color: #007bff; -fx-text-fill: white;");
+                    setGraphic(subscriberCardBtn);
+                    setText(null);
+                }
+            }
+        });
+
+        return subscriberColumn;
+    }
+
+    /**
+     * Opens the SubscriberCardScreen for a specific subscriber.
+     * 
+     * <p>
+     * The subscriber details are fetched from the server using the {@code GET_SUBSCRIBER_BY_ID}
+     * action. The data is then passed to the SubscriberCardScreen.
+     * </p>
+     * 
+     * @param subscriberId The ID of the subscriber to view.
+     * @throws IOException If an error occurs while opening the screen.
+     */
+    public void openSubscriberCardScreen(int subscriberId) throws IOException {
+        Subscriber subscriber = (Subscriber) ClientUtils.sendMessage(Action.GET_SUBSCRIBER_BY_ID, subscriberId).getObject();
+        SubscriberCardScreen screen = (SubscriberCardScreen) screenManager.openScreen("SubscriberCardScreen", "Subscriber Card");
+        screen.setData(subscriber, false);
+    }
+
+    /**
+     * Closes the current screen and updates notification statuses.
+     * 
+     * <p>
+     * If there are any new notifications in the {@code newNotifications} TableView,
+     * their status is updated on the server using the {@code UPDATE_NOTIFICATION_STATUS}
+     * action.
+     * </p>
+     * 
+     * @param event The ActionEvent triggered by the user.
+     */
+    public void closeWindow(ActionEvent event) {
+        screenManager.closeScreen();
+        if (!newNotifications.getItems().isEmpty()) {
+            List<Notification> notifications = new ArrayList<>(newNotifications.getItems());
+            ClientUtils.sendMessage(Action.UPDATE_NOTIFICATION_STATUS, notifications);
+        }
+    }
+}

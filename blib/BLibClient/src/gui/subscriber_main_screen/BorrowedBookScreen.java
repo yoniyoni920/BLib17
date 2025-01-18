@@ -1,10 +1,13 @@
 package gui.subscriber_main_screen;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import base.Action;
 import entities.BookCopy;
+import entities.Message;
+import entities.Notification;
+import entities.Subscriber;
 import gui.AbstractScreen;
 import gui.BookCard;
 import javafx.animation.FadeTransition;
@@ -13,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import services.ClientUtils;
 
 /**
  * Controller for the Borrowed Book Screen.
@@ -20,7 +24,6 @@ import javafx.util.Duration;
  * return date, and whether the book is ordered by another subscriber. It also shows the number of days 
  * left before the book is due for return or indicates if the book is overdue.
  * 
- * @author Helal Hammoud
  */
 public class BorrowedBookScreen extends AbstractScreen {
 
@@ -43,6 +46,8 @@ public class BorrowedBookScreen extends AbstractScreen {
     private VBox borrowExtend;
 
     private BookCopy copy;
+    
+    private Subscriber subscriber;
 
     @FXML
     private BookCard bookCardController;
@@ -53,9 +58,9 @@ public class BorrowedBookScreen extends AbstractScreen {
      *
      * @param copy The book copy that was borrowed and whose information will be displayed.
      */
-    public void onStart(BookCopy copy) {
+    public void onStart(BookCopy copy , Subscriber subscriber) {
         fadeInLabelTransition(welcomeText);
-        loadData(copy);
+        loadData(copy , subscriber);
         renderData();
     }
 
@@ -65,8 +70,9 @@ public class BorrowedBookScreen extends AbstractScreen {
      *
      * @param copy The book copy whose information will be loaded.
      */
-    private void loadData(BookCopy copy) {
+    private void loadData(BookCopy copy , Subscriber subscriber) {
         this.copy = copy;
+        this.subscriber = subscriber;
     }
 
     /**
@@ -74,30 +80,51 @@ public class BorrowedBookScreen extends AbstractScreen {
      * order status, copy ID, and the number of days left before the book is due for return.
      */
     private void renderData() {
+    	borrowExtend.setVisible(false);
         bookCardController.setBookData(copy.getBook());
-
         borrowDate.setText(copy.getLendDate().toString());
         returnDate.setText(copy.getReturnDate().toString());
-//        isOrdered.setText("no");
-        copyId.setText(copy.getId() + "");
+        copyId.setText(copy.getCopyId() + "");
+
         
         int daysBetween = (int) ChronoUnit.DAYS.between(LocalDate.now(), copy.getReturnDate());
-        if (daysBetween < 14) {
+        if (daysBetween < 0) {
+            daysLeft.setText("You Are Late!");
+        }
+        if (daysBetween == 0) {
+        	daysLeft.setText("Today!");
+        }
+        else {
             daysLeft.setText(daysBetween + " Days Left");
-        } else {
-            daysLeft.setText("You Are Late");
-        }
 
-        if (copy.getOrderSubscriberId() == 0 && daysBetween <= 7) {
-            borrowExtend.setVisible(true);
-        } else {
-//            isOrdered.setText("yes");
         }
+        if (copy.getOrderSubscriberId() == 0 && daysBetween <= 7 && !subscriber.isFrozen()) {
+            borrowExtend.setVisible(true);
+        }
+      
     }
     
-    public void openExtendBorrowTimeScreen(ActionEvent event) throws IOException {
-    	ExtendBorrowTimeScreen screen = (ExtendBorrowTimeScreen)screenManager.openScreen("subscriber_main_screen/ExtendBorrowTimeScreen", "Extension Screen");
-    	screen.onStart(copy);
+    public void openExtendBorrowTimeScreen(ActionEvent event) {
+    	copy.setReturnDate(copy.getReturnDate().plusDays(14));
+    	boolean succesfullyChanged = (boolean) ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME , copy)).getObject();
+    	
+		String message = "Extended The Borrow Time For The Book " + copy.getBook().getTitle() + " ,copy : " + copy.getCopyId() + " For 14 Days"; 
+		Notification notification = new Notification(subscriber.getId(), subscriber.getName() , message , LocalDate.now() , true);
+		boolean successfullySaveNotification = (boolean) ClientUtils.sendMessage(new Message(Action.SAVE_NOTIFICATION , notification)).getObject();
+		
+		if(succesfullyChanged && successfullySaveNotification) {
+			try {
+				closeWindow(event);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			copy.setReturnDate(copy.getReturnDate().minusDays(14));
+		}
+		
+    	
     }
 
     /**
@@ -118,7 +145,6 @@ public class BorrowedBookScreen extends AbstractScreen {
      */
     private void fadeInLabelTransition(Label welcomeText) {
         welcomeText.setOpacity(0.0); // Start with the text invisible
-
         // First Fade-In Transition (Welcome Message)
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
         fadeIn.setFromValue(0.0); // Start fully transparent

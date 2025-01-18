@@ -63,7 +63,9 @@ public class Subscriber extends User implements Serializable {
 	}
 
 	public LocalDate getFrozenUntil() {
-		return frozenUntil;
+		if(isFrozen())
+			return frozenUntil;
+		return null;
 	}
 
 	public void setFrozenUntil(LocalDate frozenUntil) {

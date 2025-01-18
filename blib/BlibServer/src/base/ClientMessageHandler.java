@@ -2,6 +2,7 @@ package base;
 
 import controllers.BookControl;
 import controllers.LoginControl;
+import controllers.NotificationControl;
 import controllers.RegisterUser;
 import controllers.SubscriberControl;
 import entities.*;
@@ -67,6 +68,9 @@ public class ClientMessageHandler {
         actions.put(Action.RETURN_BOOK, ClientMessageHandler::returnBook);
         actions.put(Action.MARK_BOOK_COPY_AS_LOST, ClientMessageHandler::markBookCopyAsLost);
         actions.put(Action.EXTEND_BORROW_TIME , ClientMessageHandler :: extendBorrowTime);
+        actions.put(Action.RETRIEVE_NOTIFICATIONS, ClientMessageHandler :: retrieveNotifications);
+        actions.put(Action.SAVE_NOTIFICATION, ClientMessageHandler :: saveNotification);
+        actions.put(Action.UPDATE_NOTIFICATION_STATUS, ClientMessageHandler :: updateNotificationStatus);
     }
 
     public static Message orderBook(Message msg, ConnectionToClient client) {
@@ -236,6 +240,23 @@ public class ClientMessageHandler {
     	boolean successfullyChanged = BookControl.extendBorrowTime((BookCopy )msg.getObject());
     	return msg.reply(successfullyChanged);
     }
+    
+    public static Message saveNotification(Message msg, ConnectionToClient client) {
+    	boolean successfullySaved = NotificationControl.saveNotification((Notification)msg.getObject());
+    	return msg.reply(successfullySaved);
+    }
+    
+    public static Message updateNotificationStatus(Message msg, ConnectionToClient client) {
+    	boolean successfullyUpdated = NotificationControl.updateNotificationStatus((List<Notification>)msg.getObject());
+    	return msg.reply(successfullyUpdated);
+    }
+    
+    public static Message retrieveNotifications(Message msg, ConnectionToClient client) {
+    	List<Notification> notifications = NotificationControl.retrieveNotifications();
+    	return msg.reply(notifications);
+    }
+    
+    
 }
 
 

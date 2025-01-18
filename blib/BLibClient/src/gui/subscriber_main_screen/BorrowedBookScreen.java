@@ -109,9 +109,9 @@ public class BorrowedBookScreen extends AbstractScreen {
     
     public void openExtendBorrowTimeScreen(ActionEvent event) {
     	copy.setReturnDate(copy.getReturnDate().plusDays(14));
-    	boolean succesfullyChanged = (boolean) ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME , copy)).getObject();
-    	
-		String message = "Extended The Borrow Time For The Book " + copy.getBook().getTitle() + " ,copy : " + copy.getId() + " For 14 Days"; 
+      boolean succesfullyChanged = (boolean) ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME , copy)).getObject();
+    
+		 String message = "Extended The Borrow Time For The Book " + copy.getBook().getTitle() + " ,copy : " + copy.getId() + " For 14 Days";
 		Notification notification = new Notification(subscriber.getId(), subscriber.getName() , message , LocalDate.now() , true);
 		boolean successfullySaveNotification = (boolean) ClientUtils.sendMessage(new Message(Action.SAVE_NOTIFICATION , notification)).getObject();
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);

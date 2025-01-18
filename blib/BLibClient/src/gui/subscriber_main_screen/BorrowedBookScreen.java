@@ -13,6 +13,7 @@ import gui.BookCard;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -84,7 +85,7 @@ public class BorrowedBookScreen extends AbstractScreen {
         bookCardController.setBookData(copy.getBook());
         borrowDate.setText(copy.getLendDate().toString());
         returnDate.setText(copy.getReturnDate().toString());
-        copyId.setText(copy.getCopyId() + "");
+        copyId.setText(copy.getId() + "");
 
         
         int daysBetween = (int) ChronoUnit.DAYS.between(LocalDate.now(), copy.getReturnDate());
@@ -101,6 +102,8 @@ public class BorrowedBookScreen extends AbstractScreen {
         if (copy.getOrderSubscriberId() == 0 && daysBetween <= 7 && !subscriber.isFrozen()) {
             borrowExtend.setVisible(true);
         }
+        System.out.println(daysBetween);
+
       
     }
     
@@ -108,11 +111,14 @@ public class BorrowedBookScreen extends AbstractScreen {
     	copy.setReturnDate(copy.getReturnDate().plusDays(14));
     	boolean succesfullyChanged = (boolean) ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME , copy)).getObject();
     	
-		String message = "Extended The Borrow Time For The Book " + copy.getBook().getTitle() + " ,copy : " + copy.getCopyId() + " For 14 Days"; 
+		String message = "Extended The Borrow Time For The Book " + copy.getBook().getTitle() + " ,copy : " + copy.getId() + " For 14 Days"; 
 		Notification notification = new Notification(subscriber.getId(), subscriber.getName() , message , LocalDate.now() , true);
 		boolean successfullySaveNotification = (boolean) ClientUtils.sendMessage(new Message(Action.SAVE_NOTIFICATION , notification)).getObject();
-		
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		if(succesfullyChanged && successfullySaveNotification) {
+			
+			alert.setHeaderText("Your Borrow Duration Successfully Extended");
+			alert.showAndWait();
 			try {
 				closeWindow(event);
 			} catch (Exception e) {
@@ -121,6 +127,7 @@ public class BorrowedBookScreen extends AbstractScreen {
 			}
 		}
 		else {
+			alert.setHeaderText("Error , Please Try Again Later");
 			copy.setReturnDate(copy.getReturnDate().minusDays(14));
 		}
 		

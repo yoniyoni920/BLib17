@@ -79,18 +79,27 @@ public class NotificationsScreen extends AbstractScreen {
      * </p>
      */
     private void prepareTableView() {
-        TableColumn<Notification, String> messageColumn = new TableColumn<>("Message");
-        messageColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
-        messageColumn.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
+        TableColumn<Notification, String> messageColumnAll = new TableColumn<>("Message");
+        messageColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
+        messageColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
+        
+        TableColumn<Notification, String> messageColumnNew = new TableColumn<>("Message");
+        messageColumnNew.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
+        messageColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
 
-        TableColumn<Notification, String> dateColumn = new TableColumn<>("Date");
-        dateColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
-        dateColumn.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
+        TableColumn<Notification, String> dateColumnAll = new TableColumn<>("Date");
+        dateColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
+        dateColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
+        
+        TableColumn<Notification, String> dateColumnNew = new TableColumn<>("Date");
+        dateColumnNew.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
+        dateColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
 
-        TableColumn<Notification, Button> subscriberCardColumn = getSubscriberCardColumn();
+        TableColumn<Notification, Button> subscriberCardColumnAll = getSubscriberCardColumn();
+        TableColumn<Notification, Button> subscriberCardColumnNew = getSubscriberCardColumn();
 
-        newNotifications.getColumns().addAll(subscriberCardColumn, messageColumn, dateColumn);
-        allNotifications.getColumns().addAll(subscriberCardColumn, messageColumn, dateColumn);
+        allNotifications.getColumns().addAll(subscriberCardColumnAll, messageColumnAll, dateColumnAll);
+        newNotifications.getColumns().addAll(subscriberCardColumnNew, messageColumnNew, dateColumnNew);
     }
 
     /**
@@ -168,7 +177,10 @@ public class NotificationsScreen extends AbstractScreen {
         screenManager.closeScreen();
         if (!newNotifications.getItems().isEmpty()) {
             List<Notification> notifications = new ArrayList<>(newNotifications.getItems());
+            System.out.println(notifications);
             ClientUtils.sendMessage(Action.UPDATE_NOTIFICATION_STATUS, notifications);
         }
+        newNotifications.getItems().clear();
+        allNotifications.getItems().clear();
     }
 }

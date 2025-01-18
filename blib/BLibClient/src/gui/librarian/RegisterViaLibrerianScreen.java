@@ -21,6 +21,16 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import services.ClientUtils;
+
+
+/**
+* This class handles the registration of subscribers by librarians.
+* It provides functionality to validate user input, display error messages
+* for invalid or missing fields, and send registration requests to the server.
+* 
+* The class includes methods to initialize the screen with the librarian's name,
+* handle user registration, and close the registration screen.
+*/
 public class RegisterViaLibrerianScreen extends AbstractScreen {
 	
 	
@@ -53,12 +63,21 @@ public class RegisterViaLibrerianScreen extends AbstractScreen {
 	@FXML
 	private Label LibraranNamefx;
 	
-	
+	/**
+     * Initializes the screen with the librarian's name.
+     *
+     * @param name the name of the librarian
+     * @throws Exception if an error occurs during setup
+     */
 
 	public void startUp(String name) throws Exception {
 		LibraranNamefx.setText(name);
 	}
-	
+	 /**
+     * Handles the registration of a new subscriber.
+     * Validates input fields, displays error messages if any validation fails,
+     * and sends the registration request to the server if all inputs are valid.
+     */
 	public void RegisterSubscriber() {
 		String pass2 = Password2.getText();
 		String pass = PassTxt.getText();
@@ -134,7 +153,7 @@ public class RegisterViaLibrerianScreen extends AbstractScreen {
 	    }
 		
 		
-		
+	     // If all fields are valid, attempt to register
 		if (!pass2Empty && !passEmpty && !FirstNameEmpty && !LastNameEmpty && !PhoneEmpty && !EmailAddressEmpty && ((pass2.equals(pass)) && valid))
 		{
 			// Attempt to Send message to Server To REGISTER USER
@@ -163,10 +182,12 @@ public class RegisterViaLibrerianScreen extends AbstractScreen {
 	}
 
 
-	/*
-	 * close Window and returns to previous screen
-	 */
-	
+	 /**
+     * Closes the current window and returns to the previous screen.
+     *
+     * @param event the ActionEvent triggered by the exit button
+     * @throws Exception if an error occurs during the process
+     */
 	public void Exit(ActionEvent event) throws Exception {
 		screenManager.closeScreen();
 	}

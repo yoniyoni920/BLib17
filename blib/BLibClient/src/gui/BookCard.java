@@ -11,6 +11,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * The BookCard class is a controller for the book card UI component.
+ * It handles setting book data and managing the visibility of extra details.
+ */
 public class BookCard {
     @FXML
     private VBox vbox;
@@ -24,11 +28,19 @@ public class BookCard {
     private Label genreLabel;
     @FXML
     private Label locationOrDateLabel;
-
+    /**
+     * Sets the visibility of the extra details (location or date) label.
+     * 
+     * @param visible true to make the extra details visible, false otherwise
+     */
     public void setExtraDetailsVisible(boolean visible) {
         locationOrDateLabel.setVisible(visible);
     }
-
+    /**
+     * Sets the book data to be displayed in the card.
+     * 
+     * @param book the Book object containing the data to display
+     */
     public void setBookData(Book book) {
         titleLabel.setText(book.getTitle());
         authorLabel.setText(book.getAuthors());

@@ -38,7 +38,10 @@ import javafx.util.converter.FormatStringConverter;
 import services.ClientUtils;
 import services.InterfaceUtils;
 
-
+/**
+ * Controller class for the "SearchBooksScreen.fxml" view.
+ * Handles the logic for searching and displaying books in a grid layout.
+ */
 public class SearchBooksScreen extends AbstractScreen implements Initializable{
 	
 	ObservableList<String> choiceBoxList = FXCollections.observableArrayList("title", "genre", "description");
@@ -60,7 +63,12 @@ public class SearchBooksScreen extends AbstractScreen implements Initializable{
 
 	private Timer timer;
 	private TimerTask searchTask;
-
+	/**
+     * Initializes the screen with default values and configurations.
+     *
+     * @param arg0 The URL location used to resolve relative paths.
+     * @param arg1 The resource bundle for internationalization.
+     */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		timer = new Timer();
@@ -89,7 +97,12 @@ public class SearchBooksScreen extends AbstractScreen implements Initializable{
 			scrollPane.setVvalue(scrollPane.getVvalue() - deltaY);
 		});
 	}
-
+    /**
+     * Handles user input in the search field and triggers a debounced search.
+     *
+     * @param event The input event from the search field.
+     * @throws Exception If the search process encounters an error.
+     */
 	public void onSearch(InputEvent event) throws Exception {
 		// Makes search faster
 		if (searchTask != null) {
@@ -104,6 +117,12 @@ public class SearchBooksScreen extends AbstractScreen implements Initializable{
 		timer.schedule(searchTask, 200);
 	}
 
+
+	
+	  /**
+     * Searches for books based on the user's input and selected filter.
+     * Updates the grid with the resulting books or shows a "no results" message.
+     */
 	public void searchBooks() {
 		String[] searchInfo = {searchId.getText(), choiceBox.getValue()};
 

@@ -11,12 +11,7 @@ import entities.User;
  * 
  */
 public class RegisterUser {
-	//need to add later that privilege will detect
-	//type of user and return the correct obj type
-	//--after adding status can add the option to check
-	//if user is already logged in and if so make sure 
-	//he can't log in again and display warning
-	
+
 	/*
 	 * Login to the Database checks
 	 * for the user and starts the session.

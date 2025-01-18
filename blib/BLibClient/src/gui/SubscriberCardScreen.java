@@ -18,7 +18,11 @@ import services.ClientUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
+/**
+ * Controller class for the SubscriberCard screen.
+ * This class handles the display of subscriber details, their borrowed books,
+ * and actions that can be performed on the subscriber or their borrowed books.
+ */
 public class SubscriberCardScreen extends AbstractScreen {
 	private Subscriber subscriber;
 
@@ -34,7 +38,12 @@ public class SubscriberCardScreen extends AbstractScreen {
 	@FXML private VBox borrowedBooksVBox;
 
 	private ObservableList<BookCopy> borrowedBooksObservableList;
-
+    /**
+     * Sets the subscriber data and configures the UI accordingly.
+     *
+     * @param subscriber The subscriber object containing all relevant data.
+     * @param isMe Indicates if the subscriber is the logged-in user.
+     */
 	public void setData(Subscriber subscriber, boolean isMe) {
 		this.subscriber = subscriber;
 
@@ -80,7 +89,12 @@ public class SubscriberCardScreen extends AbstractScreen {
 
 		screenManager.getPrimaryStage().sizeToScene();
 	}
-
+    /**
+     * Configures the action column for the borrowed books table.
+     *
+     * @param subscriber The subscriber object to which the books belong.
+     * @return The configured action column.
+     */
 	private TableColumn<BookCopy, Void> getActionColumn(Subscriber subscriber) {
 		List<BookCopy> copies = subscriber.getBorrowedBooks();
 
@@ -124,7 +138,10 @@ public class SubscriberCardScreen extends AbstractScreen {
 	private void onChangeDurationBookPressed(BookCopy bookCopy) {
 		//TODO: implement changing duration of borrowing
 	}
-
+	   /**
+     * Handles the action for marking a book as lost.
+     * @param bookCopy The book copy to be marked as lost.
+     */
 	private void onMarkBookAsLostPressed(BookCopy bookCopy) {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Mark Book as Lost");

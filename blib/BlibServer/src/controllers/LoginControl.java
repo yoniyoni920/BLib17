@@ -8,22 +8,21 @@ import entities.DetailedSubscriptionHistory;
 import entities.Subscriber;
 import entities.User;
 /*
- * The class handles login logic. 
- * 
+ * The class handles login logic for users and subscribers.
+ * It verifies credentials and returns the appropriate user type based on the role.
  */
 public class LoginControl {
-	//need to add later that privilege will detect
-	//type of user and return the correct obj type
-	//--after adding status can add the option to check
-	//if user is already logged in and if so make sure 
-	//he can't log in again and display warning
-	
-	/*
-	 * Login to the Database checks
-	 * for the user and starts the session.
-	 */
+	 /**
+     * Handles the login action by verifying the user's credentials.
+     * Based on the role of the user, it returns either a Subscriber or a User object.
+     * 
+     * @param loginId the login ID provided by the user
+     * @param loginPassword the password provided by the user
+     * @return a User or Subscriber object if credentials are valid, otherwise null
+     */
 	public static User loginAction(String loginId, String loginPassword) {
 		try {
+			
 			System.out.println("i am here");
 			// This is called the try-with-resource block, it automatically closes the prepared statement and result set when it's done.
 			System.out.println("login:" + loginId + "password:" + loginPassword);

@@ -128,7 +128,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      */
     public void openBorrowedBookScreen(ActionEvent event, BookCopy copy) throws Exception {
         BorrowedBookScreen screen = (BorrowedBookScreen)screenManager.openScreen("subscriber_main_screen/BorrowedBookScreen", "Borrowed Book Screen");
-        screen.onStart(copy);
+        screen.onStart(copy , subscriber);
     }
 
     /**

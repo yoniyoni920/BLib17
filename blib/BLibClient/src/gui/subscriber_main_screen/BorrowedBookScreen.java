@@ -6,6 +6,8 @@ import java.time.temporal.ChronoUnit;
 import base.Action;
 import entities.BookCopy;
 import entities.Message;
+import entities.Notification;
+import entities.Subscriber;
 import gui.AbstractScreen;
 import gui.BookCard;
 import javafx.animation.FadeTransition;
@@ -44,6 +46,8 @@ public class BorrowedBookScreen extends AbstractScreen {
     private VBox borrowExtend;
 
     private BookCopy copy;
+    
+    private Subscriber subscriber;
 
     @FXML
     private BookCard bookCardController;
@@ -54,9 +58,9 @@ public class BorrowedBookScreen extends AbstractScreen {
      *
      * @param copy The book copy that was borrowed and whose information will be displayed.
      */
-    public void onStart(BookCopy copy) {
+    public void onStart(BookCopy copy , Subscriber subscriber) {
         fadeInLabelTransition(welcomeText);
-        loadData(copy);
+        loadData(copy , subscriber);
         renderData();
     }
 
@@ -66,8 +70,9 @@ public class BorrowedBookScreen extends AbstractScreen {
      *
      * @param copy The book copy whose information will be loaded.
      */
-    private void loadData(BookCopy copy) {
+    private void loadData(BookCopy copy , Subscriber subscriber) {
         this.copy = copy;
+        this.subscriber = subscriber;
     }
 
     /**
@@ -92,7 +97,7 @@ public class BorrowedBookScreen extends AbstractScreen {
             daysLeft.setText(daysBetween + " Days Left");
 
         }
-        if (copy.getOrderSubscriberId() == 0 && daysBetween <= 7) {
+        if (copy.getOrderSubscriberId() == 0 && daysBetween <= 7 && !subscriber.isFrozen()) {
             borrowExtend.setVisible(true);
         }
       
@@ -101,7 +106,12 @@ public class BorrowedBookScreen extends AbstractScreen {
     public void openExtendBorrowTimeScreen(ActionEvent event) {
     	copy.setReturnDate(copy.getReturnDate().plusDays(14));
     	boolean succesfullyChanged = (boolean) ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME , copy)).getObject();
-		if(succesfullyChanged) {
+    	
+		String message = "Extended The Borrow Time For The Book " + copy.getBook().getTitle() + " ,copy : " + copy.getCopyId() + " For 14 Days"; 
+		Notification notification = new Notification(subscriber.getId(), subscriber.getName() , message , LocalDate.now() , true);
+		boolean successfullySaveNotification = (boolean) ClientUtils.sendMessage(new Message(Action.SAVE_NOTIFICATION , notification)).getObject();
+		
+		if(succesfullyChanged && successfullySaveNotification) {
 			try {
 				closeWindow(event);
 			} catch (Exception e) {
@@ -112,6 +122,7 @@ public class BorrowedBookScreen extends AbstractScreen {
 		else {
 			copy.setReturnDate(copy.getReturnDate().minusDays(14));
 		}
+		
     	
     }
 

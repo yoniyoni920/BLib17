@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -26,6 +27,7 @@ public class LibrarianMainScreen extends AbstractScreen {
 	@FXML private Label nameTxt;
 	@FXML private TextField searchSubscribers;
 	@FXML private ContextMenu searchSubscribersContextMenu;
+	@FXML private Button notificationButton;
 	
 	public void RegisterSubscriber(ActionEvent event) throws Exception {
 		RegisterViaLibrerianScreen librarianRegister = (RegisterViaLibrerianScreen)screenManager
@@ -101,5 +103,10 @@ public class LibrarianMainScreen extends AbstractScreen {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public void openNotificationsScreen(ActionEvent event) throws IOException {
+		NotificationsScreen screen = (NotificationsScreen) screenManager.openScreen("librarian/NotificationsScreen", "Notifications Screen");
+		screen.onStart();
 	}
 }

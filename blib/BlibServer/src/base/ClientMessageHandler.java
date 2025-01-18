@@ -65,6 +65,7 @@ public class ClientMessageHandler {
         actions.put(Action.SEARCH_BOOKS, ClientMessageHandler::searchBooks);
         actions.put(Action.ORDER_BOOK, ClientMessageHandler::orderBook);
         actions.put(Action.SEARCH_SUBSCRIBERS, ClientMessageHandler::searchSubscribers);
+        actions.put(Action.RETURN_BOOK, ClientMessageHandler::returnBook);
         actions.put(Action.MARK_BOOK_COPY_AS_LOST, ClientMessageHandler::markBookCopyAsLost);
         actions.put(Action.EXTEND_BORROW_TIME , ClientMessageHandler :: extendBorrowTime);
         actions.put(Action.RETRIEVE_NOTIFICATIONS, ClientMessageHandler :: retrieveNotifications);
@@ -83,7 +84,7 @@ public class ClientMessageHandler {
             bookCopy.setOrderSubscriberId(-1);
             return msg.reply(bookCopy);
         } else {
-            bookCopy.setCopyId(foundCopy.getCopyId());
+            bookCopy.setCopyId(foundCopy.getId());
             bookCopy.setReturnDate(foundCopy.getReturnDate());
             if (BookControl.orderBook(bookCopy)) {
                 return msg.reply(bookCopy);
@@ -118,13 +119,13 @@ public class ClientMessageHandler {
                     bookCopy.setBorrowSubscriberId(-1);
                     return msg.reply(bookCopy);
                 }
-                bookCopy.setCopyId(foundCopy.getCopyId());
+                bookCopy.setCopyId(foundCopy.getId());
                 bookCopy.setReturnDate(foundCopy.getReturnDate());
                 return msg.reply(bookCopy);
             }
-            bookCopy.setCopyId(foundCopy.getCopyId());
+            bookCopy.setCopyId(foundCopy.getId());
             if (BookControl.lendBookToSubscriber(bookCopy)) {
-                bookCopy.setCopyId(foundCopy.getCopyId());
+                bookCopy.setCopyId(foundCopy.getId());
                 return msg.reply(bookCopy);
             } else {
                 return msg.errorReply("Failed to lend book!");
@@ -221,6 +222,11 @@ public class ClientMessageHandler {
         return msg.reply(BookControl.searchBooks(searchInfo[0], searchInfo[1]));
     }
 
+    public static Message returnBook(Message msg, ConnectionToClient client) {
+          int bookCopyId = (Integer)msg.getObject();
+          BookControl.returnBook(bookCopyId);
+          return msg.reply("Success");
+    }
     public static Message searchSubscribers(Message msg, ConnectionToClient client) {
         String[] searchInfo = (String[])msg.getObject();
         return msg.reply(SubscriberControl.searchSubscribers(searchInfo[0], searchInfo[1]));

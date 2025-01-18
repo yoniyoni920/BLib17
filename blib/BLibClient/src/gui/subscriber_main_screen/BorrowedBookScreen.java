@@ -85,6 +85,7 @@ public class BorrowedBookScreen extends AbstractScreen {
         borrowDate.setText(copy.getLendDate().toString());
         returnDate.setText(copy.getReturnDate().toString());
         copyId.setText(copy.getCopyId() + "");
+
         
         int daysBetween = (int) ChronoUnit.DAYS.between(LocalDate.now(), copy.getReturnDate());
         if (daysBetween < 0) {

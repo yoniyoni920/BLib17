@@ -65,7 +65,7 @@ public class BookControl {
 					book.setLocationOrDate(locationOrDate);
 					books.add(book);
 				}
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -123,7 +123,7 @@ public static BookCopy checkBookLendable(int bookId) {
             stt.setDate(1, Date.valueOf(bookCopy.getLendDate()));
             stt.setDate(2, Date.valueOf(bookCopy.getReturnDate()));
             stt.setInt(3, bookCopy.getBorrowSubscriberId());
-            stt.setInt(4, bookCopy.getCopyId());
+            stt.setInt(4, bookCopy.getId());
             stt.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -221,7 +221,7 @@ public static BookCopy checkBookLendable(int bookId) {
         try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
                 "UPDATE book_copy SET order_subscriber_id = ? WHERE id = ?")) {
             stt.setInt(1, bookCopy.getOrderSubscriberId());
-            stt.setInt(2, bookCopy.getCopyId());
+            stt.setInt(2, bookCopy.getId());
             stt.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -281,6 +281,18 @@ public static BookCopy checkBookLendable(int bookId) {
 		}
 	}
 
+  public static void returnBook(int bookCopyId) {
+		String query = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
+		try(PreparedStatement preparedStatemen = DBControl.getConnection().prepareStatement(query)){
+			preparedStatemen.setNull(1, Types.INTEGER);
+			preparedStatemen.setNull(2, java.sql.Types.DATE);
+			preparedStatemen.setNull(3, java.sql.Types.DATE);
+			preparedStatemen.setInt(4, bookCopyId);
+			preparedStatemen.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+  }
 	/**
 	 * Marks a book as lost. This also automatically freezes the subscriber and makes a history point about that
 	 * @param bookCopyId
@@ -311,19 +323,19 @@ public static BookCopy checkBookLendable(int bookId) {
 	}
 
 	public static boolean extendBorrowTime(BookCopy copy) {
-		int changed = 0 ;
-		try {
-			PreparedStatement stmt = DBControl.getConnection().prepareStatement("UPDATE book_copy SET return_date = ? WHERE id = ?");
-			stmt.setString(1,copy.getReturnDate().toString());
-			stmt.setString(2, copy.getCopyId()+"");
-			changed = stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false ;
-		}
-		if(changed == 1)
-			return true ;
-		else
-			return false ;
-	}
+      int changed = 0 ;
+      try {
+        PreparedStatement stmt = DBControl.getConnection().prepareStatement("UPDATE book_copy SET return_date = ? WHERE id = ?");
+        stmt.setString(1,copy.getReturnDate().toString());
+        stmt.setString(2, copy.getId()+"");
+        changed = stmt.executeUpdate();
+      } catch (SQLException e) {
+        e.printStackTrace();
+        return false ;
+      }
+      if(changed == 1)
+        return true ;
+      else
+        return false ;
+  }
 }

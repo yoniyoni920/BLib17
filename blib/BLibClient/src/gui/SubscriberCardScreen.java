@@ -16,7 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import services.ClientUtils;
-
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -127,7 +126,16 @@ public class SubscriberCardScreen extends AbstractScreen {
 	}
 
 	private void onReturnBookPressed(BookCopy bookCopy) {
-		//TODO: implement returning books
+		int bookCopyId = bookCopy.getId();
+		ClientUtils.sendMessage(new Message(Action.RETURN_BOOK, bookCopyId));
+		List<BookCopy> copies = subscriber.getBorrowedBooks();
+		copies.remove(bookCopy);
+		borrowedBooks.setItems(borrowedBooksObservableList);
+		borrowedBooks.refresh();
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Returned Book Successfully");
+		alert.setHeaderText("The book returned successfully");
+		alert.showAndWait();
 	}
 
 	private void onChangeDurationBookPressed(BookCopy bookCopy) throws IOException {
@@ -148,7 +156,7 @@ public class SubscriberCardScreen extends AbstractScreen {
 		alert.showAndWait();
 
 		if (alert.getResult() == ButtonType.OK) {
-			Message msg = ClientUtils.sendMessage(Action.MARK_BOOK_COPY_AS_LOST, bookCopy.getCopyId());
+			Message msg = ClientUtils.sendMessage(Action.MARK_BOOK_COPY_AS_LOST, bookCopy.getId());
 			if (msg.getObject().equals(true)) {
 				Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
 				successAlert.setTitle("Mark Book as Lost");

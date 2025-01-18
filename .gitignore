@@ -54,3 +54,4 @@ prototype/build
 /blib/.idea/dataSources.xml
 blib/BLibClient/bin
 blib/BLibClient/bin
+/blib/.idea/runConfigurations

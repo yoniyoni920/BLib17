@@ -246,32 +246,6 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES (1,'Daniel','Student','123','subscriber'),(2,'Safranit','Lol','321','librarian'),(3,'yeled','haha','852','subscriber'),(4,'bery','hi','963','subscriber'),(5,'moti','lochim','258','subscriber'),(6,'Elias','Yes','elias','subscriber'),(7,'Helal','Hammoud','123','subscriber');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
-
-DROP TABLE IF EXISTS `notification`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-
-CREATE TABLE `notification` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `subscriber_id` int NOT NULL,
-  `subscriber_name` varchar(100) NOT NULL,
-  `message` varchar(150) DEFAULT NULL,
-  `date` date DEFAULT NULL,
-  `isNew` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `book`
---
-
-LOCK TABLES `notification` WRITE;
-/*!40000 ALTER TABLE `book` DISABLE KEYS */;
-/*!40000 ALTER TABLE `book` ENABLE KEYS */;
-UNLOCK TABLES;
-
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

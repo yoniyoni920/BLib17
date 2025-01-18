@@ -78,10 +78,16 @@ public class NotificationControl {
      * @return true if the status update was successful for all notifications, false otherwise
      */
     public static boolean updateNotificationStatus(List<Notification> notifications) {
-        Statement stmt = null;
+        Statement stmt;
+		try {
+			stmt = DBControl.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false ;
+		}
         for (Notification notification : notifications) {
             try {
-                stmt = DBControl.createStatement();
                 String query = "UPDATE notification SET isNew = 0 WHERE id = " + notification.getNotificationId();
                 stmt.addBatch(query);
             } catch (SQLException e) {

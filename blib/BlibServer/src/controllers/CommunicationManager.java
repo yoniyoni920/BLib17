@@ -68,6 +68,8 @@ public class CommunicationManager {
 	 * password: Aa123456
 	 * the functionality works by sending a post request to the phone with basic authorization
 	 * and phone, message params in the format of json in the body
+	 * @param phone Recipient phone number
+	 * @param message Message to send throw sms
 	 */
 	public static void sendSMS(String phone, String message) {
 		String userCredentials = "root:Aa123456";
@@ -94,7 +96,8 @@ public class CommunicationManager {
 			//get output data and print if error
 			if(http.getResponseCode() != 200) {
 				String result;
-				BufferedInputStream bis = new BufferedInputStream(http.getInputStream());
+				BufferedInputStream bis = 100 <= http.getResponseCode() && http.getResponseCode() <= 399?new BufferedInputStream(http.getInputStream()):
+						new BufferedInputStream(http.getErrorStream());
 				ByteArrayOutputStream buf = new ByteArrayOutputStream();
 				int result2 = bis.read();
 				while (result2 != -1) {

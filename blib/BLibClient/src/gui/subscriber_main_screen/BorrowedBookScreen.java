@@ -167,6 +167,7 @@ public class BorrowedBookScreen extends AbstractScreen {
         Message msgFromServer = ClientUtils.sendMessage(new Message(Action.SAVE_NOTIFICATION, notification));
 
         return !msgFromServer.isError();
+    }
 
     /**
      * Closes the current screen and returns to the previous screen.

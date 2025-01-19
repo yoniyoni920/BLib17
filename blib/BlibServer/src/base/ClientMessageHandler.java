@@ -243,16 +243,26 @@ public class ClientMessageHandler {
     
     public static Message saveNotification(Message msg, ConnectionToClient client) {
     	boolean successfullySaved = NotificationControl.saveNotification((Notification)msg.getObject());
+    	if(!successfullySaved) {
+    		msg.setError(true);
+    	}
     	return msg.reply(successfullySaved);
     }
     
     public static Message updateNotificationStatus(Message msg, ConnectionToClient client) {
-    	boolean successfullyUpdated = NotificationControl.updateNotificationStatus((List<Notification>)msg.getObject());
-    	return msg.reply(successfullyUpdated);
+		@SuppressWarnings("unchecked")
+		boolean successfullyUpdated = NotificationControl.updateNotificationStatus((List<Notification>)msg.getObject());
+    	if(!successfullyUpdated) {
+    		msg.setError(true);
+    	}
+		return msg.reply(successfullyUpdated);
     }
     
     public static Message retrieveNotifications(Message msg, ConnectionToClient client) {
     	List<Notification> notifications = NotificationControl.retrieveNotifications();
+    	if(notifications == null) {
+    		msg.setError(true);
+    	}
     	return msg.reply(notifications);
     }
     

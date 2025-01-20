@@ -7,15 +7,22 @@ import entities.Message;
 import entities.Subscriber;
 import entities.User;
 /*
- * The class handles login logic. 
+ * The class handles user registration logic.
  * 
+ * It registers a new user by inserting data into the `user` and `subscriber` tables in the database.
  */
 public class RegisterUser {
 
-	/*
-	 * Login to the Database checks
-	 * for the user and starts the session.
-	 */
+	  /**
+     * Registers a new user in the system by inserting data into both the `user` and `subscriber` tables.
+     * 
+     * @param FirstName the first name of the user
+     * @param LastName the last name of the user
+     * @param Password the password of the user
+     * @param PhoneNumber the phone number of the subscriber
+     * @param Email the email of the subscriber
+     * @return a Message object containing the result of the registration, including the user object if successful
+     */
 	public static Message registerAction(String FirstName, String LastName, String Password, String PhoneNumber, String Email) {
 	    Connection connection = null;
 	    
@@ -64,7 +71,7 @@ public class RegisterUser {
 	                throw new SQLException("Failed to insert into subscriber table, no rows affected.");
 	            }
 	        }
-	        // Commit transaction
+	        // Commit the transaction if both inserts were successful
 	        connection.commit();
 
 	        // Return a new User object (assuming you have a User class)

@@ -12,7 +12,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 import services.ClientUtils;
-
+/**
+ * This class manages the screen for extending the borrow time of a book copy.
+ * It provides functionalities to:
+ * - Display book details and welcome text
+ * - Validate user input for the number of extension days
+ * - Extend the borrow time for a book copy
+ * - Navigate back to the previous screen upon successful extension
+ */
 public class ExtendBorrowTimeScreen extends AbstractScreen{
 	
 	@FXML
@@ -25,7 +32,12 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 	private TextField daysExtension ;
 	
 	private BookCopy copy ;
-	
+
+    /**
+     * Initializes the screen with the provided book copy details.
+     *
+     * @param copy the book copy whose borrow time is to be extended
+     */
 	public void onStart(BookCopy copy) {
 		loadData(copy);
 		renderData(); 
@@ -34,17 +46,39 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 	private void loadData(BookCopy copy) {
 		this.copy = copy;
 	}
-	
+	/**
+     * Loads the book copy data into the screen's state.
+     *
+     * @param copy the book copy whose data is to be loaded
+     */
+//    private void loadData(BookCopy copy) {
+//        this.copy = copy;
+//    }
+
+    /**
+     * Renders the loaded book copy data onto the screen.
+     * Also triggers a fade-in transition for the welcome message.
+     */
 	private void renderData() {
 		fadeInLabelTransition(welcomeText);
 		bookNameLabel.setText(copy.getBook().getTitle());
 	}
-	
+	 /**
+     * Closes the current window and navigates back to the BorrowedBookScreen.
+     * Updates the previous screen with the latest book copy details.
+     *
+     * @param event the ActionEvent triggered by the close button
+     * @throws Exception if an error occurs during screen transition
+     */
 	public void closeWindow(ActionEvent event) throws Exception {
 		BorrowedBookScreen prevScreen = (BorrowedBookScreen) screenManager.closeScreen();
         prevScreen.onStart(copy);
     }
-	
+    /**
+     * Triggers a fade-in animation for the specified label.
+     *
+     * @param label the label to apply the fade-in animation to
+     */
 	private void fadeInLabelTransition(Label welcomeText) {
         welcomeText.setOpacity(0.0); // Start with the text invisible
 
@@ -55,7 +89,12 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
         fadeIn.setCycleCount(1);
         fadeIn.play();
     }
-	
+    /**
+     * Handles the extension of borrow time for the current book copy.
+     * Validates the input, updates the return date, and sends the extension request to the server.
+     *
+     * @param event the ActionEvent triggered by the extend button
+     */
 	public void extendBorrowTime(ActionEvent event) {
 		boolean succesfullyChanged = false ;
 		int days = returnAndCheckDaysInput();
@@ -72,7 +111,13 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 			}
 		}
 	}
-	
+	   /**
+     * Validates the user input for the number of extension days.
+     * Ensures that the input is a valid integer and within the allowed range.
+     * Displays error messages for invalid inputs.
+     *
+     * @return the number of days entered by the user, or 0 for invalid input
+     */
 	private int returnAndCheckDaysInput() {
 		int days = 0;
 		try {

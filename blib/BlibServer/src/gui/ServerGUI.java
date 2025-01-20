@@ -22,20 +22,23 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import ocsf.server.ConnectionToClient;
 /*
- * 
+ * This class represents the GUI for managing server connections.
+ * It listens for incoming client connections and displays their status in a table.
  */
 public class ServerGUI extends AbstractScreen implements Initializable {
+	// Inner class representing a connection to be shown in the table
 	public class TableConnection {
 		public InetAddress address;
 		public boolean connected = false;
-		
+		// Constructor to initialize the connection with a specific address
 		public TableConnection(InetAddress address) {
 			this.address = address;
 		}
-
+		// Returns the status of the connection ("Connected" or "Disconnected")
 		public String getStatus() {
 			return connected ? "Connected" : "Disconnected";
 		}
+		// Override equals to compare connections based on IP address and hostname
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -60,8 +63,12 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 	private ObservableList<TableConnection> shownConnections;
 	
 	/**
-	 * This receives connections from the ServerApplication and updates the connections list
-	 * @param connections
+	 * Updates the connections table with new connections from the server.
+	 * 
+	 * This method is called to refresh the connection status by comparing the active connections
+	 * with the ones already shown in the table.
+	 * 
+	 * @param connections Array of threads representing the active connections
 	 */
 	public void updateConnections(Thread[] connections) {		
 		for (Thread connectionThread : connections) {
@@ -73,7 +80,7 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 				}
 			}
 		}
-		
+		// Update the connection status for each displayed connection
 		for (TableConnection tableConnection : shownConnections) {
 			tableConnection.connected = false;
 			for (Thread connectionThread : connections) {
@@ -92,6 +99,10 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 		connectionTable.refresh();
 	}
 
+	/**
+	 * Initializes the GUI, setting up the table and columns.
+	 * This method is called when the FXML file is loaded.
+	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		shownConnections = FXCollections.observableArrayList();

@@ -28,29 +28,43 @@ public class LibrarianMainScreen extends AbstractScreen {
 	@FXML private TextField searchSubscribers;
 	@FXML private ContextMenu searchSubscribersContextMenu;
 	@FXML private Button notificationButton;
-	
+
+    /**
+     * This method navigates to the "Register Subscriber" screen 
+     * and initializes it with the librarian's name.
+     *
+     * @param event The ActionEvent triggered by the UI.
+     * @throws Exception If there is an error opening the screen.
+     */
 	public void RegisterSubscriber(ActionEvent event) throws Exception {
 		RegisterViaLibrerianScreen librarianRegister = (RegisterViaLibrerianScreen)screenManager
 				.openScreen("librarian/RegisterViaLibrerianScreen", "Register Screen");
 		librarianRegister.startUp(user.getName());
 	}
+	   /**
+     * This method sets up the main screen with a welcome message 
+     * that includes the librarian's name.
+     *
+     * @param name The name of the librarian.
+     * @throws Exception If there is an error initializing the screen.
+     */
 	public void startUp(String name) throws Exception {
 		nameTxt.setText("Welcome, " + name);
 	}
+    /**
+     * This method navigates to the "Lend Book" screen.
+     *
+     * @throws IOException If there is an error opening the screen.
+     */
 	public void lendBook() throws IOException {
 		screenManager.openScreen("librarian/LendBookScreen", "Reports");
 	}
 
-	public void getMemberStatus() {
-		// TODO - implement LibrarianMainScreen.getMemberStatus
-		throw new UnsupportedOperationException();
-	}
-
-	public void returnBook() {
-		// TODO - implement LibrarianMainScreen.returnBook
-		throw new UnsupportedOperationException();
-	}
-
+    /**
+     * This method sets the logged-in user's details for the User.
+     *
+     * @param user The logged-in user object.
+     */
 	public void loadUser(User user) {
 		this.user = user;
 	}
@@ -61,11 +75,22 @@ public class LibrarianMainScreen extends AbstractScreen {
 	public void closeWindow(ActionEvent event) throws Exception {
 		screenManager.closeScreen();
 	}
-
+    /**
+     * This method navigates to the "Report Screen".
+     *
+     * @param event The ActionEvent triggered by the UI.
+     * @throws IOException If there is an error opening the screen.
+     */
     public void openReportScreen(ActionEvent event) throws IOException {
 		screenManager.openScreen("librarian/ReportScreen", "Reports");
     }
-
+    /**
+     * This method searches for subscribers based on the input in the search field.
+     * It sends the search query to the server and populates the context menu with results.
+     *
+     * @param event The KeyEvent triggered by the user's input.
+     * @throws Exception If there is an error processing the search query.
+     */
 	public void searchSubscribers(KeyEvent event) throws Exception {
 		String search = searchSubscribers.getText();
 
@@ -90,7 +115,13 @@ public class LibrarianMainScreen extends AbstractScreen {
 			}
 		}
 	}
-
+    /**
+     * This method handles the selection of a subscriber from the context menu.
+     * It opens the SubscriberCardScreen and displays the selected subscriber's details.
+     *
+     * @param event The ActionEvent triggered by selecting a menu item.
+     * @throws IOException If there is an error opening the subscriber card screen.
+     */
 	public void onChoseSubscriber(ActionEvent event) throws IOException {
 		SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("SubscriberCardScreen", "Subscriber Card Screen");
 

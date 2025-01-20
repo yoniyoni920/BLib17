@@ -7,15 +7,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This Class is the message handles between server and Client
+ * extends AbstractClient class to facilitate server interaction.
+ */
 public class LibraryClient extends AbstractClient
 {
-	
-	/**
-	 * This Class is the message handles between server and Client
-	 */
 	public static List<Message> awaitingMessages;
 
-	
 	/**
 	 * Constructs an instance of the LibraryClient.
 	 *
@@ -51,15 +50,16 @@ public class LibraryClient extends AbstractClient
 	}
 
 	/**
-	 * This method handles all data coming from the UI            
+	 * This method handles all data coming from the UI   
+	 * and Sends a message to the server & waits for a response.         
 	 *
 	 * @param msgToServer The message from the UI.
 	 */
 	public Message sendMessageToServer(Message msgToServer) {
 		try {
-			msgToServer.setAwaiting(true);
-			awaitingMessages.add(msgToServer);
-			sendToServer(msgToServer);
+			msgToServer.setAwaiting(true); // Mark the message as awaiting response
+			awaitingMessages.add(msgToServer);// Add the message to the awaiting list
+			sendToServer(msgToServer);// Send the message to the server
 
 			int timePassed = 0;
 			/*
@@ -81,9 +81,9 @@ public class LibraryClient extends AbstractClient
 				}
 			}
 
-			return msgToServer;
+			return msgToServer;// Return the server's response
 		}
-		catch(IOException e) {
+		catch(IOException e) {// Terminate the application in case of an error
 			e.printStackTrace();
 			System.exit(1);
 			return null; // This will never happen

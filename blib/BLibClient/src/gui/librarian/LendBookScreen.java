@@ -88,10 +88,6 @@ public class LendBookScreen extends AbstractScreen {
         });
     }
 
-    public void searchBooskByName() {
-        // TODO - implement LendBookScreen.searchBooskByName
-        throw new UnsupportedOperationException();
-    }
     // Activates the book scanner to fetch the book ID
     public void activateScanner() {
         Thread thread = new Thread(() -> {

@@ -193,12 +193,6 @@ public class SubscriberCardScreen extends AbstractScreen {
 		}
 	}
 
-
-	public void updateBookCopyReturnDate() {
-		// TODO - implement SubscriberCardScreen.updateBookCopyReturnDate
-		throw new UnsupportedOperationException();
-	}
-
 	/**
 	 * Performs a fade-in animation on the welcome label.
 	 * This method animates the opacity of the welcome text from 0 (invisible) to 1 (fully visible).

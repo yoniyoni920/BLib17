@@ -59,20 +59,7 @@ public class LibrarianMainScreen extends AbstractScreen {
 	public void lendBook() throws IOException {
 		screenManager.openScreen("librarian/LendBookScreen", "Reports");
 	}
-    /**
-     * This method is a placeholder for getting member status functionality.
-     */
-	public void getMemberStatus() {
-		// TODO - implement LibrarianMainScreen.getMemberStatus
-		throw new UnsupportedOperationException();
-	}
-	  /**
-     * This method is a placeholder for returning books functionality.
-     */
-	public void returnBook() {
-		// TODO - implement LibrarianMainScreen.returnBook
-		throw new UnsupportedOperationException();
-	}
+
     /**
      * This method sets the logged-in user's details for the User.
      *

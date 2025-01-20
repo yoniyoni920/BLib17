@@ -7,16 +7,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This Class is the message handles between server and Client
+ * extends AbstractClient class to facilitate server interaction.
+ */
 public class LibraryClient extends AbstractClient
 {
-	
-	/**
-	 * This Class is the message handles between server and Client
-	 * extends AbstractClient class to facilitate server interaction.
-	 */
 	public static List<Message> awaitingMessages;
 
-	
 	/**
 	 * Constructs an instance of the LibraryClient.
 	 *

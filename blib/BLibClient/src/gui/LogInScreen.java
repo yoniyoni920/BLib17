@@ -19,8 +19,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import services.ClientUtils;
 
-/*
- * controller for LogInScreen.fxml
+/**
+ * Controller for the LogInScreen.fxml file.
+ * Handles user login functionality and navigation to the appropriate main screen based on the user's role.
  */
 public class LogInScreen extends AbstractScreen {	
 	@FXML
@@ -42,11 +43,13 @@ public class LogInScreen extends AbstractScreen {
 	private Label passErrorLabel;
 	
 
-	/*
-	 * gets the info from fields and sends it
-	 * to be Checked by the system and move to the 
-	 * main Screen after being logged in
-	 */
+    /**
+     * Handles the login process by sending user credentials to the server for validation.
+     * Displays error messages if fields are empty or if login fails.
+     * 
+     * @param event the ActionEvent triggered by the login button
+     * @throws Exception if an error occurs during the login process
+     */
 	@SuppressWarnings("unchecked")
 	public void Login(ActionEvent event) throws Exception {
 		String id = idtxt.getText();
@@ -93,6 +96,13 @@ public class LogInScreen extends AbstractScreen {
 			}
 		}
 	}
+	
+    /**
+     * Navigates to the SearchBooksScreen.
+     * 
+     * @param event the ActionEvent triggered by the search books button
+     * @throws Exception if an error occurs during navigation
+     */
 	public void searchBooksScreen(ActionEvent event) throws Exception{
 		screenManager.openScreen("SearchBooksScreen", "Search Book");
 	}

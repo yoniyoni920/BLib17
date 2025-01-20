@@ -23,9 +23,11 @@ public class NotificationControl {
     public static List<Notification> retrieveNotifications() {
         List<Notification> notifications = new ArrayList<>();
         ResultSet rs;
+        
+        //retrieving notifications from the DB
         try {
             Statement stmt = DBControl.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM notification");
+            rs = stmt.executeQuery("SELECT * FROM notification ORDER BY date DESC");
             while (rs.next()) {
                 Notification notification = new Notification(
                         rs.getInt("subscriber_id"),
@@ -38,9 +40,11 @@ public class NotificationControl {
                 notifications.add(notification);
             }
         } catch (SQLException e) {
+        	System.out.println("Couldn't retrieve the notifications from the DB");
             e.printStackTrace();
-            return notifications;
+            return null ;
         }
+        
         return notifications;
     }
 
@@ -53,7 +57,12 @@ public class NotificationControl {
     public static boolean saveNotification(Notification notification) {
         int rowsAffected;
         try {
-            PreparedStatement stmt = DBControl.prepareStatement("INSERT INTO notification (subscriber_id, subscriber_name , message, date, isNew) VALUES (?,?,?,?,?)");
+        	
+        	//preparing a statement
+        	String sqlQuery = "INSERT INTO notification (subscriber_id, subscriber_name , message, date, isNew) VALUES (?,?,?,?,?)";
+            PreparedStatement stmt = DBControl.prepareStatement(sqlQuery);
+            
+            //inserting the variables in the query
             stmt.setString(1, notification.getSubscriberId() + "");
             stmt.setString(2, notification.getSubscriberName());
             stmt.setString(3, notification.getMessage());
@@ -63,11 +72,17 @@ public class NotificationControl {
             else
                 stmt.setString(5, 0 + "");
 
+            //executing the query
             rowsAffected = stmt.executeUpdate();
+            
+            
         } catch (SQLException e) {
+			System.out.println("Couldn't save notification in the DB : NotificationControl.saveNotification()");
             e.printStackTrace();
             return false;
         }
+        
+        
         return rowsAffected > 0;
     }
 
@@ -78,20 +93,34 @@ public class NotificationControl {
      * @return true if the status update was successful for all notifications, false otherwise
      */
     public static boolean updateNotificationStatus(List<Notification> notifications) {
-        Statement stmt = null;
+    	
+    	//creating statement
+        Statement stmt;
+		try {
+			stmt = DBControl.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Couldn't create a statement in : NotificationControl.updateNotificationStatus()");
+			e.printStackTrace();
+			return false ;
+		}
+		
+		//creating a batch update
         for (Notification notification : notifications) {
             try {
-                stmt = DBControl.createStatement();
                 String query = "UPDATE notification SET isNew = 0 WHERE id = " + notification.getNotificationId();
                 stmt.addBatch(query);
             } catch (SQLException e) {
+    			System.out.println("Error in creating the batch update in : NotificationControl.updateNotificationStatus()");
                 e.printStackTrace();
                 return false;
             }
         }
+        
+        //executing the batch
         try {
             stmt.executeBatch();
         } catch (SQLException e) {
+			System.out.println("Error in executing the batch update in : NotificationControl.updateNotificationStatus()");
             e.printStackTrace();
             return false;
         }

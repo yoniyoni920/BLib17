@@ -2,7 +2,6 @@ package controllers;
 
 import entities.BookCopy;
 import entities.BorrowReport;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.sql.PreparedStatement;
@@ -15,12 +14,21 @@ import java.util.List;
 import java.util.Map;
 
 import entities.Book;
-
+/**
+ * The BookControl class provides various methods for managing books and their copies,
+ * including search, lending, ordering, marking as lost, and generating reports.
+ */
 public class BookControl {
-
+    /**
+     * Searches for books based on the specified search term and search type.
+     *
+     * @param search The search term.
+     * @param searchType The type of search (e.g., "title", "genre", "description").
+     * @return A list of books matching the search criteria.
+     */
     public static List<Book> searchBooks(String search, String searchType) {
         List<Book> books = new ArrayList<>();
-        if (searchType.equals("title") || searchType.equals("genre") || searchType.equals("description")) {
+        if(searchType.equals("title") || searchType.equals("genre") || searchType.equals("description")) {
             String query = "SELECT * FROM book WHERE " + searchType + " LIKE ?";
 
             // Query tries to find at lesat one copy that isn't borrowed or ordered.
@@ -33,7 +41,7 @@ public class BookControl {
                     "ORDER BY ABS(DATEDIFF(return_date, CURDATE())) ASC LIMIT 1";
 
             try (PreparedStatement ps = DBControl.prepareStatement(query)) {
-                ps.setString(1, "%" + search + "%");
+                ps.setString(1, "%"+search+"%");
                 ResultSet bookResult = ps.executeQuery();
 
                 while (bookResult.next()) {
@@ -46,18 +54,18 @@ public class BookControl {
                     String location = bookResult.getString("location");
 
                     String locationOrDate;
-                    try (PreparedStatement ps2 = DBControl.prepareStatement(queryAvailable)) {
+                    try(PreparedStatement ps2 = DBControl.prepareStatement(queryAvailable)){
                         ps2.setInt(1, id);
                         if (ps2.executeQuery().next())
-                            locationOrDate = "Shelf " + location;
+                            locationOrDate = "Shelf "+location;
                         else {
-                            try (PreparedStatement ps3 = DBControl.prepareStatement(queryOrderable)) {
+                            try(PreparedStatement ps3 = DBControl.prepareStatement(queryOrderable)){
                                 ps3.setInt(1, id);
                                 ResultSet orderResult = ps3.executeQuery();
-                                if (orderResult.next()) {
+                                if(orderResult.next()) {
                                     LocalDate originalDate = orderResult.getDate("return_date").toLocalDate();
                                     locationOrDate = originalDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                                    locationOrDate = "Available By: " + locationOrDate;
+                                    locationOrDate = "Available By: "+locationOrDate;
                                 } else {
                                     locationOrDate = "Unavailable";
                                 }
@@ -75,7 +83,12 @@ public class BookControl {
         }
         return books;
     }
-
+    /**
+     * Checks if a book copy is lendable based on its availability and return date.
+     *
+     * @param bookId The ID of the book to check.
+     * @return A lendable BookCopy, or null if none are available.
+     */
     public static BookCopy checkBookLendable(int bookId) {
         try (PreparedStatement stt = DBControl.getInstance().selectQuery("book_copy", "book_id", bookId)) {
             ResultSet rs = stt.executeQuery();
@@ -86,8 +99,8 @@ public class BookControl {
                 if (orderSubscriberId == 0 && (returnDate == null || returnDate.toLocalDate().isBefore(LocalDate.now()))) {
                     Date lendDate = rs.getDate("lend_date");
                     int borrowerId = rs.getInt("borrow_subscriber_id");
-                    return new BookCopy(copyId, bookId, lendDate == null ? null : lendDate.toLocalDate(),
-                            returnDate == null ? null : returnDate.toLocalDate(), borrowerId, orderSubscriberId);
+                    return new BookCopy(copyId, bookId, lendDate == null?null:lendDate.toLocalDate(),
+                            returnDate == null? null:returnDate.toLocalDate(), borrowerId, orderSubscriberId);
                 }
             }
         } catch (Exception e) {
@@ -96,7 +109,12 @@ public class BookControl {
         return null;
     }
 
-
+    /**
+     * Checks if a book is orderable and retrieves the earliest available copy.
+     *
+     * @param bookId The ID of the book to check.
+     * @return An orderable BookCopy, or null if none are available.
+     */
     public static BookCopy checkBookOrderable(int bookId) {
         try (PreparedStatement stt = DBControl.getInstance().selectQuery("book_copy", "book_id", bookId)) {
             ResultSet rs = stt.executeQuery();
@@ -106,11 +124,11 @@ public class BookControl {
                 Date returnDate = rs.getDate("return_date");
                 int orderSubscriberId = rs.getInt("order_subscriber_id");
                 if (orderSubscriberId == 0) {
-                    if (earliestCopy == null || returnDate.toLocalDate().isBefore(earliestCopy.getReturnDate())) {
+                    if (earliestCopy == null ||  returnDate.toLocalDate().isBefore(earliestCopy.getReturnDate())) {
                         Date lendDate = rs.getDate("lend_date");
                         int borrowerSubscriberId = rs.getInt("borrow_subscriber_id");
-                        earliestCopy = new BookCopy(copyId, bookId, lendDate == null ? null : lendDate.toLocalDate(),
-                                returnDate == null ? null : returnDate.toLocalDate(), borrowerSubscriberId, orderSubscriberId);
+                        earliestCopy = new BookCopy(copyId, bookId, lendDate == null?null:lendDate.toLocalDate(),
+                                returnDate == null ? null : returnDate.toLocalDate(),borrowerSubscriberId, orderSubscriberId );
                     }
                 }
             }
@@ -121,6 +139,12 @@ public class BookControl {
         return null;
     }
 
+    /**
+     * Lends a book to a subscriber by updating its database record.
+     *
+     * @param bookCopy The BookCopy to lend.
+     * @return True if the operation was successful, false otherwise.
+     */
     public static boolean lendBookToSubscriber(BookCopy bookCopy) {
         try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
                 "UPDATE book_copy SET lend_date = ?, return_date = ?, borrow_subscriber_id = ? WHERE id = ?")) {
@@ -135,7 +159,12 @@ public class BookControl {
         }
         return false;
     }
-
+    /**
+     * Searches for a book by its unique identifier (ID).
+     *
+     * @param bookId The ID of the book to search for.
+     * @return A Book object containing the details of the book, or null if not found.
+     */
     public static Book searchBookById(int bookId) {
         try (PreparedStatement stt = DBControl.getInstance().selectQuery("book", "id", bookId)) {
             ResultSet rs = stt.executeQuery();
@@ -236,7 +265,6 @@ public class BookControl {
 
     /**
      * Returns borrow times report for a specific book
-     *
      * @param bookId
      */
     public static List<BorrowReport> getBorrowTimesReport(LocalDate date, Integer bookId) {
@@ -280,27 +308,26 @@ public class BookControl {
             }
 
             return list;
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static void returnBook(int bookCopyId) {
         String query = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
-        try (PreparedStatement preparedStatemen = DBControl.getConnection().prepareStatement(query)) {
+        try(PreparedStatement preparedStatemen = DBControl.getConnection().prepareStatement(query)){
             preparedStatemen.setNull(1, Types.INTEGER);
             preparedStatemen.setNull(2, java.sql.Types.DATE);
             preparedStatemen.setNull(3, java.sql.Types.DATE);
             preparedStatemen.setInt(4, bookCopyId);
             preparedStatemen.executeUpdate();
-        } catch (SQLException e) {
+        }catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
     /**
      * Marks a book as lost. This also automatically freezes the subscriber and makes a history point about that
-     *
      * @param bookCopyId
      */
     public static boolean markBookCopyAsLost(int bookCopyId) {
@@ -329,20 +356,20 @@ public class BookControl {
     }
 
     public static boolean extendBorrowTime(BookCopy copy) {
-        int changed = 0;
+        int changed = 0 ;
         try {
             PreparedStatement stmt = DBControl.getConnection().prepareStatement("UPDATE book_copy SET return_date = ? WHERE id = ?");
-            stmt.setString(1, copy.getReturnDate().toString());
-            stmt.setString(2, copy.getId() + "");
+            stmt.setString(1,copy.getReturnDate().toString());
+            stmt.setString(2, copy.getId()+"");
             changed = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return false ;
         }
-        if (changed == 1)
-            return true;
+        if(changed == 1)
+            return true ;
         else
-            return false;
+            return false ;
     }
 
     /**
@@ -351,26 +378,25 @@ public class BookControl {
      */
     public static ArrayList<Map<String, Object>> getBooksForReturnReminder() {
         ArrayList<Map<String, Object>> records = new ArrayList<>();
-		  try {
-              PreparedStatement stmt = DBControl.getConnection().prepareStatement(
-                      "select book.title, subscriber.email, subscriber.phone_number, user.first_name, last_name" +
-                              " from (((book_copy join book on book_copy.book_id = book.id)" +
-                              " join subscriber on borrow_subscriber_id = subscriber.id)" +
-                              " join user on user_id = user.id) where return_date = ?");
-              stmt.setDate(1, Date.valueOf(LocalDate.now().plusDays(1)));
+        String query = "select book.title, subscriber.email, subscriber.phone_number, user.first_name, last_name" +
+                " from (((book_copy join book on book_copy.book_id = book.id)" +
+                " join subscriber on borrow_subscriber_id = subscriber.id)" +
+                " join user on user_id = user.id) where return_date = ?";
 
-              ResultSet rs = stmt.executeQuery();
-              while (rs.next()) {
-                  Map<String, Object> record = new HashMap<>();
-                  record.put("title", rs.getString("book.title"));
-                  record.put("email", rs.getString("subscriber.email"));
-                  record.put("phone_number", rs.getString("subscriber.phone_number"));
-                  record.put("name", rs.getString("user.first_name") + " " + rs.getString("user.last_name"));
-                  records.add(record);
-              }
-          } catch (SQLException e) {
-              e.printStackTrace();
-          }
-          return records;
+        try (PreparedStatement stmt = DBControl.prepareStatement(query)) {
+            stmt.setDate(1, Date.valueOf(LocalDate.now().plusDays(1)));
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Map<String, Object> record = new HashMap<>();
+                record.put("title", rs.getString("book.title"));
+                record.put("email", rs.getString("subscriber.email"));
+                record.put("phone_number", rs.getString("subscriber.phone_number"));
+                record.put("name", rs.getString("user.first_name") + " " + rs.getString("user.last_name"));
+                records.add(record);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return records;
     }
 }

@@ -22,10 +22,24 @@ public class ClientApplication extends Application {
 	private static ClientApplication clientApplication;
 	private LibraryClient libraryClient;
 
+	
+	 /**
+     * The main entry point of the client.
+     * 
+     * @param args command-line arguments
+     * @throws Exception if an error occurs during application launch
+     */
 	public static void main(String args[]) throws Exception { 
 	    launch(args);  
 	}
 	
+	
+	 
+	  /**
+     * Gets the ScreenManager instance.
+     * 
+     * @return the ScreenManager instance
+     */
 	public ScreenManager getScreenManager() {
 		return screenManager;
 	}
@@ -52,6 +66,15 @@ public class ClientApplication extends Application {
 		primaryStage.getIcons().add(new Image(getClass().getResource("/resources/icon.png").toExternalForm()));
 	}
 
+	
+	
+	 /**
+     * Creates and initializes the LibraryClient instance to connect to the server.
+     * 
+     * @param ip   the server's IP address
+     * @param port the server's port number
+     * @throws Exception if an error occurs during client creation
+     */
 	public void createClient(String ip, int port) throws Exception{
 		ClientApplication.chat = new ClientController();
 
@@ -71,6 +94,12 @@ public class ClientApplication extends Application {
 		screenManager.openScreen("LogInScreen", "Log In Screen");
 	}
 
+
+    /**
+     * Gets the singleton instance of ClientApplication.
+     * 
+     * @return the singleton ClientApplication instance
+     */
 	public static ClientApplication getInstance() {
 		return clientApplication;
 	}

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import base.Action;
+import entities.Message;
 import entities.Notification;
 import entities.Subscriber;
 import gui.AbstractScreen;
@@ -12,6 +13,7 @@ import gui.SubscriberCardScreen;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -60,7 +62,19 @@ public class NotificationsScreen extends AbstractScreen {
      */
     @SuppressWarnings("unchecked")
     private void loadData() {
-        List<Notification> list = (List<Notification>) ClientUtils.sendMessage(Action.RETRIEVE_NOTIFICATIONS, null).getObject();
+        Message msgFromServer = ClientUtils.sendMessage(Action.RETRIEVE_NOTIFICATIONS, null);
+        
+        // If couldn't retrieve the notifications
+        if (msgFromServer.isError()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Couldn't retrieve the notifications");
+            alert.showAndWait();
+            screenManager.closeScreen();
+            return;
+        }
+        
+        // If notifications were retrieved successfully
+        List<Notification> list = (List<Notification>) msgFromServer.getObject();
         allNotifications.getItems().addAll(list);
         for (Notification n : list) {
             if (n.getIsNew()) {
@@ -79,18 +93,27 @@ public class NotificationsScreen extends AbstractScreen {
      * </p>
      */
     private void prepareTableView() {
-        TableColumn<Notification, String> messageColumn = new TableColumn<>("Message");
-        messageColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
-        messageColumn.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
+        TableColumn<Notification, String> messageColumnAll = new TableColumn<>("Message");
+        messageColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
+        messageColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
+        
+        TableColumn<Notification, String> messageColumnNew = new TableColumn<>("Message");
+        messageColumnNew.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
+        messageColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
 
-        TableColumn<Notification, String> dateColumn = new TableColumn<>("Date");
-        dateColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
-        dateColumn.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
+        TableColumn<Notification, String> dateColumnAll = new TableColumn<>("Date");
+        dateColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
+        dateColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
+        
+        TableColumn<Notification, String> dateColumnNew = new TableColumn<>("Date");
+        dateColumnNew.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
+        dateColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
 
-        TableColumn<Notification, Button> subscriberCardColumn = getSubscriberCardColumn();
+        TableColumn<Notification, Button> subscriberCardColumnAll = getSubscriberCardColumn();
+        TableColumn<Notification, Button> subscriberCardColumnNew = getSubscriberCardColumn();
 
-        newNotifications.getColumns().addAll(subscriberCardColumn, messageColumn, dateColumn);
-        allNotifications.getColumns().addAll(subscriberCardColumn, messageColumn, dateColumn);
+        allNotifications.getColumns().addAll(subscriberCardColumnAll, messageColumnAll, dateColumnAll);
+        newNotifications.getColumns().addAll(subscriberCardColumnNew, messageColumnNew, dateColumnNew);
     }
 
     /**
@@ -154,6 +177,23 @@ public class NotificationsScreen extends AbstractScreen {
     }
 
     /**
+     * Updates the status of all new notifications to "seen" on the server.
+     * 
+     * <p>
+     * This method sends a request to the server to mark all new notifications as seen.
+     * </p>
+     */
+    private void updateMessagesStatus() {
+        if (!newNotifications.getItems().isEmpty()) {
+            List<Notification> notifications = new ArrayList<>(newNotifications.getItems());
+            Message msg = ClientUtils.sendMessage(Action.UPDATE_NOTIFICATION_STATUS, notifications);
+            if (msg.isError()) {
+                System.out.println("Error in updating the new messages status to seen");
+            }
+        }
+    }
+
+    /**
      * Closes the current screen and updates notification statuses.
      * 
      * <p>
@@ -165,10 +205,9 @@ public class NotificationsScreen extends AbstractScreen {
      * @param event The ActionEvent triggered by the user.
      */
     public void closeWindow(ActionEvent event) {
+        updateMessagesStatus();
+        newNotifications.getItems().clear();
+        allNotifications.getItems().clear();
         screenManager.closeScreen();
-        if (!newNotifications.getItems().isEmpty()) {
-            List<Notification> notifications = new ArrayList<>(newNotifications.getItems());
-            ClientUtils.sendMessage(Action.UPDATE_NOTIFICATION_STATUS, notifications);
-        }
     }
 }

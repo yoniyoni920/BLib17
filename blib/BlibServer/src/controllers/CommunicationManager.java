@@ -1,8 +1,6 @@
 package controllers;
 
 
-import sun.net.www.http.HttpClient;
-
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
@@ -30,12 +28,12 @@ public class CommunicationManager {
 			http.addRequestProperty("User-Agent", "Application");
 			http.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(http.getOutputStream());
-			OutputStreamWriter writer = new OutputStreamWriter(wr);
+			OutputStreamWriter writer = new OutputStreamWriter(wr, StandardCharsets.UTF_8);
 			writer.write("{" +
-					"\"from\":{\"email\":\"Blib@trial-0r83ql39nzmlzw1j.mlsender.net\",\"name\":\"" + senderName + "\"}," +
-					"\"to\":[{\"email\":\"" + to + "\"}]," +
-					"\"subject\":\"" + subject + "\"," +
-					"\"text\":\"" + body + "\"" +
+					"\"from\":{\"email\":\"Blib@trial-0r83ql39nzmlzw1j.mlsender.net\",\"name\":\"" + senderName.replace("\"", "'") + "\"}," +
+					"\"to\":[{\"email\":\"" + to.replace("\"", "'") + "\"}]," +
+					"\"subject\":\"" + subject.replace("\"", "'") + "\"," +
+					"\"html\":\"" + body.replace("\"", "'") + "\"" +
 					"}");
 			writer.flush();
 			writer.close();

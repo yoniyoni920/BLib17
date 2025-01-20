@@ -25,6 +25,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
+
+/**
+ * This class manages the report screen for librarians.
+ * It provides functionalities to display and interact with various reports such as:
+ * - Borrow times for books
+ * - Subscriber status over time
+ *
+ * The class includes methods to:
+ * - Initialize the screen with report dates and charts
+ * - Search and select books for detailed borrow time reports
+ * - Update charts based on selected dates and filters
+ * - Handle user interactions with the report screen
+ */
 public class ReportScreen extends AbstractScreen implements Initializable {
     @FXML
     private LineChart<Integer, Integer> subscriberStatusChart;
@@ -54,7 +67,13 @@ public class ReportScreen extends AbstractScreen implements Initializable {
     private Button clearFilter;
 
     boolean hasLoadedBorrowTImes = false;
-
+    /**
+     * Initializes the report screen.
+     * Loads available report dates, sets default selection, and initializes charts.
+     *
+     * @param location  the location used to resolve relative paths for the root object
+     * @param resources the resources used to localize the root object
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Message msg = ClientUtils.sendMessage(Action.GET_REPORT_DATES);
@@ -84,13 +103,23 @@ public class ReportScreen extends AbstractScreen implements Initializable {
             setSubscriberStatusData();
         }
     }
-
+    /**
+     * Clears the search filter for books and resets the chart.
+     *
+     * @param event the ActionEvent triggered by the clear filter button
+     */
     public void clearFilter(ActionEvent event) {
         setBook(null);
         clearFilter.setDisable(true);
         searchBook.setText("");
     }
-
+    /**
+     * Handles the selection of a book from the context menu.
+     * Updates the chart with the selected book's borrow times.
+     *
+     * @param event the ActionEvent triggered by the book selection
+     * @throws Exception if an error occurs during the process
+     */
     public void onChoseBook(ActionEvent event) throws Exception{
         MenuItem item = (MenuItem)event.getTarget();
         if (item != null) {
@@ -98,7 +127,12 @@ public class ReportScreen extends AbstractScreen implements Initializable {
             clearFilter.setDisable(false);
         }
     }
-
+    /**
+     * Searches for books based on user input and displays results in a context menu.
+     *
+     * @param event the KeyEvent triggered by typing in the search field
+     * @throws Exception if an error occurs during the search process
+     */
     public void searchBooks(KeyEvent event) throws Exception {
         String search = searchBook.getText();
 
@@ -124,6 +158,11 @@ public class ReportScreen extends AbstractScreen implements Initializable {
         }
     }
 
+    /**
+     * Updates the borrow times chart with data for the selected book and date.
+     *
+     * @param bookId the ID of the book to display borrow times for, or null for all books
+     */
     public void setBook(Integer bookId) {
         Message msg = ClientUtils.sendMessage(Action.GET_BORROW_TIMES_REPORT, new Object[] { reportDate.getValue(), bookId });
         borrowTimesChart.getData().clear();
@@ -171,7 +210,9 @@ public class ReportScreen extends AbstractScreen implements Initializable {
             }
         }
     }
-
+    /**
+     * Updates the subscriber status chart with data for the selected date.
+     */
     public void setSubscriberStatusData() {
         Message msg = ClientUtils.sendMessage(Action.GET_SUBSCRIBER_STATUS_REPORT, reportDate.getValue());
 
@@ -192,14 +233,24 @@ public class ReportScreen extends AbstractScreen implements Initializable {
             subscriberStatusChart.getData().add(frozen);
         }
     }
-
+    /**
+     * Handles tab selection changes.
+     * Loads borrow times data if the borrow times tab is selected for the first time.
+     *
+     * @param event the Event triggered by tab selection
+     */
     public void onSelectionChanged(Event event) {
         if (borrowTimesTab != null && borrowTimesTab.isSelected() && !hasLoadedBorrowTImes) {
             setBook(null);
             hasLoadedBorrowTImes = true;
         }
     }
-
+    /**
+     * Handles the selection of a report date.
+     * Updates the corresponding chart based on the selected tab and date.
+     *
+     * @param event the ActionEvent triggered by selecting a date
+     */
     public void onChoseDate(ActionEvent event) {
         if (borrowTimesTab.isSelected()) {
             setBook(null);

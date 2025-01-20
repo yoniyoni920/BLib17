@@ -59,7 +59,7 @@ public class LendBookScreen extends AbstractScreen {
             if (!t1 && aBoolean) userTextFieldChanged();
         });
     }
-
+    // Validate the entered book ID and fetch book details from the server
     public void bookTextFieldChanged() {
         ClientApplication.chat.sendToServer(new Message(Action.GET_BOOK_BY_ID, bookIdTextField.getText()), message -> {
             if (message.isError()) {
@@ -72,7 +72,7 @@ public class LendBookScreen extends AbstractScreen {
             }
         });
     }
-
+    // Validate the entered subscriber ID and fetch subscriber details from the server
     public void userTextFieldChanged() {
         ClientApplication.chat.sendToServer(new Message(Action.GET_SUBSCRIBER_BY_ID, subID.getText()), message -> {
             if (message.isError()) {
@@ -92,7 +92,7 @@ public class LendBookScreen extends AbstractScreen {
         // TODO - implement LendBookScreen.searchBooskByName
         throw new UnsupportedOperationException();
     }
-
+    // Activates the book scanner to fetch the book ID
     public void activateScanner() {
         Thread thread = new Thread(() -> {
             Platform.runLater(() -> {
@@ -108,7 +108,7 @@ public class LendBookScreen extends AbstractScreen {
         });
         thread.start();
     }
-
+    // Submit the lending process
     public void submitLend() {
         Integer sub = null, bookId = null;
         try {

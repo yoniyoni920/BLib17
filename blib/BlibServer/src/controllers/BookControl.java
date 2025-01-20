@@ -11,9 +11,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import entities.Book;
-
+/**
+ * The BookControl class provides various methods for managing books and their copies,
+ * including search, lending, ordering, marking as lost, and generating reports.
+ */
 public class BookControl {
-
+	/**
+     * Searches for books based on the specified search term and search type.
+     *
+     * @param search The search term.
+     * @param searchType The type of search (e.g., "title", "genre", "description").
+     * @return A list of books matching the search criteria.
+     */
 	public static List<Book> searchBooks(String search, String searchType) {
 		List<Book> books = new ArrayList<>();
 		if(searchType.equals("title") || searchType.equals("genre") || searchType.equals("description")) {
@@ -71,7 +80,12 @@ public class BookControl {
 		}
 	  return books;
 	}
-
+	/**
+     * Checks if a book copy is lendable based on its availability and return date.
+     *
+     * @param bookId The ID of the book to check.
+     * @return A lendable BookCopy, or null if none are available.
+     */
 public static BookCopy checkBookLendable(int bookId) {
 		try (PreparedStatement stt = DBControl.getInstance().selectQuery("book_copy", "book_id", bookId)) {
 			ResultSet rs = stt.executeQuery();
@@ -92,7 +106,12 @@ public static BookCopy checkBookLendable(int bookId) {
 		return null;
 	}
 	
-
+/**
+ * Checks if a book is orderable and retrieves the earliest available copy.
+ *
+ * @param bookId The ID of the book to check.
+ * @return An orderable BookCopy, or null if none are available.
+ */
     public static BookCopy checkBookOrderable(int bookId) {
         try (PreparedStatement stt = DBControl.getInstance().selectQuery("book_copy", "book_id", bookId)) {
             ResultSet rs = stt.executeQuery();
@@ -117,6 +136,12 @@ public static BookCopy checkBookLendable(int bookId) {
         return null;
     }
 
+    /**
+     * Lends a book to a subscriber by updating its database record.
+     *
+     * @param bookCopy The BookCopy to lend.
+     * @return True if the operation was successful, false otherwise.
+     */
     public static boolean lendBookToSubscriber(BookCopy bookCopy) {
         try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
                 "UPDATE book_copy SET lend_date = ?, return_date = ?, borrow_subscriber_id = ? WHERE id = ?")) {
@@ -131,7 +156,12 @@ public static BookCopy checkBookLendable(int bookId) {
         }
         return false;
     }
-
+    /**
+     * Searches for a book by its unique identifier (ID).
+     *
+     * @param bookId The ID of the book to search for.
+     * @return A Book object containing the details of the book, or null if not found.
+     */
     public static Book searchBookById(int bookId) {
         try (PreparedStatement stt = DBControl.getInstance().selectQuery("book", "id", bookId)) {
             ResultSet rs = stt.executeQuery();

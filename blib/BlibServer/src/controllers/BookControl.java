@@ -9,7 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import entities.Book;
 /**
  * The BookControl class provides various methods for managing books and their copies,
@@ -367,5 +370,33 @@ public class BookControl {
             return true ;
         else
             return false ;
+    }
+
+    /**
+     * This functions returns records of the books that needs to be returned tomorrow
+     * @return Array list of map that contains name, phone_number, email, title
+     */
+    public static ArrayList<Map<String, Object>> getBooksForReturnReminder() {
+        ArrayList<Map<String, Object>> records = new ArrayList<>();
+        String query = "select book.title, subscriber.email, subscriber.phone_number, user.first_name, last_name" +
+                " from (((book_copy join book on book_copy.book_id = book.id)" +
+                " join subscriber on borrow_subscriber_id = subscriber.id)" +
+                " join user on user_id = user.id) where return_date = ?";
+
+        try (PreparedStatement stmt = DBControl.prepareStatement(query)) {
+            stmt.setDate(1, Date.valueOf(LocalDate.now().plusDays(1)));
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Map<String, Object> record = new HashMap<>();
+                record.put("title", rs.getString("book.title"));
+                record.put("email", rs.getString("subscriber.email"));
+                record.put("phone_number", rs.getString("subscriber.phone_number"));
+                record.put("name", rs.getString("user.first_name") + " " + rs.getString("user.last_name"));
+                records.add(record);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return records;
     }
 }

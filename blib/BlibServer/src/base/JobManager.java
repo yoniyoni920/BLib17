@@ -1,5 +1,7 @@
 package base;
 
+import controllers.BookControl;
+import controllers.CommunicationManager;
 import controllers.DBControl;
 import controllers.SubscriberControl;
 
@@ -7,7 +9,8 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,6 +28,11 @@ public class JobManager {
                 runJobs();
             }
         }, 0, 60 * 60 * 1000);
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                runOnceADayJobs();
+            }
+        }, 0, 24 * 60 * 60 * 1000);
     }
 
     /**
@@ -33,6 +41,25 @@ public class JobManager {
     public void runJobs() {
         generateReports();
         checkForLateBorrows();
+    }
+
+    /**
+     * This method runs jobs that need to be done once a day
+     */
+    public void runOnceADayJobs(){
+        sendBookReturnReminders();
+    }
+
+    public void sendBookReturnReminders(){
+        final String messageTemplate = "Hi %s,\nWe wanted to remind you that you have to return %s book to the library until tomorrow.\nBlib Library.";
+        final String htmlMessageTemplate ="Hi %s,<br>We wanted to remind you that you have to return %s book to the library until tomorrow.<br>Blib Library.";
+
+        ArrayList<Map<String, Object>> records = BookControl.getBooksForReturnReminder();
+        for (Map<String, Object> record : records) {
+            CommunicationManager.sendSMS((String)record.get("phone_number"), String.format(messageTemplate, record.get("name"), record.get("title")));
+            CommunicationManager.sendMail((String) record.get("email"), String.format("Returning %s", record.get("title")),
+                    String.format(htmlMessageTemplate, record.get("name"), record.get("title")), "Blib Reminders");
+        }
     }
 
     /**

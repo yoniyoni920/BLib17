@@ -2,8 +2,6 @@ package controllers;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,8 +9,9 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import entities.BookCopy;
+
 import entities.Subscriber;
+import entities.HistoryEntry;
 import entities.SubscriberStatusReport;
 
 /*
@@ -24,8 +23,8 @@ public class SubscriberControl {
 	 */
 	public static void updateInfo(List<String> changedInfo) {
 		try {
-			PreparedStatement subscriberStatement = DBControl.getConnection().prepareStatement("UPDATE subscriber SET phone_number = ?, email = ? WHERE user_id = ?");
-			PreparedStatement userStatement = DBControl.getConnection().prepareStatement("UPDATE user SET first_name = ?, last_name = ?, password = ? WHERE id = ?");
+			PreparedStatement subscriberStatement = DBControl.prepareStatement("UPDATE subscriber SET phone_number = ?, email = ? WHERE user_id = ?");
+			PreparedStatement userStatement = DBControl.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, password = ? WHERE id = ?");
 			subscriberStatement.setString(1,changedInfo.get(3));
 			subscriberStatement.setString(2,changedInfo.get(4));
 			subscriberStatement.setString(3, changedInfo.get(0));
@@ -194,13 +193,84 @@ public class SubscriberControl {
 	public static boolean freezeSubscriber(int subscriberId) {
 		String query = "UPDATE subscriber SET frozen_until = ? WHERE id = ?";
 
-		try (PreparedStatement st2 = DBControl.prepareStatement(query)) {
+		try (PreparedStatement st = DBControl.prepareStatement(query)) {
 			LocalDateTime now = LocalDateTime.now();
-			st2.setTimestamp(1, Timestamp.valueOf(now.plusDays(30)));
-			st2.setInt(2, subscriberId);
-			return st2.executeUpdate() == 1;
+			st.setTimestamp(1, Timestamp.valueOf(now.plusDays(30)));
+			st.setInt(2, subscriberId);
+
+			// Log into history
+			logIntoHistory(new HistoryEntry(subscriberId, "freeze"));
+
+			return st.executeUpdate() == 1;
 		} catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+	public static List<HistoryEntry> getSubscriberHistory(int subscriberId) {
+		String query = "SELECT *, book.title AS book_title FROM subscriber_history " +
+				"JOIN book_copy ON book_copy.id = book_copy_id " +
+				"JOIN book ON book.id = book_copy.book_id " +
+				"WHERE subscriber_id = ?";
+
+		try (PreparedStatement st = DBControl.prepareStatement(query)) {
+			List<HistoryEntry> list = new ArrayList<>();
+			st.setInt(1, subscriberId);
+
+			ResultSet rs = st.executeQuery();
+			while(rs.next()) {
+				HistoryEntry item = new HistoryEntry(
+					rs.getInt("subscriber_id"),
+					rs.getInt("id"),
+					rs.getString("action"),
+					rs.getTimestamp("date").toLocalDateTime()
+				);
+
+				// Set optional fields
+				Timestamp endDate = rs.getTimestamp("end_date");
+				String bookTitle = rs.getString("book_title");
+
+				if (endDate != null) {
+					item.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
+				}
+
+				if (bookTitle != null) {
+					item.setBook(rs.getString("book_title"));
+				}
+
+				list.add(item);
+			}
+
+			return list;
+		} catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+	}
+
+	/**
+	 *
+	 * @param historyItem
+	 * @return
+	 * @throws SQLException
+	 */
+	public static boolean logIntoHistory(HistoryEntry historyItem) throws SQLException {
+		String query = "INSERT INTO subscriber_history (action, subscriber_id, book_copy_id, date, end_date) " +
+				"VALUES (?, ?, ?, ?, ?)";
+
+		try (PreparedStatement st = DBControl.prepareStatement(query)) {
+			st.setString(1, historyItem.getAction());
+			st.setInt(2, historyItem.getSubscriberId());
+			st.setInt(3, historyItem.getBookCopyId());
+			st.setTimestamp(4, Timestamp.valueOf(historyItem.getDate()));
+
+			LocalDateTime endDate = historyItem.getEndDate();
+			if (endDate != null) {
+				st.setTimestamp(5, Timestamp.valueOf(historyItem.getEndDate()));
+			} else {
+				st.setTimestamp(5, null);
+			}
+
+			return st.executeUpdate() == 1;
+		}
+	}
 }

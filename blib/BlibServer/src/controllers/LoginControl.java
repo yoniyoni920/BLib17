@@ -1,10 +1,7 @@
 package controllers;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.util.HashMap;
 
-import entities.DetailedSubscriptionHistory;
 import entities.Subscriber;
 import entities.User;
 /*
@@ -64,9 +61,7 @@ public class LoginControl {
 							date != null ? date.toLocalDate() : null
 						);
 
-						DetailedSubscriptionHistory history = new DetailedSubscriptionHistory();
-						history.setActionsHistory(DetailedSubscriptionHistoryControl.retrieveActionsHistory());
-						subscriber.setDetailedSubscriptionHistory(history);
+						subscriber.setHistory(SubscriberControl.getSubscriberHistory(id));
 						subscriber.setBorrowedBooks(BookControl.retrieveBorrowedBooks(subscriber.getId()));
 						return subscriber;
 					}

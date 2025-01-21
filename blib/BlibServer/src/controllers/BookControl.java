@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 import entities.Book;
+import entities.HistoryEntry;
+
 /**
  * The BookControl class provides various methods for managing books and their copies,
  * including search, lending, ordering, marking as lost, and generating reports.
@@ -148,11 +151,26 @@ public class BookControl {
     public static boolean lendBookToSubscriber(BookCopy bookCopy) {
         try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
                 "UPDATE book_copy SET lend_date = ?, return_date = ?, borrow_subscriber_id = ? WHERE id = ?")) {
-            stt.setDate(1, Date.valueOf(bookCopy.getLendDate()));
-            stt.setDate(2, Date.valueOf(bookCopy.getReturnDate()));
-            stt.setInt(3, bookCopy.getBorrowSubscriberId());
-            stt.setInt(4, bookCopy.getId());
+
+            int subscriberId = bookCopy.getBorrowSubscriberId();
+            int bookCopyId = bookCopy.getId();
+            LocalDateTime date = bookCopy.getLendDate().atStartOfDay();
+            LocalDateTime returnDate = bookCopy.getReturnDate().atStartOfDay(); // TODO: use localdatetime?
+
+            stt.setDate(1, Date.valueOf(date.toLocalDate()));
+            stt.setDate(2, Date.valueOf(returnDate.toLocalDate()));
+            stt.setInt(3, subscriberId);
+            stt.setInt(4, bookCopyId);
             stt.executeUpdate();
+
+            SubscriberControl.logIntoHistory(new HistoryEntry(
+                subscriberId,
+                "borrow",
+                bookCopyId,
+                date,
+                returnDate
+            ));
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -339,13 +357,17 @@ public class BookControl {
                 String upQuery = "UPDATE book_copy " +
                         "SET is_lost = 1, borrow_subscriber_id = null, order_subscriber_id = null, lend_date = NULL, return_date = NULL " +
                         "WHERE id = ?";
+                int subscriberId = rs.getInt("borrow_subscriber_id");
+
                 try (PreparedStatement st2 = DBControl.prepareStatement(upQuery)) {
                     st2.setInt(1, bookCopyId);
-                    //TODO: log history
-
+                    // Log this into the subscriber's history
+                    SubscriberControl.logIntoHistory(
+                        new HistoryEntry(subscriberId, "lost_book", bookCopyId)
+                    );
                     // Punish subscriber for losing the book
-                    SubscriberControl.freezeSubscriber(rs.getInt("borrow_subscriber_id"));
-                    return st2.executeUpdate() == 1;
+                    SubscriberControl.freezeSubscriber(subscriberId);
+                    return true;// st2.executeUpdate() == 1;
                 }
             }
         } catch (SQLException ex) {

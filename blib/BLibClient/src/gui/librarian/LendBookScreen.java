@@ -61,10 +61,12 @@ public class LendBookScreen extends AbstractScreen {
         ClientApplication.chat.sendToServer(new Message(Action.GET_BOOK_BY_ID, bookIdTextField.getText()), message -> {
             if (message.isError()) {
                 bookIdAlert.setText(message.getObject().toString());
+                bookIdAlert.setTextFill(Color.RED);
                 bookIdAlert.setVisible(true);
             } else {
                 Book book = (Book) message.getObject();
                 bookIdAlert.setText(book.getTitle());
+                bookIdAlert.setTextFill(Color.DODGERBLUE);
                 bookIdAlert.setVisible(true);
             }
         });

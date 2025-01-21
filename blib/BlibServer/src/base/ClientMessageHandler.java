@@ -7,6 +7,7 @@ import controllers.RegisterUser;
 import controllers.SubscriberControl;
 import entities.*;
 import ocsf.server.ConnectionToClient;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -67,10 +68,10 @@ public class ClientMessageHandler {
         actions.put(Action.SEARCH_SUBSCRIBERS, ClientMessageHandler::searchSubscribers);
         actions.put(Action.RETURN_BOOK, ClientMessageHandler::returnBook);
         actions.put(Action.MARK_BOOK_COPY_AS_LOST, ClientMessageHandler::markBookCopyAsLost);
-        actions.put(Action.EXTEND_BORROW_TIME , ClientMessageHandler :: extendBorrowTime);
-        actions.put(Action.RETRIEVE_NOTIFICATIONS, ClientMessageHandler :: retrieveNotifications);
-        actions.put(Action.SAVE_NOTIFICATION, ClientMessageHandler :: saveNotification);
-        actions.put(Action.UPDATE_NOTIFICATION_STATUS, ClientMessageHandler :: updateNotificationStatus);
+        actions.put(Action.EXTEND_BORROW_TIME, ClientMessageHandler::extendBorrowTime);
+        actions.put(Action.RETRIEVE_NOTIFICATIONS, ClientMessageHandler::retrieveNotifications);
+        actions.put(Action.SAVE_NOTIFICATION, ClientMessageHandler::saveNotification);
+        actions.put(Action.UPDATE_NOTIFICATION_STATUS, ClientMessageHandler::updateNotificationStatus);
     }
 
     public static Message orderBook(Message msg, ConnectionToClient client) {
@@ -79,7 +80,7 @@ public class ClientMessageHandler {
         if (subscriber == null || subscriber.isFrozen()) {
             return msg.errorReply("Subscriber is frozen or doesn't exist!");
         }
-        if(BookControl.checkBookLendable(order.getBookId()) != 0){
+        if (BookControl.checkBookLendable(order.getBookId(), order.getSubscriberId()) != 0) {
             return msg.errorReply("Book is lendable, Can't be orderer!");
         }
         LocalDate orderable = BookControl.checkBookOrderable(order.getBookId());
@@ -91,7 +92,7 @@ public class ClientMessageHandler {
             order.setOrderId(0);
             if (BookControl.orderBook(order)) {
                 return msg.reply(order);
-            }else{
+            } else {
                 return msg.errorReply("Failed to order book!");
             }
         }
@@ -114,15 +115,15 @@ public class ClientMessageHandler {
         }
 
         if (BookControl.searchBookById(bookCopy.getBookId()) != null) {
-            int availableCopy = BookControl.checkBookLendable(bookCopy.getBookId());
-            if(availableCopy != 0){
+            int availableCopy = BookControl.checkBookLendable(bookCopy.getBookId(), bookCopy.getBorrowSubscriberId());
+            if (availableCopy != 0) {
+                bookCopy.setCopyId(availableCopy);
                 if (BookControl.lendBookToSubscriber(bookCopy)) {
-                    bookCopy.setCopyId(availableCopy);
                     return msg.reply(bookCopy);
                 } else {
                     return msg.errorReply("Failed to lend book!");
                 }
-            }else {
+            } else {
                 LocalDate orderableDate = BookControl.checkBookOrderable(bookCopy.getBookId());
                 if (orderableDate != null) {
                     Order order = new Order(0, bookCopy.getBorrowSubscriberId(), bookCopy.getBookId(),
@@ -174,7 +175,7 @@ public class ClientMessageHandler {
      * Handles logging subscribers or librarians
      */
     public static Message login(Message msg, ConnectionToClient client) {
-        String[] args = (String[])msg.getObject();
+        String[] args = (String[]) msg.getObject();
         User user = LoginControl.loginAction(args[0], args[1]);
         if (user != null) {
             return msg.reply(user);
@@ -189,24 +190,24 @@ public class ClientMessageHandler {
      * @param client
      * @return Message
      */
-	  public static Message updateSubscriber(Message msg, ConnectionToClient client) {
-        SubscriberControl.updateInfo((List<String>)msg.getObject());
+    public static Message updateSubscriber(Message msg, ConnectionToClient client) {
+        SubscriberControl.updateInfo((List<String>) msg.getObject());
         return msg.reply("Success");
     }
 
     public static Message RegisterSubscriber(Message msg, ConnectionToClient client) {
-    	String[] args = (String[])msg.getObject();
-    	msg = RegisterUser.registerAction(args[0], args[1],args[2],args[3],args[4]);
+        String[] args = (String[]) msg.getObject();
+        msg = RegisterUser.registerAction(args[0], args[1], args[2], args[3], args[4]);
         return msg;
     }
 
     public static Message getBorrowTimesReport(Message msg, ConnectionToClient client) {
-        Object[] params = (Object[])msg.getObject();
-        return msg.reply(BookControl.getBorrowTimesReport((LocalDate)params[0], (Integer)params[1]));
+        Object[] params = (Object[]) msg.getObject();
+        return msg.reply(BookControl.getBorrowTimesReport((LocalDate) params[0], (Integer) params[1]));
     }
 
     public static Message getSubscriberStatusReport(Message msg, ConnectionToClient client) {
-        return msg.reply(SubscriberControl.getSubscriberStatusReport((LocalDate)msg.getObject()));
+        return msg.reply(SubscriberControl.getSubscriberStatusReport((LocalDate) msg.getObject()));
     }
 
     public static Message getReportDates(Message msg, ConnectionToClient client) {
@@ -214,8 +215,8 @@ public class ClientMessageHandler {
     }
 
     //handles retrieving the borrowed books for a specific subscriber
-    public static Message retrieveBorrowedBooks(Message msg , ConnectionToClient client) {
-        List<BookCopy> borrowedBooks = BookControl.retrieveBorrowedBooks((int)msg.getObject());
+    public static Message retrieveBorrowedBooks(Message msg, ConnectionToClient client) {
+        List<BookCopy> borrowedBooks = BookControl.retrieveBorrowedBooks((int) msg.getObject());
         return msg.reply(borrowedBooks);
     }
 
@@ -225,50 +226,51 @@ public class ClientMessageHandler {
     }
 
     public static Message returnBook(Message msg, ConnectionToClient client) {
-          int bookCopyId = (Integer)msg.getObject();
-          BookControl.returnBook(bookCopyId);
-          return msg.reply("Success");
+        int bookCopyId = (Integer) msg.getObject();
+        BookControl.returnBook(bookCopyId);
+        return msg.reply("Success");
     }
+
     public static Message searchSubscribers(Message msg, ConnectionToClient client) {
-        String[] searchInfo = (String[])msg.getObject();
+        String[] searchInfo = (String[]) msg.getObject();
         return msg.reply(SubscriberControl.searchSubscribers(searchInfo[0], searchInfo[1]));
     }
 
     public static Message markBookCopyAsLost(Message msg, ConnectionToClient client) {
-        return msg.reply(BookControl.markBookCopyAsLost((Integer)msg.getObject()));
+        return msg.reply(BookControl.markBookCopyAsLost((Integer) msg.getObject()));
     }
 
-    public static Message extendBorrowTime(Message msg , ConnectionToClient client) {
-    	boolean successfullyChanged = BookControl.extendBorrowTime((BookCopy )msg.getObject());
-    	return msg.reply(successfullyChanged);
+    public static Message extendBorrowTime(Message msg, ConnectionToClient client) {
+        boolean successfullyChanged = BookControl.extendBorrowTime((BookCopy) msg.getObject());
+        return msg.reply(successfullyChanged);
     }
-    
+
     public static Message saveNotification(Message msg, ConnectionToClient client) {
-    	boolean successfullySaved = NotificationControl.saveNotification((Notification)msg.getObject());
-    	if(!successfullySaved) {
-    		msg.setError(true);
-    	}
-    	return msg.reply(successfullySaved);
+        boolean successfullySaved = NotificationControl.saveNotification((Notification) msg.getObject());
+        if (!successfullySaved) {
+            msg.setError(true);
+        }
+        return msg.reply(successfullySaved);
     }
-    
+
     public static Message updateNotificationStatus(Message msg, ConnectionToClient client) {
-		@SuppressWarnings("unchecked")
-		boolean successfullyUpdated = NotificationControl.updateNotificationStatus((List<Notification>)msg.getObject());
-    	if(!successfullyUpdated) {
-    		msg.setError(true);
-    	}
-		return msg.reply(successfullyUpdated);
+        @SuppressWarnings("unchecked")
+        boolean successfullyUpdated = NotificationControl.updateNotificationStatus((List<Notification>) msg.getObject());
+        if (!successfullyUpdated) {
+            msg.setError(true);
+        }
+        return msg.reply(successfullyUpdated);
     }
-    
+
     public static Message retrieveNotifications(Message msg, ConnectionToClient client) {
-    	List<Notification> notifications = NotificationControl.retrieveNotifications();
-    	if(notifications == null) {
-    		msg.setError(true);
-    	}
-    	return msg.reply(notifications);
+        List<Notification> notifications = NotificationControl.retrieveNotifications();
+        if (notifications == null) {
+            msg.setError(true);
+        }
+        return msg.reply(notifications);
     }
-    
-    
+
+
 }
 
 

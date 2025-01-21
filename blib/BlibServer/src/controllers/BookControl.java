@@ -90,23 +90,23 @@ public class BookControl {
     /**
      * Checks if a book copy is lendable based on its availability and return date.
      *
-     * @param bookId The ID of the book to check.
+     * @param bookId       The ID of the book to check.
      * @param subscriberId The ID of the subscriber to handle ordered books
      * @return The copy ID of the available copy.
      */
     public static int checkBookLendable(int bookId, int subscriberId) {
         //check if ordered
-        if(subscriberId != 0) {
+        if (subscriberId != 0) {
             try (PreparedStatement stt = DBControl.getInstance().selectQuery("`order`",
                     "book_id", bookId, "subscriber_id", subscriberId);) {
                 ResultSet rs = stt.executeQuery();
-                if(rs.next()) {
-                    try(PreparedStatement stt1 = DBControl.getConnection().prepareStatement("SELECT id, return_date FROM " +
+                if (rs.next()) {
+                    try (PreparedStatement stt1 = DBControl.getConnection().prepareStatement("SELECT id, return_date FROM " +
                             "book_copy where book_id = ? ORDER BY return_date")) {
                         stt1.setInt(1, bookId);
                         ResultSet rs1 = stt1.executeQuery();
-                        if(rs1.next()) {
-                            if(rs1.getDate("return_date") == null) {
+                        if (rs1.next()) {
+                            if (rs1.getDate("return_date") == null) {
                                 return rs1.getInt("id");
                             }
                         }
@@ -192,7 +192,7 @@ public class BookControl {
             stt.setInt(4, bookCopy.getId());
             stt.executeUpdate();
             try (PreparedStatement stt2 = DBControl.getConnection().prepareStatement(
-                    "delete from `order` where book_id = ? and subscriber_id = ?")){
+                    "delete from `order` where book_id = ? and subscriber_id = ?")) {
                 stt2.setInt(1, bookCopy.getBookId());
                 stt2.setInt(2, bookCopy.getBorrowSubscriberId());
                 stt2.execute();
@@ -367,6 +367,50 @@ public class BookControl {
         }
     }
 
+    private static void updateSubOrderReady(int bookId){
+        try(PreparedStatement sttm2 = DBControl.getConnection().prepareStatement(
+                "select email, first_name, last_name, title from " +
+                        "(subscriber join user on subscriber.user_id = user.id)" +
+                        " join (`order` join book on `order`.book_id = book.id)" +
+                        " on subscriber_id = subscriber.id where ordered_until = CURDATE() + 2 AND book_id = 2")){
+            sttm2.setInt(1, bookId);
+            ResultSet rs = sttm2.executeQuery();
+            if (rs.next()) {
+                CommunicationManager.sendMail(rs.getString("email"),
+                        rs.getString("title") + " Order", "Hi "
+                                + rs.getString("first_name") + " " + rs.getString("last_name")
+                        +",<br>Ordered book '" + rs.getString("title") + "' is ready for pickup.<br>" +
+                                "If book isn't picked up in 2 days ordered is will be canceled automatically.<br>" +
+                                "Blib Library.","Blib Orders");
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void updateReturnForOrders(int bookCopyId){
+        try(PreparedStatement stt = DBControl.getConnection()
+                .prepareStatement("SELECT book_id from book_copy WHERE id = ?")){
+            stt.setInt(1, bookCopyId);
+            ResultSet rs = stt.executeQuery();
+            if(rs.next()){
+                int bookId = rs.getInt("book_id");
+                try (PreparedStatement sttm = DBControl.getConnection().prepareStatement(
+                        "UPDATE `order` SET ordered_until = CURDATE() + 2 WHERE book_id = ? " +
+                                "AND ordered_until IS NULL order by date limit 1"
+                )) {
+                    sttm.setInt(1, bookId);
+                    sttm.execute();
+                    updateSubOrderReady(bookId);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void returnBook(int bookCopyId) {
         String query = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
         try (PreparedStatement preparedStatemen = DBControl.getConnection().prepareStatement(query)) {
@@ -375,6 +419,8 @@ public class BookControl {
             preparedStatemen.setNull(3, java.sql.Types.DATE);
             preparedStatemen.setInt(4, bookCopyId);
             preparedStatemen.executeUpdate();
+
+            updateReturnForOrders(bookCopyId);
         } catch (SQLException e) {
             e.printStackTrace();
         }

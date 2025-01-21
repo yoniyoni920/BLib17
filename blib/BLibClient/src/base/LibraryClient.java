@@ -74,7 +74,7 @@ public class LibraryClient extends AbstractClient
 					System.out.println("Interrupted..");
 				}
 
-				if (timePassed > 30 * 1000) {
+				if (timePassed > 10 * 1000) {
 					System.out.println(String.format("Warning: request %d has timed out after 30 seconds...", msgToServer.getId()));
 					awaitingMessages.remove(msgToServer);
 					return msgToServer.errorReply("Timed out");

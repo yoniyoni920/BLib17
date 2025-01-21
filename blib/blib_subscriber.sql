@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `blib` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `blib`;
 -- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
 --
 -- Host: localhost    Database: blib
@@ -170,12 +172,13 @@ CREATE TABLE `order` (
   `subscriber_id` int NOT NULL,
   `book_id` int NOT NULL,
   `date` date NOT NULL DEFAULT (now()),
+  `ordered_until` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `subscriber_id_idx` (`subscriber_id`),
   KEY `book_id_idx` (`book_id`),
   CONSTRAINT `book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
   CONSTRAINT `subscriber` FOREIGN KEY (`subscriber_id`) REFERENCES `subscriber` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +187,7 @@ CREATE TABLE `order` (
 
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` VALUES (1,1,1,'2025-01-21'),(2,2,1,'2025-01-21');
+INSERT INTO `order` VALUES (1,1,1,'2025-01-21',NULL),(2,2,1,'2025-01-21',NULL),(3,1,2,'2025-01-21',NULL);
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -308,4 +311,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-21  2:39:08
+-- Dump completed on 2025-01-21 14:05:04

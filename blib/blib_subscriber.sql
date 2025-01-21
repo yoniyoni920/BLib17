@@ -73,8 +73,39 @@ CREATE TABLE `book_copy` (
 
 LOCK TABLES `book_copy` WRITE;
 /*!40000 ALTER TABLE `book_copy` DISABLE KEYS */;
-INSERT INTO `book_copy` VALUES (1,1,'2025-01-15','2025-01-29',1,0),(2,3,NULL,NULL,NULL,0),(3,1,'2025-01-02','2025-01-16',1,0),(4,2,'2025-01-03','2025-01-17',1,0),(5,2,'2025-01-04','2025-01-16',1,0),(6,4,'2023-03-16','2025-03-30',1,0),(7,5,NULL,NULL,NULL,0),(8,6,NULL,NULL,NULL,0),(9,7,NULL,NULL,NULL,0),(10,8,NULL,NULL,NULL,0);
+INSERT INTO `book_copy` VALUES (1,1,'2025-01-15','2025-01-29',1,0),(2,3,NULL,NULL,NULL,0),(3,1,'2025-01-02','2025-01-23',1,0),(4,2,'2025-01-03','2025-01-17',1,0),(5,2,'2025-01-04','2025-01-16',1,0),(6,4,'2023-03-16','2025-03-30',1,0),(7,5,NULL,NULL,NULL,0),(8,6,NULL,NULL,NULL,0),(9,7,NULL,NULL,NULL,0),(10,8,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `book_copy` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `book_order`
+--
+
+DROP TABLE IF EXISTS `book_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `book_order` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `subscriber_id` int NOT NULL,
+  `book_id` int NOT NULL,
+  `date` date NOT NULL DEFAULT (now()),
+  `ordered_until` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `subscriber_id_idx` (`subscriber_id`),
+  KEY `book_id_idx` (`book_id`),
+  CONSTRAINT `book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
+  CONSTRAINT `subscriber` FOREIGN KEY (`subscriber_id`) REFERENCES `subscriber` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `book_order`
+--
+
+LOCK TABLES `book_order` WRITE;
+/*!40000 ALTER TABLE `book_order` DISABLE KEYS */;
+INSERT INTO `book_order` VALUES (1,1,1,'2025-01-21',NULL),(3,1,2,'2025-01-21',NULL),(4,3,1,'2025-01-21',NULL);
+/*!40000 ALTER TABLE `book_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -129,7 +160,7 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
-INSERT INTO `job` VALUES (1,'2025-01-10 16:54:32','generate-reports'),(2,'2025-01-18 15:10:31','check-borrows');
+INSERT INTO `job` VALUES (1,'2025-01-10 16:54:32','generate-reports'),(2,'2025-01-21 22:50:54','check-borrows');
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,7 +179,7 @@ CREATE TABLE `notification` (
   `date` date DEFAULT NULL,
   `isNew` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,38 +188,8 @@ CREATE TABLE `notification` (
 
 LOCK TABLES `notification` WRITE;
 /*!40000 ALTER TABLE `notification` DISABLE KEYS */;
+INSERT INTO `notification` VALUES (6,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(7,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(8,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(9,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(10,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(11,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(12,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1);
 /*!40000 ALTER TABLE `notification` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `order`
---
-
-DROP TABLE IF EXISTS `order`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `subscriber_id` int NOT NULL,
-  `book_id` int NOT NULL,
-  `date` date NOT NULL DEFAULT (now()),
-  `ordered_until` date DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `subscriber_id_idx` (`subscriber_id`),
-  KEY `book_id_idx` (`book_id`),
-  CONSTRAINT `book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
-  CONSTRAINT `subscriber` FOREIGN KEY (`subscriber_id`) REFERENCES `subscriber` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `order`
---
-
-LOCK TABLES `order` WRITE;
-/*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` VALUES (1,1,1,'2025-01-21',NULL),(2,2,1,'2025-01-21',NULL),(3,1,2,'2025-01-21',NULL);
-/*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -217,7 +218,7 @@ CREATE TABLE `subscriber` (
 
 LOCK TABLES `subscriber` WRITE;
 /*!40000 ALTER TABLE `subscriber` DISABLE KEYS */;
-INSERT INTO `subscriber` VALUES (1,1,'0501234567','hi@gmail.com','2025-02-16'),(2,5,'0521479856','shalom@gmail.com',NULL),(3,3,'0548975642','bye@walla.com',NULL),(4,4,'0508797841','ma@gmail.com','2025-01-10'),(5,6,'0508797111','elias@elias.elias',NULL);
+INSERT INTO `subscriber` VALUES (1,1,'0501234567','hi@gmail.com',NULL),(2,5,'0521479856','shalom@gmail.com',NULL),(3,3,'0548975642','bye@walla.com',NULL),(4,4,'0508797841','ma@gmail.com','2025-01-10'),(5,6,'0508797111','elias@elias.elias',NULL);
 /*!40000 ALTER TABLE `subscriber` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -298,7 +299,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Daniel','Student','123','subscriber'),(2,'Safranit','Lol','321','librarian'),(3,'yeled','haha','852','subscriber'),(4,'bery','hi','963','subscriber'),(5,'moti','lochim','258','subscriber'),(6,'Elias','Yes','elias','subscriber'),(7,'Helal','Hammoud','123','subscriber');
+INSERT INTO `user` VALUES (1,'Daniel','Student','123','subscriber'),(2,'Safranit','Lol','321','librarian'),(3,'yeled','haha','123','subscriber'),(4,'bery','hi','123','subscriber'),(5,'moti','lochim','123','subscriber'),(6,'Elias','Yes','elias','subscriber'),(7,'Helal','Hammoud','123','subscriber');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -311,4 +312,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-21 14:05:04
+-- Dump completed on 2025-01-21 22:59:28

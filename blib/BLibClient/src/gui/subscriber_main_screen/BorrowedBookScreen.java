@@ -99,7 +99,7 @@ public class BorrowedBookScreen extends AbstractScreen {
         }
 
         // Display the extend button only if the book is not ordered and it's close to due date
-        if (copy.getOrderSubscriberId() == 0 && daysBetween <= 7 && !subscriber.isFrozen()) {
+        if (daysBetween <= 7 && !subscriber.isFrozen()) {
             borrowExtend.setVisible(true);
         }
     }
@@ -111,11 +111,14 @@ public class BorrowedBookScreen extends AbstractScreen {
      * @param event The action event triggered by the user.
      */
     public void onPressingExtendButton(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        // Send to server
+        copy.setReturnDate(copy.getReturnDate().plusDays(14));
+        Message msgFromServer = ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME, copy));
 
         // Extending book borrow time
-        boolean flag = extendBookBorrowDuration();
-        if (flag) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        if (!msgFromServer.isError()) {
             // Changing data and showing message
             borrowExtend.setVisible(false);
             returnDate.setText(copy.getReturnDate().toString());
@@ -123,37 +126,18 @@ public class BorrowedBookScreen extends AbstractScreen {
             daysLeft.setText(daysBetween + " Days Left");
             alert.setHeaderText("Your Borrow Duration Successfully Extended");
             alert.showAndWait();
-        } else {
+        } else { // Failed to extend
+            copy.setReturnDate(copy.getReturnDate().minusDays(14));
+            alert.setAlertType(Alert.AlertType.ERROR);
             alert.setHeaderText("Error Extending Your Borrow Time Duration");
+            alert.setContentText("Couldn't extend the borrow duration. It's possible there's an order waiting for the book.");
             alert.showAndWait();
         }
 
         // Saving notification
-        flag = sendNotificationToLibrarian();
-        if (!flag) {
+        if (!sendNotificationToLibrarian()) {
             System.out.println("Couldn't Send Notification To The Librarian");
         }
-    }
-
-    /**
-     * Extends the borrow duration for the book by 14 days.
-     * This method sends a request to the server to extend the borrow time.
-     *
-     * @return true if the borrow time was successfully extended; false otherwise.
-     */
-    private boolean extendBookBorrowDuration() {
-        // Updating the new return date in the memory
-        copy.setReturnDate(copy.getReturnDate().plusDays(14));
-
-        Message msgFromServer = ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME, copy));
-
-        // If couldn't extend the borrow time
-        if (msgFromServer.isError()) {
-            copy.setReturnDate(copy.getReturnDate().minusDays(14));
-            return false;
-        }
-
-        return true;
     }
   
     /**

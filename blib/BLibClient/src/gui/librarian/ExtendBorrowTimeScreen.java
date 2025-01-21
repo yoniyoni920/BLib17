@@ -100,13 +100,12 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
      * @param event the ActionEvent triggered by the extend button
      */
 	public void extendBorrowTime(ActionEvent event) {
-		boolean succesfullyChanged = false ;
-		int days = 0 ;
+		int days = 0;
 		if(checkExtendDaysInput()) {
 			days = Integer.parseInt(daysExtension.getText());
 			copy.setReturnDate(copy.getReturnDate().plusDays(days));
-			succesfullyChanged = (boolean) ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME , copy)).getObject();
-			if(succesfullyChanged) {
+			Message msg = ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME , copy));
+			if(!msg.isError()) {
 				try {
 					closeWindow(event);
 				} catch (Exception e) {

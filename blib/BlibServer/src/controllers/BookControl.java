@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import entities.Book;
+import entities.Order;
+
 /**
  * The BookControl class provides various methods for managing books and their copies,
  * including search, lending, ordering, marking as lost, and generating reports.
@@ -87,52 +89,61 @@ public class BookControl {
      * Checks if a book copy is lendable based on its availability and return date.
      *
      * @param bookId The ID of the book to check.
-     * @return A lendable BookCopy, or null if none are available.
+     * @return The copy ID of the available copy.
      */
-    public static BookCopy checkBookLendable(int bookId) {
-        try (PreparedStatement stt = DBControl.getInstance().selectQuery("book_copy", "book_id", bookId)) {
+    public static int checkBookLendable(int bookId) {
+        try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
+                "select (select count(`order`.book_id) from `order` where book_id = ?) as order_count," +
+                        " (select count(book_copy.book_id) from book_copy where book_id = ? and " +
+                        "(return_date IS NULL || return_date < now())) as available_copies," +
+                        "    (select book_copy.id from book_copy where book_id = ?" +
+                        " order by return_date limit 1) as available_copy_id")) {
+            stt.setInt(1, bookId);
+            stt.setInt(2, bookId);
+            stt.setInt(3, bookId);
             ResultSet rs = stt.executeQuery();
-            while (rs.next()) {
-                int copyId = rs.getInt("id");
-                Date returnDate = rs.getDate("return_date");
-                int orderSubscriberId = rs.getInt("order_subscriber_id");
-                if (orderSubscriberId == 0 && (returnDate == null || returnDate.toLocalDate().isBefore(LocalDate.now()))) {
-                    Date lendDate = rs.getDate("lend_date");
-                    int borrowerId = rs.getInt("borrow_subscriber_id");
-                    return new BookCopy(copyId, bookId, lendDate == null?null:lendDate.toLocalDate(),
-                            returnDate == null? null:returnDate.toLocalDate(), borrowerId, orderSubscriberId);
+            if (rs.next()) {
+                int copyId = rs.getInt("available_copy_id");
+                int orderCount = rs.getInt("order_count");
+                int availableCopies = rs.getInt("available_copies");
+                if (availableCopies > orderCount) {
+                    return copyId;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return 0;
     }
 
     /**
      * Checks if a book is orderable and retrieves the earliest available copy.
      *
      * @param bookId The ID of the book to check.
-     * @return An orderable BookCopy, or null if none are available.
+     * @return LocalDate representing the date book with be available or null if not orderable.
      */
-    public static BookCopy checkBookOrderable(int bookId) {
-        try (PreparedStatement stt = DBControl.getInstance().selectQuery("book_copy", "book_id", bookId)) {
+    public static LocalDate checkBookOrderable(int bookId) {
+        try(PreparedStatement stt = DBControl.getConnection().prepareStatement(
+                "select (select count(`order`.book_id) from `order` where book_id = ?) as order_count," +
+                        " (select count(book_copy.book_id) from book_copy where book_id = ?) as copy_count")){
+            stt.setInt(1, bookId);
+            stt.setInt(2, bookId);
             ResultSet rs = stt.executeQuery();
-            BookCopy earliestCopy = null;
-            while (rs.next()) {
-                int copyId = rs.getInt("id");
-                Date returnDate = rs.getDate("return_date");
-                int orderSubscriberId = rs.getInt("order_subscriber_id");
-                if (orderSubscriberId == 0) {
-                    if (earliestCopy == null ||  returnDate.toLocalDate().isBefore(earliestCopy.getReturnDate())) {
-                        Date lendDate = rs.getDate("lend_date");
-                        int borrowerSubscriberId = rs.getInt("borrow_subscriber_id");
-                        earliestCopy = new BookCopy(copyId, bookId, lendDate == null?null:lendDate.toLocalDate(),
-                                returnDate == null ? null : returnDate.toLocalDate(),borrowerSubscriberId, orderSubscriberId );
+            if(rs.next()) {
+                if(rs.getInt("order_count") < rs.getInt("copy_count")) {
+                    try(PreparedStatement stt2 = DBControl.getConnection().prepareStatement(
+                            "select book_copy.return_date from book_copy where book_id = ? order by return_date limit 1 offset ?")){
+                        stt2.setInt(1, bookId);
+                        stt2.setInt(2, rs.getInt("order_count"));
+                        ResultSet rs2 = stt2.executeQuery();
+                        if(rs2.next()) {
+                            return rs2.getDate("return_date").toLocalDate();
+                        }
+                    }catch (SQLException e) {
+                        e.printStackTrace();
                     }
                 }
             }
-            return earliestCopy;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -250,11 +261,16 @@ public class BookControl {
         return borrowedBooks;
     }
 
-    public static boolean orderBook(BookCopy bookCopy) {
+    /**
+     * Orders a book
+     * @param order object representing the book order
+     * @return boolean if successful
+     */
+    public static boolean orderBook(Order order) {
         try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
-                "UPDATE book_copy SET order_subscriber_id = ? WHERE id = ?")) {
-            stt.setInt(1, bookCopy.getOrderSubscriberId());
-            stt.setInt(2, bookCopy.getId());
+                "INSERT INTO `order`(subscriber_id, book_id) VALUES (?, ?)")) {
+            stt.setInt(1, order.getSubscriberId());
+            stt.setInt(2, order.getBookId());
             stt.executeUpdate();
             return true;
         } catch (Exception e) {

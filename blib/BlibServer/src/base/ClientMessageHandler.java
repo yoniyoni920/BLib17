@@ -74,20 +74,23 @@ public class ClientMessageHandler {
     }
 
     public static Message orderBook(Message msg, ConnectionToClient client) {
-        BookCopy bookCopy = (BookCopy) msg.getObject();
-        Subscriber subscriber = SubscriberControl.getSubscriberById(bookCopy.getBorrowSubscriberId());
+        Order order = (Order) msg.getObject();
+        Subscriber subscriber = SubscriberControl.getSubscriberById(order.getSubscriberId());
         if (subscriber == null || subscriber.isFrozen()) {
             return msg.errorReply("Subscriber is frozen or doesn't exist!");
         }
-        BookCopy foundCopy = BookControl.checkBookOrderable(bookCopy.getBookId());
-        if (foundCopy == null) {
-            bookCopy.setOrderSubscriberId(-1);
-            return msg.reply(bookCopy);
+        if(BookControl.checkBookLendable(order.getBookId()) != 0){
+            return msg.errorReply("Book is lendable, Can't be orderer!");
+        }
+        LocalDate orderable = BookControl.checkBookOrderable(order.getBookId());
+        if (orderable == null) {
+            order.setOrderId(-1);
+            return msg.reply(order);
         } else {
-            bookCopy.setCopyId(foundCopy.getId());
-            bookCopy.setReturnDate(foundCopy.getReturnDate());
-            if (BookControl.orderBook(bookCopy)) {
-                return msg.reply(bookCopy);
+            order.setOrderDate(orderable);
+            order.setOrderId(0);
+            if (BookControl.orderBook(order)) {
+                return msg.reply(order);
             }else{
                 return msg.errorReply("Failed to order book!");
             }
@@ -111,24 +114,23 @@ public class ClientMessageHandler {
         }
 
         if (BookControl.searchBookById(bookCopy.getBookId()) != null) {
-            BookCopy foundCopy = BookControl.checkBookLendable(bookCopy.getBookId());
-            if (foundCopy == null) {
-                bookCopy.setBorrowSubscriberId(-1);
-                foundCopy = BookControl.checkBookOrderable(bookCopy.getBookId());
-                if (foundCopy == null) {
-                    bookCopy.setBorrowSubscriberId(-1);
+            int availableCopy = BookControl.checkBookLendable(bookCopy.getBookId());
+            if(availableCopy != 0){
+                if (BookControl.lendBookToSubscriber(bookCopy)) {
+                    bookCopy.setCopyId(availableCopy);
                     return msg.reply(bookCopy);
+                } else {
+                    return msg.errorReply("Failed to lend book!");
                 }
-                bookCopy.setCopyId(foundCopy.getId());
-                bookCopy.setReturnDate(foundCopy.getReturnDate());
-                return msg.reply(bookCopy);
-            }
-            bookCopy.setCopyId(foundCopy.getId());
-            if (BookControl.lendBookToSubscriber(bookCopy)) {
-                bookCopy.setCopyId(foundCopy.getId());
-                return msg.reply(bookCopy);
-            } else {
-                return msg.errorReply("Failed to lend book!");
+            }else {
+                LocalDate orderableDate = BookControl.checkBookOrderable(bookCopy.getBookId());
+                if (orderableDate != null) {
+                    Order order = new Order(0, bookCopy.getBorrowSubscriberId(), bookCopy.getBookId(),
+                            orderableDate, null);
+                    return msg.reply(order);
+                } else {
+                    return msg.reply(null);
+                }
             }
         } else {
             return msg.errorReply("Book doesn't exist!");

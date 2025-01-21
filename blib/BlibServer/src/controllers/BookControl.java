@@ -456,21 +456,32 @@ public class BookControl {
         return false;
     }
 
+    /**
+     * Extends the borrowing duration of the book
+     * @param copy
+     * @return whether the extension has succeeded
+     */
     public static boolean extendBorrowTime(BookCopy copy) {
-        int changed = 0;
-        try {
-            PreparedStatement stmt = DBControl.getConnection().prepareStatement("UPDATE book_copy SET return_date = ? WHERE id = ?");
-            stmt.setString(1, copy.getReturnDate().toString());
-            stmt.setString(2, copy.getId() + "");
-            changed = stmt.executeUpdate();
+        int bookId = copy.getBookId();
+
+        String checkQuery = "SELECT 1 FROM book_order WHERE book_id = ?";
+        try (PreparedStatement ps = DBControl.prepareStatement(checkQuery)) {
+            ps.setInt(1, bookId);
+            // Don't allow extending if the book is being ordered
+            if (!ps.executeQuery().next()) {
+                String query = "UPDATE book_copy SET return_date = ? WHERE id = ?";
+                try (PreparedStatement stmt = DBControl.prepareStatement(query)) {
+                    stmt.setString(1, copy.getReturnDate().toString());
+                    stmt.setString(2, copy.getId() + "");
+                    return stmt.executeUpdate() == 1;
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
-        if (changed == 1)
-            return true;
-        else
-            return false;
+
+        return false;
     }
 
     /**

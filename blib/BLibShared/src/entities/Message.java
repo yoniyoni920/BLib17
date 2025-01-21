@@ -68,7 +68,20 @@ public class Message implements Serializable{
 		this.setError(false);
 		return this;
 	}
-	
+
+	/**
+	 * A simple reply that is served only to return that the request has succeeded to the client
+	 * @return Success message
+	 */
+	public Message successReply() {
+		return reply(true);
+	}
+
+	/**
+	 * An error reply, this <b>should</b> contain the error!
+	 * @param object
+	 * @return Error message
+	 */
 	public Message errorReply(Object object) {
 		this.object = object;
 		this.setError(true);

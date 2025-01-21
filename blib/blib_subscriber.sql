@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `blib` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `blib`;
 -- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
 --
 -- Host: localhost    Database: blib
@@ -59,14 +57,11 @@ CREATE TABLE `book_copy` (
   `lend_date` date DEFAULT NULL,
   `return_date` date DEFAULT NULL,
   `borrow_subscriber_id` int DEFAULT NULL,
-  `order_subscriber_id` int DEFAULT NULL,
   `is_lost` tinyint DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `bookId_idx` (`book_id`),
   KEY `subscriber_id_idx` (`borrow_subscriber_id`),
-  KEY `order_subscriber_id_idx` (`order_subscriber_id`),
-  CONSTRAINT `borrow_subscriber_id` FOREIGN KEY (`borrow_subscriber_id`) REFERENCES `subscriber` (`id`),
-  CONSTRAINT `order_subscriber_id` FOREIGN KEY (`order_subscriber_id`) REFERENCES `subscriber` (`id`)
+  CONSTRAINT `borrow_subscriber_id` FOREIGN KEY (`borrow_subscriber_id`) REFERENCES `subscriber` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -76,7 +71,7 @@ CREATE TABLE `book_copy` (
 
 LOCK TABLES `book_copy` WRITE;
 /*!40000 ALTER TABLE `book_copy` DISABLE KEYS */;
-INSERT INTO `book_copy` VALUES (1,1,'2025-01-15','2025-01-29',1,NULL,0),(2,3,NULL,NULL,NULL,NULL,0),(3,1,'2025-01-02','2025-01-16',1,NULL,0),(4,2,'2025-01-03','2025-01-17',1,3,0),(5,2,'2025-01-04','2025-01-16',1,1,0),(6,4,'2023-03-16','2025-03-30',1,NULL,0),(7,5,NULL,NULL,NULL,NULL,0),(8,6,NULL,NULL,NULL,NULL,0),(9,7,NULL,NULL,NULL,NULL,0),(10,8,NULL,NULL,NULL,NULL,0);
+INSERT INTO `book_copy` VALUES (1,1,'2025-01-15','2025-01-29',1,0),(2,3,NULL,NULL,NULL,0),(3,1,'2025-01-02','2025-01-16',1,0),(4,2,'2025-01-03','2025-01-17',1,0),(5,2,'2025-01-04','2025-01-16',1,0),(6,4,'2023-03-16','2025-03-30',1,0),(7,5,NULL,NULL,NULL,0),(8,6,NULL,NULL,NULL,0),(9,7,NULL,NULL,NULL,0),(10,8,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `book_copy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,6 +156,36 @@ CREATE TABLE `notification` (
 LOCK TABLES `notification` WRITE;
 /*!40000 ALTER TABLE `notification` DISABLE KEYS */;
 /*!40000 ALTER TABLE `notification` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order`
+--
+
+DROP TABLE IF EXISTS `order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `subscriber_id` int NOT NULL,
+  `book_id` int NOT NULL,
+  `date` date NOT NULL DEFAULT (now()),
+  PRIMARY KEY (`id`),
+  KEY `subscriber_id_idx` (`subscriber_id`),
+  KEY `book_id_idx` (`book_id`),
+  CONSTRAINT `book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
+  CONSTRAINT `subscriber` FOREIGN KEY (`subscriber_id`) REFERENCES `subscriber` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order`
+--
+
+LOCK TABLES `order` WRITE;
+/*!40000 ALTER TABLE `order` DISABLE KEYS */;
+INSERT INTO `order` VALUES (1,1,1,'2025-01-21'),(2,2,1,'2025-01-21');
+/*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -283,4 +308,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-18 16:09:56
+-- Dump completed on 2025-01-21  2:39:08

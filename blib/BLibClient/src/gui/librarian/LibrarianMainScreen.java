@@ -75,6 +75,7 @@ public class LibrarianMainScreen extends AbstractScreen {
 	public void closeWindow(ActionEvent event) throws Exception {
 		screenManager.closeScreen();
 	}
+
     /**
      * This method navigates to the "Report Screen".
      *
@@ -84,6 +85,7 @@ public class LibrarianMainScreen extends AbstractScreen {
     public void openReportScreen(ActionEvent event) throws IOException {
 		screenManager.openScreen("librarian/ReportScreen", "Reports");
     }
+
     /**
      * This method searches for subscribers based on the input in the search field.
      * It sends the search query to the server and populates the context menu with results.
@@ -115,6 +117,7 @@ public class LibrarianMainScreen extends AbstractScreen {
 			}
 		}
 	}
+
     /**
      * This method handles the selection of a subscriber from the context menu.
      * It opens the SubscriberCardScreen and displays the selected subscriber's details.

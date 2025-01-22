@@ -4667,6 +4667,7 @@ Add support for NO_HEADER tweak in tables .table-view.no-header > .column-header
 }
 
 .underline {
-  -fx-border-width: 1;
-  -fx-border-color: transparent transparent #515151 transparent;
+  -fx-border-width: 2;
+  -fx-padding: 4;
+  -fx-border-color: transparent transparent -color-border-default transparent;
 }

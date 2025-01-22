@@ -4,12 +4,14 @@ package gui.librarian;
 import base.Action;
 import entities.BookCopy;
 import entities.Message;
+import entities.Subscriber;
 import gui.AbstractScreen;
 import gui.SubscriberCardScreen;
 import gui.subscriber_main_screen.BorrowedBookScreen;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
@@ -81,7 +83,7 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
     /**
      * Triggers a fade-in animation for the specified label.
      *
-     * @param label the label to apply the fade-in animation to
+     * @param welcomeText the label to apply the fade-in animation to
      */
 	private void fadeInLabelTransition(Label welcomeText) {
         welcomeText.setOpacity(0.0); // Start with the text invisible
@@ -105,6 +107,14 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 			days = Integer.parseInt(daysExtension.getText());
 			copy.setReturnDate(copy.getReturnDate().plusDays(days));
 			Message msg = ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME , copy));
+
+			// Sucess dialog
+			Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+			successAlert.setTitle("Extend Borrow Duration");
+			successAlert.setHeaderText("Success");
+			successAlert.setContentText("Successfully extended the borrow duration!");
+			successAlert.showAndWait();
+
 			if(!msg.isError()) {
 				try {
 					closeWindow(event);
@@ -114,6 +124,10 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 				}
 			}
 			else {
+				Alert erorrAlert = new Alert(Alert.AlertType.ERROR);
+				erorrAlert.setTitle("Extend Borrow Time");
+				erorrAlert.setHeaderText("Failed to extend borrow time!");
+				erorrAlert.showAndWait();
 				copy.setReturnDate(copy.getReturnDate().minusDays(days));
 			}
 		}

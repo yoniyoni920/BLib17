@@ -1,7 +1,6 @@
 package gui.librarian;
 
 import base.Action;
-import base.ClientApplication;
 import controllers.BookScanner;
 import entities.*;
 import gui.AbstractScreen;
@@ -12,6 +11,7 @@ import javafx.scene.paint.Color;
 import services.ClientUtils;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 public class LendBookScreen extends AbstractScreen {
@@ -121,7 +121,10 @@ public class LendBookScreen extends AbstractScreen {
             bookIdAlert.setVisible(true);
             return;
         }
-        Message msg = new Message(Action.LEND_BOOK, new BookCopy(0, bookId, lendDatePicker.getValue(), returnDatePicker.getValue(), sub));
+
+        LocalTime now = LocalTime.now();
+        BookCopy sendCopy = new BookCopy(0, bookId, lendDatePicker.getValue().atTime(now), returnDatePicker.getValue().atTime(now), sub);
+        Message msg = new Message(Action.LEND_BOOK, sendCopy);
         ClientUtils.sendMessage(msg, message -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             if (message.isError()) {
@@ -134,18 +137,18 @@ public class LendBookScreen extends AbstractScreen {
                     alert.setHeaderText("Can't lend book");
                     alert.setContentText(bookIdAlert.getText() + " has no available copies for ordering or borrowing!");
                     alert.showAndWait();
-                } else if (message.getObject() instanceof Order) {
-                    Order order = (Order) message.getObject();
+                } else if (message.getObject() instanceof BookOrder) {
+                    BookOrder bookOrder = (BookOrder) message.getObject();
                     alert.setAlertType(Alert.AlertType.CONFIRMATION);
                     alert.setHeaderText("Can't lend book");
-                    alert.setContentText(bookIdAlert.getText() + " isn't available until " + order.getOrderDate() + " would you like to order it?");
+                    alert.setContentText(bookIdAlert.getText() + " isn't available until " + bookOrder.getOrderDate() + " would you like to order it?");
                     alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
                     alert.showAndWait().ifPresent(buttonType -> {
                         if(buttonType == ButtonType.NO) return;
                         Alert orderAlert = new Alert(Alert.AlertType.INFORMATION);
                         orderAlert.setHeaderText("Ordering book");
                         orderAlert.setContentText("Trying to make an order for " + bookIdAlert.getText());
-                        ClientUtils.sendMessage(new Message(Action.ORDER_BOOK, order), message1 -> {
+                        ClientUtils.sendMessage(new Message(Action.ORDER_BOOK, bookOrder), message1 -> {
                             Alert orderResultAlert = new Alert(Alert.AlertType.INFORMATION);
                             if(message1.isError()) {
                                 orderResultAlert.setAlertType(Alert.AlertType.ERROR);
@@ -153,8 +156,8 @@ public class LendBookScreen extends AbstractScreen {
                                 orderResultAlert.setContentText(message1.getObject().toString());
                             }
                             else {
-                                Order order1 = (Order) message1.getObject();
-                                if(order1.getOrderId() == -1){
+                                BookOrder bookOrder1 = (BookOrder) message1.getObject();
+                                if(bookOrder1.getOrderId() == -1){
                                     orderResultAlert.setAlertType(Alert.AlertType.INFORMATION);
                                     orderResultAlert.setHeaderText("Can't order book");
                                     orderResultAlert.setContentText("Book can't be ordered at the moment!");
@@ -162,7 +165,7 @@ public class LendBookScreen extends AbstractScreen {
                                     orderResultAlert.setAlertType(Alert.AlertType.INFORMATION);
                                     orderResultAlert.setHeaderText("Book Ordered successfully");
                                     orderResultAlert.setContentText(bookIdAlert.getText() + " has been ordered for subscriber "
-                                            + userAlert.getText() + " and will be available on " + order1.getOrderDate());
+                                            + userAlert.getText() + " and will be available on " + bookOrder1.getOrderDate());
                                 }
                             }
                             orderResultAlert.show();

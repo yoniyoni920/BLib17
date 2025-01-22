@@ -358,20 +358,21 @@ public class BookControl {
             while (rs.next()) {
                 Date lateDate = rs.getDate("late_return_date");
                 BorrowReport report = new BorrowReport(
-                        rs.getInt("book_id"),
-                        rs.getInt("book_copy_id"),
-                        rs.getDate("start_date").toLocalDate(),
-                        rs.getDate("return_date").toLocalDate(),
-                        lateDate != null ? lateDate.toLocalDate() : null
+                    rs.getInt("book_id"),
+                    rs.getInt("book_copy_id"),
+                    rs.getDate("start_date").toLocalDate(),
+                    rs.getDate("return_date").toLocalDate(),
+                    rs.getBoolean("is_late"),
+                    lateDate != null ? lateDate.toLocalDate() : null
                 );
                 report.setBook(new Book(
-                        rs.getInt("book_id"),
-                        rs.getString("title"),
-                        rs.getString("authors"),
-                        rs.getString("genre"),
-                        rs.getString("description"),
-                        rs.getString("image"),
-                        rs.getString("location")
+                    rs.getInt("book_id"),
+                    rs.getString("title"),
+                    rs.getString("authors"),
+                    rs.getString("genre"),
+                    rs.getString("description"),
+                    rs.getString("image"),
+                    rs.getString("location")
                 ));
                 list.add(report);
             }
@@ -424,18 +425,44 @@ public class BookControl {
     }
 
     public static void returnBook(int bookCopyId) {
-        String query = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
-        try (PreparedStatement preparedStatemen = DBControl.getConnection().prepareStatement(query)) {
-            preparedStatemen.setNull(1, Types.INTEGER);
-            preparedStatemen.setNull(2, java.sql.Types.DATE);
-            preparedStatemen.setNull(3, java.sql.Types.DATE);
-            preparedStatemen.setInt(4, bookCopyId);
-            preparedStatemen.executeUpdate();
+        String query = "SELECT * FROM book_copy WHERE id = ?";
 
-            updateReturnForOrders(bookCopyId);
+        try (PreparedStatement ps = DBControl.getConnection().prepareStatement(query)) {
+            ps.setInt(1, bookCopyId);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String updateQuery = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
+                int subscriberId = rs.getInt("borrow_subscriber_id");
+                try (PreparedStatement ps2 = DBControl.getConnection().prepareStatement(updateQuery)) {
+                    ps2.setNull(1, Types.INTEGER);
+                    ps2.setNull(2, java.sql.Types.DATE);
+                    ps2.setNull(3, java.sql.Types.DATE);
+                    ps2.setInt(4, bookCopyId);
+                    ps2.executeUpdate();
+
+                    SubscriberControl.logIntoHistory(
+                        new HistoryEntry(subscriberId, "return", bookCopyId)
+                    );
+
+                    // Attempts to update the late entry to include an actual return date
+                    String updateLateQuery = "UPDATE subscriber_history SET end_date = now() " +
+                            "WHERE book_copy_id = ? AND subscriber_id = ? " +
+                            "AND action = 'late' AND end_date IS NULL";
+                    try (PreparedStatement ps3 = DBControl.getConnection().prepareStatement(updateLateQuery)) {
+                        ps3.setInt(1, bookCopyId);
+                        ps3.setInt(2, subscriberId);
+                        ps3.executeUpdate();
+                    }
+
+                    updateReturnForOrders(bookCopyId);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
     }
 
     /**

@@ -203,11 +203,12 @@ public class ClientMessageHandler {
 
     public static Message getBorrowTimesReport(Message msg, ConnectionToClient client) {
         Object[] params = (Object[]) msg.getObject();
-        return msg.reply(BookControl.getBorrowTimesReport((LocalDate) params[0], (Integer) params[1]));
+        return msg.reply(BookControl.getBorrowTimesReport((LocalDate) params[0], (Integer)params[1]));
     }
 
     public static Message getSubscriberStatusReport(Message msg, ConnectionToClient client) {
-        return msg.reply(SubscriberControl.getSubscriberStatusReport((LocalDate) msg.getObject()));
+        Object[] params = (Object[]) msg.getObject();
+        return msg.reply(SubscriberControl.getSubscriberStatusReport((LocalDate)params[0], (Integer)params[1]));
     }
 
     public static Message getReportDates(Message msg, ConnectionToClient client) {

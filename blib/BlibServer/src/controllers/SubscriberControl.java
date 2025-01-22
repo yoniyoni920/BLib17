@@ -122,12 +122,12 @@ public class SubscriberControl {
 	/**
 	 * Returns a list of dates in which a report has been generated.
 	 * Enough that there is a single case made in the report for it to count as a report
-	 *
-	 * @return List<LocalDate
+	 * <br>
+	 * @return List<LocalDate>
 	 */
 	public static List<LocalDate> getReportDates() {
 		// Could use any report type, both of them are generated at the same time
-		String query = "SELECT report_date FROM subscriber_status_report GROUP BY report_date";
+		String query = "SELECT report_date FROM borrow_report GROUP BY report_date";
 
 		try (Statement st = DBControl.createStatement()) {
 			ResultSet rs = st.executeQuery(query);
@@ -146,38 +146,39 @@ public class SubscriberControl {
 	}
 
 	/**
-	 * Returns an array that contains each day of the month and how many frozen subscribers
-	 * were there at that day
+	 * Returns a list of subscriber status report
 	 *
-	 * @return int[]
+	 * @return List<SubscriberStatusReport>
 	 */
-	public static int[] getSubscriberStatusReport(LocalDate date) {
-		String query = "SELECT * FROM subscriber_status_report WHERE report_date = ?";
+	public static List<SubscriberStatusReport> getSubscriberStatusReport(LocalDate date, Integer subscriberId) {
+		String query = "SELECT subscriber_status_report.*, user.first_name FROM subscriber_status_report " +
+				"JOIN subscriber ON subscriber.id = subscriber_status_report.subscriber_id " +
+				"JOIN user ON subscriber.user_id = user.id " +
+				"WHERE report_date = ? ";
+
+		if (subscriberId != null) {
+			query += " AND subscriber_id = ?";
+		}
 
 		try (PreparedStatement st = DBControl.prepareStatement(query)) {
 			st.setObject(1, date);
+			if (subscriberId != null) {
+				st.setInt(2, subscriberId);
+			}
 			ResultSet rs = st.executeQuery();
 			List<SubscriberStatusReport> list = new ArrayList<>();
 			while (rs.next()) {
 				list.add(new SubscriberStatusReport(
-					rs.getDate("report_date").toLocalDate(),
+					rs.getString("first_name"),
+					rs.getInt("subscriber_id"),
 					rs.getDate("freeze_date").toLocalDate(),
 					rs.getDate("freeze_end_date").toLocalDate()
 				));
 			}
 
-			int[] statusCount = new int[31];
-			for (int i = 0; i < 31; i++) {
-				LocalDate day = date.plusDays(i);
-				for (SubscriberStatusReport report : list) {
-					// Collect all freezes where this day of the month is within the freeze duration
-					if (day.isAfter(report.getFreezeDate()) && (day.isBefore(report.getFreezeEndDate()) || day.isEqual(report.getFreezeEndDate()))) {
-						statusCount[i]++;
-					}
-				}
-			}
+			System.out.println(list.size());
 
-			return statusCount;
+			return list;
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);

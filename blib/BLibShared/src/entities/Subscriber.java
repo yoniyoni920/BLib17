@@ -81,6 +81,6 @@ public class Subscriber extends User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Subscriber : " + super.getName();
+		return getName() + " (" + getId() + " )";
 	}
 }

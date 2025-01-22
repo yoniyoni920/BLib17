@@ -1,9 +1,7 @@
 package gui.librarian;
 
 import base.Action;
-import entities.Book;
-import entities.BorrowReport;
-import entities.Message;
+import entities.*;
 import gui.AbstractScreen;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,7 +19,9 @@ import services.ClientUtils;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -40,10 +40,13 @@ import java.util.ResourceBundle;
  */
 public class ReportScreen extends AbstractScreen implements Initializable {
     @FXML
-    private LineChart<Integer, Integer> subscriberStatusChart;
+    private LineChart<Integer, String> subscriberStatusChart;
 
     @FXML
-    private NumberAxis yAxis;
+    private NumberAxis borrowYAxis;
+
+    @FXML
+    private NumberAxis subscriberYAxis;
 
     @FXML
     private LineChart<Integer, String> borrowTimesChart;
@@ -65,6 +68,13 @@ public class ReportScreen extends AbstractScreen implements Initializable {
 
     @FXML
     private Button clearFilter;
+
+    @FXML private Button clearSubscriberFilter;
+
+    @FXML private TextField searchSubscribers;
+
+    @FXML
+    private ContextMenu searchSubscribersContextMenu;
 
     boolean hasLoadedBorrowTImes = false;
     /**
@@ -100,9 +110,21 @@ public class ReportScreen extends AbstractScreen implements Initializable {
         });
 
         if (!(reportDate.getValue() == null)) {
-            setSubscriberStatusData();
+            setSubscriber(null);
         }
     }
+
+    /**
+     * Clears the search filter for subscribers and resets the chart.
+     *
+     * @param event the ActionEvent triggered by the clear filter button
+     */
+    public void clearSubscriberFilter(ActionEvent event) {
+        setSubscriber(null);
+        clearSubscriberFilter.setDisable(true);
+        searchSubscribers.setText("");
+    }
+
     /**
      * Clears the search filter for books and resets the chart.
      *
@@ -118,9 +140,8 @@ public class ReportScreen extends AbstractScreen implements Initializable {
      * Updates the chart with the selected book's borrow times.
      *
      * @param event the ActionEvent triggered by the book selection
-     * @throws Exception if an error occurs during the process
      */
-    public void onChoseBook(ActionEvent event) throws Exception{
+    public void onChoseBook(ActionEvent event) {
         MenuItem item = (MenuItem)event.getTarget();
         if (item != null) {
             setBook(((Book)item.getUserData()).getId());
@@ -131,9 +152,8 @@ public class ReportScreen extends AbstractScreen implements Initializable {
      * Searches for books based on user input and displays results in a context menu.
      *
      * @param event the KeyEvent triggered by typing in the search field
-     * @throws Exception if an error occurs during the search process
      */
-    public void searchBooks(KeyEvent event) throws Exception {
+    public void searchBooks(KeyEvent event) {
         String search = searchBook.getText();
 
         if (!search.isEmpty()) {
@@ -164,16 +184,29 @@ public class ReportScreen extends AbstractScreen implements Initializable {
      * @param bookId the ID of the book to display borrow times for, or null for all books
      */
     public void setBook(Integer bookId) {
-        Message msg = ClientUtils.sendMessage(Action.GET_BORROW_TIMES_REPORT, new Object[] { reportDate.getValue(), bookId });
+        LocalDate reportLocalDate = reportDate.getValue();
+        Message msg = ClientUtils.sendMessage(Action.GET_BORROW_TIMES_REPORT, new Object[] { reportLocalDate, bookId });
         borrowTimesChart.getData().clear();
+
+        borrowYAxis.setUpperBound(reportLocalDate.getMonth().maxLength()+1);
 
         if (!msg.isError()) {
             List<BorrowReport> reports = (List<BorrowReport>)msg.getObject();
             for (BorrowReport report : reports) {
                 XYChart.Series<Integer, String> borrow = new XYChart.Series<>();
 
-                int startD = report.getStartDate().getDayOfMonth();
-                int endD = report.getReturnDate().getDayOfMonth();
+                LocalDate date = report.getStartDate();
+                LocalDate endDate = report.getReturnDate();
+
+                // Handles things that occur outside the report's month
+                int startD = date.getDayOfMonth();
+                if (!date.getMonth().equals(reportLocalDate.getMonth())) {
+                    startD = 0;
+                }
+                int endD = endDate.getDayOfMonth();
+                if (!endDate.getMonth().equals(reportLocalDate.getMonth())) {
+                    endD = 32; // Doesn't matter, just so it looks like it passes through the chart
+                }
 
                 String yVal =  report.getBook().getTitle() + " (Copy " + report.getBookCopyId() + ")";
 
@@ -190,15 +223,20 @@ public class ReportScreen extends AbstractScreen implements Initializable {
                 endData.getNode().setStyle("-fx-background-color: #04b0bd");
                 borrow.getNode().setStyle("-fx-stroke: #04b0bd;");
 
-                LocalDate lateDate = report.getLateReturnDate();
-                if (lateDate != null) {
-                    XYChart.Series<Integer, String> lateReturn = new XYChart.Series<>();
+                if (report.isLate()) {
+                    LocalDate lateDate = report.getLateReturnDate();
+
+                    int lateEndD = lateDate != null ? lateDate.getDayOfMonth() : 32;
+                    if (lateDate != null && !lateDate.getMonth().equals(reportLocalDate.getMonth())) {
+                        lateEndD = 32;
+                    }
 
                     // Create XY for end->late borrow
                     XYChart.Data<Integer, String> lateStartData = new XYChart.Data<>(endD, yVal);
-                    XYChart.Data<Integer, String> lateEndData = new XYChart.Data<>(lateDate.getDayOfMonth(), yVal);
+                    XYChart.Data<Integer, String> lateEndData = new XYChart.Data<>(lateEndD, yVal);
 
                     // Add XY to series and series to chart
+                    XYChart.Series<Integer, String> lateReturn = new XYChart.Series<>();
                     lateReturn.getData().addAll(lateStartData, lateEndData);
                     borrowTimesChart.getData().add(lateReturn);
 
@@ -210,29 +248,108 @@ public class ReportScreen extends AbstractScreen implements Initializable {
             }
         }
     }
+
     /**
-     * Updates the subscriber status chart with data for the selected date.
+     * This method searches for subscribers based on the input in the search field.
+     * It sends the search query to the server and populates the context menu with results.
+     *
+     * @param event The KeyEvent triggered by the user's input.
+     * @throws Exception If there is an error processing the search query.
      */
-    public void setSubscriberStatusData() {
-        Message msg = ClientUtils.sendMessage(Action.GET_SUBSCRIBER_STATUS_REPORT, reportDate.getValue());
+    public void searchSubscribers(KeyEvent event) throws Exception {
+        String search = searchSubscribers.getText();
 
-        subscriberStatusChart.getData().clear();
+        if (!search.isEmpty()) {
+            Message msg = ClientUtils.sendMessage(Action.SEARCH_SUBSCRIBERS, new String[] { search, "first_name" });
+            if (!msg.isError()) {
+                List<Subscriber> subs = (List<Subscriber>)msg.getObject();
 
-        if (!msg.isError()) {
-            int[] days = (int[])msg.getObject();
-            XYChart.Series<Integer, Integer> frozen = new XYChart.Series<>();
+                ObservableList<MenuItem> list = searchSubscribersContextMenu.getItems();
+                list.clear();
 
-            int maxSubs = 0;
+                for (Subscriber sub : subs) {
+                    MenuItem item = new MenuItem(sub.getName() + " (" + sub.getId() + ")");
+                    list.add(item);
+                    item.setUserData(sub);
+                }
 
-            for (int i = 0; i < days.length; i++) {
-                frozen.getData().add(new XYChart.Data<>(i, days[i]));
-                maxSubs = Math.max(maxSubs, days[i]);
+                if (!searchSubscribersContextMenu.isShowing()) {
+                    Bounds bounds = searchSubscribers.localToScreen(searchSubscribers.getBoundsInLocal());
+                    searchSubscribersContextMenu.show(searchSubscribers, bounds.getMinX(), bounds.getMaxY());
+                }
             }
-
-            yAxis.setUpperBound(maxSubs + 1);
-            subscriberStatusChart.getData().add(frozen);
         }
     }
+
+    /**
+     * Handles the selection of a subscriber from the context menu.
+     * Updates the chart with the selected subscriber's status report.
+     *
+     * @param event the ActionEvent triggered by the book selection
+     * @throws Exception if an error occurs during the process
+     */
+    public void onChoseSubscriber(ActionEvent event) throws Exception {
+        MenuItem item = (MenuItem)event.getTarget();
+        if (item != null) {
+            setSubscriber(((Subscriber)item.getUserData()).getId());
+            clearSubscriberFilter.setDisable(false);
+        }
+    }
+
+    /**
+     * Updates the subscriber status chart with data for the selected subscriber and date.
+     *
+     * @param subscriberId the ID of the subscriber to display subscriber status for, or null for all subscribers
+     */
+    public void setSubscriber(Integer subscriberId) {
+        LocalDate reportLocalDate = reportDate.getValue();
+        Message msg = ClientUtils.sendMessage(Action.GET_SUBSCRIBER_STATUS_REPORT, new Object[] { reportLocalDate, subscriberId });
+        subscriberStatusChart.getData().clear();
+
+        subscriberYAxis.setUpperBound(reportLocalDate.getMonth().maxLength()+1);
+
+        if (!msg.isError()) {
+            List<SubscriberStatusReport> reports = (List<SubscriberStatusReport>)msg.getObject();
+
+            System.out.println(reports.size());
+
+
+            for (SubscriberStatusReport report : reports) {
+                XYChart.Series<Integer, String> freeze = new XYChart.Series<>();
+
+                LocalDate date = report.getDate();
+                LocalDate endDate = report.getEndDate();
+
+                int startD = report.getDate().getDayOfMonth();
+                if (!date.getMonth().equals(reportLocalDate.getMonth())) {
+                    startD = 0;
+                }
+
+                int endD = endDate.getDayOfMonth();
+                if (!endDate.getMonth().equals(reportLocalDate.getMonth())) {
+                    endD = 32; // Doesn't matter, just so it looks like it passes through the chart
+                }
+
+                String yVal = report.getName() + " (" + report.getSubscriberId() + ")";
+
+                // Create XY for start->end freeze
+                XYChart.Data<Integer, String> startData = new XYChart.Data<>(startD, yVal);
+                XYChart.Data<Integer, String> endData = new XYChart.Data<>(endD, yVal);
+
+                // Add XY to series and series to chart
+                freeze.getData().addAll(startData, endData);
+                subscriberStatusChart.getData().add(freeze);
+
+                // Set styles
+                startData.getNode().setStyle("-fx-background-color: red");
+                endData.getNode().setStyle("-fx-background-color: red");
+                freeze.getNode().setStyle("-fx-stroke: red;");
+
+
+            }
+        }
+    }
+
     /**
      * Handles tab selection changes.
      * Loads borrow times data if the borrow times tab is selected for the first time.
@@ -255,7 +372,7 @@ public class ReportScreen extends AbstractScreen implements Initializable {
         if (borrowTimesTab.isSelected()) {
             setBook(null);
         } else {
-            setSubscriberStatusData();
+            setSubscriber(null);
         }
     }
 }

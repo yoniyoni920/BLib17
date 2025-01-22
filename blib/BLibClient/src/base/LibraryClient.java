@@ -1,5 +1,6 @@
 package base;
 
+import controllers.Auth;
 import entities.Message;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -66,6 +67,7 @@ public class LibraryClient extends AbstractClient
 	public Message sendMessageToServer(Message msgToServer) {
 		try {
 			msgToServer.setAwaiting(true); // Mark the message as awaiting response
+			msgToServer.setUser(Auth.getInstance().getUser()); // Set the user that sent the message
 			awaitingMessages.add(msgToServer);// Add the message to the awaiting list
 			sendToServer(msgToServer);// Send the message to the server
 

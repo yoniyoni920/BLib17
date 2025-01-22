@@ -209,10 +209,12 @@ public class SubscriberControl {
     }
 
 	public static List<HistoryEntry> getSubscriberHistory(int subscriberId) {
-		String query = "SELECT *, book.title AS book_title FROM subscriber_history " +
-				"JOIN book_copy ON book_copy.id = book_copy_id " +
-				"JOIN book ON book.id = book_copy.book_id " +
-				"WHERE subscriber_id = ?";
+		String query = "SELECT *, book.title AS book_title, user.first_name AS librarian_name FROM subscriber_history " +
+				"LEFT JOIN book_copy ON book_copy.id = book_copy_id " +
+				"LEFT JOIN book ON book.id = book_copy.book_id " +
+				"LEFT JOIN user ON user.id = librarian_user_id " +
+				"WHERE subscriber_id = ? " +
+				"ORDER BY date DESC";
 
 		try (PreparedStatement st = DBControl.prepareStatement(query)) {
 			List<HistoryEntry> list = new ArrayList<>();
@@ -230,13 +232,18 @@ public class SubscriberControl {
 				// Set optional fields
 				Timestamp endDate = rs.getTimestamp("end_date");
 				String bookTitle = rs.getString("book_title");
+				String librarianName = rs.getString("librarian_name");
 
 				if (endDate != null) {
 					item.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
 				}
 
 				if (bookTitle != null) {
-					item.setBook(rs.getString("book_title"));
+					item.setBookName(rs.getString("book_title"));
+				}
+
+				if (librarianName != null) {
+					item.setLibrarianName(librarianName);
 				}
 
 				list.add(item);
@@ -255,21 +262,24 @@ public class SubscriberControl {
 	 * @throws SQLException
 	 */
 	public static boolean logIntoHistory(HistoryEntry historyItem) throws SQLException {
-		String query = "INSERT INTO subscriber_history (action, subscriber_id, book_copy_id, date, end_date) " +
-				"VALUES (?, ?, ?, ?, ?)";
+		String query = "INSERT INTO subscriber_history (action, subscriber_id, book_copy_id, book_id, date, end_date, librarian_user_id) " +
+				"VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement st = DBControl.prepareStatement(query)) {
 			st.setString(1, historyItem.getAction());
 			st.setInt(2, historyItem.getSubscriberId());
-			st.setInt(3, historyItem.getBookCopyId());
-			st.setTimestamp(4, Timestamp.valueOf(historyItem.getDate()));
+			st.setObject(3, historyItem.getBookCopyId());
+			st.setObject(4, historyItem.getBookId());
+			st.setTimestamp(5, Timestamp.valueOf(historyItem.getDate()));
 
 			LocalDateTime endDate = historyItem.getEndDate();
 			if (endDate != null) {
-				st.setTimestamp(5, Timestamp.valueOf(historyItem.getEndDate()));
+				st.setTimestamp(6, Timestamp.valueOf(historyItem.getEndDate()));
 			} else {
-				st.setTimestamp(5, null);
+				st.setTimestamp(6, null);
 			}
+
+			st.setObject(7, historyItem.getLibrarianUserId());
 
 			return st.executeUpdate() == 1;
 		}

@@ -504,27 +504,45 @@ public class BookControl {
      * @param copy
      * @return whether the extension has succeeded
      */
-    public static boolean extendBorrowTime(BookCopy copy) {
+    public static boolean extendBorrowTime(BookCopy copy, User userRequesting) {
+        int id = copy.getId();
         int bookId = copy.getBookId();
 
+        boolean isLibrarian = userRequesting.getRole() == Role.LIBRARIAN;
+
         String checkQuery = "SELECT 1 FROM book_order WHERE book_id = ?";
-        try (PreparedStatement ps = DBControl.prepareStatement(checkQuery)) {
-            ps.setInt(1, bookId);
-            // Don't allow extending if the book is being ordered
-            if (!ps.executeQuery().next()) {
-                String query = "UPDATE book_copy SET return_date = ? WHERE id = ?";
-                try (PreparedStatement stmt = DBControl.prepareStatement(query)) {
-                    stmt.setString(1, copy.getReturnDate().toString());
-                    stmt.setString(2, copy.getId() + "");
-                    return stmt.executeUpdate() == 1;
+        // Don't allow extending if the book is being ordered (unless the librarian is asking)
+        if (!isLibrarian) {
+            try (PreparedStatement ps = DBControl.prepareStatement(checkQuery)) {
+                ps.setInt(1, bookId);
+                if (ps.executeQuery().next()) {
+                    return false;
                 }
+            }  catch (SQLException e) {
+                e.printStackTrace();
+                return false;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
 
-        return false;
+        String query = "UPDATE book_copy SET return_date = ? WHERE id = ?";
+        try (PreparedStatement stmt = DBControl.prepareStatement(query)) {
+            stmt.setString(1, copy.getReturnDate().toString());
+            stmt.setString(2, id + "");
+
+            HistoryEntry entry;
+            if (userRequesting.getRole() == Role.LIBRARIAN) {
+                entry = new HistoryEntry(copy.getBorrowSubscriberId(), "extend_by_librarian", id);
+                entry.setLibrarianUserId(userRequesting.getId());
+            } else {
+                entry = new HistoryEntry(copy.getBorrowSubscriberId(), "extend_by_subscriber", id);
+            }
+            entry.setEndDate(copy.getReturnDate());
+            SubscriberControl.logIntoHistory(entry);
+
+            return stmt.executeUpdate() == 1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

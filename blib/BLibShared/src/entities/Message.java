@@ -44,7 +44,10 @@ public class Message implements Serializable{
 	
 	// Handles awaiting the message
 	private boolean isAwaiting = false;
-	
+
+	// The user that sends the message
+	private User user;
+
 	/* ------- Logic -------*/
 	public Message() {
 		id = idCounter++;
@@ -145,6 +148,14 @@ public class Message implements Serializable{
 
 	public void setAwaiting(boolean isAwaiting) {
 		this.isAwaiting = isAwaiting;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

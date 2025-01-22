@@ -242,7 +242,7 @@ public class ClientMessageHandler {
     }
 
     public static Message extendBorrowTime(Message msg, ConnectionToClient client) {
-        if (BookControl.extendBorrowTime((BookCopy) msg.getObject())) {
+        if (BookControl.extendBorrowTime((BookCopy)msg.getObject(), msg.getUser())) {
             return msg.successReply();
         } else {
             return msg.errorReply("Couldn't extend borrow time!");

@@ -7,11 +7,16 @@ public class HistoryEntry implements Serializable {
 	private int id;
 	private String action;
 	private int subscriberId;
-	private int bookCopyId;
 	private LocalDateTime date;
+
+	// These are more optional, depending on the action done
+	private Integer librarianUserId;
+	private Integer bookCopyId;
+	private Integer bookId;
 	private LocalDateTime endDate;
 
-	private String book;
+	private String bookName;
+	private String librarianName;
 
 	public HistoryEntry(int subscriberId, String action, int bookCopyId, LocalDateTime date, LocalDateTime endDate) {
 		this.bookCopyId = bookCopyId;
@@ -66,7 +71,7 @@ public class HistoryEntry implements Serializable {
 		this.subscriberId = subscriberId;
 	}
 
-	public int getBookCopyId() {
+	public Integer getBookCopyId() {
 		return bookCopyId;
 	}
 
@@ -74,12 +79,20 @@ public class HistoryEntry implements Serializable {
 		this.bookCopyId = bookCopyId;
 	}
 
-	public String getBook() {
-		return book;
+	public String getBookName() {
+		return bookName;
 	}
 
-	public void setBook(String book) {
-		this.book = book;
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+
+	public String getLibrarianName() {
+		return librarianName;
+	}
+
+	public void setLibrarianName(String librarianName) {
+		this.librarianName = librarianName;
 	}
 
 	public LocalDateTime getDate() {
@@ -97,4 +110,20 @@ public class HistoryEntry implements Serializable {
 	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
+
+    public Integer getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
+    }
+
+    public Integer getLibrarianUserId() {
+        return librarianUserId;
+    }
+
+    public void setLibrarianUserId(Integer librarianUserId) {
+        this.librarianUserId = librarianUserId;
+    }
 }

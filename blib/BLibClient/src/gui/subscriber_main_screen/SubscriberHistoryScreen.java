@@ -16,7 +16,9 @@ import javafx.util.Duration;
 import java.time.format.DateTimeFormatter;
 
 public class SubscriberHistoryScreen extends AbstractScreen{
-	
+
+	public TableColumn<HistoryEntry, String> dateColumn;
+	public TableColumn<HistoryEntry, String> detailsColumn;
 	@FXML private Label welcomeText;
 	@FXML private TableView<HistoryEntry> historyTable;
 
@@ -33,28 +35,37 @@ public class SubscriberHistoryScreen extends AbstractScreen{
 	private void loadSubscriber(Subscriber sub) {
 		subscriber = sub;
 		historyTable.setItems(FXCollections.observableArrayList(sub.getHistory()));
-		TableColumn<HistoryEntry, String> dateColumn = new TableColumn<>("Date");
-		TableColumn<HistoryEntry, String> actionColumn = new TableColumn<>("Action");
-
-		historyTable.getColumns().addAll(dateColumn, actionColumn);
 
 		dateColumn.setCellValueFactory(cellData ->
 			new SimpleStringProperty(cellData.getValue().getDate().format(DateTimeFormatter.ofPattern("dd/MM/yy, hh:mm"))
 		));
-		actionColumn.setCellValueFactory(cellData -> {
+		detailsColumn.setCellValueFactory(cellData -> {
 			HistoryEntry item = cellData.getValue();
 			String action = item.getAction();
-			String formattedAction = "";
+			String formattedAction;
 
 			if (action.equals("lost")) {
-				formattedAction = String.format("Lost book named: %s", item.getBook());
+				formattedAction = String.format("Lost book named: %s", item.getBookName());
 			} else if (action.equals("borrow")) {
-				formattedAction = String.format("Borrowed book named: %s", item.getBook());
+				formattedAction = String.format("Borrowed book named: %s", item.getBookName());
 			} else if (action.equals("late")) {
-				formattedAction = String.format("Late for book return. Book name: %s", item.getBook());
-			} else if (action.equals("frozen")) {
-				formattedAction = String.format("Got frozen for 30 days for not returning a book for more than " +
-						"a week after the return date.");
+				formattedAction = String.format("Late for book return. Book name: %s", item.getBookName());
+			} else if (action.equals("freeze")) {
+				formattedAction = "Got frozen for 30 days for not returning a book for more than " +
+						"a week after the return date.";
+			} else if (action.equals("return")) {
+				formattedAction = String.format("Returned book named: %s", item.getBookName());
+			} else if (action.equals("login")) {
+				formattedAction = "Logged in";
+			} else if (action.equals("extend_by_subscriber")) {
+				formattedAction = String.format("Extended borrowing duration for book named: %s", item.getBookName());
+			} else if (action.equals("extend_by_librarian")) {
+				formattedAction = String.format("Librarian %s extended borrowing duration for book named: %s",
+						item.getLibrarianName(), item.getBookName());
+			} else if (action.equals("order")) {
+				formattedAction = String.format("Ordered book named: %s", item.getBookName());
+			} else {
+				formattedAction = "Unknown action: " + action;
 			}
 			return new SimpleStringProperty(formattedAction);
 		});

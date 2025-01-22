@@ -1,24 +1,10 @@
 package gui;
 
-import java.io.IOException;
-
 import base.ClientApplication;
-import base.ClientController;
-import base.LibraryClient;
-import entities.Message;
-import entities.Subscriber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 /*
  * controller for ClientSocket.fxml

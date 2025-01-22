@@ -17,7 +17,6 @@ import java.io.IOException;
  * starts LiberaryClient.
  */
 public class ClientApplication extends Application {
-	public static ClientController chat; //only one instance
 	private ScreenManager screenManager;
 	private static ClientApplication clientApplication;
 	private LibraryClient libraryClient;
@@ -76,8 +75,6 @@ public class ClientApplication extends Application {
      * @throws Exception if an error occurs during client creation
      */
 	public void createClient(String ip, int port) throws Exception{
-		ClientApplication.chat = new ClientController();
-
 		try {
 			libraryClient = new LibraryClient(ip, port);
 		} catch (IOException e) {

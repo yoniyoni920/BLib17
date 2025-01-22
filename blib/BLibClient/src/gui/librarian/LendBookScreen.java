@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
+import services.ClientUtils;
 
 import java.time.LocalDate;
 
@@ -58,7 +59,7 @@ public class LendBookScreen extends AbstractScreen {
     }
     // Validate the entered book ID and fetch book details from the server
     public void bookTextFieldChanged() {
-        ClientApplication.chat.sendToServer(new Message(Action.GET_BOOK_BY_ID, bookIdTextField.getText()), message -> {
+        ClientUtils.sendMessage(new Message(Action.GET_BOOK_BY_ID, bookIdTextField.getText()), message -> {
             if (message.isError()) {
                 bookIdAlert.setText(message.getObject().toString());
                 bookIdAlert.setTextFill(Color.RED);
@@ -73,7 +74,7 @@ public class LendBookScreen extends AbstractScreen {
     }
     // Validate the entered subscriber ID and fetch subscriber details from the server
     public void userTextFieldChanged() {
-        ClientApplication.chat.sendToServer(new Message(Action.GET_SUBSCRIBER_BY_ID, subID.getText()), message -> {
+        ClientUtils.sendMessage(new Message(Action.GET_SUBSCRIBER_BY_ID, subID.getText()), message -> {
             if (message.isError()) {
                 userAlert.setText(message.getObject().toString());
                 userAlert.setTextFill(Color.RED);
@@ -121,7 +122,7 @@ public class LendBookScreen extends AbstractScreen {
             return;
         }
         Message msg = new Message(Action.LEND_BOOK, new BookCopy(0, bookId, lendDatePicker.getValue(), returnDatePicker.getValue(), sub));
-        ClientApplication.chat.sendToServer(msg, message -> {
+        ClientUtils.sendMessage(msg, message -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             if (message.isError()) {
                 alert.setAlertType(Alert.AlertType.ERROR);
@@ -144,7 +145,7 @@ public class LendBookScreen extends AbstractScreen {
                         Alert orderAlert = new Alert(Alert.AlertType.INFORMATION);
                         orderAlert.setHeaderText("Ordering book");
                         orderAlert.setContentText("Trying to make an order for " + bookIdAlert.getText());
-                        ClientApplication.chat.sendToServer(new Message(Action.ORDER_BOOK, order), message1 -> {
+                        ClientUtils.sendMessage(new Message(Action.ORDER_BOOK, order), message1 -> {
                             Alert orderResultAlert = new Alert(Alert.AlertType.INFORMATION);
                             if(message1.isError()) {
                                 orderResultAlert.setAlertType(Alert.AlertType.ERROR);

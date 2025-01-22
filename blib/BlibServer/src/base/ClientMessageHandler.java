@@ -3,12 +3,12 @@ package base;
 import controllers.BookControl;
 import controllers.LoginControl;
 import controllers.NotificationControl;
-import controllers.RegisterUser;
 import controllers.SubscriberControl;
 import entities.*;
 import ocsf.server.ConnectionToClient;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,23 +75,23 @@ public class ClientMessageHandler {
     }
 
     public static Message orderBook(Message msg, ConnectionToClient client) {
-        Order order = (Order) msg.getObject();
-        Subscriber subscriber = SubscriberControl.getSubscriberById(order.getSubscriberId());
+        BookOrder bookOrder = (BookOrder) msg.getObject();
+        Subscriber subscriber = SubscriberControl.getSubscriberById(bookOrder.getSubscriberId());
         if (subscriber == null || subscriber.isFrozen()) {
             return msg.errorReply("Subscriber is frozen or doesn't exist!");
         }
-        if (BookControl.checkBookLendable(order.getBookId(), order.getSubscriberId()) != 0) {
+        if (BookControl.checkBookLendable(bookOrder.getBookId(), bookOrder.getSubscriberId()) != 0) {
             return msg.errorReply("Book is lendable, Can't be orderer!");
         }
-        LocalDate orderable = BookControl.checkBookOrderable(order.getBookId());
+        LocalDate orderable = BookControl.checkBookOrderable(bookOrder.getBookId());
         if (orderable == null) {
-            order.setOrderId(-1);
-            return msg.reply(order);
+            bookOrder.setOrderId(-1);
+            return msg.reply(bookOrder);
         } else {
-            order.setOrderDate(orderable);
-            order.setOrderId(0);
-            if (BookControl.orderBook(order)) {
-                return msg.reply(order);
+            bookOrder.setOrderDate(orderable);
+            bookOrder.setOrderId(0);
+            if (BookControl.orderBook(bookOrder)) {
+                return msg.reply(bookOrder);
             } else {
                 return msg.errorReply("Failed to order book!");
             }
@@ -99,9 +99,9 @@ public class ClientMessageHandler {
     }
 
     public static Message lendBook(Message msg, ConnectionToClient client) {
-        BookCopy bookCopy = (BookCopy) msg.getObject();
+        BookCopy bookCopy = (BookCopy)msg.getObject();
 
-        if (bookCopy.getLendDate().isBefore(LocalDate.now())) {
+        if (bookCopy.getLendDate().isBefore(LocalDateTime.now())) {
             return msg.errorReply("Lend date is not valid!");
         }
 
@@ -126,9 +126,9 @@ public class ClientMessageHandler {
             } else {
                 LocalDate orderableDate = BookControl.checkBookOrderable(bookCopy.getBookId());
                 if (orderableDate != null) {
-                    Order order = new Order(0, bookCopy.getBorrowSubscriberId(), bookCopy.getBookId(),
+                    BookOrder bookOrder = new BookOrder(0, bookCopy.getBorrowSubscriberId(), bookCopy.getBookId(),
                             orderableDate, null);
-                    return msg.reply(order);
+                    return msg.reply(bookOrder);
                 } else {
                     return msg.reply(null);
                 }
@@ -176,7 +176,7 @@ public class ClientMessageHandler {
      */
     public static Message login(Message msg, ConnectionToClient client) {
         String[] args = (String[]) msg.getObject();
-        User user = LoginControl.loginAction(args[0], args[1]);
+        User user = LoginControl.login(Integer.parseInt(args[0]), args[1]);
         if (user != null) {
             return msg.reply(user);
         }
@@ -197,8 +197,12 @@ public class ClientMessageHandler {
 
     public static Message RegisterSubscriber(Message msg, ConnectionToClient client) {
         String[] args = (String[]) msg.getObject();
-        msg = RegisterUser.registerAction(args[0], args[1], args[2], args[3], args[4]);
-        return msg;
+        User user = LoginControl.register(args[0], args[1], args[2], args[3], args[4]);
+        if (user != null) {
+            return msg.reply(user);
+        } else {
+            return msg.errorReply("Couldn't register user!");
+        }
     }
 
     public static Message getBorrowTimesReport(Message msg, ConnectionToClient client) {

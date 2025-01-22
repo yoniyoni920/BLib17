@@ -1,15 +1,16 @@
 package entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Order implements java.io.Serializable {
+public class BookOrder implements Serializable {
     private int orderId;
     private int subscriberId;
     private int bookId;
     private LocalDate orderDate;
     private LocalDate untilDate;
 
-    public Order(int orderId, int subscriberId, int bookId, LocalDate orderDate, LocalDate untilDate) {
+    public BookOrder(int orderId, int subscriberId, int bookId, LocalDate orderDate, LocalDate untilDate) {
         this.orderId = orderId;
         this.subscriberId = subscriberId;
         this.bookId = bookId;

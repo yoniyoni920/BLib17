@@ -2,6 +2,7 @@ package entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * This class represents a Book Copy in the library system.
@@ -16,12 +17,12 @@ public class BookCopy implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private int bookId ;
-	private LocalDate lendDate;
-	private LocalDate returnDate;
+	private LocalDateTime lendDate;
+	private LocalDateTime returnDate;
 	private int borrowSubscriberID;
 	private Book book ;
 
-	public BookCopy(int id, int bookId , LocalDate lendDate , LocalDate returnDate , int borrowSubscriberId) {
+	public BookCopy(int id, int bookId , LocalDateTime lendDate , LocalDateTime returnDate , int borrowSubscriberId) {
 		this.id = id ;
 		this.bookId = bookId ;
 		this.lendDate = lendDate ;
@@ -45,19 +46,19 @@ public class BookCopy implements Serializable{
 		this.id = copyId;
 	}
 	
-	public LocalDate getLendDate() {
+	public LocalDateTime getLendDate() {
 		return this.lendDate;
 	}
 	
-	public void setLendDate(LocalDate lendDate) {
+	public void setLendDate(LocalDateTime lendDate) {
 		this.lendDate = lendDate;
 	}
 	
-	public LocalDate getReturnDate() {
+	public LocalDateTime getReturnDate() {
 		return this.returnDate;
 	}
 	
-	public void setReturnDate(LocalDate returnDate) {
+	public void setReturnDate(LocalDateTime returnDate) {
 		this.returnDate = returnDate ;
 	}
 	

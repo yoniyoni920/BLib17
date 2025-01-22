@@ -4,6 +4,7 @@ import controllers.BookControl;
 import controllers.CommunicationManager;
 import controllers.DBControl;
 import controllers.SubscriberControl;
+import entities.HistoryEntry;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -161,18 +162,42 @@ public class JobManager {
         LocalDateTime now = LocalDateTime.now();
 
         if (date == null || ChronoUnit.HOURS.between(date, now) >= 1) {
-            String query = "SELECT book_copy.*, s.* FROM book_copy " +
+            // Punish week+ late returns
+            String query = "SELECT book_copy.borrow_subscriber_id FROM book_copy " +
                     "LEFT JOIN subscriber AS s ON book_copy.borrow_subscriber_id = s.id " +
-                    "WHERE DATE_ADD(book_copy.return_date, INTERVAL 1 WEEK) < NOW()" +
+                    "WHERE DATE_ADD(book_copy.return_date, INTERVAL 1 WEEK) < NOW() " +
+                    "AND is_late = 1 " +
                     "AND (s.frozen_until IS NULL OR s.frozen_until < NOW())";
-
-            //TODO: add history entry for being late and then punish after a week
 
             try (Statement st = DBControl.createStatement()) {
                 ResultSet rs = st.executeQuery(query);
                 while (rs.next()) {
                     SubscriberControl.freezeSubscriber(rs.getInt("borrow_subscriber_id"));
                 }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Make an entry in the history for being late
+            String lateCheckQuery = "SELECT book_copy.id, borrow_subscriber_id FROM book_copy " +
+                    "LEFT JOIN subscriber AS s ON borrow_subscriber_id = s.id " +
+                    "WHERE book_copy.return_date < NOW() AND is_late = 0";
+
+            try (Statement st = DBControl.createStatement()) {
+                ResultSet rs = st.executeQuery(lateCheckQuery);
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    SubscriberControl.logIntoHistory(
+                        new HistoryEntry(rs.getInt("borrow_subscriber_id"), "late", id)
+                    );
+
+                    String updateCopyAsLateQuery = "UPDATE book_copy SET is_late = 1 WHERE id = ?";
+                    try (PreparedStatement ps = DBControl.prepareStatement(updateCopyAsLateQuery)) {
+                        ps.setInt(1, id);
+                        ps.executeUpdate();
+                    }
+                }
+
                 markJobDone("check-borrows");
             } catch (SQLException e) {
                 throw new RuntimeException(e);

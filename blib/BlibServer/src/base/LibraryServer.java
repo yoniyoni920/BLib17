@@ -44,7 +44,7 @@ public class LibraryServer extends AbstractServer
 			}
 		} catch (Exception e) {
 			System.err.println("Failed to handle message: " + msgFromClient);
-			System.err.println(e);
+			e.printStackTrace();
 			try { // One last attempt, just to tell the client there was a fatal error
 				if (msgFromClient != null) {
 					client.sendToClient(msgFromClient.fatalError());

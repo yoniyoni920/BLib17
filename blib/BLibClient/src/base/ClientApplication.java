@@ -7,21 +7,14 @@ import javafx.stage.Stage;
 import entities.Message;
 import gui.ScreenManager;
 import java.io.IOException;
-/*
- * The runnable for client side.
- * 
- */
-
 /**
- * Constructs an instance of client Controller which 
- * starts LiberaryClient.
+ * The runnable for client side.
  */
 public class ClientApplication extends Application {
 	private ScreenManager screenManager;
 	private static ClientApplication clientApplication;
 	private LibraryClient libraryClient;
 
-	
 	 /**
      * The main entry point of the client.
      * 
@@ -32,8 +25,6 @@ public class ClientApplication extends Application {
 	    launch(args);  
 	}
 	
-	
-	 
 	  /**
      * Gets the ScreenManager instance.
      * 
@@ -42,11 +33,11 @@ public class ClientApplication extends Application {
 	public ScreenManager getScreenManager() {
 		return screenManager;
 	}
+
 	/**
      * Constructs an instance of the ScreenManager .
      * and opens  Login screen
      */
-
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		clientApplication = this;

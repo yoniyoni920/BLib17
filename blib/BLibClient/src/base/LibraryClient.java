@@ -1,6 +1,8 @@
 package base;
 
 import entities.Message;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import ocsf.client.AbstractClient;
 
 import java.io.*;
@@ -42,9 +44,15 @@ public class LibraryClient extends AbstractClient
 		int id = msgFromServer.getId();
 		for(Message awaitingMsg : awaitingMessages) {
 			if (awaitingMsg.getId() == id) {
-				awaitingMsg.setObject(msgFromServer.getObject());
-				awaitingMsg.setError(msgFromServer.isError());
-				awaitingMsg.setAwaiting(false);
+				if (msgFromServer.isFatalError()) {
+					awaitingMsg.setError(true);
+					awaitingMsg.setAwaiting(false);
+					awaitingMsg.setObject("Fatal error");
+				} else {
+					awaitingMsg.setObject(msgFromServer.getObject());
+					awaitingMsg.setError(msgFromServer.isError());
+					awaitingMsg.setAwaiting(false);
+				}
 			}
 		}
 	}

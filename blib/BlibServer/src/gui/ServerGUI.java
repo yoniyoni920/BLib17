@@ -2,24 +2,18 @@ package gui;
 
 import java.net.InetAddress;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
+import controllers.CommunicationManager;
 import javafx.collections.ObservableList;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
 import ocsf.server.ConnectionToClient;
 /*
  * This class represents the GUI for managing server connections.
@@ -118,4 +112,52 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 		statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
 		connectionTable.getColumns().addAll(ipColumn, hostColumn, statusColumn);
 	}
+
+    /**
+     * This function opens a new window with the server settings
+     */
+    public void openSettings() {
+        // Create the custom dialog.
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Server settings");
+        dialog.setHeaderText("Communication settings");
+
+// Set the button types.
+        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+// Create the emailServer and smsServer labels and fields.
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField emailServer = new TextField();
+        emailServer.setText(CommunicationManager.emailServer);
+        emailServer.setMinWidth(300);
+        TextField smsServer = new TextField();
+        smsServer.setText(CommunicationManager.smsServer);
+
+        grid.add(new Label("Email Server:"), 0, 0);
+        grid.add(emailServer, 1, 0);
+        grid.add(new Label("Sms Server:"), 0, 1);
+        grid.add(smsServer, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Convert the result to a emailServer-smsServer-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                return new Pair<>(emailServer.getText(), smsServer.getText());
+            }
+            return null;
+        });
+
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+
+        result.ifPresent(emailSms -> {
+            CommunicationManager.emailServer = emailSms.getKey();
+            CommunicationManager.smsServer = emailSms.getValue();
+        });
+    }
 }

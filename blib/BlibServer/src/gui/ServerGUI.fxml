@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<VBox spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ServerGUI">
+<VBox spacing="8.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ServerGUI">
    <children>
       <Label alignment="CENTER" prefHeight="32.0" prefWidth="740.0" text="BLib Server Console" textAlignment="CENTER">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
+      <ImageView fitHeight="22.0" fitWidth="22.0" onMouseClicked="#openSettings" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../src/resources/settings-gear.png" />
+         </image>
+      </ImageView>
       <Label text="Connections" />
       <TableView fx:id="connectionTable" prefHeight="328.0" prefWidth="739.0">
          <columnResizePolicy>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import base.Action;
 import base.ClientApplication;
+import controllers.Auth;
 import entities.BookCopy;
 import entities.Message;
 import entities.Role;
@@ -79,6 +80,8 @@ public class LogInScreen extends AbstractScreen {
 			if(!msg.isError()) {
 				idErrorLabel.setVisible(false);
 				User user = ((User)msg.getObject());
+
+				Auth.getInstance().setUser(user);
 
 				// Check which user this is to show the appropriate screen
 				if (user.getRole() == Role.SUBSCRIBER) {

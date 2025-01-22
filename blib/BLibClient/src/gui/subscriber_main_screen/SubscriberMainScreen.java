@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import base.Action;
+import controllers.Auth;
 import entities.BookCopy;
 import entities.Message;
 import entities.Subscriber;
@@ -210,6 +211,11 @@ public class SubscriberMainScreen extends AbstractScreen {
         });
 
         fadeIn.play();
+    }
+
+    public void logout(ActionEvent event) {
+        Auth.getInstance().setUser(null); // Clear current user
+        closeScreen(event);
     }
 }
 

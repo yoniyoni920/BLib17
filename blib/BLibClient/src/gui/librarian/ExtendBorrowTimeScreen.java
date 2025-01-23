@@ -11,6 +11,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import services.ClientUtils;
+import services.InterfaceUtils;
+
 /**
  * This class manages the screen for extending the borrow time of a book copy.
  * It provides functionalities to:
@@ -56,7 +58,8 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
      */
 	private void renderData() {
 		bookNameLabel.setText(copy.getBook().getTitle());
-		descriptionLabel.setText("Borrowed From " + copy.getLendDate() + " to " + copy.getReturnDate() );
+		descriptionLabel.setText(String.format("Borrowing From %s Until %s",
+				InterfaceUtils.formatDate(copy.getLendDate()), InterfaceUtils.formatDate(copy.getReturnDate())));
 	}
 
     /**

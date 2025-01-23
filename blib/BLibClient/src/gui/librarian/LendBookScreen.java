@@ -29,8 +29,8 @@ public class LendBookScreen extends AbstractScreen {
     @FXML
     TextField subID;
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void openScreen(Object... args) {
         lendDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             returnDatePicker.setDayCellFactory(param -> new DateCell() {
                 @Override

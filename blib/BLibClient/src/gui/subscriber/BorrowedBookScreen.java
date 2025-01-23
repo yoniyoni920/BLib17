@@ -42,7 +42,8 @@ public class BorrowedBookScreen extends AbstractScreen {
 
     @FXML private ImageView bookImageView;
 
-    @FXML private Label titleLabel;
+    @FXML private Label bookTitleLabel;
+    @FXML private Label descLabel;
     @FXML private Label authorsLabel;
     @FXML private Label genreLabel;
     @FXML private Label locationLabel;
@@ -87,7 +88,8 @@ public class BorrowedBookScreen extends AbstractScreen {
         Image image = new Image(url);
         bookImageView.setImage(image);
 
-        titleLabel.setText(copy.getBook().getTitle());
+        bookTitleLabel.setText(copy.getBook().getTitle());
+        descLabel.setText(copy.getBook().getDescription());
         authorsLabel.setText(copy.getBook().getAuthors());
         genreLabel.setText(copy.getBook().getGenre());
         locationLabel.setText(copy.getBook().getLocation());

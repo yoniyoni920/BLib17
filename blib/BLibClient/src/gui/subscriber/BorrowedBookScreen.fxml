@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="795.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber.BorrowedBookScreen">
+<VBox prefWidth="964.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber.BorrowedBookScreen">
    <children>
       <AnchorPane prefHeight="63.0" prefWidth="795.0" styleClass="underline">
          <children>
@@ -31,18 +31,19 @@
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </padding>
       </AnchorPane>
-      <AnchorPane prefHeight="310.0" prefWidth="809.0">
+      <VBox prefWidth="843.0" spacing="16.0">
          <children>
-            <HBox layoutX="14.0" layoutY="14.0" prefHeight="313.0" prefWidth="795.0" spacing="16.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox prefWidth="843.0" spacing="16.0">
                <children>
-                  <ImageView fx:id="bookImageView" fitHeight="299.0" fitWidth="199.0" pickOnBounds="true">
+                  <ImageView fx:id="bookImageView" fitHeight="346.0" fitWidth="244.0" pickOnBounds="true">
                      <image>
                         <Image url="@../../resources/book_covers/batman.jpg" />
                      </image>
                   </ImageView>
-                  <VBox prefHeight="340.0" prefWidth="588.0" spacing="24.0">
+                  <VBox prefWidth="646.0" spacing="16.0">
                      <children>
-                        <Label fx:id="titleLabel" styleClass="title-3" text="Batman" />
+                        <Label fx:id="bookTitleLabel" prefHeight="31.0" prefWidth="645.0" styleClass="title-3" text="Batman" />
+                        <Label fx:id="descLabel" alignment="TOP_LEFT" prefWidth="640.0" styleClass="text-italic" text=" Born in England and raised in Canada, John Byrne discovered superheroes through The Adventures of Superman on television. After studying at the Alberta College of Art and Design, he broke into comics first with Skywald and then at Charlton, where he created the character Rog-2000. Following his tenure at Charlton, Byrne moved to Marvel, where his acclaimed runs on The Uncanny X-Men and The Fantastic Four soon made him one of the most popular artists in the industry. In 1986 he came to DC to revamp Superman from the ground up, and since then he has gone on to draw and/or write every major character at both DC and Marvel. " wrapText="true" />
                         <HBox>
                            <children>
                               <Label prefHeight="20.0" prefWidth="112.0" text="Authors:" />
@@ -70,7 +71,7 @@
                         <HBox spacing="2.0">
                            <children>
                               <Label prefHeight="20.0" prefWidth="152.0" text="Return Date:" />
-                              <HBox alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="432.0" spacing="4.0">
+                              <HBox alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="497.0" spacing="4.0">
                                  <children>
                                     <Label fx:id="returnDate" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="20.0" text="2025/1/1, 00:00" />
                                     <Label fx:id="daysLeft" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="(66 Days Left)" textFill="RED" />
@@ -80,22 +81,22 @@
                         </HBox>
                         <HBox>
                            <children>
-                              <Label prefHeight="20.0" prefWidth="100.0" text="Borrow Date:" />
-                              <Label fx:id="borrowDate" alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="509.0" text="2025/1/1" />
+                              <Label prefHeight="20.0" prefWidth="121.0" text="Borrow Date:" />
+                              <Label fx:id="borrowDate" alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="526.0" text="2025/1/1" />
                            </children>
                         </HBox>
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <VBox fx:id="borrowExtend" alignment="CENTER" layoutX="3.0" layoutY="327.0" prefHeight="65.0" prefWidth="805.0" spacing="8.0" AnchorPane.topAnchor="316.0">
+            <VBox fx:id="borrowExtend" alignment="CENTER" prefHeight="65.0" prefWidth="805.0" spacing="8.0">
                <children>
                   <Label text="You Can Try Extending the Borrow Duration by 14 Days" textFill="RED" />
                   <Button mnemonicParsing="false" onAction="#onPressingExtendButton" text="Extend" />
                </children>
             </VBox>
          </children>
-      </AnchorPane>
+      </VBox>
    </children>
    <padding>
       <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />

@@ -1,9 +1,11 @@
 package gui.subscriber_main_screen;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import base.Action;
+import controllers.Auth;
 import entities.BookCopy;
 import entities.Message;
 import entities.Subscriber;
@@ -20,6 +22,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import services.ClientUtils;
 import services.InterfaceUtils;
@@ -33,8 +36,8 @@ import services.InterfaceUtils;
  */
 public class SubscriberMainScreen extends AbstractScreen {
 
-    @FXML
-    private Label welcomeText;
+    @FXML private Label frozenText;
+    @FXML private HBox frozenBox;
 
     @FXML
     private GridPane borrowedBooksGrid;
@@ -49,6 +52,11 @@ public class SubscriberMainScreen extends AbstractScreen {
 
     // Used to dynamically store the borrowed books for this subscriber
     private ObservableList<BookCopy> borrowedBooks = FXCollections.observableArrayList();
+
+    @Override
+    public void openScreen(Object... args) {
+        onStart((Subscriber)args[0]);
+    }
 
     /**
      * Initializes the subscriber main screen.
@@ -81,10 +89,17 @@ public class SubscriberMainScreen extends AbstractScreen {
      * Renders the data on the screen including the welcome message, borrowed books, and the count of borrowed books.
      */
     private void renderData() {
-        welcomeText.setText("Welcome back, " + subscriber.getName());
-        transitionPlayer(welcomeText);
+        titleLabel.setText("Welcome back, " + subscriber.getName());
         showBorrowedBooks();
-        borrowedBooksCount.setText("You Have " + borrowedBooks.size() + " Books In Your Library");
+
+        boolean isFrozen = subscriber.isFrozen();
+        frozenBox.setManaged(isFrozen);
+        frozenBox.setVisible(isFrozen);
+        if (isFrozen) {
+            frozenText.setText("Frozen Until " + InterfaceUtils.formatDate(subscriber.getFrozenUntil()));
+        }
+
+        borrowedBooksCount.setText("You Have " + borrowedBooks.size() + " Books in Your Library");
     }
 
     /**
@@ -94,8 +109,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSubInfoScreen(ActionEvent event) throws Exception {
-        SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("SubscriberCardScreen", "Subscriber Card Screen");
-        card.setData(subscriber, true);
+        screenManager.openScreen("SubscriberCardScreen", "Subscriber Card", subscriber, true);
     }
 
     /**
@@ -105,8 +119,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSubscriberHistoryScreen(ActionEvent event) throws Exception {
-        SubscriberHistoryScreen screen = (SubscriberHistoryScreen) screenManager.openScreen("subscriber_main_screen/SubscriberHistoryScreen", "Subscriber History Screen");
-        screen.onStart(subscriber);
+        screenManager.openScreen("subscriber_main_screen/SubscriberHistoryScreen", "Subscriber History", subscriber);
     }
 
     /**
@@ -116,7 +129,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSearchBooksScreen(ActionEvent event) throws Exception {
-        screenManager.openScreen("SearchBooksScreen", "Book Search Screen");
+        screenManager.openScreen("SearchBooksScreen", "Book Search");
     }
 
     /**
@@ -127,8 +140,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openBorrowedBookScreen(ActionEvent event, BookCopy copy) throws Exception {
-        BorrowedBookScreen screen = (BorrowedBookScreen)screenManager.openScreen("subscriber_main_screen/BorrowedBookScreen", "Borrowed Book Screen");
-        screen.onStart(copy , subscriber);
+        screenManager.openScreen("subscriber_main_screen/BorrowedBookScreen", "Borrowed Book", copy, subscriber);
     }
 
     /**
@@ -139,8 +151,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs while opening the Subscriber Settings screen.
      */
     public void openConfigureScreen(ActionEvent event) throws Exception {
-        SubscriberSettingsScreen screen = (SubscriberSettingsScreen) screenManager.openScreen("subscriber_main_screen/SubscriberSettingsScreen", "Subscriber Settings");
-        screen.onStart(subscriber);
+        screenManager.openScreen("subscriber_main_screen/SubscriberSettingsScreen", "Subscriber Settings", subscriber);
     }
 
     /**
@@ -172,33 +183,32 @@ public class SubscriberMainScreen extends AbstractScreen {
     /**
      * Plays a dynamic welcome text transition on the screen.
      * Includes fade-in and fade-out effects, changing the displayed message.
-     *
-     * @param welcomeText The welcome text label to animate.
      */
-    private void transitionPlayer(Label welcomeText) {
-        welcomeText.setOpacity(0.0); // Start with the text invisible
+    @Override
+    protected void fadeInTitle() {
+        titleLabel.setOpacity(0.0); // Start with the text invisible
 
         // First Fade-In Transition (Welcome Message)
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), titleLabel);
         fadeIn.setFromValue(0.0); // Start fully transparent
         fadeIn.setToValue(1.0);   // Fade to fully visible
         fadeIn.setCycleCount(1);
 
         // Fade-Out Transition (Welcome Message)
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), welcomeText);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), titleLabel);
         fadeOut.setFromValue(1.0); // Start fully visible
         fadeOut.setToValue(0.0);   // Fade to fully transparent
         fadeOut.setCycleCount(1);
 
         // Second Fade-In Transition (My Books)
-        FadeTransition fadeInMyBooks = new FadeTransition(Duration.seconds(1), welcomeText);
+        FadeTransition fadeInMyBooks = new FadeTransition(Duration.seconds(1), titleLabel);
         fadeInMyBooks.setFromValue(0.0); // Start fully transparent
         fadeInMyBooks.setToValue(1.0);   // Fade to fully visible
         fadeInMyBooks.setCycleCount(1);
 
         // After fade-out, change the text and fade in "My Books"
         fadeOut.setOnFinished(event -> {
-            welcomeText.setText("My Books");
+            titleLabel.setText("My Books");
             fadeInMyBooks.play();
         });
 
@@ -210,6 +220,11 @@ public class SubscriberMainScreen extends AbstractScreen {
         });
 
         fadeIn.play();
+    }
+
+    public void logout(ActionEvent event) {
+        Auth.getInstance().setUser(null); // Clear current user
+        closeScreen(event);
     }
 }
 

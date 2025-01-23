@@ -24,12 +24,16 @@ import java.util.List;
 
 public class LibrarianMainScreen extends AbstractScreen {
 	User user;
-	@FXML private Label nameTxt;
 	@FXML private TextField searchSubscribers;
 	@FXML private ContextMenu searchSubscribersContextMenu;
 	@FXML private Button notificationButton;
 
-    /**
+	@Override
+	public void openScreen(Object... args) {
+		startUp((User)args[0]);
+	}
+
+	/**
      * This method navigates to the "Register Subscriber" screen 
      * and initializes it with the librarian's name.
      *
@@ -37,19 +41,18 @@ public class LibrarianMainScreen extends AbstractScreen {
      * @throws Exception If there is an error opening the screen.
      */
 	public void RegisterSubscriber(ActionEvent event) throws Exception {
-		RegisterViaLibrerianScreen librarianRegister = (RegisterViaLibrerianScreen)screenManager
-				.openScreen("librarian/RegisterViaLibrerianScreen", "Register Screen");
-		librarianRegister.startUp(user.getName());
+		screenManager.openScreen("librarian/RegisterViaLibrerianScreen", "Register Subscriber");
 	}
 	   /**
      * This method sets up the main screen with a welcome message 
      * that includes the librarian's name.
      *
-     * @param name The name of the librarian.
+     * @param user The user of the librarian.
      * @throws Exception If there is an error initializing the screen.
      */
-	public void startUp(String name) throws Exception {
-		nameTxt.setText("Welcome, " + name);
+	public void startUp(User user) {
+		titleLabel.setText("Welcome, " + user.getName());
+		this.user = user;
 	}
     /**
      * This method navigates to the "Lend Book" screen.
@@ -57,24 +60,9 @@ public class LibrarianMainScreen extends AbstractScreen {
      * @throws IOException If there is an error opening the screen.
      */
 	public void lendBook() throws IOException {
-		screenManager.openScreen("librarian/LendBookScreen", "Reports");
+		screenManager.openScreen("librarian/LendBookScreen", "Lend Book");
 	}
 
-    /**
-     * This method sets the logged-in user's details for the User.
-     *
-     * @param user The logged-in user object.
-     */
-	public void loadUser(User user) {
-		this.user = user;
-	}
-
-	/*
-	 * close Window and returns to previous screen
-	 */
-	public void closeWindow(ActionEvent event) throws Exception {
-		screenManager.closeScreen();
-	}
     /**
      * This method navigates to the "Report Screen".
      *
@@ -84,6 +72,7 @@ public class LibrarianMainScreen extends AbstractScreen {
     public void openReportScreen(ActionEvent event) throws IOException {
 		screenManager.openScreen("librarian/ReportScreen", "Reports");
     }
+
     /**
      * This method searches for subscribers based on the input in the search field.
      * It sends the search query to the server and populates the context menu with results.
@@ -115,29 +104,25 @@ public class LibrarianMainScreen extends AbstractScreen {
 			}
 		}
 	}
+
     /**
      * This method handles the selection of a subscriber from the context menu.
      * It opens the SubscriberCardScreen and displays the selected subscriber's details.
      *
      * @param event The ActionEvent triggered by selecting a menu item.
-     * @throws IOException If there is an error opening the subscriber card screen.
      */
-	public void onChoseSubscriber(ActionEvent event) throws IOException {
-		SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("SubscriberCardScreen", "Subscriber Card Screen");
-
+	public void onChoseSubscriber(ActionEvent event) {
 		try {
 			MenuItem item = (MenuItem)event.getTarget();
 			if (item != null) {
-				card.setData((Subscriber)item.getUserData(), false);
+				screenManager.openScreen("SubscriberCardScreen", "Subscriber Card", item.getUserData(), false);
 			}
-
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
 	public void openNotificationsScreen(ActionEvent event) throws IOException {
-		NotificationsScreen screen = (NotificationsScreen) screenManager.openScreen("librarian/NotificationsScreen", "Notifications Screen");
-		screen.onStart();
+		screenManager.openScreen("librarian/NotificationsScreen", "Notifications");
 	}
 }

@@ -5,21 +5,18 @@
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="507.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.librarian.LibrarianMainScreen">
+<AnchorPane prefHeight="364.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.librarian.LibrarianMainScreen">
    <children>
       <AnchorPane layoutX="64.0" prefHeight="36.0" prefWidth="750.0" styleClass="underline" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button layoutX="629.0" layoutY="7.0" mnemonicParsing="false" onAction="#closeWindow" styleClass="danger" text="Logout" AnchorPane.rightAnchor="3.0" />
-            <Label fx:id="nameTxt" prefHeight="47.0" prefWidth="448.0" styleClass="title-3" text="Welcome, Librarian Name" />
+            <Button layoutX="629.0" layoutY="7.0" mnemonicParsing="false" onAction="#closeScreen" styleClass="danger" text="Logout" AnchorPane.rightAnchor="3.0" />
+            <Label fx:id="titleLabel" prefHeight="47.0" prefWidth="448.0" styleClass="title-3" text="Welcome, Librarian Name" />
             <Button fx:id="notificationsButton" layoutX="575.0" layoutY="7.0" mnemonicParsing="false" onAction="#openNotificationsScreen" style="-fx-background-color: transparent;">
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
@@ -31,33 +28,25 @@
             </Button>
          </children>
       </AnchorPane>
-      <VBox layoutX="32.0" layoutY="125.0" prefHeight="109.0" prefWidth="700.0" spacing="4.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
+      <TextField fx:id="searchSubscribers" layoutX="32.0" layoutY="116.0" minHeight="-Infinity" onKeyReleased="#searchSubscribers" prefHeight="49.0" prefWidth="700.0" promptText="Search for a Subscriber..." AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0">
+         <contextMenu>
+            <ContextMenu fx:id="searchSubscribersContextMenu" onAction="#onChoseSubscriber">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+               </items>
+            </ContextMenu>
+         </contextMenu>
+      </TextField>
+      <VBox layoutX="32.0" layoutY="387.0" spacing="8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <HBox prefHeight="53.0" prefWidth="700.0" spacing="4.0">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#RegisterSubscriber" prefHeight="53.0" prefWidth="233.0" text="Subscriber Registration" />
-                  <Button mnemonicParsing="false" onAction="#lendBook" prefHeight="53.0" prefWidth="233.0" text="Lend a Book" />
-                  <Button mnemonicParsing="false" onAction="#openReportScreen" prefHeight="56.0" prefWidth="233.0" text="Reports" />
-               </children>
-            </HBox>
-            <TextField fx:id="searchSubscribers" onKeyReleased="#searchSubscribers" prefHeight="51.0" prefWidth="637.0" promptText="Search subscriber...">
-               <contextMenu>
-                  <ContextMenu fx:id="searchSubscribersContextMenu" onAction="#onChoseSubscriber">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Unspecified Action" />
-                     </items>
-                  </ContextMenu>
-               </contextMenu>
-            </TextField>
+            <Button mnemonicParsing="false" onAction="#RegisterSubscriber" prefHeight="25.0" prefWidth="752.0" text="Subscriber Registration" />
+            <Button mnemonicParsing="false" onAction="#lendBook" prefHeight="36.0" prefWidth="753.0" text="Lend a Book" />
+            <Button mnemonicParsing="false" onAction="#openReportScreen" prefHeight="36.0" prefWidth="752.0" text="Reports" />
          </children>
+         <padding>
+            <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+         </padding>
       </VBox>
-      <TableView layoutX="64.0" layoutY="304.0" prefHeight="200.0" prefWidth="676.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="Date" />
-          <TableColumn prefWidth="75.0" text="Action" />
-        </columns>
-      </TableView>
-      <Label layoutX="32.0" layoutY="234.0" text="Log" />
    </children>
    <padding>
       <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />

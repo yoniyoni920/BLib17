@@ -11,12 +11,15 @@ public class BorrowReport implements Serializable {
     private LocalDate returnDate;
     private LocalDate lateReturnDate;
 
+    private boolean isLate;
+
     public BorrowReport(int bookId, int bookCopyId, LocalDate startDate, LocalDate returnDate,
-                        LocalDate lateReturnDate) {
+                        boolean isLate, LocalDate lateReturnDate) {
         this.bookId = bookId;
         this.bookCopyId = bookCopyId;
         this.startDate = startDate;
         this.returnDate = returnDate;
+        this.isLate = isLate;
         this.lateReturnDate = lateReturnDate;
     }
 
@@ -38,6 +41,10 @@ public class BorrowReport implements Serializable {
 
     public LocalDate getLateReturnDate() {
         return lateReturnDate;
+    }
+
+    public boolean isLate() {
+        return isLate;
     }
 
     public Book getBook() {

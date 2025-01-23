@@ -122,11 +122,11 @@ public class ServerGUI extends AbstractScreen implements Initializable {
         dialog.setTitle("Server settings");
         dialog.setHeaderText("Communication settings");
 
-// Set the button types.
+		// Set the button types.
         ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
 
-// Create the emailServer and smsServer labels and fields.
+		// Create the emailServer and smsServer labels and fields.
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -140,7 +140,7 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 
         grid.add(new Label("Email Server:"), 0, 0);
         grid.add(emailServer, 1, 0);
-        grid.add(new Label("Sms Server:"), 0, 1);
+        grid.add(new Label("SMS Server:"), 0, 1);
         grid.add(smsServer, 1, 1);
 
         dialog.getDialogPane().setContent(grid);

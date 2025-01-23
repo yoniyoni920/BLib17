@@ -1,6 +1,9 @@
 package base;
 
+import controllers.Auth;
 import entities.Message;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import ocsf.client.AbstractClient;
 
 import java.io.*;
@@ -42,9 +45,15 @@ public class LibraryClient extends AbstractClient
 		int id = msgFromServer.getId();
 		for(Message awaitingMsg : awaitingMessages) {
 			if (awaitingMsg.getId() == id) {
-				awaitingMsg.setObject(msgFromServer.getObject());
-				awaitingMsg.setError(msgFromServer.isError());
-				awaitingMsg.setAwaiting(false);
+				if (msgFromServer.isFatalError()) {
+					awaitingMsg.setError(true);
+					awaitingMsg.setAwaiting(false);
+					awaitingMsg.setObject("Fatal error");
+				} else {
+					awaitingMsg.setObject(msgFromServer.getObject());
+					awaitingMsg.setError(msgFromServer.isError());
+					awaitingMsg.setAwaiting(false);
+				}
 			}
 		}
 	}
@@ -58,6 +67,7 @@ public class LibraryClient extends AbstractClient
 	public Message sendMessageToServer(Message msgToServer) {
 		try {
 			msgToServer.setAwaiting(true); // Mark the message as awaiting response
+			msgToServer.setUser(Auth.getInstance().getUser()); // Set the user that sent the message
 			awaitingMessages.add(msgToServer);// Add the message to the awaiting list
 			sendToServer(msgToServer);// Send the message to the server
 
@@ -74,7 +84,7 @@ public class LibraryClient extends AbstractClient
 					System.out.println("Interrupted..");
 				}
 
-				if (timePassed > 30 * 1000) {
+				if (timePassed > 10 * 1000) {
 					System.out.println(String.format("Warning: request %d has timed out after 30 seconds...", msgToServer.getId()));
 					awaitingMessages.remove(msgToServer);
 					return msgToServer.errorReply("Timed out");

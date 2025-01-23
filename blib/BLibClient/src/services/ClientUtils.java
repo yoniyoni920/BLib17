@@ -41,6 +41,23 @@ public class ClientUtils {
     }
 
     /**
+     * Sends a message in either different thread or in a synchronized way.
+     * Useful in cases you want to run it in async but then do want.
+     * <br>
+     * A good example of this being utilized is in the search books pages, we want the user to open
+     * the screen and instantly see the books instead of seeing "no books found".
+     * @param msg
+     * @param then
+     */
+    public static void sendMessage(Message msg, Consumer<Message> then, boolean async) {
+        if (async) {
+            sendMessage(msg, then);
+        } else {
+            then.accept(sendMessage(msg));
+        }
+    }
+
+    /**
      * Sends a message in a different thread, this is useful if you call this is many times and don't wish to slowdown
      * the UI thread.
      * @param msg

@@ -2,23 +2,30 @@ package entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Notification implements Serializable{
-	private int id ;
-	private int subscriberId ;
+	private int id;
+	private int subscriberId;
 	private String subscriberName;
-	private String message ;
-	private LocalDate date ;
-	private boolean isNew ;
+	private String message;
+	private LocalDateTime date;
+	private boolean isNew;
 	
-	public Notification(int subscriberId ,String subscriberName , String message , LocalDate date , boolean isNew) {
+	public Notification(int subscriberId, String message, LocalDateTime date, boolean isNew) {
 		this.subscriberId = subscriberId;
-		this.subscriberName = subscriberName;
 		this.message = message;
 		this.date = date ;
 		this.isNew = isNew ;
 	}
-	
+
+	public Notification(int subscriberId, String message) {
+		this.subscriberId = subscriberId;
+		this.message = message;
+		this.date = LocalDateTime.now();
+		this.isNew = true;
+	}
+
 	public int getNotificationId() {
 		return id ;
 	}
@@ -35,8 +42,8 @@ public class Notification implements Serializable{
 		return message;
 	}
 	
-	public LocalDate getDate() {
-		return date ;
+	public LocalDateTime getDate() {
+		return date;
 	}
 	
 	public boolean getIsNew() {
@@ -50,4 +57,8 @@ public class Notification implements Serializable{
 	public String getSubscriberName() {
 		return subscriberName ;
 	}
+
+    public void setSubscriberName(String subscriberName) {
+        this.subscriberName = subscriberName;
+    }
 }

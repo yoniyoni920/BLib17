@@ -5,23 +5,31 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_RIGHT" prefHeight="351.0" prefWidth="502.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LogInScreen">
+<VBox alignment="TOP_RIGHT" prefHeight="400.0" prefWidth="527.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LogInScreen">
    <children>
-      <AnchorPane prefHeight="62.0" prefWidth="438.0">
+      <AnchorPane prefHeight="62.0" prefWidth="438.0" styleClass="underline">
          <children>
-            <Label alignment="CENTER" layoutY="11.0" prefHeight="25.0" prefWidth="438.0" styleClass="title-1" text="BLib Login" textAlignment="CENTER">
+            <Label fx:id="titleLabel" layoutY="11.0" prefHeight="25.0" prefWidth="438.0" styleClass="title-3" text="BLib Login" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="22.0" />
                </font>
             </Label>
-            <Button layoutX="372.0" layoutY="13.0" mnemonicParsing="false" onAction="#searchBooksScreen" text="Search" AnchorPane.bottomAnchor="13.0" AnchorPane.topAnchor="13.0" />
+            <Button alignment="CENTER" layoutX="417.0" layoutY="11.0" minWidth="28.0" mnemonicParsing="false" onAction="#searchBooksScreen" prefHeight="41.0" prefWidth="40.0" AnchorPane.rightAnchor="0.0">
+            <graphic>
+               <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@/resources/subscriber_main_screen_photos/search.png" />
+               </ImageView>
+            </graphic>
+            </Button>
          </children>
       </AnchorPane>
-      <VBox prefHeight="0.0" prefWidth="438.0">
+      <VBox prefHeight="0.0" prefWidth="445.0" spacing="8.0">
          <children>
             <Label text="ID" />
             <TextField fx:id="idtxt" prefHeight="42.0" prefWidth="431.0" promptText="ID...">
@@ -32,7 +40,7 @@
             <Label fx:id="idErrorLabel" styleClass="danger" text="Label" visible="false" />
          </children>
       </VBox>
-      <VBox prefHeight="0.0" prefWidth="438.0">
+      <VBox prefHeight="0.0" prefWidth="438.0" spacing="8.0">
          <children>
             <Label text="Password" />
             <PasswordField fx:id="passTxt" promptText="Password..." />

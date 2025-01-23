@@ -36,10 +36,7 @@ public class SubscriberSettingsScreen extends AbstractScreen {
     
     @FXML
     private TextField lastNameTxtField;
-    
-    @FXML
-    private Label welcomeText;
-    
+
     @FXML
     private PasswordField oldPasswordTxtField;
     
@@ -81,8 +78,6 @@ public class SubscriberSettingsScreen extends AbstractScreen {
         lastNameTxtField.setText(sub.getLastName());
         phoneTxtField.setText(sub.getPhoneNumber());
         emailTxtField.setText(sub.getEmail());
-
-        fadeInLabelTransition(welcomeText);
     }
 
     /**
@@ -174,23 +169,6 @@ public class SubscriberSettingsScreen extends AbstractScreen {
                ((trimSpaces(oldPasswordTxtField.getText()).isEmpty() && trimSpaces(newPasswordTxtField.getText()).isEmpty()) ||
                 (!trimSpaces(oldPasswordTxtField.getText()).isEmpty() && 
                   trimSpaces(newPasswordTxtField.getText()).equals(sub.getPassword())));
-    }
-
-    /**
-     * Performs a fade-in animation on the welcome label.
-     * This method animates the opacity of the welcome text from 0 (invisible) to 1 (fully visible).
-     *
-     * @param welcomeText The label to apply the fade-in transition on.
-     */
-    private void fadeInLabelTransition(Label welcomeText) {
-        welcomeText.setOpacity(0.0); // Start with the text invisible
-
-        // First Fade-In Transition (Welcome Message)
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(5), welcomeText);
-        fadeIn.setFromValue(0.0); // Start fully transparent
-        fadeIn.setToValue(1.0);   // Fade to fully visible
-        fadeIn.setCycleCount(1);
-        fadeIn.play();
     }
 }
 

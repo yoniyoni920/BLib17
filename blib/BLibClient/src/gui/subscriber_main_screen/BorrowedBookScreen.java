@@ -15,9 +15,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import services.ClientUtils;
+import services.InterfaceUtils;
 
 /**
  * Controller for the Borrowed Book Screen.
@@ -27,31 +30,31 @@ import services.ClientUtils;
  * 
  */
 public class BorrowedBookScreen extends AbstractScreen {
-
-    @FXML
-    private Label welcomeText;
-
-    @FXML
-    private Label borrowDate;
+    @FXML private Label borrowDate;
     
-    @FXML
-    private Label returnDate;
+    @FXML private Label returnDate;
     
-    @FXML
-    private Label copyId;
+    @FXML private Label copyId;
     
-    @FXML
-    private Label daysLeft;
+    @FXML private Label daysLeft;
     
-    @FXML
-    private VBox borrowExtend;
+    @FXML private VBox borrowExtend;
 
     private BookCopy copy;
     
     private Subscriber subscriber;
 
-    @FXML
-    private BookCard bookCardController;
+    @FXML private ImageView bookImageView;
+
+    @FXML private Label titleLabel;
+    @FXML private Label authorsLabel;
+    @FXML private Label genreLabel;
+    @FXML private Label locationLabel;
+
+    @Override
+    public void openScreen(Object... args) {
+        onStart((BookCopy)args[0], (Subscriber)args[1]);
+    }
 
     /**
      * Initializes the screen with the provided book copy information.
@@ -61,7 +64,6 @@ public class BorrowedBookScreen extends AbstractScreen {
      * @param subscriber The subscriber who borrowed the book.
      */
     public void onStart(BookCopy copy , Subscriber subscriber) {
-        fadeInLabelTransition(welcomeText);
         loadData(copy , subscriber);
         renderData();
     }
@@ -84,24 +86,31 @@ public class BorrowedBookScreen extends AbstractScreen {
      */
     private void renderData() {
         borrowExtend.setVisible(false);
-        bookCardController.setBookData(copy.getBook());
-        borrowDate.setText(copy.getLendDate().toString());
-        returnDate.setText(copy.getReturnDate().toString());
+
+        String url = getClass().getResource("/resources/book_covers/" + copy.getBook().getImage()).toExternalForm();
+        Image image = new Image(url);
+        bookImageView.setImage(image);
+
+        titleLabel.setText(copy.getBook().getTitle());
+        authorsLabel.setText(copy.getBook().getAuthors());
+        genreLabel.setText(copy.getBook().getGenre());
+        locationLabel.setText(copy.getBook().getLocation());
+        borrowDate.setText(InterfaceUtils.formatDate(copy.getLendDate()));
+        returnDate.setText(InterfaceUtils.formatDate(copy.getReturnDate()));
         copyId.setText(copy.getId() + "");
 
         int daysBetween = (int) ChronoUnit.DAYS.between(LocalDate.now(), copy.getReturnDate());
         if (daysBetween < 0) {
-            daysLeft.setText("You Are Late!");
+            daysLeft.setText(String.format("(%d Days Late!)", Math.abs(daysBetween)));
         } else if (daysBetween == 0) {
-            daysLeft.setText("Today!");
+            daysLeft.setText("(Today!)");
         } else {
-            daysLeft.setText(daysBetween + " Days Left");
+            daysLeft.setText(String.format("(%d Days Left)", daysBetween));
         }
 
         // Display the extend button only if the book is not ordered and it's close to due date
-        if (daysBetween <= 7 && !subscriber.isFrozen()) {
-            borrowExtend.setVisible(true);
-        }
+        borrowExtend.setVisible(daysBetween <= 7 && !subscriber.isFrozen());
+        borrowExtend.setManaged(borrowExtend.isVisible());
     }
 
     /**
@@ -123,7 +132,7 @@ public class BorrowedBookScreen extends AbstractScreen {
             borrowExtend.setVisible(false);
             returnDate.setText(copy.getReturnDate().toString());
             int daysBetween = (int) ChronoUnit.DAYS.between(LocalDate.now(), copy.getReturnDate());
-            daysLeft.setText(daysBetween + " Days Left");
+            daysLeft.setText(String.format("(%d Days Left)", daysBetween));
             alert.setHeaderText("Your Borrow Duration Successfully Extended");
             alert.showAndWait();
         } else { // Failed to extend
@@ -133,49 +142,5 @@ public class BorrowedBookScreen extends AbstractScreen {
             alert.setContentText("Couldn't extend the borrow duration. It's possible there's an order waiting for the book.");
             alert.showAndWait();
         }
-
-        // Saving notification
-        if (!sendNotificationToLibrarian()) {
-            System.out.println("Couldn't Send Notification To The Librarian");
-        }
-    }
-  
-    /**
-     * Sends a notification to the librarian about the borrow time extension.
-     * 
-     * @return true if the notification was successfully sent; false otherwise.
-     */
-    private boolean sendNotificationToLibrarian() {
-        String message = "Extended The Borrow Time For The Book " + copy.getBook().getTitle() + " ,copy : " + copy.getId() + " For 14 Days";
-        Notification notification = new Notification(subscriber.getId(), subscriber.getName(), message, LocalDate.now(), true);
-        Message msgFromServer = ClientUtils.sendMessage(new Message(Action.SAVE_NOTIFICATION, notification));
-
-        return !msgFromServer.isError();
-    }
-
-    /**
-     * Closes the current screen and returns to the previous screen.
-     *
-     * @param event The action event triggered by the close window action.
-     * @throws Exception If an error occurs while closing the screen.
-     */
-    public void closeWindow(ActionEvent event) throws Exception {
-        screenManager.closeScreen();
-    }
-
-    /**
-     * Performs a fade-in animation on the welcome label.
-     * This method animates the opacity of the welcome text from 0 (invisible) to 1 (fully visible).
-     *
-     * @param welcomeText The label to apply the fade-in transition on.
-     */
-    private void fadeInLabelTransition(Label welcomeText) {
-        welcomeText.setOpacity(0.0); // Start with the text invisible
-        // First Fade-In Transition (Welcome Message)
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
-        fadeIn.setFromValue(0.0); // Start fully transparent
-        fadeIn.setToValue(1.0);   // Fade to fully visible
-        fadeIn.setCycleCount(1);
-        fadeIn.play();
     }
 }

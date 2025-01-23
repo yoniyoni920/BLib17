@@ -63,6 +63,9 @@ public class SearchBooksScreen extends AbstractScreen implements Initializable{
 
 	private Timer timer;
 	private TimerTask searchTask;
+
+	private boolean hasOpened = false;
+
 	/**
      * Initializes the screen with default values and configurations.
      *
@@ -147,6 +150,8 @@ public class SearchBooksScreen extends AbstractScreen implements Initializable{
 			else {
 				textId.setVisible(true);
 			}
-		});
+		}, hasOpened);
+
+		hasOpened = true;
 	}
 }

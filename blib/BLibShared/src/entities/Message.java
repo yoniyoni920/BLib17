@@ -38,10 +38,16 @@ public class Message implements Serializable{
 	
 	// Whether this message is an error. object will be an object containing info about the error
 	private boolean isError = false;
+
+	// Whether this message is a fatal error. Fatal errors simply show a dialog that something went really wrong
+	private boolean isFatalError = false;
 	
 	// Handles awaiting the message
 	private boolean isAwaiting = false;
-	
+
+	// The user that sends the message
+	private User user;
+
 	/* ------- Logic -------*/
 	public Message() {
 		id = idCounter++;
@@ -88,6 +94,17 @@ public class Message implements Serializable{
 		return this;
 	}
 
+	/**
+	 * An fatal error reply
+	 * @return Error message
+	 */
+	public Message fatalError() {
+		this.isFatalError = true;
+		this.object = null;
+		this.setError(true);
+		return this;
+	}
+
 	/* ------- Getters & Setters -----*/
 	public int getId() {
 		return id;
@@ -121,6 +138,10 @@ public class Message implements Serializable{
 		this.isError = isError;
 	}
 
+	public boolean isFatalError() {
+		return isFatalError;
+	}
+
 	public boolean isAwaiting() {
 		return isAwaiting;
 	}
@@ -129,9 +150,17 @@ public class Message implements Serializable{
 		this.isAwaiting = isAwaiting;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	@Override
 	public String toString() {
 		return "Message [id=" + id + ", action=" + action + ", object=" + object + ", isError=" + isError
-				+ ", isAwaiting=" + isAwaiting + "]";
+				+ ", isAwaiting=" + isAwaiting + ", isFatalError=" + isFatalError + "]";
 	}
 }

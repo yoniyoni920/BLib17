@@ -1,8 +1,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,7 +12,7 @@ public class Subscriber extends User implements Serializable {
 	private String email;
 
 	private LocalDate frozenUntil;
-	private DetailedSubscriptionHistory detailedSubscriptionHistory;
+	private List<HistoryEntry> history;
 
 	private List<BookCopy> borrowedBooks;
 
@@ -55,11 +53,12 @@ public class Subscriber extends User implements Serializable {
 		this.email = email;
 	}
 
-	public DetailedSubscriptionHistory getDetailedSubscriptionHistory() {
-		return detailedSubscriptionHistory ;
+	public List<HistoryEntry> getHistory() {
+		return history;
 	}
-	public void setDetailedSubscriptionHistory(DetailedSubscriptionHistory detailedSubscriptionHistory) {
-		this.detailedSubscriptionHistory = detailedSubscriptionHistory;
+
+	public void setHistory(List<HistoryEntry> history) {
+		this.history = history;
 	}
 
 	public LocalDate getFrozenUntil() {
@@ -82,6 +81,6 @@ public class Subscriber extends User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Subscriber : " + super.getName();
+		return getName() + " (" + getId() + " )";
 	}
 }

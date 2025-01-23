@@ -3,8 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
@@ -12,12 +10,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="772.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber_main_screen.SubscriberHistoryScreen">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="938.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber_main_screen.SubscriberHistoryScreen">
    <children>
       <AnchorPane prefHeight="63.0" prefWidth="795.0" styleClass="underline">
          <children>
-            <Label fx:id="welcomeText" layoutX="4.0" layoutY="-2.0" prefHeight="63.0" prefWidth="321.0" style="-fx-font-size: 24;" text="History" wrapText="true" AnchorPane.leftAnchor="0.0" />
-            <Button layoutX="668.0" layoutY="12.0" mnemonicParsing="false" onAction="#closeWindow" prefHeight="35.0" prefWidth="104.0" styleClass="danger" text="Back" AnchorPane.rightAnchor="0.0">
+            <Label fx:id="titleLabel" layoutX="12.0" layoutY="-2.0" prefHeight="63.0" prefWidth="321.0" styleClass="title-3" text="History" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Button layoutX="668.0" layoutY="12.0" mnemonicParsing="false" onAction="#closeScreen" prefHeight="35.0" prefWidth="104.0" text="Back" AnchorPane.rightAnchor="0.0">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -28,38 +26,15 @@
             </Button>
          </children>
       </AnchorPane>
-      <TabPane prefHeight="509.0" prefWidth="772.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab text="Borrows">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <TableView layoutX="10.0" layoutY="13.0" prefHeight="200.0" prefWidth="708.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="index" />
-                            <TableColumn prefWidth="479.0" text="description" />
-                              <TableColumn editable="false" prefWidth="82.0" text="returned ?" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="Orders">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </Tab>
-            <Tab text="Returns">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
-            </Tab>
-        </tabs>
-      </TabPane>
+      <TableView fx:id="historyTable" prefHeight="450.0" prefWidth="708.0">
+        <columns>
+          <TableColumn fx:id="dateColumn" prefWidth="145.0" resizable="false" text="Date" />
+          <TableColumn fx:id="detailsColumn" prefWidth="718.0" resizable="false" text="Details" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
    </children>
    <padding>
       <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />

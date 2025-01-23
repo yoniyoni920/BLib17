@@ -4,12 +4,14 @@ package gui.librarian;
 import base.Action;
 import entities.BookCopy;
 import entities.Message;
+import entities.Subscriber;
 import gui.AbstractScreen;
 import gui.SubscriberCardScreen;
 import gui.subscriber_main_screen.BorrowedBookScreen;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
@@ -23,9 +25,6 @@ import services.ClientUtils;
  * - Navigate back to the previous screen upon successful extension
  */
 public class ExtendBorrowTimeScreen extends AbstractScreen{
-	
-	@FXML
-	private Label welcomeText;
 	@FXML
 	private Label bookNameLabel;
 	@FXML
@@ -46,53 +45,25 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 		loadData(copy);
 		renderData(); 
 	}
-	
+
+	/**
+	 * Loads the book copy data into the screen's state.
+	 *
+	 * @param copy the book copy whose data is to be loaded
+	 */
 	private void loadData(BookCopy copy) {
 		this.copy = copy;
 	}
-	/**
-     * Loads the book copy data into the screen's state.
-     *
-     * @param copy the book copy whose data is to be loaded
-     */
-//    private void loadData(BookCopy copy) {
-//        this.copy = copy;
-//    }
 
     /**
      * Renders the loaded book copy data onto the screen.
      * Also triggers a fade-in transition for the welcome message.
      */
 	private void renderData() {
-		fadeInLabelTransition(welcomeText);
 		bookNameLabel.setText(copy.getBook().getTitle());
 		descriptionLabel.setText("Borrowed From " + copy.getLendDate() + " to " + copy.getReturnDate() );
 	}
-	 /**
-     * Closes the current window and navigates back to the BorrowedBookScreen.
-     * Updates the previous screen with the latest book copy details.
-     *
-     * @param event the ActionEvent triggered by the close button
-     * @throws Exception if an error occurs during screen transition
-     */
-	public void closeWindow(ActionEvent event) throws Exception {
-		SubscriberCardScreen prevScreen = (SubscriberCardScreen) screenManager.closeScreen();
-    }
-    /**
-     * Triggers a fade-in animation for the specified label.
-     *
-     * @param label the label to apply the fade-in animation to
-     */
-	private void fadeInLabelTransition(Label welcomeText) {
-        welcomeText.setOpacity(0.0); // Start with the text invisible
 
-        // First Fade-In Transition (Welcome Message)
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
-        fadeIn.setFromValue(0.0); // Start fully transparent
-        fadeIn.setToValue(1.0);   // Fade to fully visible
-        fadeIn.setCycleCount(1);
-        fadeIn.play();
-    }
     /**
      * Handles the extension of borrow time for the current book copy.
      * Validates the input, updates the return date, and sends the extension request to the server.
@@ -105,15 +76,27 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 			days = Integer.parseInt(daysExtension.getText());
 			copy.setReturnDate(copy.getReturnDate().plusDays(days));
 			Message msg = ClientUtils.sendMessage(new Message(Action.EXTEND_BORROW_TIME , copy));
+
+			// Sucess dialog
+			Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+			successAlert.setTitle("Extend Borrow Duration");
+			successAlert.setHeaderText("Success");
+			successAlert.setContentText("Successfully extended the borrow duration!");
+			successAlert.showAndWait();
+
 			if(!msg.isError()) {
 				try {
-					closeWindow(event);
+					closeScreen(event);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			else {
+				Alert erorrAlert = new Alert(Alert.AlertType.ERROR);
+				erorrAlert.setTitle("Extend Borrow Time");
+				erorrAlert.setHeaderText("Failed to extend borrow time!");
+				erorrAlert.showAndWait();
 				copy.setReturnDate(copy.getReturnDate().minusDays(days));
 			}
 		}

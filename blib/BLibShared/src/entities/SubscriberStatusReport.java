@@ -1,32 +1,38 @@
 package entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-/**
- * This class tracks the status of some subscriber.
- * In truth this class is more like a freeze status report as it only reports frozen subs
- * It's possible this will be changed in the future as reports become clearer.
- */
-public class SubscriberStatusReport {
-    private LocalDate reportDate;
-    private LocalDate freezeDate;
-    private LocalDate freezeEndDate;
+public class SubscriberStatusReport implements Serializable {
+    private int subscriberId;
+    private String name;
+    private LocalDate date;
+    private LocalDate endDate;
 
-    public SubscriberStatusReport(LocalDate reportDate, LocalDate freezeDate, LocalDate freezeEndDate) {
-        this.reportDate = reportDate;
-        this.freezeDate = freezeDate;
-        this.freezeEndDate = freezeEndDate;
+    public SubscriberStatusReport(String name, int subscriberId, LocalDate date, LocalDate endDate) {
+        this.name = name;
+        this.subscriberId = subscriberId;
+        this.date = date;
+        this.endDate = endDate;
     }
 
-    public LocalDate getReportDate() {
-        return reportDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public LocalDate getFreezeDate() {
-        return freezeDate;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public LocalDate getFreezeEndDate() {
-        return freezeEndDate;
+    public int getSubscriberId() {
+        return subscriberId;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public String getName() {
+        return name;
     }
 }

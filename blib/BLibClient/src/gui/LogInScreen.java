@@ -4,6 +4,7 @@ import java.util.List;
 
 import base.Action;
 import base.ClientApplication;
+import controllers.Auth;
 import entities.BookCopy;
 import entities.Message;
 import entities.Role;
@@ -80,14 +81,13 @@ public class LogInScreen extends AbstractScreen {
 				idErrorLabel.setVisible(false);
 				User user = ((User)msg.getObject());
 
+				Auth.getInstance().setUser(user);
+
 				// Check which user this is to show the appropriate screen
 				if (user.getRole() == Role.SUBSCRIBER) {
-					SubscriberMainScreen subMainScreen = (SubscriberMainScreen)screenManager.openScreen("subscriber_main_screen/SubscriberMainScreen", "Subscriber Main Screen");
-					subMainScreen.onStart((Subscriber)user);
+					screenManager.openScreen("subscriber_main_screen/SubscriberMainScreen", "Subscriber Main Screen", user);
 				} else {
-					LibrarianMainScreen libMainScreen = (LibrarianMainScreen)screenManager.openScreen("librarian/LibrarianMainScreen", "Librarian Main Screen");
-					libMainScreen.loadUser(user);
-					libMainScreen.startUp(user.getName());
+					screenManager.openScreen("librarian/LibrarianMainScreen", "Librarian Main Screen", user);
 				}
 			}
 			else {

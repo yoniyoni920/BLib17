@@ -52,7 +52,7 @@ public class ServerApplication extends Application {
 		if (port != null) {
 			createServer(port);
 		} else {
-			screenManager.openScreen("ServerSocket", "Server Socket Screen"); // Get controller for communicating with it later
+			screenManager.openScreen("ServerSocket", "Server Socket"); // Get controller for communicating with it later
 		}
 
 		setUserAgentStylesheet("/gui/Main.css");

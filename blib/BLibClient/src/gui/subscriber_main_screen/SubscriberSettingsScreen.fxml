@@ -14,12 +14,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="572.0" prefWidth="772.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber_main_screen.SubscriberSettingsScreen">
+<VBox prefHeight="524.0" prefWidth="861.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.subscriber_main_screen.SubscriberSettingsScreen">
    <children>
       <AnchorPane prefHeight="63.0" prefWidth="795.0" styleClass="underline">
          <children>
-            <Label fx:id="welcomeText" layoutX="2.0" layoutY="-2.0" prefHeight="52.0" prefWidth="321.0" style="-fx-font-size: 24;" text="Settings" wrapText="true" AnchorPane.leftAnchor="1.0" />
-            <Button layoutX="693.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeScreen" prefHeight="35.0" prefWidth="104.0" styleClass="danger" text="Back" AnchorPane.rightAnchor="0.0">
+            <Label fx:id="titleLabel" layoutX="2.0" layoutY="-2.0" prefHeight="52.0" prefWidth="321.0" styleClass="title-3" text="Settings" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Button layoutX="693.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeScreen" prefHeight="35.0" prefWidth="104.0" text="Back" AnchorPane.rightAnchor="0.0">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -28,56 +28,60 @@
                </graphic></Button>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="513.0" prefWidth="797.0">
+      <AnchorPane prefHeight="444.0" prefWidth="797.0">
          <children>
-            <TabPane prefHeight="401.0" prefWidth="797.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane prefHeight="346.0" prefWidth="797.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Personal Info">
                      <content>
                         <AnchorPane prefHeight="319.0" prefWidth="772.0">
                            <children>
-                              <VBox layoutX="22.0" layoutY="50.0" prefHeight="200.0" prefWidth="728.0">
+                              <VBox layoutX="22.0" layoutY="50.0" prefHeight="200.0" prefWidth="728.0" spacing="16.0">
                                  <children>
-                                    <HBox prefHeight="53.0" prefWidth="728.0">
+                                    <HBox spacing="16.0">
                                        <children>
-                                          <Label prefHeight="35.0" prefWidth="128.0" text="First Name:               " />
-                                          <TextField fx:id="firstNameTxtField" prefHeight="32.0" prefWidth="288.0">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </TextField>
+                                          <VBox prefHeight="53.0" prefWidth="728.0" spacing="8.0">
+                                             <children>
+                                                <Label prefHeight="35.0" prefWidth="128.0" text="First Name" />
+                                                <TextField fx:id="firstNameTxtField" prefHeight="32.0" prefWidth="288.0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </TextField>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="53.0" prefWidth="728.0" spacing="8.0">
+                                             <children>
+                                                <Label prefHeight="35.0" prefWidth="126.0" text="Last Name" />
+                                                <TextField fx:id="lastNameTxtField" prefHeight="32.0" prefWidth="288.0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </TextField>
+                                             </children>
+                                          </VBox>
                                        </children>
                                     </HBox>
-                                    <HBox prefHeight="53.0" prefWidth="728.0">
+                                    <VBox prefHeight="53.0" prefWidth="728.0" spacing="8.0">
                                        <children>
-                                          <Label prefHeight="35.0" prefWidth="126.0" text="Last Name:               " />
-                                          <TextField fx:id="lastNameTxtField" prefHeight="32.0" prefWidth="288.0">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </TextField>
-                                       </children>
-                                    </HBox>
-                                    <HBox prefHeight="53.0" prefWidth="728.0">
-                                       <children>
-                                          <Label prefHeight="37.0" prefWidth="128.0" text="Phone Number:        " />
+                                          <Label prefHeight="37.0" prefWidth="128.0" text="Phone Number" />
                                           <TextField fx:id="phoneTxtField" prefHeight="32.0" prefWidth="287.0">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </TextField>
                                        </children>
-                                    </HBox>
-                                    <HBox prefHeight="55.0" prefWidth="668.0">
+                                    </VBox>
+                                    <VBox prefHeight="55.0" prefWidth="668.0" spacing="8.0">
                                        <children>
-                                          <Label prefHeight="36.0" prefWidth="129.0" text="Email :                       " />
+                                          <Label prefHeight="36.0" prefWidth="129.0" text="Email                " />
                                           <TextField fx:id="emailTxtField" prefHeight="30.0" prefWidth="289.0">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </TextField>
                                        </children>
-                                    </HBox>
+                                    </VBox>
                                  </children>
                               </VBox>
                            </children>
@@ -90,16 +94,20 @@
                            <children>
                               <VBox layoutX="22.0" layoutY="50.0" prefHeight="200.0" prefWidth="728.0">
                                  <children>
-                                    <HBox prefHeight="53.0" prefWidth="728.0">
+                                    <HBox spacing="16.0">
                                        <children>
-                                          <Label prefHeight="36.0" prefWidth="145.0" text="Old Password:               " />
-                                          <PasswordField fx:id="oldPasswordTxtField" prefHeight="33.0" prefWidth="291.0" />
-                                       </children>
-                                    </HBox>
-                                    <HBox prefHeight="36.0" prefWidth="728.0">
-                                       <children>
-                                          <Label prefHeight="36.0" prefWidth="147.0" text="New Password:              " />
-                                          <PasswordField fx:id="newPasswordTxtField" prefHeight="33.0" prefWidth="291.0" />
+                                          <VBox prefHeight="53.0" prefWidth="728.0" spacing="8.0">
+                                             <children>
+                                                <Label prefHeight="36.0" prefWidth="145.0" text="Old Password             " />
+                                                <PasswordField fx:id="oldPasswordTxtField" prefHeight="33.0" prefWidth="291.0" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="36.0" prefWidth="728.0" spacing="8.0">
+                                             <children>
+                                                <Label prefHeight="36.0" prefWidth="147.0" text="New Password:              " />
+                                                <PasswordField fx:id="newPasswordTxtField" prefHeight="33.0" prefWidth="291.0" />
+                                             </children>
+                                          </VBox>
                                        </children>
                                     </HBox>
                                  </children>
@@ -109,7 +117,7 @@
                      </content></Tab>
               </tabs>
             </TabPane>
-            <Button layoutX="347.0" layoutY="401.0" mnemonicParsing="false" onAction="#updateInfo" prefHeight="25.0" prefWidth="104.0" text="Save" AnchorPane.bottomAnchor="0.0" />
+            <Button layoutX="347.0" layoutY="370.0" mnemonicParsing="false" onAction="#updateInfo" prefHeight="25.0" prefWidth="104.0" text="Save" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="346.0" />
             <Label fx:id="alertMessage" layoutX="61.0" layoutY="314.0" opacity="0.0" text="One of the fields is wrong, Please try again" textFill="#f80909" />
          </children>
       </AnchorPane>

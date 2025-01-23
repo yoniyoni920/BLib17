@@ -1,21 +1,18 @@
 package controllers;
 
-import entities.BookCopy;
-import entities.BorrowReport;
+import entities.*;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import entities.Book;
-import entities.Order;
 
 /**
  * The BookControl class provides various methods for managing books and their copies,
@@ -186,11 +183,26 @@ public class BookControl {
     public static boolean lendBookToSubscriber(BookCopy bookCopy) {
         try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
                 "UPDATE book_copy SET lend_date = ?, return_date = ?, borrow_subscriber_id = ? WHERE id = ?")) {
-            stt.setDate(1, Date.valueOf(bookCopy.getLendDate()));
-            stt.setDate(2, Date.valueOf(bookCopy.getReturnDate()));
-            stt.setInt(3, bookCopy.getBorrowSubscriberId());
-            stt.setInt(4, bookCopy.getId());
+
+            int subscriberId = bookCopy.getBorrowSubscriberId();
+            int bookCopyId = bookCopy.getId();
+            LocalDateTime date = bookCopy.getLendDate();
+            LocalDateTime returnDate = bookCopy.getReturnDate();
+
+            stt.setDate(1, Date.valueOf(date.toLocalDate()));
+            stt.setDate(2, Date.valueOf(returnDate.toLocalDate()));
+            stt.setInt(3, subscriberId);
+            stt.setInt(4, bookCopyId);
             stt.executeUpdate();
+
+            SubscriberControl.logIntoHistory(new HistoryEntry(
+                subscriberId,
+                HistoryAction.BORROW_BOOK,
+                bookCopyId,
+                date,
+                returnDate
+            ));
+            
             try (PreparedStatement stt2 = DBControl.getConnection().prepareStatement(
                     "delete from book_order where book_id = ? and subscriber_id = ?")) {
                 stt2.setInt(1, bookCopy.getBookId());
@@ -241,73 +253,61 @@ public class BookControl {
      * @return A list of borrowed `BookCopy` objects associated with the given subscriber.
      */
     public static List<BookCopy> retrieveBorrowedBooks(int subscriberId) {
-        ResultSet rs;
-
-        // Retrieving borrowed books for a subscriber
         List<BookCopy> borrowedBooks = new ArrayList<>();
-        try {
-            PreparedStatement stmt = DBControl.getConnection().prepareStatement("SELECT * FROM book_copy WHERE borrow_subscriber_id = ?");
-            stmt.setInt(1, subscriberId);
-            rs = stmt.executeQuery();
+        String query = "SELECT * FROM book_copy " +
+                "JOIN book ON book.id = book_copy.book_id " +
+                "WHERE borrow_subscriber_id = ?";
+        try (PreparedStatement ps = DBControl.prepareStatement(query)) {
+            ps.setInt(1, subscriberId);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int copyId = rs.getInt(1);
-                int bookId = rs.getInt(2);
-                Date sqlDate = rs.getDate(3);
-                LocalDate lendDate = sqlDate.toLocalDate();
-                sqlDate = rs.getDate(4);
-                LocalDate returnDate = sqlDate.toLocalDate();
-                int borrowSubscriberId = rs.getInt(5);
-                borrowedBooks.add(new BookCopy(copyId, bookId, lendDate, returnDate, borrowSubscriberId));
+                // Copy data
+                int copyId = rs.getInt("id");
+                int bookId = rs.getInt("book_id");
+                int borrowSubscriberId = rs.getInt("borrow_subscriber_id");
+                LocalDateTime lendDate = rs.getTimestamp("lend_date").toLocalDateTime();
+                LocalDateTime returnDate = rs.getTimestamp("return_date").toLocalDateTime();
+                BookCopy copy = new BookCopy(copyId, bookId, lendDate, returnDate, borrowSubscriberId);
+
+                // Book data
+                String title = rs.getString("title");
+                String authors = rs.getString("authors");
+                String genre = rs.getString("genre");
+                String description = rs.getString("description");
+                String image = rs.getString("image");
+                String location = rs.getString("location");
+                copy.setBook(new Book(bookId, title, authors, genre, description, image, location));
+
+                borrowedBooks.add(copy);
             }
-            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // Retrieving the book details (covers, title, etc.)
-        Connection con = DBControl.getConnection();
-        Statement stmt1 = null;
-        try {
-            stmt1 = con.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        for (BookCopy copy : borrowedBooks) {
-            int bookId = copy.getBookId();
-            try {
-                rs = stmt1.executeQuery("SELECT * FROM book WHERE id = '" + bookId + "'");
-                if (rs.next()) {
-                    int id = rs.getInt(1);
-                    String title = rs.getString(2);
-                    String authors = rs.getString(3);
-                    String genre = rs.getString(4);
-                    String description = rs.getString(5);
-                    String image = rs.getString(6);
-                    String location = rs.getString("location");
-
-                    copy.setBook(new Book(id, title, authors, genre, description, image, location));
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        }
         return borrowedBooks;
     }
 
     /**
      * Orders a book
      *
-     * @param order object representing the book order
+     * @param bookOrder object representing the book order
      * @return boolean if successful
      */
-    public static boolean orderBook(Order order) {
-        try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
+    public static boolean orderBook(BookOrder bookOrder) {
+        try (PreparedStatement stt = DBControl.prepareStatement(
                 "INSERT INTO book_order(subscriber_id, book_id) VALUES (?, ?)")) {
-            stt.setInt(1, order.getSubscriberId());
-            stt.setInt(2, order.getBookId());
+
+            int subscriberId = bookOrder.getSubscriberId();
+            int bookId = bookOrder.getBookId();
+
+            stt.setInt(1, subscriberId);
+            stt.setInt(2, bookId);
             stt.executeUpdate();
+
+            HistoryEntry entry = new HistoryEntry(subscriberId, HistoryAction.ORDER_BOOK);
+            entry.setBookId(bookId);
+            SubscriberControl.logIntoHistory(entry);
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -342,20 +342,21 @@ public class BookControl {
             while (rs.next()) {
                 Date lateDate = rs.getDate("late_return_date");
                 BorrowReport report = new BorrowReport(
-                        rs.getInt("book_id"),
-                        rs.getInt("book_copy_id"),
-                        rs.getDate("start_date").toLocalDate(),
-                        rs.getDate("return_date").toLocalDate(),
-                        lateDate != null ? lateDate.toLocalDate() : null
+                    rs.getInt("book_id"),
+                    rs.getInt("book_copy_id"),
+                    rs.getDate("start_date").toLocalDate(),
+                    rs.getDate("return_date").toLocalDate(),
+                    rs.getBoolean("is_late"),
+                    lateDate != null ? lateDate.toLocalDate() : null
                 );
                 report.setBook(new Book(
-                        rs.getInt("book_id"),
-                        rs.getString("title"),
-                        rs.getString("authors"),
-                        rs.getString("genre"),
-                        rs.getString("description"),
-                        rs.getString("image"),
-                        rs.getString("location")
+                    rs.getInt("book_id"),
+                    rs.getString("title"),
+                    rs.getString("authors"),
+                    rs.getString("genre"),
+                    rs.getString("description"),
+                    rs.getString("image"),
+                    rs.getString("location")
                 ));
                 list.add(report);
             }
@@ -367,7 +368,7 @@ public class BookControl {
     }
 
     private static void updateSubOrderReady(int bookId){
-        try(PreparedStatement sttm2 = DBControl.getConnection().prepareStatement(
+        try(PreparedStatement sttm2 = DBControl.prepareStatement(
                 "select email, first_name, last_name, title from " +
                         "(subscriber join user on subscriber.user_id = user.id)" +
                         " join (book_order join book on book_order.book_id = book.id)" +
@@ -408,18 +409,42 @@ public class BookControl {
     }
 
     public static void returnBook(int bookCopyId) {
-        String query = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
-        try (PreparedStatement preparedStatemen = DBControl.getConnection().prepareStatement(query)) {
-            preparedStatemen.setNull(1, Types.INTEGER);
-            preparedStatemen.setNull(2, java.sql.Types.DATE);
-            preparedStatemen.setNull(3, java.sql.Types.DATE);
-            preparedStatemen.setInt(4, bookCopyId);
-            preparedStatemen.executeUpdate();
+        try (PreparedStatement ps = DBControl.prepareStatement("SELECT * FROM book_copy WHERE id = ?")) {
+            ps.setInt(1, bookCopyId);
 
-            updateReturnForOrders(bookCopyId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String updateQuery = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
+                int subscriberId = rs.getInt("borrow_subscriber_id");
+                try (PreparedStatement ps2 = DBControl.prepareStatement(updateQuery)) {
+                    ps2.setNull(1, Types.INTEGER);
+                    ps2.setNull(2, java.sql.Types.DATE);
+                    ps2.setNull(3, java.sql.Types.DATE);
+                    ps2.setInt(4, bookCopyId);
+                    ps2.executeUpdate();
+
+                    SubscriberControl.logIntoHistory(
+                        new HistoryEntry(subscriberId, HistoryAction.RETURN_BOOK, bookCopyId)
+                    );
+
+                    // Attempts to update the late entry to include an actual return date
+                    String updateLateQuery = "UPDATE subscriber_history SET end_date = now() " +
+                            "WHERE book_copy_id = ? AND subscriber_id = ? " +
+                            "AND action = 'late' AND end_date IS NULL";
+                    try (PreparedStatement ps3 = DBControl.prepareStatement(updateLateQuery)) {
+                        ps3.setInt(1, bookCopyId);
+                        ps3.setInt(2, subscriberId);
+                        ps3.executeUpdate();
+                    }
+
+                    updateReturnForOrders(bookCopyId);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
     }
 
     /**
@@ -434,14 +459,19 @@ public class BookControl {
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 String upQuery = "UPDATE book_copy " +
-                        "SET is_lost = 1, borrow_subscriber_id = null, order_subscriber_id = null, lend_date = NULL, return_date = NULL " +
+                        "SET is_lost = 1, is_late = 0, borrow_subscriber_id = null, " +
+                        "order_subscriber_id = null, lend_date = NULL, return_date = NULL " +
                         "WHERE id = ?";
+
+                int subscriberId = rs.getInt("borrow_subscriber_id");
                 try (PreparedStatement st2 = DBControl.prepareStatement(upQuery)) {
                     st2.setInt(1, bookCopyId);
-                    //TODO: log history
-
+                    // Log this into the subscriber's history
+                    SubscriberControl.logIntoHistory(
+                        new HistoryEntry(subscriberId, HistoryAction.LOST_BOOK, bookCopyId)
+                    );
                     // Punish subscriber for losing the book
-                    SubscriberControl.freezeSubscriber(rs.getInt("borrow_subscriber_id"));
+                    SubscriberControl.freezeSubscriber(subscriberId);
                     return st2.executeUpdate() == 1;
                 }
             }
@@ -457,27 +487,55 @@ public class BookControl {
      * @param copy
      * @return whether the extension has succeeded
      */
-    public static boolean extendBorrowTime(BookCopy copy) {
+    public static boolean extendBorrowTime(BookCopy copy, User userRequesting) {
+        int id = copy.getId();
         int bookId = copy.getBookId();
 
+        boolean isLibrarian = userRequesting.getRole() == Role.LIBRARIAN;
+
         String checkQuery = "SELECT 1 FROM book_order WHERE book_id = ?";
-        try (PreparedStatement ps = DBControl.prepareStatement(checkQuery)) {
-            ps.setInt(1, bookId);
-            // Don't allow extending if the book is being ordered
-            if (!ps.executeQuery().next()) {
-                String query = "UPDATE book_copy SET return_date = ? WHERE id = ?";
-                try (PreparedStatement stmt = DBControl.prepareStatement(query)) {
-                    stmt.setString(1, copy.getReturnDate().toString());
-                    stmt.setString(2, copy.getId() + "");
-                    return stmt.executeUpdate() == 1;
+        // Don't allow extending if the book is being ordered (unless the librarian is asking)
+        if (!isLibrarian) {
+            try (PreparedStatement ps = DBControl.prepareStatement(checkQuery)) {
+                ps.setInt(1, bookId);
+                if (ps.executeQuery().next()) {
+                    return false;
                 }
+            }  catch (SQLException e) {
+                e.printStackTrace();
+                return false;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
 
-        return false;
+        String query = "UPDATE book_copy SET return_date = ? WHERE id = ?";
+        try (PreparedStatement stmt = DBControl.prepareStatement(query)) {
+            stmt.setString(1, copy.getReturnDate().toString());
+            stmt.setString(2, id + "");
+
+            int subId = copy.getBorrowSubscriberId();
+
+            // Add history entry
+            HistoryEntry entry;
+            if (userRequesting.getRole() == Role.LIBRARIAN) {
+                entry = new HistoryEntry(subId, HistoryAction.EXTEND_BORROW_LIBRARIAN, id);
+                entry.setLibrarianUserId(userRequesting.getId());
+            } else {
+                entry = new HistoryEntry(subId, HistoryAction.EXTEND_BORROW_SUBSCRIBER, id);
+
+                NotificationControl.saveNotification(
+                    new Notification(
+                        subId,
+                        String.format("Extended Borrow Duration for Book: %s (Copy %d) by 14 Days", copy.getBook().getTitle(), copy.getId())
+                    )
+                );
+            }
+            entry.setEndDate(copy.getReturnDate());
+            SubscriberControl.logIntoHistory(entry);
+
+            return stmt.executeUpdate() == 1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

@@ -7,10 +7,11 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -20,13 +21,8 @@
    <children>
       <AnchorPane styleClass="underline">
          <children>
-            <Pane>
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="1056.0" styleClass="title-1" text="Search Books" textAlignment="CENTER" />
-                  <Button layoutX="997.0" layoutY="2.0" mnemonicParsing="false" onAction="#closeScreen" text="Close" />
-               </children>
-            </Pane>
-            <HBox alignment="TOP_CENTER" layoutY="44.0" prefHeight="46.0" prefWidth="1056.0" spacing="4.0">
+            <Label fx:id="titleLabel" contentDisplay="CENTER" layoutX="6.0" layoutY="7.0" prefHeight="40.0" prefWidth="1056.0" styleClass="title-3" text="Search Books" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <HBox alignment="TOP_CENTER" layoutX="115.0" layoutY="6.0" prefHeight="58.0" prefWidth="821.0" spacing="4.0" AnchorPane.bottomAnchor="6.0" AnchorPane.topAnchor="6.0">
                <children>
                   <TextField fx:id="searchId" onKeyReleased="#onSearch" prefHeight="46.0" prefWidth="385.0" />
                   <ChoiceBox fx:id="choiceBox" prefHeight="46.0" prefWidth="105.0">
@@ -36,17 +32,20 @@
                   </ChoiceBox>
                </children>
             </HBox>
+            <Button layoutX="925.0" layoutY="17.0" mnemonicParsing="false" onAction="#closeScreen" text="Close" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/resources/subscriber_main_screen_photos/goBackIcon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-         <padding>
-            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-         </padding>
       </AnchorPane>
       <StackPane prefHeight="692.0" prefWidth="951.0">
          <children>
-            <Text fx:id="textId" strokeType="OUTSIDE" strokeWidth="0.0" text="Book Not Found...">
+            <Text fx:id="textId" strokeType="OUTSIDE" strokeWidth="0.0" text="No books found...">
                <font>
                   <Font size="20.0" />
                </font>

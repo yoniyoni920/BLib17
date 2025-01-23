@@ -4,6 +4,8 @@ import controllers.BookControl;
 import controllers.CommunicationManager;
 import controllers.DBControl;
 import controllers.SubscriberControl;
+import entities.HistoryAction;
+import entities.HistoryEntry;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -84,30 +86,38 @@ public class JobManager {
         }
     }
 
+    /**
+     * Generates a report for subscribers status
+     * It fetches the data from the subscriber history, taking any freeze that either start after the month
+     * or hasn't ended in the month (Basically what is relevant for the chart of the month)
+     * @param date
+     */
     public void generateSubscriberStatusReport(LocalDate date) {
         String query = "SELECT * FROM subscriber_history " +
-                "WHERE action = 'freeze' AND date >= ? AND date <= ?";
+                "WHERE action = 'freeze' AND (date >= ? OR end_date <= ?)";
         try (PreparedStatement st = DBControl.prepareStatement(query)) {
             st.setObject(1, date);
             st.setObject(2, date);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                String query2 = "INSERT INTO subscriber_status_report (freeze_date, freeze_end_date, report_date) " +
-                        "VALUES (?, ?, ?)";
+                String query2 = "INSERT INTO subscriber_status_report (subscriber_id, freeze_date, freeze_end_date, report_date) " +
+                        "VALUES (?, ?, ?, ?)";
 
                 try (PreparedStatement st2 = DBControl.prepareStatement(query2)) {
-                    st2.setInt(1, rs.getInt("date"));
-                    st2.setInt(2, rs.getInt("end_date"));
-                    st2.setObject(3, date);
+                    st2.setInt(1, rs.getInt("subscriber_id"));
+                    st2.setDate(2, rs.getDate("date"));
+                    st2.setDate(3, rs.getDate("end_date"));
+                    st2.setObject(4, date);
+                    st2.executeUpdate();
                 }
             }
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void generateBorrowTimesReport(LocalDate date) {
-        String query = "SELECT borrow.*, book_copy.book_id, late.date AS late_return_date " +
+        String query = "SELECT borrow.*, book_copy.book_id, late.date AS late_date, late.end_date AS late_return_date " +
                 "FROM subscriber_history AS borrow " +
                 "INNER JOIN book_copy ON book_copy_id = book_copy.id " +
                 "LEFT JOIN subscriber_history AS late ON late.book_copy_id = borrow.book_copy_id AND late.action = 'late'" +
@@ -117,15 +127,23 @@ public class JobManager {
             st.setDate(2, Date.valueOf(date.plusMonths(1).minusDays(1)));
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                String query2 = "INSERT INTO borrow_report (book_id, book_copy_id, start_date, return_date, late_return_date, report_date) " +
-                        "VALUES (?, ?, ?, ?, ?, ?)";
+                String query2 = "INSERT INTO borrow_report (book_id, book_copy_id, start_date, return_date, is_late, late_return_date, report_date) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
                 try (PreparedStatement st2 = DBControl.prepareStatement(query2)) {
                     st2.setInt(1, rs.getInt("book_id"));
                     st2.setInt(2, rs.getInt("book_copy_id"));
                     st2.setTimestamp(3, rs.getTimestamp("date"));
                     st2.setTimestamp(4, rs.getTimestamp("end_date"));
-                    st2.setObject(5, rs.getDate("late_return_date"));
+                    if (rs.getTimestamp("late_date") != null) {
+                        st2.setBoolean(5, true);
+                        st2.setObject(6, rs.getDate("late_return_date"));
+                    } else {
+                        st2.setBoolean(5, false);
+                        st2.setObject(6, null);
+                    }
+                    st2.setObject(7, date);
+
                     st2.execute();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
@@ -136,7 +154,6 @@ public class JobManager {
         }
     }
 
-
     /**
      * Checks for any late return. If it detects a week late return it punishes the offending subscriber
      * by freezing their account for a month (30 days)
@@ -145,20 +162,43 @@ public class JobManager {
         LocalDateTime date = getJobDate("check-borrows");
         LocalDateTime now = LocalDateTime.now();
 
-        System.out.println("Did check for late reports " + ChronoUnit.HOURS.between(date, now) + " hours ago");
-        System.out.println("Now : " + now + " date: " + date);
-
-        if (ChronoUnit.HOURS.between(date, now) >= 1) {
-            String query = "SELECT book_copy.*, s.* FROM book_copy " +
+        if (date == null || ChronoUnit.HOURS.between(date, now) >= 1) {
+            // Punish week+ late returns
+            String query = "SELECT book_copy.borrow_subscriber_id FROM book_copy " +
                     "LEFT JOIN subscriber AS s ON book_copy.borrow_subscriber_id = s.id " +
-                    "WHERE DATE_ADD(book_copy.return_date, INTERVAL 1 WEEK) < NOW()" +
+                    "WHERE DATE_ADD(book_copy.return_date, INTERVAL 1 WEEK) < NOW() " +
+                    "AND is_late = 1 " +
                     "AND (s.frozen_until IS NULL OR s.frozen_until < NOW())";
 
-            try (Statement st = DBControl.getConnection().createStatement()) {
+            try (Statement st = DBControl.createStatement()) {
                 ResultSet rs = st.executeQuery(query);
                 while (rs.next()) {
                     SubscriberControl.freezeSubscriber(rs.getInt("borrow_subscriber_id"));
                 }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Make an entry in the history for being late
+            String lateCheckQuery = "SELECT book_copy.id, borrow_subscriber_id FROM book_copy " +
+                    "LEFT JOIN subscriber AS s ON borrow_subscriber_id = s.id " +
+                    "WHERE book_copy.return_date < NOW() AND is_late = 0";
+
+            try (Statement st = DBControl.createStatement()) {
+                ResultSet rs = st.executeQuery(lateCheckQuery);
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    SubscriberControl.logIntoHistory(
+                        new HistoryEntry(rs.getInt("borrow_subscriber_id"), HistoryAction.LATE_RETURN, id)
+                    );
+
+                    String updateCopyAsLateQuery = "UPDATE book_copy SET is_late = 1 WHERE id = ?";
+                    try (PreparedStatement ps = DBControl.prepareStatement(updateCopyAsLateQuery)) {
+                        ps.setInt(1, id);
+                        ps.executeUpdate();
+                    }
+                }
+
                 markJobDone("check-borrows");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -180,7 +220,6 @@ public class JobManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
         }
         return null;
     }

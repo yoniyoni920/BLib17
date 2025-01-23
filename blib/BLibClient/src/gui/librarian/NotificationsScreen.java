@@ -19,6 +19,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import services.ClientUtils;
+import services.InterfaceUtils;
 
 /**
  * NotificationsScreen is a JavaFX controller class responsible for managing
@@ -46,7 +47,8 @@ public class NotificationsScreen extends AbstractScreen {
     /**
      * Method executed when the screen starts. It initializes the data and configures the TableViews.
      */
-    public void onStart() {
+    @Override
+    public void openScreen(Object... args) {
         loadData();
         prepareTableView();
     }
@@ -95,19 +97,23 @@ public class NotificationsScreen extends AbstractScreen {
     private void prepareTableView() {
         TableColumn<Notification, String> messageColumnAll = new TableColumn<>("Message");
         messageColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
-        messageColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
+        messageColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.65));
         
         TableColumn<Notification, String> messageColumnNew = new TableColumn<>("Message");
         messageColumnNew.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
-        messageColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
+        messageColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.65));
 
         TableColumn<Notification, String> dateColumnAll = new TableColumn<>("Date");
-        dateColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
-        dateColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
+        dateColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(
+            InterfaceUtils.formatDate(cell.getValue().getDate())
+        ));
+        dateColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.15));
         
         TableColumn<Notification, String> dateColumnNew = new TableColumn<>("Date");
-        dateColumnNew.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
-        dateColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
+        dateColumnNew.setCellValueFactory(cell -> new SimpleStringProperty(
+                InterfaceUtils.formatDate(cell.getValue().getDate())
+        ));
+        dateColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.15));
 
         TableColumn<Notification, Button> subscriberCardColumnAll = getSubscriberCardColumn();
         TableColumn<Notification, Button> subscriberCardColumnNew = getSubscriberCardColumn();
@@ -172,8 +178,7 @@ public class NotificationsScreen extends AbstractScreen {
      */
     public void openSubscriberCardScreen(int subscriberId) throws IOException {
         Subscriber subscriber = (Subscriber) ClientUtils.sendMessage(Action.GET_SUBSCRIBER_BY_ID, subscriberId).getObject();
-        SubscriberCardScreen screen = (SubscriberCardScreen) screenManager.openScreen("SubscriberCardScreen", "Subscriber Card");
-        screen.setData(subscriber, false);
+        screenManager.openScreen("SubscriberCardScreen", "Subscriber Card", subscriber, false);
     }
 
     /**

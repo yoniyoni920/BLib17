@@ -2,8 +2,6 @@ package controllers;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,8 +9,10 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import entities.BookCopy;
+
+import entities.HistoryAction;
 import entities.Subscriber;
+import entities.HistoryEntry;
 import entities.SubscriberStatusReport;
 
 /*
@@ -24,8 +24,8 @@ public class SubscriberControl {
 	 */
 	public static void updateInfo(List<String> changedInfo) {
 		try {
-			PreparedStatement subscriberStatement = DBControl.getConnection().prepareStatement("UPDATE subscriber SET phone_number = ?, email = ? WHERE user_id = ?");
-			PreparedStatement userStatement = DBControl.getConnection().prepareStatement("UPDATE user SET first_name = ?, last_name = ?, password = ? WHERE id = ?");
+			PreparedStatement subscriberStatement = DBControl.prepareStatement("UPDATE subscriber SET phone_number = ?, email = ? WHERE user_id = ?");
+			PreparedStatement userStatement = DBControl.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, password = ? WHERE id = ?");
 			subscriberStatement.setString(1,changedInfo.get(3));
 			subscriberStatement.setString(2,changedInfo.get(4));
 			subscriberStatement.setString(3, changedInfo.get(0));
@@ -123,12 +123,12 @@ public class SubscriberControl {
 	/**
 	 * Returns a list of dates in which a report has been generated.
 	 * Enough that there is a single case made in the report for it to count as a report
-	 *
-	 * @return List<LocalDate
+	 * <br>
+	 * @return List<LocalDate>
 	 */
 	public static List<LocalDate> getReportDates() {
 		// Could use any report type, both of them are generated at the same time
-		String query = "SELECT report_date FROM subscriber_status_report GROUP BY report_date";
+		String query = "SELECT report_date FROM borrow_report GROUP BY report_date";
 
 		try (Statement st = DBControl.createStatement()) {
 			ResultSet rs = st.executeQuery(query);
@@ -147,38 +147,39 @@ public class SubscriberControl {
 	}
 
 	/**
-	 * Returns an array that contains each day of the month and how many frozen subscribers
-	 * were there at that day
+	 * Returns a list of subscriber status report
 	 *
-	 * @return int[]
+	 * @return List<SubscriberStatusReport>
 	 */
-	public static int[] getSubscriberStatusReport(LocalDate date) {
-		String query = "SELECT * FROM subscriber_status_report WHERE report_date = ?";
+	public static List<SubscriberStatusReport> getSubscriberStatusReport(LocalDate date, Integer subscriberId) {
+		String query = "SELECT subscriber_status_report.*, user.first_name FROM subscriber_status_report " +
+				"JOIN subscriber ON subscriber.id = subscriber_status_report.subscriber_id " +
+				"JOIN user ON subscriber.user_id = user.id " +
+				"WHERE report_date = ? ";
+
+		if (subscriberId != null) {
+			query += " AND subscriber_id = ?";
+		}
 
 		try (PreparedStatement st = DBControl.prepareStatement(query)) {
 			st.setObject(1, date);
+			if (subscriberId != null) {
+				st.setInt(2, subscriberId);
+			}
 			ResultSet rs = st.executeQuery();
 			List<SubscriberStatusReport> list = new ArrayList<>();
 			while (rs.next()) {
 				list.add(new SubscriberStatusReport(
-					rs.getDate("report_date").toLocalDate(),
+					rs.getString("first_name"),
+					rs.getInt("subscriber_id"),
 					rs.getDate("freeze_date").toLocalDate(),
 					rs.getDate("freeze_end_date").toLocalDate()
 				));
 			}
 
-			int[] statusCount = new int[31];
-			for (int i = 0; i < 31; i++) {
-				LocalDate day = date.plusDays(i);
-				for (SubscriberStatusReport report : list) {
-					// Collect all freezes where this day of the month is within the freeze duration
-					if (day.isAfter(report.getFreezeDate()) && (day.isBefore(report.getFreezeEndDate()) || day.isEqual(report.getFreezeEndDate()))) {
-						statusCount[i]++;
-					}
-				}
-			}
+			System.out.println(list.size());
 
-			return statusCount;
+			return list;
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -194,13 +195,94 @@ public class SubscriberControl {
 	public static boolean freezeSubscriber(int subscriberId) {
 		String query = "UPDATE subscriber SET frozen_until = ? WHERE id = ?";
 
-		try (PreparedStatement st2 = DBControl.prepareStatement(query)) {
+		try (PreparedStatement st = DBControl.prepareStatement(query)) {
 			LocalDateTime now = LocalDateTime.now();
-			st2.setTimestamp(1, Timestamp.valueOf(now.plusDays(30)));
-			st2.setInt(2, subscriberId);
-			return st2.executeUpdate() == 1;
+			st.setTimestamp(1, Timestamp.valueOf(now.plusDays(30)));
+			st.setInt(2, subscriberId);
+
+			// Log into history
+			logIntoHistory(new HistoryEntry(subscriberId, HistoryAction.FREEZE_SUBSCRIBER));
+
+			return st.executeUpdate() == 1;
 		} catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+	public static List<HistoryEntry> getSubscriberHistory(int subscriberId) {
+		String query = "SELECT *, book.title AS book_title, user.first_name AS librarian_name FROM subscriber_history " +
+				"LEFT JOIN book_copy ON book_copy.id = book_copy_id " +
+				"LEFT JOIN book ON book.id = book_copy.book_id " +
+				"LEFT JOIN user ON user.id = librarian_user_id " +
+				"WHERE subscriber_id = ? " +
+				"ORDER BY date DESC";
+
+		try (PreparedStatement st = DBControl.prepareStatement(query)) {
+			List<HistoryEntry> list = new ArrayList<>();
+			st.setInt(1, subscriberId);
+
+			ResultSet rs = st.executeQuery();
+			while(rs.next()) {
+				HistoryEntry item = new HistoryEntry(
+					rs.getInt("subscriber_id"),
+					rs.getInt("id"),
+					HistoryAction.valueOf(rs.getString("action")),
+					rs.getTimestamp("date").toLocalDateTime()
+				);
+
+				// Set optional fields
+				Timestamp endDate = rs.getTimestamp("end_date");
+				String bookTitle = rs.getString("book_title");
+				String librarianName = rs.getString("librarian_name");
+
+				if (endDate != null) {
+					item.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
+				}
+
+				if (bookTitle != null) {
+					item.setBookName(rs.getString("book_title"));
+				}
+
+				if (librarianName != null) {
+					item.setLibrarianName(librarianName);
+				}
+
+				list.add(item);
+			}
+
+			return list;
+		} catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+	}
+
+	/**
+	 *
+	 * @param historyItem
+	 * @return
+	 * @throws SQLException
+	 */
+	public static boolean logIntoHistory(HistoryEntry historyItem) throws SQLException {
+		String query = "INSERT INTO subscriber_history (action, subscriber_id, book_copy_id, book_id, date, end_date, librarian_user_id) " +
+				"VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement st = DBControl.prepareStatement(query)) {
+			st.setString(1, historyItem.getAction().toString());
+			st.setInt(2, historyItem.getSubscriberId());
+			st.setObject(3, historyItem.getBookCopyId());
+			st.setObject(4, historyItem.getBookId());
+			st.setTimestamp(5, Timestamp.valueOf(historyItem.getDate()));
+
+			LocalDateTime endDate = historyItem.getEndDate();
+			if (endDate != null) {
+				st.setTimestamp(6, Timestamp.valueOf(historyItem.getEndDate()));
+			} else {
+				st.setTimestamp(6, null);
+			}
+
+			st.setObject(7, historyItem.getLibrarianUserId());
+
+			return st.executeUpdate() == 1;
+		}
+	}
 }

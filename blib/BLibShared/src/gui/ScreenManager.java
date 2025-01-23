@@ -37,13 +37,14 @@ public class ScreenManager {
 	 * @return
 	 * @throws IOException
 	 */
-	public AbstractScreen openScreen(String screenName, String title) throws IOException {
+	public AbstractScreen openScreen(String screenName, String title, Object... args) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/" + screenName + ".fxml"));
 		Parent root = loader.load();	
 		Scene scene = new Scene(root);
 		AbstractScreen screen = loader.getController();
-		screen.setScene(scene);
 		screen.setScreenManager(this);
+		screen.openScreen(args);
+		screen.setScene(scene);
 		screen.setTitle(title);
 		screens.add(screen);
 		setScreen(screen);

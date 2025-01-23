@@ -16,6 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import services.ClientUtils;
+import services.InterfaceUtils;
+
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -35,10 +37,15 @@ public class SubscriberCardScreen extends AbstractScreen {
 	@FXML private Label frozenText;
 	@FXML private HBox frozenBox;
 	@FXML private TableView<BookCopy> borrowedBooks;
-	@FXML private Label welcomeText;
 	@FXML private VBox borrowedBooksVBox;
 
 	private ObservableList<BookCopy> borrowedBooksObservableList;
+
+	@Override
+	public void openScreen(Object...args) {
+		setData((Subscriber)args[0], (Boolean)args[1]);
+	}
+
     /**
      * Sets the subscriber data and configures the UI accordingly.
      *
@@ -55,12 +62,10 @@ public class SubscriberCardScreen extends AbstractScreen {
 		emailLabel.setText(subscriber.getEmail());
 
 		boolean isFrozen = subscriber.isFrozen();
-		System.out.println(isFrozen);
 		frozenBox.setManaged(isFrozen);
 		frozenBox.setVisible(isFrozen);
-
 		if (isFrozen) {
-			frozenText.setText("Frozen Until " + subscriber.getFrozenUntil().format(DateTimeFormatter.ofPattern("dd-MM-yy")));
+			frozenText.setText("Frozen Until " + InterfaceUtils.formatDate(subscriber.getFrozenUntil()));
 		}
 
 		if (!isMe) {
@@ -85,8 +90,6 @@ public class SubscriberCardScreen extends AbstractScreen {
 
 		borrowedBooksVBox.setVisible(!isMe);
 		borrowedBooksVBox.setManaged(!isMe);
-
-		fadeInLabelTransition(welcomeText);
 
 		screenManager.getPrimaryStage().sizeToScene();
 	}
@@ -153,7 +156,8 @@ public class SubscriberCardScreen extends AbstractScreen {
 	}
 
 	private void onChangeDurationBookPressed(BookCopy bookCopy) throws IOException {
-		ExtendBorrowTimeScreen screen = (ExtendBorrowTimeScreen) screenManager.openScreen("librarian/ExtendBorrowTimeScreen", "Extend Duration Screen");
+		ExtendBorrowTimeScreen screen = (ExtendBorrowTimeScreen) screenManager
+				.openScreen("librarian/ExtendBorrowTimeScreen", "Extend Borrow Duration");
 		screen.onStart(bookCopy);
 	}
 	   /**
@@ -191,22 +195,5 @@ public class SubscriberCardScreen extends AbstractScreen {
 				erorrAlert.showAndWait();
 			}
 		}
-	}
-
-	/**
-	 * Performs a fade-in animation on the welcome label.
-	 * This method animates the opacity of the welcome text from 0 (invisible) to 1 (fully visible).
-	 *
-	 * @param welcomeText The label to apply the fade-in transition on.
-	 */
-	private void fadeInLabelTransition(Label welcomeText) {
-		welcomeText.setOpacity(0.0); // Start with the text invisible
-
-		// First Fade-In Transition (Welcome Message)
-		FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
-		fadeIn.setFromValue(0.0); // Start fully transparent
-		fadeIn.setToValue(1.0);   // Fade to fully visible
-		fadeIn.setCycleCount(1);
-		fadeIn.play();
 	}
 }

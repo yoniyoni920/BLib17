@@ -14,12 +14,8 @@
     <children>
         <AnchorPane prefHeight="63.0" prefWidth="795.0" styleClass="underline">
             <children>
-            <HBox layoutX="5.0" layoutY="1.0">
-               <children>
-                      <Label fx:id="welcomeText" prefHeight="51.0" prefWidth="209.0" styleClass="title-2" text="Subscriber Card" wrapText="true" />
-               </children>
-            </HBox>
-                <Button layoutX="629.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeScreen" prefHeight="35.0" prefWidth="104.0" text="Back" AnchorPane.rightAnchor="0.0">
+                <Label fx:id="titleLabel" prefHeight="51.0" prefWidth="209.0" styleClass="title-3" text="Subscriber Card" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <Button layoutX="623.0" layoutY="11.0" mnemonicParsing="false" onAction="#closeScreen" prefHeight="35.0" prefWidth="104.0" text="Back" AnchorPane.rightAnchor="0.0">
                     <graphic>
                         <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                             <image>

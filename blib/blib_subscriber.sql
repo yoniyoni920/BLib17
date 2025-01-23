@@ -56,10 +56,11 @@ DROP TABLE IF EXISTS `book_copy`;
 CREATE TABLE `book_copy` (
   `id` int NOT NULL AUTO_INCREMENT,
   `book_id` int NOT NULL,
-  `lend_date` date DEFAULT NULL,
-  `return_date` date DEFAULT NULL,
+  `lend_date` datetime DEFAULT NULL,
+  `return_date` datetime DEFAULT NULL,
   `borrow_subscriber_id` int DEFAULT NULL,
   `is_lost` tinyint DEFAULT '0',
+  `is_late` tinyint DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `bookId_idx` (`book_id`),
   KEY `subscriber_id_idx` (`borrow_subscriber_id`),
@@ -73,7 +74,7 @@ CREATE TABLE `book_copy` (
 
 LOCK TABLES `book_copy` WRITE;
 /*!40000 ALTER TABLE `book_copy` DISABLE KEYS */;
-INSERT INTO `book_copy` VALUES (1,1,'2025-01-15','2025-01-29',1,0),(2,3,NULL,NULL,NULL,0),(3,1,'2025-01-02','2025-01-23',1,0),(4,2,'2025-01-03','2025-01-17',1,0),(5,2,'2025-01-04','2025-01-16',1,0),(6,4,'2023-03-16','2025-03-30',1,0),(7,5,NULL,NULL,NULL,0),(8,6,NULL,NULL,NULL,0),(9,7,NULL,NULL,NULL,0),(10,8,NULL,NULL,NULL,0);
+INSERT INTO `book_copy` VALUES (1,1,NULL,NULL,NULL,0,0),(2,3,NULL,NULL,NULL,0,0),(3,1,NULL,NULL,NULL,0,0),(4,2,NULL,NULL,NULL,0,0),(5,2,'2025-01-04 00:00:00','2025-02-07 00:00:00',1,0,1),(6,4,'2023-03-16 00:00:00','2025-03-30 00:00:00',1,0,0),(7,5,NULL,NULL,NULL,0,0),(8,6,NULL,NULL,NULL,0,0),(9,7,NULL,NULL,NULL,0,0),(10,8,NULL,NULL,NULL,0,0);
 /*!40000 ALTER TABLE `book_copy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,7 +96,7 @@ CREATE TABLE `book_order` (
   KEY `book_id_idx` (`book_id`),
   CONSTRAINT `book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
   CONSTRAINT `subscriber` FOREIGN KEY (`subscriber_id`) REFERENCES `subscriber` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +105,7 @@ CREATE TABLE `book_order` (
 
 LOCK TABLES `book_order` WRITE;
 /*!40000 ALTER TABLE `book_order` DISABLE KEYS */;
-INSERT INTO `book_order` VALUES (1,1,1,'2025-01-21',NULL),(3,1,2,'2025-01-21',NULL),(4,3,1,'2025-01-21',NULL);
+INSERT INTO `book_order` VALUES (1,1,1,'2025-01-21',NULL),(4,3,1,'2025-01-21',NULL);
 /*!40000 ALTER TABLE `book_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,11 +123,12 @@ CREATE TABLE `borrow_report` (
   `start_date` date DEFAULT NULL,
   `return_date` date DEFAULT NULL,
   `late_return_date` date DEFAULT NULL,
+  `is_late` tinyint DEFAULT NULL,
   `report_date` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `book_id_idx` (`book_id`),
   CONSTRAINT `book_id` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,7 +137,7 @@ CREATE TABLE `borrow_report` (
 
 LOCK TABLES `borrow_report` WRITE;
 /*!40000 ALTER TABLE `borrow_report` DISABLE KEYS */;
-INSERT INTO `borrow_report` VALUES (1,1,3,'2024-12-16','2024-12-20','2024-12-22','2024-12-01'),(2,1,3,'2024-12-23','2024-12-26',NULL,'2024-12-01'),(3,1,4,'2024-12-22','2024-12-25',NULL,'2024-12-01'),(4,2,5,'2024-12-20','2025-01-02','2025-01-04','2024-12-01');
+INSERT INTO `borrow_report` VALUES (9,1,3,'2024-12-04','2024-12-18',NULL,1,'2024-12-01');
 /*!40000 ALTER TABLE `borrow_report` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +153,7 @@ CREATE TABLE `job` (
   `date` datetime DEFAULT NULL,
   `name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +162,7 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
-INSERT INTO `job` VALUES (1,'2025-01-10 16:54:32','generate-reports'),(2,'2025-01-21 22:50:54','check-borrows');
+INSERT INTO `job` VALUES (11,'2025-01-22 02:34:24','generate-reports'),(12,'2025-01-23 06:25:56','check-borrows');
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,12 +176,11 @@ DROP TABLE IF EXISTS `notification`;
 CREATE TABLE `notification` (
   `id` int NOT NULL AUTO_INCREMENT,
   `subscriber_id` int NOT NULL,
-  `subscriber_name` varchar(100) NOT NULL,
-  `message` varchar(150) DEFAULT NULL,
-  `date` date DEFAULT NULL,
-  `isNew` tinyint(1) DEFAULT NULL,
+  `message` varchar(200) DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  `is_new` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +189,7 @@ CREATE TABLE `notification` (
 
 LOCK TABLES `notification` WRITE;
 /*!40000 ALTER TABLE `notification` DISABLE KEYS */;
-INSERT INTO `notification` VALUES (6,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(7,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(8,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(9,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(10,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(11,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1),(12,1,'Daniel','Extended The Borrow Time For The Book Superman ,copy : 3 For 14 Days','2025-01-21',1);
+INSERT INTO `notification` VALUES (14,1,'Extended Borrow Duration for Book: Batman Vol. 1 (Copy 5) by 14 Days','2025-01-23 00:00:00',0),(15,1,'Extended Borrow Duration for Book: Batman Vol. 1 (Copy 5) by 14 Days','2025-01-23 00:00:00',0),(16,1,'Extended Borrow Duration for Book: Batman Vol. 1 (Copy 5) by 14 Days','2025-01-23 00:00:00',0),(17,1,'Extended Borrow Duration for Book: Batman Vol. 1 (Copy 5) by 14 Days','2025-01-23 06:15:46',0);
 /*!40000 ALTER TABLE `notification` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -218,7 +219,7 @@ CREATE TABLE `subscriber` (
 
 LOCK TABLES `subscriber` WRITE;
 /*!40000 ALTER TABLE `subscriber` DISABLE KEYS */;
-INSERT INTO `subscriber` VALUES (1,1,'0501234567','hi@gmail.com',NULL),(2,5,'0521479856','shalom@gmail.com',NULL),(3,3,'0548975642','bye@walla.com',NULL),(4,4,'0508797841','ma@gmail.com','2025-01-10'),(5,6,'0508797111','elias@elias.elias',NULL);
+INSERT INTO `subscriber` VALUES (1,1,'0501234567','hi@gmail.com','2025-01-10'),(2,5,'0521479856','shalom@gmail.com',NULL),(3,3,'0548975642','bye@walla.com',NULL),(4,4,'0508797841','ma@gmail.com','2025-01-10'),(5,6,'0508797111','elias@elias.elias',NULL);
 /*!40000 ALTER TABLE `subscriber` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -234,10 +235,12 @@ CREATE TABLE `subscriber_history` (
   `action` varchar(45) NOT NULL,
   `subscriber_id` int NOT NULL,
   `book_copy_id` int DEFAULT NULL,
-  `date` date NOT NULL,
-  `end_date` date DEFAULT NULL,
+  `book_id` int DEFAULT NULL,
+  `date` datetime NOT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `librarian_user_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +249,7 @@ CREATE TABLE `subscriber_history` (
 
 LOCK TABLES `subscriber_history` WRITE;
 /*!40000 ALTER TABLE `subscriber_history` DISABLE KEYS */;
-INSERT INTO `subscriber_history` VALUES (1,'borrow',1,3,'2024-12-16','2024-12-20'),(2,'late',1,3,'2024-12-22',NULL);
+INSERT INTO `subscriber_history` VALUES (1,'BORROW_BOOK',1,3,NULL,'2024-12-04 00:00:00','2024-12-18 00:00:00',NULL),(2,'LATE_RETURN',1,3,NULL,'2024-12-18 00:00:00',NULL,NULL),(4,'LOST_BOOK',1,4,NULL,'2025-01-21 00:00:00',NULL,NULL),(5,'FREEZE_SUBSCRIBER',1,NULL,NULL,'2024-12-03 00:00:00','2025-01-03 00:00:00',NULL),(6,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 05:05:28',NULL,NULL),(7,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 05:09:38',NULL,NULL),(8,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 05:13:19',NULL,NULL),(9,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 05:14:00',NULL,NULL),(10,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 22:56:10',NULL,NULL),(11,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 23:00:45',NULL,NULL),(12,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 23:02:07',NULL,NULL),(13,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 23:02:23',NULL,NULL),(14,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 23:03:19',NULL,NULL),(15,'EXTEND_BORROW_LIBRARIAN',1,5,NULL,'2025-01-22 23:13:10','2025-01-18 00:00:00',NULL),(16,'EXTEND_BORROW_LIBRARIAN',1,5,NULL,'2025-01-22 23:14:16','2025-01-20 00:00:00',NULL),(17,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 23:14:40',NULL,NULL),(18,'EXTEND_BORROW_LIBRARIAN',1,5,NULL,'2025-01-22 23:17:54','2025-01-21 00:00:00',NULL),(19,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 23:17:59',NULL,NULL),(20,'EXTEND_BORROW_LIBRARIAN',1,5,NULL,'2025-01-22 23:20:18','2025-01-23 00:00:00',2),(21,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-22 23:21:05',NULL,NULL),(56,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 05:45:46',NULL,NULL),(57,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 05:45:47',NULL,NULL),(58,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 05:46:14',NULL,NULL),(59,'EXTEND_BORROW_SUBSCRIBER',1,5,NULL,'2025-01-23 05:48:17','2025-02-06 00:00:00',NULL),(60,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:06:40',NULL,NULL),(61,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:07:54',NULL,NULL),(62,'EXTEND_BORROW_SUBSCRIBER',1,5,NULL,'2025-01-23 06:09:24','2025-02-09 00:00:00',NULL),(63,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:11:39',NULL,NULL),(64,'EXTEND_BORROW_SUBSCRIBER',1,5,NULL,'2025-01-23 06:12:57','2025-02-06 00:00:00',NULL),(65,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:14:41',NULL,NULL),(66,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:15:00',NULL,NULL),(67,'EXTEND_BORROW_SUBSCRIBER',1,5,NULL,'2025-01-23 06:15:01','2025-02-07 00:00:00',NULL),(68,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:15:45',NULL,NULL),(69,'EXTEND_BORROW_SUBSCRIBER',1,5,NULL,'2025-01-23 06:15:46','2025-02-07 00:00:00',NULL),(70,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:26:04',NULL,NULL),(71,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:49:49',NULL,NULL),(72,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:50:36',NULL,NULL),(73,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:51:14',NULL,NULL),(74,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:51:47',NULL,NULL),(75,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:52:05',NULL,NULL),(76,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 06:52:28',NULL,NULL);
 /*!40000 ALTER TABLE `subscriber_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -262,8 +265,11 @@ CREATE TABLE `subscriber_status_report` (
   `freeze_date` date DEFAULT NULL,
   `freeze_end_date` date DEFAULT NULL,
   `report_date` date DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `subscriber_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `subscriber_id_idx` (`subscriber_id`),
+  CONSTRAINT `subscriber_id` FOREIGN KEY (`subscriber_id`) REFERENCES `subscriber` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -272,7 +278,7 @@ CREATE TABLE `subscriber_status_report` (
 
 LOCK TABLES `subscriber_status_report` WRITE;
 /*!40000 ALTER TABLE `subscriber_status_report` DISABLE KEYS */;
-INSERT INTO `subscriber_status_report` VALUES (1,'2024-11-01','2024-12-01','2024-11-01'),(2,'2024-11-04','2024-12-15','2024-11-01'),(3,'2024-12-01','2025-01-01','2024-12-01'),(4,'2024-12-03','2024-12-12','2024-12-01'),(5,'2024-12-03','2024-12-10','2024-12-01'),(6,'2024-12-08','2024-12-20','2024-12-01');
+INSERT INTO `subscriber_status_report` VALUES (11,'2024-12-03','2025-01-03','2024-12-01',1),(12,'2024-12-03','2025-01-03','2024-12-01',1);
 /*!40000 ALTER TABLE `subscriber_status_report` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,4 +318,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-21 22:59:28
+-- Dump completed on 2025-01-23  6:54:46

@@ -1,17 +1,10 @@
 package gui;
 
-import java.util.List;
-
 import base.Action;
-import base.ClientApplication;
 import controllers.Auth;
-import entities.BookCopy;
 import entities.Message;
 import entities.Role;
-import entities.Subscriber;
 import entities.User;
-import gui.librarian.LibrarianMainScreen;
-import gui.subscriber_main_screen.SubscriberMainScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -85,7 +78,7 @@ public class LogInScreen extends AbstractScreen {
 
 				// Check which user this is to show the appropriate screen
 				if (user.getRole() == Role.SUBSCRIBER) {
-					screenManager.openScreen("subscriber_main_screen/SubscriberMainScreen", "Subscriber Main Screen", user);
+					screenManager.openScreen("subscriber/SubscriberMainScreen", "Subscriber Main Screen", user);
 				} else {
 					screenManager.openScreen("librarian/LibrarianMainScreen", "Librarian Main Screen", user);
 				}

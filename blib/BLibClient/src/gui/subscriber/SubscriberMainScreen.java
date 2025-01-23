@@ -113,7 +113,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSubscriberHistoryScreen(ActionEvent event) throws Exception {
-        screenManager.openScreen("subscriber_main_screen/SubscriberHistoryScreen", "Subscriber History", subscriber);
+        screenManager.openScreen("subscriber/SubscriberHistoryScreen", "Subscriber History", subscriber);
     }
 
     /**
@@ -134,7 +134,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openBorrowedBookScreen(ActionEvent event, BookCopy copy) throws Exception {
-        screenManager.openScreen("subscriber_main_screen/BorrowedBookScreen", "Borrowed Book", copy, subscriber);
+        screenManager.openScreen("subscriber/BorrowedBookScreen", "Borrowed Book", copy, subscriber);
     }
 
     /**
@@ -145,7 +145,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs while opening the Subscriber Settings screen.
      */
     public void openConfigureScreen(ActionEvent event) throws Exception {
-        screenManager.openScreen("subscriber_main_screen/SubscriberSettingsScreen", "Subscriber Settings", subscriber);
+        screenManager.openScreen("subscriber/SubscriberSettingsScreen", "Subscriber Settings", subscriber);
     }
 
     /**

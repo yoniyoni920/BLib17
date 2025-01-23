@@ -153,7 +153,7 @@ public class RegisterViaLibrerianScreen extends AbstractScreen {
 		if (!pass2Empty && !passEmpty && !FirstNameEmpty && !LastNameEmpty && !PhoneEmpty && !EmailAddressEmpty && ((pass2.equals(pass)) && valid))
 		{
 			// Attempt to Send message to Server To REGISTER USER
-			Message msg = ClientUtils.sendMessage(new Message(Action.REGISTER, new String[]{ pass,FirstName,LastName,Phone,EmailAddress }));
+			Message msg = ClientUtils.sendMessage(new Message(Action.REGISTER, new String[]{FirstName,LastName,pass,Phone,EmailAddress }));
 			
 			
 			if(!msg.isError()) {

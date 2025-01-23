@@ -176,7 +176,8 @@ public class BookControl {
      */
     public static boolean lendBookToSubscriber(BookCopy bookCopy) {
         try (PreparedStatement stt = DBControl.prepareStatement(
-                "UPDATE book_copy SET lend_date = ?, return_date = ?, borrow_subscriber_id = ? WHERE id = ?")) {
+                "UPDATE book_copy SET lend_date = ?, return_date = ?, borrow_subscriber_id = ?, is_waiting = 0" +
+                        " WHERE id = ?")) {
 
             int subscriberId = bookCopy.getBorrowSubscriberId();
             int bookCopyId = bookCopy.getId();

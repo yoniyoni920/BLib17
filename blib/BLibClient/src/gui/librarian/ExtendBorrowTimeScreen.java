@@ -4,17 +4,12 @@ package gui.librarian;
 import base.Action;
 import entities.BookCopy;
 import entities.Message;
-import entities.Subscriber;
 import gui.AbstractScreen;
-import gui.SubscriberCardScreen;
-import gui.subscriber_main_screen.BorrowedBookScreen;
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.util.Duration;
 import services.ClientUtils;
 /**
  * This class manages the screen for extending the borrow time of a book copy.

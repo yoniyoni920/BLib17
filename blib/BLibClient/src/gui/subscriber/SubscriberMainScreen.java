@@ -1,17 +1,12 @@
-package gui.subscriber_main_screen;
+package gui.subscriber;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
-import base.Action;
 import controllers.Auth;
 import entities.BookCopy;
-import entities.Message;
 import entities.Subscriber;
 import gui.AbstractScreen;
 import gui.BookCard;
-import gui.SubscriberCardScreen;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
@@ -24,7 +19,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
-import services.ClientUtils;
 import services.InterfaceUtils;
 
 /**

@@ -1,4 +1,4 @@
-package gui.subscriber_main_screen;
+package gui.subscriber;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -6,11 +6,8 @@ import java.time.temporal.ChronoUnit;
 import base.Action;
 import entities.BookCopy;
 import entities.Message;
-import entities.Notification;
 import entities.Subscriber;
 import gui.AbstractScreen;
-import gui.BookCard;
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -18,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 import services.ClientUtils;
 import services.InterfaceUtils;
 

@@ -1,21 +1,16 @@
-package gui.subscriber_main_screen;
+package gui.subscriber;
 
 import entities.HistoryAction;
 import entities.HistoryEntry;
 import entities.Subscriber;
 import gui.AbstractScreen;
-import javafx.animation.FadeTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.util.Duration;
 import services.InterfaceUtils;
-
-import java.time.format.DateTimeFormatter;
 
 public class SubscriberHistoryScreen extends AbstractScreen {
 

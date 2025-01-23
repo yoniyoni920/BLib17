@@ -1,19 +1,16 @@
-package gui.subscriber_main_screen;
+package gui.subscriber;
 
 import java.util.Arrays;
 import java.util.List;
 import base.Action;
-import base.ClientApplication;
 import entities.Message;
 import entities.Subscriber;
 import gui.AbstractScreen;
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.util.Duration;
 import services.ClientUtils;
 
 /**

@@ -376,6 +376,7 @@ public class BookControl {
 
         try(PreparedStatement sttm2 = DBControl.prepareStatement(query)){
             sttm2.setInt(1, bookId);
+            sttm2.setInt(2, subscriberId);
             ResultSet rs = sttm2.executeQuery();
             if (rs.next()) {
                 String message = "Hello %s %s,<br>your ordered book '%s' is ready for pickup!<br>" +

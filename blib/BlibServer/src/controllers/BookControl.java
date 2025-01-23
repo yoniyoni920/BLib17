@@ -97,7 +97,7 @@ public class BookControl {
                     "book_id", bookId, "subscriber_id", subscriberId);) {
                 ResultSet rs = stt.executeQuery();
                 if (rs.next()) {
-                    try (PreparedStatement stt1 = DBControl.getConnection().prepareStatement("SELECT id, return_date FROM " +
+                    try (PreparedStatement stt1 = DBControl.prepareStatement("SELECT id, return_date FROM " +
                             "book_copy where book_id = ? ORDER BY return_date")) {
                         stt1.setInt(1, bookId);
                         ResultSet rs1 = stt1.executeQuery();
@@ -115,7 +115,7 @@ public class BookControl {
             }
         }
 
-        try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
+        try (PreparedStatement stt = DBControl.prepareStatement(
                 "select (select count(book_order.book_id) from book_order where book_id = ?) as order_count," +
                         " (select count(book_copy.book_id) from book_copy where book_id = ? and " +
                         "return_date IS NULL) as available_copies," +
@@ -146,7 +146,7 @@ public class BookControl {
      * @return LocalDate representing the date book with be available or null if not orderable.
      */
     public static LocalDate checkBookOrderable(int bookId) {
-        try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
+        try (PreparedStatement stt = DBControl.prepareStatement(
                 "select (select count(book_order.book_id) from book_order where book_id = ?) as order_count," +
                         " (select count(book_copy.book_id) from book_copy where book_id = ?) as copy_count")) {
             stt.setInt(1, bookId);
@@ -154,7 +154,7 @@ public class BookControl {
             ResultSet rs = stt.executeQuery();
             if (rs.next()) {
                 if (rs.getInt("order_count") < rs.getInt("copy_count")) {
-                    try (PreparedStatement stt2 = DBControl.getConnection().prepareStatement(
+                    try (PreparedStatement stt2 = DBControl.prepareStatement(
                             "select book_copy.return_date from book_copy where book_id = ? order by return_date limit 1 offset ?")) {
                         stt2.setInt(1, bookId);
                         stt2.setInt(2, rs.getInt("order_count"));
@@ -180,7 +180,7 @@ public class BookControl {
      * @return True if the operation was successful, false otherwise.
      */
     public static boolean lendBookToSubscriber(BookCopy bookCopy) {
-        try (PreparedStatement stt = DBControl.getConnection().prepareStatement(
+        try (PreparedStatement stt = DBControl.prepareStatement(
                 "UPDATE book_copy SET lend_date = ?, return_date = ?, borrow_subscriber_id = ? WHERE id = ?")) {
 
             int subscriberId = bookCopy.getBorrowSubscriberId();
@@ -202,8 +202,8 @@ public class BookControl {
                 returnDate
             ));
             
-            try (PreparedStatement stt2 = DBControl.getConnection().prepareStatement(
-                    "delete from book_order where book_id = ? and subscriber_id = ?")) {
+            try (PreparedStatement stt2 = DBControl.prepareStatement(
+                    "DELETE FROM book_order WHERE book_id = ? AND subscriber_id = ?")) {
                 stt2.setInt(1, bookCopy.getBookId());
                 stt2.setInt(2, bookCopy.getBorrowSubscriberId());
                 stt2.execute();

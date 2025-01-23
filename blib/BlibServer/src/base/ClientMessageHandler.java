@@ -80,7 +80,7 @@ public class ClientMessageHandler {
             return msg.errorReply("Subscriber is frozen or doesn't exist!");
         }
         if (BookControl.checkBookLendable(bookOrder.getBookId(), bookOrder.getSubscriberId()) != 0) {
-            return msg.errorReply("Book is lendable, Can't be orderer!");
+            return msg.errorReply("Book is lendable, Can't be ordered!");
         }
         LocalDate orderable = BookControl.checkBookOrderable(bookOrder.getBookId());
         if (orderable == null) {

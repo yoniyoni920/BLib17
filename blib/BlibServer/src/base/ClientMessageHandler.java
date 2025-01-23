@@ -100,7 +100,7 @@ public class ClientMessageHandler {
     public static Message lendBook(Message msg, ConnectionToClient client) {
         BookCopy bookCopy = (BookCopy)msg.getObject();
 
-        if (bookCopy.getLendDate().isBefore(LocalDateTime.now())) {
+        if (bookCopy.getLendDate().isBefore(LocalDate.now())) {
             return msg.errorReply("Lend date is not valid!");
         }
 

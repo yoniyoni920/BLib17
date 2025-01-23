@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -181,11 +180,11 @@ public class BookControl {
 
             int subscriberId = bookCopy.getBorrowSubscriberId();
             int bookCopyId = bookCopy.getId();
-            LocalDateTime date = bookCopy.getLendDate();
-            LocalDateTime returnDate = bookCopy.getReturnDate();
+            LocalDate date = bookCopy.getLendDate();
+            LocalDate returnDate = bookCopy.getReturnDate();
 
-            stt.setDate(1, Date.valueOf(date.toLocalDate()));
-            stt.setDate(2, Date.valueOf(returnDate.toLocalDate()));
+            stt.setDate(1, Date.valueOf(date));
+            stt.setDate(2, Date.valueOf(returnDate));
             stt.setInt(3, subscriberId);
             stt.setInt(4, bookCopyId);
             stt.executeUpdate();
@@ -194,8 +193,8 @@ public class BookControl {
                 subscriberId,
                 HistoryAction.BORROW_BOOK,
                 bookCopyId,
-                date,
-                returnDate
+                date.atStartOfDay(),
+                returnDate.atStartOfDay()
             ));
             
             try (PreparedStatement stt2 = DBControl.prepareStatement(
@@ -260,8 +259,8 @@ public class BookControl {
                 int copyId = rs.getInt("id");
                 int bookId = rs.getInt("book_id");
                 int borrowSubscriberId = rs.getInt("borrow_subscriber_id");
-                LocalDateTime lendDate = rs.getTimestamp("lend_date").toLocalDateTime();
-                LocalDateTime returnDate = rs.getTimestamp("return_date").toLocalDateTime();
+                LocalDate lendDate = rs.getDate("lend_date").toLocalDate();
+                LocalDate returnDate = rs.getDate("return_date").toLocalDate();
                 BookCopy copy = new BookCopy(copyId, bookId, lendDate, returnDate, borrowSubscriberId);
 
                 // Book data
@@ -312,8 +311,9 @@ public class BookControl {
 
     /**
      * Returns borrow times report for a specific book
-     *
+     * @param date
      * @param bookId
+     * @return
      */
     public static List<BorrowReport> getBorrowTimesReport(LocalDate date, Integer bookId) {
         String query;
@@ -546,7 +546,7 @@ public class BookControl {
                     )
                 );
             }
-            entry.setEndDate(copy.getReturnDate());
+            entry.setEndDate(copy.getReturnDate().atStartOfDay());
             SubscriberControl.logIntoHistory(entry);
 
             return stmt.executeUpdate() == 1;

@@ -116,7 +116,7 @@ public class LendBookScreen extends AbstractScreen {
         }
 
         LocalTime now = LocalTime.now();
-        BookCopy sendCopy = new BookCopy(0, bookId, lendDatePicker.getValue().atTime(now), returnDatePicker.getValue().atTime(now), sub);
+        BookCopy sendCopy = new BookCopy(0, bookId, lendDatePicker.getValue(), returnDatePicker.getValue(), sub);
         Message msg = new Message(Action.LEND_BOOK, sendCopy);
         ClientUtils.sendMessage(msg, message -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

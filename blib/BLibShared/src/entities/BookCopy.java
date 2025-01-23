@@ -17,12 +17,12 @@ public class BookCopy implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private int bookId ;
-	private LocalDateTime lendDate;
-	private LocalDateTime returnDate;
+	private LocalDate lendDate;
+	private LocalDate returnDate;
 	private int borrowSubscriberID;
 	private Book book ;
 
-	public BookCopy(int id, int bookId , LocalDateTime lendDate , LocalDateTime returnDate , int borrowSubscriberId) {
+	public BookCopy(int id, int bookId , LocalDate lendDate , LocalDate returnDate , int borrowSubscriberId) {
 		this.id = id ;
 		this.bookId = bookId ;
 		this.lendDate = lendDate ;
@@ -46,19 +46,19 @@ public class BookCopy implements Serializable{
 		this.id = copyId;
 	}
 	
-	public LocalDateTime getLendDate() {
+	public LocalDate getLendDate() {
 		return this.lendDate;
 	}
 	
-	public void setLendDate(LocalDateTime lendDate) {
+	public void setLendDate(LocalDate lendDate) {
 		this.lendDate = lendDate;
 	}
 	
-	public LocalDateTime getReturnDate() {
+	public LocalDate getReturnDate() {
 		return this.returnDate;
 	}
 	
-	public void setReturnDate(LocalDateTime returnDate) {
+	public void setReturnDate(LocalDate returnDate) {
 		this.returnDate = returnDate ;
 	}
 	

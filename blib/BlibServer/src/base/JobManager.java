@@ -60,8 +60,9 @@ public class JobManager {
         LocalDateTime now = LocalDateTime.now();
 
         if (date == null || ChronoUnit.DAYS.between(date, now) >= 1) {
-            final String messageTemplate = "Hi %s,\nWe wanted to remind you that you have to return %s book to the library until tomorrow.\nBLib Library.";
-            final String htmlMessageTemplate ="Hi %s,<br>We wanted to remind you that you have to return %s book to the library until tomorrow.<br>BLib Library.";
+            final String messageTemplate ="Hi %s,<br>" +
+                    "We wanted to remind you that you have to return the book '%s' to the library by tomorrow.<br>" +
+                    "BLib Library.";
 
             ArrayList<Map<String, Object>> records = BookControl.getBooksForReturnReminder();
             for (Map<String, Object> record : records) {

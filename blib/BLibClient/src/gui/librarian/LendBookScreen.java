@@ -172,6 +172,7 @@ public class LendBookScreen extends AbstractScreen {
                     alert.setHeaderText("Lent Successfully");
                     alert.setContentText(bookIdAlert.getText() + " was lent successfully to " + userAlert.getText() + " with a return date of " + bookCopy.getReturnDate());
                     alert.showAndWait();
+                    closeScreen(null);
                 }
             }
         });

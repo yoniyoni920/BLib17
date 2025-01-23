@@ -60,9 +60,8 @@ public class BookControl {
 
                         Book book = new Book(id, title, authors, genre, description, image, location);
 
-                        String locationOrDate = location;
+                        String locationOrDate = "Shelf " + location;
                         //TODO: what if a book was returned and is waiting to be picked?
-                        System.out.println(title + " - " + totalCopies + " - " + borrowedCopies + " - " + orders);
                         if ((totalCopies - borrowedCopies) == 0) {
                             if ((totalCopies - orders) > 0) { // Can we make an order?
                                 LocalDate originalDate = bookResult.getDate("min_return_date").toLocalDate();

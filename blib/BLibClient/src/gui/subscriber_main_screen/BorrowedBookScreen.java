@@ -142,24 +142,5 @@ public class BorrowedBookScreen extends AbstractScreen {
             alert.setContentText("Couldn't extend the borrow duration. It's possible there's an order waiting for the book.");
             alert.showAndWait();
         }
-
-        // Saving notification
-        if (!sendNotificationToLibrarian()) {
-            System.out.println("Couldn't Send Notification To The Librarian");
-        }
-    }
-  
-    /**
-     * Sends a notification to the librarian about the borrow time extension.
-     * 
-     * @return true if the notification was successfully sent; false otherwise.
-     */
-    private boolean sendNotificationToLibrarian() {
-        String message = "Extended The Borrow Time For The Book " + copy.getBook().getTitle() + " ,copy : " + copy.getId() + " For 14 Days";
-        Notification notification = new Notification(subscriber.getId(), subscriber.getName(), message, LocalDate.now(), true);
-        Message msgFromServer = ClientUtils.sendMessage(new Message(Action.SAVE_NOTIFICATION, notification));
-
-        return !msgFromServer.isError();
-    }
     }
 }

@@ -70,7 +70,6 @@ public class ClientMessageHandler {
         actions.put(Action.MARK_BOOK_COPY_AS_LOST, ClientMessageHandler::markBookCopyAsLost);
         actions.put(Action.EXTEND_BORROW_TIME, ClientMessageHandler::extendBorrowTime);
         actions.put(Action.RETRIEVE_NOTIFICATIONS, ClientMessageHandler::retrieveNotifications);
-        actions.put(Action.SAVE_NOTIFICATION, ClientMessageHandler::saveNotification);
         actions.put(Action.UPDATE_NOTIFICATION_STATUS, ClientMessageHandler::updateNotificationStatus);
     }
 
@@ -251,14 +250,6 @@ public class ClientMessageHandler {
         } else {
             return msg.errorReply("Couldn't extend borrow time!");
         }
-    }
-
-    public static Message saveNotification(Message msg, ConnectionToClient client) {
-        boolean successfullySaved = NotificationControl.saveNotification((Notification) msg.getObject());
-        if (!successfullySaved) {
-            msg.setError(true);
-        }
-        return msg.reply(successfullySaved);
     }
 
     public static Message updateNotificationStatus(Message msg, ConnectionToClient client) {

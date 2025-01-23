@@ -19,6 +19,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import services.ClientUtils;
+import services.InterfaceUtils;
 
 /**
  * NotificationsScreen is a JavaFX controller class responsible for managing
@@ -103,12 +104,16 @@ public class NotificationsScreen extends AbstractScreen {
         messageColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.65));
 
         TableColumn<Notification, String> dateColumnAll = new TableColumn<>("Date");
-        dateColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
-        dateColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
+        dateColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(
+            InterfaceUtils.formatDate(cell.getValue().getDate())
+        ));
+        dateColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.15));
         
         TableColumn<Notification, String> dateColumnNew = new TableColumn<>("Date");
-        dateColumnNew.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));
-        dateColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.13));
+        dateColumnNew.setCellValueFactory(cell -> new SimpleStringProperty(
+                InterfaceUtils.formatDate(cell.getValue().getDate())
+        ));
+        dateColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.15));
 
         TableColumn<Notification, Button> subscriberCardColumnAll = getSubscriberCardColumn();
         TableColumn<Notification, Button> subscriberCardColumnNew = getSubscriberCardColumn();

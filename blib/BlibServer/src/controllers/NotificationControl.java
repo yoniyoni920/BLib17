@@ -14,7 +14,6 @@ import entities.Notification;
  * It includes functionality to retrieve, save, and update notification statuses in the database.
  */
 public class NotificationControl {
-
     /**
      * Retrieves all notifications from the database.
      * 
@@ -22,20 +21,21 @@ public class NotificationControl {
      */
     public static List<Notification> retrieveNotifications() {
         List<Notification> notifications = new ArrayList<>();
-        ResultSet rs;
-        
+
         //retrieving notifications from the DB
-        try {
-            Statement stmt = DBControl.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM notification ORDER BY date DESC");
+        try(Statement stmt = DBControl.createStatement()) {
+            ResultSet rs = stmt.executeQuery("SELECT *, user.first_name AS subscriber_name FROM notification " +
+                    "JOIN subscriber ON subscriber.id = subscriber_id " +
+                    "JOIN user ON user.id = subscriber.user_id " +
+                    "ORDER BY date DESC");
             while (rs.next()) {
                 Notification notification = new Notification(
-                        rs.getInt("subscriber_id"),
-                        rs.getString("subscriber_name"),
-                        rs.getString("message"),
-                        rs.getDate("date").toLocalDate(),
-                        rs.getBoolean("isNew")
+                    rs.getInt("subscriber_id"),
+                    rs.getString("message"),
+                    rs.getTimestamp("date").toLocalDateTime(),
+                    rs.getBoolean("is_new")
                 );
+                notification.setSubscriberName(rs.getString("subscriber_name"));
                 notification.setNotificationId(rs.getInt("id"));
                 notifications.add(notification);
             }
@@ -55,75 +55,42 @@ public class NotificationControl {
      * @return true if the notification was saved successfully, false otherwise
      */
     public static boolean saveNotification(Notification notification) {
-        int rowsAffected;
-        try {
-        	
-        	//preparing a statement
-        	String sqlQuery = "INSERT INTO notification (subscriber_id, subscriber_name , message, date, isNew) VALUES (?,?,?,?,?)";
-            PreparedStatement stmt = DBControl.prepareStatement(sqlQuery);
-            
+        String sqlQuery = "INSERT INTO notification (subscriber_id, message, date, is_new) VALUES (?,?,?,?)";
+
+        try(PreparedStatement stmt = DBControl.prepareStatement(sqlQuery)) {
             //inserting the variables in the query
             stmt.setString(1, notification.getSubscriberId() + "");
-            stmt.setString(2, notification.getSubscriberName());
-            stmt.setString(3, notification.getMessage());
-            stmt.setString(4, notification.getDate().toString());
-            if (notification.getIsNew())
-                stmt.setString(5, 1 + "");
-            else
-                stmt.setString(5, 0 + "");
+            stmt.setString(2, notification.getMessage());
+            stmt.setString(3, notification.getDate().toString());
+            stmt.setBoolean(4, notification.getIsNew());
 
             //executing the query
-            rowsAffected = stmt.executeUpdate();
-            
-            
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
 			System.out.println("Couldn't save notification in the DB : NotificationControl.saveNotification()");
             e.printStackTrace();
             return false;
         }
-        
-        
-        return rowsAffected > 0;
     }
 
     /**
-     * Updates the status of the given notifications to 'read' (isNew = 0) in the database.
+     * Updates the status of all notifications to 'read' (is_new = 0) in the database.
      * 
      * @param notifications the list of notifications to be updated
      * @return true if the status update was successful for all notifications, false otherwise
      */
     public static boolean updateNotificationStatus(List<Notification> notifications) {
-    	
-    	//creating statement
-        Statement stmt;
-		try {
-			stmt = DBControl.createStatement();
+		try (PreparedStatement st = DBControl.prepareStatement("UPDATE notification SET is_new = 0 WHERE id = ?")) {
+            for (Notification notification : notifications) {
+                st.setInt(1, notification.getNotificationId());
+                st.addBatch();
+            }
+            st.executeBatch();
 		} catch (SQLException e) {
 			System.out.println("Couldn't create a statement in : NotificationControl.updateNotificationStatus()");
 			e.printStackTrace();
 			return false ;
 		}
-		
-		//creating a batch update
-        for (Notification notification : notifications) {
-            try {
-                String query = "UPDATE notification SET isNew = 0 WHERE id = " + notification.getNotificationId();
-                stmt.addBatch(query);
-            } catch (SQLException e) {
-    			System.out.println("Error in creating the batch update in : NotificationControl.updateNotificationStatus()");
-                e.printStackTrace();
-                return false;
-            }
-        }
-        
-        //executing the batch
-        try {
-            stmt.executeBatch();
-        } catch (SQLException e) {
-			System.out.println("Error in executing the batch update in : NotificationControl.updateNotificationStatus()");
-            e.printStackTrace();
-            return false;
-        }
         return true;
     }
 }

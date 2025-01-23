@@ -512,12 +512,22 @@ public class BookControl {
             stmt.setString(1, copy.getReturnDate().toString());
             stmt.setString(2, id + "");
 
+            int subId = copy.getBorrowSubscriberId();
+
+            // Add history entry
             HistoryEntry entry;
             if (userRequesting.getRole() == Role.LIBRARIAN) {
-                entry = new HistoryEntry(copy.getBorrowSubscriberId(), "extend_by_librarian", id);
+                entry = new HistoryEntry(subId, "extend_by_librarian", id);
                 entry.setLibrarianUserId(userRequesting.getId());
             } else {
-                entry = new HistoryEntry(copy.getBorrowSubscriberId(), "extend_by_subscriber", id);
+                entry = new HistoryEntry(subId, "extend_by_subscriber", id);
+
+                NotificationControl.saveNotification(
+                    new Notification(
+                        subId,
+                        String.format("Extended Borrow Duration for Book: %s (Copy %d) by 14 Days", copy.getBook().getTitle(), copy.getId())
+                    )
+                );
             }
             entry.setEndDate(copy.getReturnDate());
             SubscriberControl.logIntoHistory(entry);

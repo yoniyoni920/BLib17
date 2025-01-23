@@ -413,7 +413,7 @@ public class BookControl {
                 String updateQuery = "UPDATE book_order SET ordered_until = CURDATE() + 2 WHERE id = ?";
                 try (PreparedStatement ps2 = DBControl.prepareStatement(updateQuery)) {
                     ps2.setInt(1, orderId);
-                    if (ps.executeUpdate() == 1) {
+                    if (ps2.executeUpdate() == 1) {
                         String updateQuery2 = "UPDATE book_copy SET borrow_subscriber_id = ?, is_waiting = 1 WHERE id = ?";
                         try (PreparedStatement ps3 = DBControl.prepareStatement(updateQuery2)) {
                             ps3.setInt(1, subscriberId);

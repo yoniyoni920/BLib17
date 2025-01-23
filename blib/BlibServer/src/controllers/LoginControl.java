@@ -122,7 +122,7 @@ public class LoginControl {
 			}
 
 			// Return a new User object (assuming you have a User class)
-			return new User(generatedId, firstName, lastName, password, "subscriber");
+			return new User(generatedId, firstName, lastName, "subscriber", password);
 		} catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -93,7 +93,7 @@ public class BookControl {
     public static int checkBookLendable(int bookId, int subscriberId) {
         //check if ordered
         if (subscriberId != 0) {
-            String query = "SELECT * FROM book_order WHERE book_Id = ? AND subscriber_id = ?";
+            String query = "SELECT * FROM book_order WHERE book_id = ? AND subscriber_id = ?";
             try (PreparedStatement stt = DBControl.prepareStatement(query)) {
                 stt.setInt(1, bookId);
                 stt.setInt(2, subscriberId);

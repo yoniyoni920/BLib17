@@ -29,53 +29,52 @@ public class BookControl {
     public static List<Book> searchBooks(String search, String searchType) {
         List<Book> books = new ArrayList<>();
         if (searchType.equals("title") || searchType.equals("genre") || searchType.equals("description")) {
-            String query = "SELECT * FROM book WHERE " + searchType + " LIKE ?";
-
-            // Query tries to find at lesat one copy that isn't borrowed or ordered.
-            String queryAvailable = "SELECT 1 FROM book_copy "
-                    + "WHERE book_id = ? AND borrow_subscriber_id IS NULL AND order_subscriber_id IS NULL LIMIT 1";
-
-            // Query selects one copy that is not being ordered and has the closest return date
-            String queryOrderable = "SELECT * FROM book_copy "
-                    + "WHERE book_id = ? AND return_date IS NOT NULL AND order_subscriber_id IS NULL " +
-                    "ORDER BY ABS(DATEDIFF(return_date, CURDATE())) ASC LIMIT 1";
+            String query = String.format("SELECT b.*," +
+                "COUNT(bc.id) AS total_copies, " +
+                "COUNT(CASE WHEN bc.borrow_subscriber_id IS NOT NULL THEN 1 END) AS borrowed_copies, " +
+                "MIN(bc.return_date) AS min_return_date, " +
+                "COUNT(CASE WHEN bo.ordered_until IS NULL OR bo.ordered_until < NOW() THEN bo.id END) AS orders " +
+                "FROM book b " +
+                "LEFT JOIN book_copy bc ON bc.book_id = b.id " +
+                "LEFT JOIN book_order bo ON bo.book_id = b.id " +
+                "WHERE b.%s LIKE ?" +
+                "GROUP BY b.id;", searchType);
 
             try (PreparedStatement ps = DBControl.prepareStatement(query)) {
                 ps.setString(1, "%" + search + "%");
                 ResultSet bookResult = ps.executeQuery();
 
                 while (bookResult.next()) {
-                    int id = bookResult.getInt("id");
-                    String title = bookResult.getString("title");
-                    String authors = bookResult.getString("authors");
-                    String genre = bookResult.getString("genre");
-                    String description = bookResult.getString("description");
-                    String image = bookResult.getString("image");
-                    String location = bookResult.getString("location");
+                    int totalCopies = bookResult.getInt("total_copies");
+                    int borrowedCopies = bookResult.getInt("borrowed_copies");
+                    int orders = bookResult.getInt("orders");
 
-                    String locationOrDate;
-                    try (PreparedStatement ps2 = DBControl.prepareStatement(queryAvailable)) {
-                        ps2.setInt(1, id);
-                        if (ps2.executeQuery().next())
-                            locationOrDate = "Shelf " + location;
-                        else {
-                            try (PreparedStatement ps3 = DBControl.prepareStatement(queryOrderable)) {
-                                ps3.setInt(1, id);
-                                ResultSet orderResult = ps3.executeQuery();
-                                if (orderResult.next()) {
-                                    LocalDate originalDate = orderResult.getDate("return_date").toLocalDate();
-                                    locationOrDate = originalDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                                    locationOrDate = "Available By: " + locationOrDate;
-                                } else {
-                                    locationOrDate = "Unavailable";
-                                }
+                    if (totalCopies > 0) {
+                        int id = bookResult.getInt("id");
+                        String title = bookResult.getString("title");
+                        String authors = bookResult.getString("authors");
+                        String genre = bookResult.getString("genre");
+                        String description = bookResult.getString("description");
+                        String image = bookResult.getString("image");
+                        String location = bookResult.getString("location");
+
+                        Book book = new Book(id, title, authors, genre, description, image, location);
+
+                        String locationOrDate = location;
+                        //TODO: what if a book was returned and is waiting to be picked?
+                        System.out.println(title + " - " + totalCopies + " - " + borrowedCopies + " - " + orders);
+                        if ((totalCopies - borrowedCopies) == 0) {
+                            if ((totalCopies - orders) > 0) { // Can we make an order?
+                                LocalDate originalDate = bookResult.getDate("min_return_date").toLocalDate();
+                                locationOrDate = "Available By: " + originalDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                            } else { // All copies are being ordered
+                                locationOrDate = "Unavailable";
                             }
                         }
-                    }
 
-                    Book book = new Book(id, title, authors, genre, description, image, location);
-                    book.setLocationOrDate(locationOrDate);
-                    books.add(book);
+                        book.setLocationOrDate(locationOrDate);
+                        books.add(book);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

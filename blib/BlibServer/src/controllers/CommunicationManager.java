@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class CommunicationManager {
+	public static String emailServer = "https://api.mailersend.com/v1/email";
+	public static String smsServer = "http://192.168.1.195:8090/SendSMS";
 
 	/**
 	 *	Function to send email using mailersend api
@@ -19,7 +21,7 @@ public class CommunicationManager {
 		final String token = "mlsn.d4074bb922cfb8f612862b99462eb3753b364d57bf01dae6c232d34e034f83da";
 		try {
 
-			URL url = new URL("https://api.mailersend.com/v1/email");
+			URL url = new URL(emailServer);
 			URLConnection con = url.openConnection();
 			HttpURLConnection http = (HttpURLConnection) con;
 			http.setRequestMethod("POST");
@@ -75,7 +77,7 @@ public class CommunicationManager {
 
         try {
 			//send the request
-            URL url = new URL("http://192.168.1.195:8090/SendSMS");
+            URL url = new URL(smsServer);
 			URLConnection con = url.openConnection();
 			HttpURLConnection http = (HttpURLConnection)con;
 			http.setRequestMethod("POST");

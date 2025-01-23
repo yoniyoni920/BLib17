@@ -372,7 +372,7 @@ public class BookControl {
                 "select email, first_name, last_name, title from " +
                         "(subscriber join user on subscriber.user_id = user.id)" +
                         " join (book_order join book on book_order.book_id = book.id)" +
-                        " on subscriber_id = subscriber.id where ordered_until = CURDATE() + 2 AND book_id = 2")){
+                        " on subscriber_id = subscriber.id where ordered_until = CURDATE() + 2 AND book_id = ?")){
             sttm2.setInt(1, bookId);
             ResultSet rs = sttm2.executeQuery();
             if (rs.next()) {
@@ -380,7 +380,7 @@ public class BookControl {
                         rs.getString("title") + " Order", "Hi "
                                 + rs.getString("first_name") + " " + rs.getString("last_name")
                         +",<br>Ordered book '" + rs.getString("title") + "' is ready for pickup.<br>" +
-                                "If book isn't picked up in 2 days ordered is will be canceled automatically.<br>" +
+                                "If the book isn't picked up in 2 days, the order will be canceled automatically.<br>" +
                                 "Blib Library.","Blib Orders");
             }
         }catch (SQLException e) {

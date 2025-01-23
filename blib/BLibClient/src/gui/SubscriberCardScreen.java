@@ -16,6 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import services.ClientUtils;
+import services.InterfaceUtils;
+
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -55,12 +57,10 @@ public class SubscriberCardScreen extends AbstractScreen {
 		emailLabel.setText(subscriber.getEmail());
 
 		boolean isFrozen = subscriber.isFrozen();
-		System.out.println(isFrozen);
 		frozenBox.setManaged(isFrozen);
 		frozenBox.setVisible(isFrozen);
-
 		if (isFrozen) {
-			frozenText.setText("Frozen Until " + subscriber.getFrozenUntil().format(DateTimeFormatter.ofPattern("dd-MM-yy")));
+			frozenText.setText("Frozen Until " + InterfaceUtils.formatDate(subscriber.getFrozenUntil()));
 		}
 
 		if (!isMe) {
@@ -153,7 +153,8 @@ public class SubscriberCardScreen extends AbstractScreen {
 	}
 
 	private void onChangeDurationBookPressed(BookCopy bookCopy) throws IOException {
-		ExtendBorrowTimeScreen screen = (ExtendBorrowTimeScreen) screenManager.openScreen("librarian/ExtendBorrowTimeScreen", "Extend Duration Screen");
+		ExtendBorrowTimeScreen screen = (ExtendBorrowTimeScreen) screenManager
+				.openScreen("librarian/ExtendBorrowTimeScreen", "Extend Borrow Duration");
 		screen.onStart(bookCopy);
 	}
 	   /**

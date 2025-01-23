@@ -7,6 +7,7 @@ import gui.AbstractScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import services.ClientUtils;
 
@@ -49,16 +50,9 @@ public class LendBookScreen extends AbstractScreen {
         });
 
         lendDatePicker.setValue(LocalDate.now());
-
-        bookIdTextField.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (!t1 && aBoolean) bookTextFieldChanged();
-        });
-        subID.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (!t1 && aBoolean) userTextFieldChanged();
-        });
     }
     // Validate the entered book ID and fetch book details from the server
-    public void bookTextFieldChanged() {
+    public void bookTextFieldChanged(KeyEvent keyEvent) {
         ClientUtils.sendMessage(new Message(Action.GET_BOOK_BY_ID, bookIdTextField.getText()), message -> {
             if (message.isError()) {
                 bookIdAlert.setText(message.getObject().toString());
@@ -73,7 +67,7 @@ public class LendBookScreen extends AbstractScreen {
         });
     }
     // Validate the entered subscriber ID and fetch subscriber details from the server
-    public void userTextFieldChanged() {
+    public void userTextFieldChanged(KeyEvent keyEvent) {
         ClientUtils.sendMessage(new Message(Action.GET_SUBSCRIBER_BY_ID, subID.getText()), message -> {
             if (message.isError()) {
                 userAlert.setText(message.getObject().toString());
@@ -95,8 +89,7 @@ public class LendBookScreen extends AbstractScreen {
                 try {
                     String bookId = BookScanner.getInstance().Scan();
                     bookIdTextField.setText(bookId);
-                    bookTextFieldChanged();
-
+                    bookTextFieldChanged(null);
                 } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
                 }

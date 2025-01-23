@@ -12,6 +12,8 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
@@ -20,20 +22,28 @@
     <children>
       <AnchorPane layoutX="18.0" layoutY="13.0" styleClass="underline" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="54.0" prefWidth="1010.0" styleClass="title-3" text="Reports" textAlignment="JUSTIFY">
+              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="54.0" prefWidth="1010.0" styleClass="title-3" text="Reports" textAlignment="JUSTIFY" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <font>
                       <Font name="System Bold" size="25.0" />
                   </font>
               </Label>
-            <ChoiceBox fx:id="reportDate" layoutX="776.0" layoutY="11.0" minHeight="10.0" onAction="#onChoseDate" prefHeight="32.0" prefWidth="174.0" />
-            <Button layoutX="957.0" layoutY="9.0" mnemonicParsing="false" onAction="#closeScreen" text="Back" AnchorPane.rightAnchor="0.0" />
+            <ChoiceBox fx:id="reportDate" layoutX="738.0" layoutY="9.0" minHeight="10.0" onAction="#onChoseDate" prefHeight="42.0" prefWidth="174.0" />
+            <Button layoutX="930.0" layoutY="9.0" mnemonicParsing="false" onAction="#closeScreen" text="Back" AnchorPane.rightAnchor="0.0">
+                <graphic>
+                    <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@/resources/subscriber_main_screen_photos/goBackIcon.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
          </children>
       </AnchorPane>
-        <TabPane layoutX="7.0" layoutY="99.0" prefHeight="559.0" prefWidth="1044.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <TabPane layoutX="7.0" layoutY="99.0" prefHeight="559.0" prefWidth="1044.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="90.0">
             <tabs>
             <Tab fx:id="subscriberStatusTab" onSelectionChanged="#onSelectionChanged" text="Subscriber Status">
                <content>
-                  <AnchorPane prefHeight="448.0" prefWidth="773.0">
+                  <AnchorPane prefHeight="448.0" prefWidth="1038.0">
                      <children>
                         <HBox layoutX="314.0" layoutY="10.0" spacing="4.0" AnchorPane.topAnchor="0.0">
                            <children>

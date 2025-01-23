@@ -32,10 +32,6 @@ import services.ClientUtils;
 * handle user registration, and close the registration screen.
 */
 public class RegisterViaLibrerianScreen extends AbstractScreen {
-	
-	
-
-	
 	@FXML
 	private PasswordField PassTxt;
 	@FXML
@@ -78,7 +74,7 @@ public class RegisterViaLibrerianScreen extends AbstractScreen {
      * Validates input fields, displays error messages if any validation fails,
      * and sends the registration request to the server if all inputs are valid.
      */
-	public void RegisterSubscriber() {
+	public void registerSubscriber() {
 		String pass2 = Password2.getText();
 		String pass = PassTxt.getText();
 		String FirstName = FName.getText();
@@ -162,33 +158,11 @@ public class RegisterViaLibrerianScreen extends AbstractScreen {
 			
 			if(!msg.isError()) {
 				FnameErrorLabel.setVisible(false);
-				User user = ((User)msg.getObject());
-					LibrarianMainScreen LibMainScreen;
-					try {
-						LibMainScreen = (LibrarianMainScreen)screenManager.openScreen("librarian/LibrarianMainScreen", "Librarian Main Screen");
-						LibMainScreen.loadUser(user);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				}
-			
-			else {
+				closeScreen(null);
+			} else {
 				FnameErrorLabel.setText(msg.getObject() + "");
 				FnameErrorLabel.setVisible(true);
 			}
 		}
-	}
-
-
-	 /**
-     * Closes the current window and returns to the previous screen.
-     *
-     * @param event the ActionEvent triggered by the exit button
-     * @throws Exception if an error occurs during the process
-     */
-	public void Exit(ActionEvent event) throws Exception {
-		screenManager.closeScreen();
 	}
 }

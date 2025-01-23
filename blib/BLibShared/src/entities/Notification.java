@@ -11,7 +11,7 @@ public class Notification implements Serializable{
 	private LocalDate date ;
 	private boolean isNew ;
 	
-	public Notification(int subscriberId ,String subscriberName , String message , LocalDate date , boolean isNew) {
+	public Notification(int subscriberId ,String subscriberName, String message, LocalDate date ,boolean isNew) {
 		this.subscriberId = subscriberId;
 		this.subscriberName = subscriberName;
 		this.message = message;

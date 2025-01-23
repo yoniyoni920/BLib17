@@ -7,10 +7,31 @@ import javafx.scene.Node;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.function.Function;
 
 public class InterfaceUtils {
+    /**
+     * Formats LocalDateTime to something more common in Israel
+     * @param date
+     * @return
+     */
+    public static String formatDate(LocalDateTime date) {
+        return date.format(DateTimeFormatter.ofPattern("dd/MM/yy, HH:mm"));
+    }
+
+    /**
+     * Formats LocalDate to something more common in Israel
+     * @param date
+     * @return
+     */
+    public static String formatDate(LocalDate date) {
+        return date.format(DateTimeFormatter.ofPattern("dd/MM/yy"));
+    }
 
     /**
      * A useful utility function to make a grid with equal sized cells

@@ -48,7 +48,7 @@ public class ClientApplication extends Application {
 		if (port != null) {
 			createClient(ip, Integer.valueOf(port));
 		} else {
-			screenManager.openScreen("ClientSocket", "Client Socket Screen");
+			screenManager.openScreen("ClientSocket", "Client Socket");
 		}
 
 
@@ -79,7 +79,7 @@ public class ClientApplication extends Application {
 			System.exit(1);
 		}
 
-		screenManager.openScreen("LogInScreen", "Log In Screen");
+		screenManager.openScreen("LogInScreen", "Log In");
 	}
 
 

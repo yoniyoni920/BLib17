@@ -70,16 +70,7 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 		bookNameLabel.setText(copy.getBook().getTitle());
 		descriptionLabel.setText("Borrowed From " + copy.getLendDate() + " to " + copy.getReturnDate() );
 	}
-	 /**
-     * Closes the current window and navigates back to the BorrowedBookScreen.
-     * Updates the previous screen with the latest book copy details.
-     *
-     * @param event the ActionEvent triggered by the close button
-     * @throws Exception if an error occurs during screen transition
-     */
-	public void closeWindow(ActionEvent event) throws Exception {
-		SubscriberCardScreen prevScreen = (SubscriberCardScreen) screenManager.closeScreen();
-    }
+
     /**
      * Triggers a fade-in animation for the specified label.
      *
@@ -117,7 +108,7 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 
 			if(!msg.isError()) {
 				try {
-					closeWindow(event);
+					closeScreen(event);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -15,7 +15,7 @@
    <children>
       <AnchorPane layoutX="64.0" prefHeight="36.0" prefWidth="750.0" styleClass="underline" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button layoutX="629.0" layoutY="7.0" mnemonicParsing="false" onAction="#closeWindow" styleClass="danger" text="Logout" AnchorPane.rightAnchor="3.0" />
+            <Button layoutX="629.0" layoutY="7.0" mnemonicParsing="false" onAction="#closeScreen" styleClass="danger" text="Logout" AnchorPane.rightAnchor="3.0" />
             <Label fx:id="nameTxt" prefHeight="47.0" prefWidth="448.0" styleClass="title-3" text="Welcome, Librarian Name" />
             <Button fx:id="notificationsButton" layoutX="575.0" layoutY="7.0" mnemonicParsing="false" onAction="#openNotificationsScreen" style="-fx-background-color: transparent;">
                <graphic>
@@ -28,7 +28,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <TextField fx:id="searchSubscribers" layoutX="40.0" layoutY="95.0" minHeight="-Infinity" onKeyReleased="#searchSubscribers" prefHeight="49.0" prefWidth="700.0" promptText="Search subscriber..." AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <TextField fx:id="searchSubscribers" layoutX="32.0" layoutY="116.0" minHeight="-Infinity" onKeyReleased="#searchSubscribers" prefHeight="49.0" prefWidth="700.0" promptText="Search for a Subscriber..." AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0">
          <contextMenu>
             <ContextMenu fx:id="searchSubscribersContextMenu" onAction="#onChoseSubscriber">
                <items>

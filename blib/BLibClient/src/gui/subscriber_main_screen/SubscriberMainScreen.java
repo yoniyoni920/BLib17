@@ -1,6 +1,7 @@
 package gui.subscriber_main_screen;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import base.Action;
@@ -21,6 +22,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import services.ClientUtils;
 import services.InterfaceUtils;
@@ -33,6 +35,9 @@ import services.InterfaceUtils;
  * @author Helal Hammoud
  */
 public class SubscriberMainScreen extends AbstractScreen {
+
+    @FXML private Label frozenText;
+    @FXML private HBox frozenBox;
 
     @FXML
     private Label welcomeText;
@@ -50,6 +55,11 @@ public class SubscriberMainScreen extends AbstractScreen {
 
     // Used to dynamically store the borrowed books for this subscriber
     private ObservableList<BookCopy> borrowedBooks = FXCollections.observableArrayList();
+
+    @Override
+    public void openScreen(Object... args) {
+        onStart((Subscriber)args[0]);
+    }
 
     /**
      * Initializes the subscriber main screen.
@@ -85,7 +95,15 @@ public class SubscriberMainScreen extends AbstractScreen {
         welcomeText.setText("Welcome back, " + subscriber.getName());
         transitionPlayer(welcomeText);
         showBorrowedBooks();
-        borrowedBooksCount.setText("You Have " + borrowedBooks.size() + " Books In Your Library");
+
+        boolean isFrozen = subscriber.isFrozen();
+        frozenBox.setManaged(isFrozen);
+        frozenBox.setVisible(isFrozen);
+        if (isFrozen) {
+            frozenText.setText("Frozen Until " + InterfaceUtils.formatDate(subscriber.getFrozenUntil()));
+        }
+
+        borrowedBooksCount.setText("You Have " + borrowedBooks.size() + " Books in Your Library");
     }
 
     /**
@@ -95,7 +113,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSubInfoScreen(ActionEvent event) throws Exception {
-        SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("SubscriberCardScreen", "Subscriber Card Screen");
+        SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("SubscriberCardScreen", "Subscriber Card");
         card.setData(subscriber, true);
     }
 
@@ -106,7 +124,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSubscriberHistoryScreen(ActionEvent event) throws Exception {
-        SubscriberHistoryScreen screen = (SubscriberHistoryScreen) screenManager.openScreen("subscriber_main_screen/SubscriberHistoryScreen", "Subscriber History Screen");
+        SubscriberHistoryScreen screen = (SubscriberHistoryScreen) screenManager.openScreen("subscriber_main_screen/SubscriberHistoryScreen", "Subscriber History");
         screen.onStart(subscriber);
     }
 
@@ -117,7 +135,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSearchBooksScreen(ActionEvent event) throws Exception {
-        screenManager.openScreen("SearchBooksScreen", "Book Search Screen");
+        screenManager.openScreen("SearchBooksScreen", "Book Search");
     }
 
     /**
@@ -128,8 +146,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openBorrowedBookScreen(ActionEvent event, BookCopy copy) throws Exception {
-        BorrowedBookScreen screen = (BorrowedBookScreen)screenManager.openScreen("subscriber_main_screen/BorrowedBookScreen", "Borrowed Book Screen");
-        screen.onStart(copy , subscriber);
+        screenManager.openScreen("subscriber_main_screen/BorrowedBookScreen", "Borrowed Book", copy, subscriber);
     }
 
     /**
@@ -140,8 +157,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs while opening the Subscriber Settings screen.
      */
     public void openConfigureScreen(ActionEvent event) throws Exception {
-        SubscriberSettingsScreen screen = (SubscriberSettingsScreen) screenManager.openScreen("subscriber_main_screen/SubscriberSettingsScreen", "Subscriber Settings");
-        screen.onStart(subscriber);
+        screenManager.openScreen("subscriber_main_screen/SubscriberSettingsScreen", "Subscriber Settings", subscriber);
     }
 
     /**

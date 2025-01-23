@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.util.Duration;
+import services.InterfaceUtils;
 
 import java.time.format.DateTimeFormatter;
 
@@ -37,7 +38,7 @@ public class SubscriberHistoryScreen extends AbstractScreen{
 		historyTable.setItems(FXCollections.observableArrayList(sub.getHistory()));
 
 		dateColumn.setCellValueFactory(cellData ->
-			new SimpleStringProperty(cellData.getValue().getDate().format(DateTimeFormatter.ofPattern("dd/MM/yy, hh:mm"))
+			new SimpleStringProperty(InterfaceUtils.formatDate(cellData.getValue().getDate())
 		));
 		detailsColumn.setCellValueFactory(cellData -> {
 			HistoryEntry item = cellData.getValue();
@@ -69,10 +70,6 @@ public class SubscriberHistoryScreen extends AbstractScreen{
 			}
 			return new SimpleStringProperty(formattedAction);
 		});
-	}
-	
-	public void closeWindow(ActionEvent event) throws Exception {
-		screenManager.closeScreen();
 	}
 
 	private void fadeInLabelTransition(Label welcomeText) {

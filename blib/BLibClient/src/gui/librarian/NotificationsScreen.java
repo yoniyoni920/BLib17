@@ -95,11 +95,11 @@ public class NotificationsScreen extends AbstractScreen {
     private void prepareTableView() {
         TableColumn<Notification, String> messageColumnAll = new TableColumn<>("Message");
         messageColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
-        messageColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
+        messageColumnAll.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.65));
         
         TableColumn<Notification, String> messageColumnNew = new TableColumn<>("Message");
         messageColumnNew.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMessage()));
-        messageColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.70));
+        messageColumnNew.prefWidthProperty().bind(newNotifications.widthProperty().multiply(0.65));
 
         TableColumn<Notification, String> dateColumnAll = new TableColumn<>("Date");
         dateColumnAll.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDate().toString()));

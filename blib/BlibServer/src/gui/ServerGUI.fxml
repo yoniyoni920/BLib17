@@ -3,17 +3,21 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ServerGUI">
+<VBox spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ServerGUI">
    <children>
-      <Label alignment="CENTER" prefHeight="32.0" prefWidth="740.0" text="BLib Server Console" textAlignment="CENTER">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
+      <AnchorPane styleClass="underline">
+         <children>
+            <Label prefHeight="32.0" prefWidth="740.0" styleClass="title-3" text="BLib Server Console" textAlignment="CENTER">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
       <Label text="Connections" />
       <TableView fx:id="connectionTable" prefHeight="328.0" prefWidth="739.0">
          <columnResizePolicy>

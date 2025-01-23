@@ -15,9 +15,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import services.ClientUtils;
+import services.InterfaceUtils;
 
 /**
  * Controller for the Borrowed Book Screen.
@@ -27,31 +30,33 @@ import services.ClientUtils;
  * 
  */
 public class BorrowedBookScreen extends AbstractScreen {
+    @FXML private Label welcomeText;
 
-    @FXML
-    private Label welcomeText;
-
-    @FXML
-    private Label borrowDate;
+    @FXML private Label borrowDate;
     
-    @FXML
-    private Label returnDate;
+    @FXML private Label returnDate;
     
-    @FXML
-    private Label copyId;
+    @FXML private Label copyId;
     
-    @FXML
-    private Label daysLeft;
+    @FXML private Label daysLeft;
     
-    @FXML
-    private VBox borrowExtend;
+    @FXML private VBox borrowExtend;
 
     private BookCopy copy;
     
     private Subscriber subscriber;
 
-    @FXML
-    private BookCard bookCardController;
+    @FXML private ImageView bookImageView;
+
+    @FXML private Label titleLabel;
+    @FXML private Label authorsLabel;
+    @FXML private Label genreLabel;
+    @FXML private Label locationLabel;
+
+    @Override
+    public void openScreen(Object... args) {
+        onStart((BookCopy)args[0], (Subscriber)args[1]);
+    }
 
     /**
      * Initializes the screen with the provided book copy information.
@@ -84,24 +89,31 @@ public class BorrowedBookScreen extends AbstractScreen {
      */
     private void renderData() {
         borrowExtend.setVisible(false);
-        bookCardController.setBookData(copy.getBook());
-        borrowDate.setText(copy.getLendDate().toString());
-        returnDate.setText(copy.getReturnDate().toString());
+
+        String url = getClass().getResource("/resources/book_covers/" + copy.getBook().getImage()).toExternalForm();
+        Image image = new Image(url);
+        bookImageView.setImage(image);
+
+        titleLabel.setText(copy.getBook().getTitle());
+        authorsLabel.setText(copy.getBook().getAuthors());
+        genreLabel.setText(copy.getBook().getGenre());
+        locationLabel.setText(copy.getBook().getLocation());
+        borrowDate.setText(InterfaceUtils.formatDate(copy.getLendDate()));
+        returnDate.setText(InterfaceUtils.formatDate(copy.getReturnDate()));
         copyId.setText(copy.getId() + "");
 
         int daysBetween = (int) ChronoUnit.DAYS.between(LocalDate.now(), copy.getReturnDate());
         if (daysBetween < 0) {
-            daysLeft.setText("You Are Late!");
+            daysLeft.setText(String.format("(%d Days Late!)", Math.abs(daysBetween)));
         } else if (daysBetween == 0) {
-            daysLeft.setText("Today!");
+            daysLeft.setText("(Today!)");
         } else {
-            daysLeft.setText(daysBetween + " Days Left");
+            daysLeft.setText(String.format("(%d Days Left)", daysBetween));
         }
 
         // Display the extend button only if the book is not ordered and it's close to due date
-        if (daysBetween <= 7 && !subscriber.isFrozen()) {
-            borrowExtend.setVisible(true);
-        }
+        borrowExtend.setVisible(daysBetween <= 7 && !subscriber.isFrozen());
+        borrowExtend.setManaged(borrowExtend.isVisible());
     }
 
     /**
@@ -123,7 +135,7 @@ public class BorrowedBookScreen extends AbstractScreen {
             borrowExtend.setVisible(false);
             returnDate.setText(copy.getReturnDate().toString());
             int daysBetween = (int) ChronoUnit.DAYS.between(LocalDate.now(), copy.getReturnDate());
-            daysLeft.setText(daysBetween + " Days Left");
+            daysLeft.setText(String.format("(%d Days Left)", daysBetween));
             alert.setHeaderText("Your Borrow Duration Successfully Extended");
             alert.showAndWait();
         } else { // Failed to extend
@@ -151,16 +163,6 @@ public class BorrowedBookScreen extends AbstractScreen {
         Message msgFromServer = ClientUtils.sendMessage(new Message(Action.SAVE_NOTIFICATION, notification));
 
         return !msgFromServer.isError();
-    }
-
-    /**
-     * Closes the current screen and returns to the previous screen.
-     *
-     * @param event The action event triggered by the close window action.
-     * @throws Exception If an error occurs while closing the screen.
-     */
-    public void closeWindow(ActionEvent event) throws Exception {
-        screenManager.closeScreen();
     }
 
     /**

@@ -37,6 +37,10 @@ public abstract class AbstractScreen {
 		this.scene = scene;
 	}
 
+	public void openScreen(Object... args) {
+
+	}
+
 	/**
 	 * Closes the current screen and returns to the previous screen.
 	 *

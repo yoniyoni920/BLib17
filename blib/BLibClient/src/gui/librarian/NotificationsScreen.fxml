@@ -7,47 +7,14 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
-<?import javafx.scene.shape.Line?>
 
-<VBox maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="626.0" prefWidth="821.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.librarian.NotificationsScreen">
+<VBox maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="910.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.librarian.NotificationsScreen">
    <children>
-      <AnchorPane prefHeight="64.0" prefWidth="623.0">
+      <AnchorPane prefHeight="64.0" prefWidth="623.0" styleClass="underline">
          <children>
-            <Label fx:id="welcomeText" layoutX="36.0" layoutY="15.0" prefHeight="35.0" prefWidth="298.0" style="-fx-font-size: 24;" text="Notifications" wrapText="true" />
-            <Line endX="786.0" endY="7.0" layoutX="13.0" layoutY="56.0" opacity="0.5" startX="3.0" startY="7.0">
-               <stroke>
-                  <LinearGradient cycleMethod="REFLECT" endX="0.49763033175355453" endY="0.5071090047393366" startX="1.0" startY="0.4976303317535545">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color />
-                           </color>
-                        </Stop>
-                        <Stop offset="0.006711409395973154">
-                           <color>
-                              <Color />
-                           </color>
-                        </Stop>
-                        <Stop offset="0.0436241610738255">
-                           <color>
-                              <Color />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color blue="1.0" green="1.0" red="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </stroke>
-            </Line>
-            <Button layoutX="710.0" layoutY="15.0" mnemonicParsing="false" onAction="#closeWindow" prefHeight="35.0" prefWidth="90.0" styleClass="danger" text="Back">
+            <Label fx:id="welcomeText" layoutX="36.0" layoutY="15.0" prefHeight="35.0" prefWidth="298.0" styleClass="title-3" text="Notifications" wrapText="true" AnchorPane.leftAnchor="0.0" />
+            <Button layoutX="710.0" layoutY="15.0" mnemonicParsing="false" onAction="#closeWindow" prefHeight="35.0" prefWidth="90.0" text="Back" AnchorPane.rightAnchor="0.0">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -58,34 +25,30 @@
             </Button>
          </children>
       </AnchorPane>
-      <VBox alignment="TOP_CENTER" prefHeight="564.0" prefWidth="821.0" spacing="10.0">
+      <VBox alignment="TOP_CENTER" prefHeight="564.0" prefWidth="821.0" spacing="16.0">
          <children>
-            <Pane prefHeight="162.0" prefWidth="821.0">
-               <children>
-                  <Label layoutX="371.0" layoutY="6.0" text="New Messages" />
-                  <TableView fx:id="newNotifications" layoutX="37.0" layoutY="30.0" prefHeight="134.0" prefWidth="737.0" />
-               </children>
+            <AnchorPane prefHeight="207.0" prefWidth="846.0">
                <VBox.margin>
-                  <Insets top="11.0" />
+                  <Insets />
                </VBox.margin>
-               <padding>
-                  <Insets top="1.0" />
-               </padding>
-            </Pane>
-            <Pane prefHeight="358.0" prefWidth="821.0">
                <children>
-                  <Label layoutX="354.0" layoutY="14.0" text="All Messages">
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" />
-                     </padding>
-                  </Label>
-                  <TableView fx:id="allNotifications" layoutX="40.0" layoutY="45.0" prefHeight="289.0" prefWidth="737.0" />
+                  <Label alignment="CENTER" text="New" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TableView fx:id="newNotifications" layoutY="32.0" prefHeight="183.0" prefWidth="827.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                </children>
-            </Pane>
+            </AnchorPane>
+            <AnchorPane prefHeight="335.0" prefWidth="846.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="120.0" text="All" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TableView fx:id="allNotifications" layoutY="30.0" prefHeight="308.0" prefWidth="846.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+               </children>
+            </AnchorPane>
          </children>
          <VBox.margin>
-            <Insets top="10.0" />
+            <Insets />
          </VBox.margin>
       </VBox>
    </children>
+   <padding>
+      <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+   </padding>
 </VBox>

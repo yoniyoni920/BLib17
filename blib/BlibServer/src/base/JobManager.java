@@ -213,7 +213,8 @@ public class JobManager {
      * @throws SQLException
      */
     public LocalDateTime getJobDate(String jobName) {
-        try (PreparedStatement ps = DBControl.getInstance().selectQuery("job","name", jobName)) {
+        try (PreparedStatement ps = DBControl.prepareStatement("SELECT FROM job WHERE name = ?")) {
+            ps.setString(1, jobName);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getTimestamp("date").toLocalDateTime();

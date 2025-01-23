@@ -93,8 +93,10 @@ public class BookControl {
     public static int checkBookLendable(int bookId, int subscriberId) {
         //check if ordered
         if (subscriberId != 0) {
-            try (PreparedStatement stt = DBControl.getInstance().selectQuery("book_order",
-                    "book_id", bookId, "subscriber_id", subscriberId);) {
+            String query = "SELECT * FROM book_order WHERE book_Id = ? AND subscriber_id = ?";
+            try (PreparedStatement stt = DBControl.prepareStatement(query)) {
+                stt.setInt(1, bookId);
+                stt.setInt(2, subscriberId);
                 ResultSet rs = stt.executeQuery();
                 if (rs.next()) {
                     try (PreparedStatement stt1 = DBControl.prepareStatement("SELECT id, return_date FROM " +
@@ -224,7 +226,8 @@ public class BookControl {
      * @return A Book object containing the details of the book, or null if not found.
      */
     public static Book searchBookById(int bookId) {
-        try (PreparedStatement stt = DBControl.getInstance().selectQuery("book", "id", bookId)) {
+        try (PreparedStatement stt = DBControl.prepareStatement("SELECT * FROM book WHERE id = ?")) {
+            stt.setInt(1, bookId);
             ResultSet rs = stt.executeQuery();
             if (rs.next()) {
                 int id = rs.getInt("id");

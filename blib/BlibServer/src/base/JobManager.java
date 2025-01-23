@@ -27,50 +27,50 @@ public class JobManager {
         // Runs every hour to run some task
         new Timer().scheduleAtFixedRate(new TimerTask() {
             public void run() {
-                runJobs();
+                try {
+                    runJobs();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }, 0, 60 * 60 * 1000);
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            public void run() {
-                runOnceADayJobs();
-            }
-        }, 0, 24 * 60 * 60 * 1000);
     }
 
     /**
      * This method runs all jobs. It's called by a fixed-rate timer in the constructor
      */
-    public void runJobs() {
+    public void runJobs() throws SQLException {
         generateReports();
         checkForLateBorrows();
-    }
-
-    /**
-     * This method runs jobs that need to be done once a day
-     */
-    public void runOnceADayJobs(){
         sendBookReturnReminders();
     }
 
-    public void sendBookReturnReminders(){
-        final String messageTemplate = "Hi %s,\nWe wanted to remind you that you have to return %s book to the library until tomorrow.\nBlib Library.";
-        final String htmlMessageTemplate ="Hi %s,<br>We wanted to remind you that you have to return %s book to the library until tomorrow.<br>Blib Library.";
+    public void sendBookReturnReminders() throws SQLException {
+        LocalDateTime date = getJobDate("send-reminders");
+        LocalDateTime now = LocalDateTime.now();
 
-        ArrayList<Map<String, Object>> records = BookControl.getBooksForReturnReminder();
-        for (Map<String, Object> record : records) {
-            CommunicationManager.sendSMS((String)record.get("phone_number"), String.format(messageTemplate, record.get("name"), record.get("title")));
-            CommunicationManager.sendMail((String) record.get("email"), String.format("Returning %s", record.get("title")),
-                    String.format(htmlMessageTemplate, record.get("name"), record.get("title")), "Blib Reminders");
+        if (date == null || ChronoUnit.DAYS.between(date, now) >= 1) {
+            final String messageTemplate = "Hi %s,\nWe wanted to remind you that you have to return %s book to the library until tomorrow.\nBLib Library.";
+            final String htmlMessageTemplate ="Hi %s,<br>We wanted to remind you that you have to return %s book to the library until tomorrow.<br>BLib Library.";
+
+            ArrayList<Map<String, Object>> records = BookControl.getBooksForReturnReminder();
+            for (Map<String, Object> record : records) {
+                CommunicationManager.sendSMS((String)record.get("phone_number"), String.format(messageTemplate, record.get("name"), record.get("title")));
+                CommunicationManager.sendMail((String) record.get("email"), String.format("Returning %s", record.get("title")),
+                        String.format(htmlMessageTemplate, record.get("name"), record.get("title")), "Blib Reminders");
+
+                markJobDone("send-reminders");
+            }
         }
     }
 
     /**
      * Tries and generates a report at the end of each month (or start of each month)
      */
-    public void generateReports() {
+    public void generateReports() throws SQLException {
         LocalDateTime date = getJobDate("generate-reports");
         LocalDate nowMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
-        LocalDate now = LocalDate.now().withDayOfMonth(1);
+        LocalDateTime now = LocalDateTime.now().withDayOfMonth(1);
 
         if (date == null || !date.getMonth().equals(now.getMonth())) {
             // The moment that the next month enters, the last month "ends".
@@ -78,11 +78,7 @@ public class JobManager {
             generateSubscriberStatusReport(nowMonth);
             generateBorrowTimesReport(nowMonth);
 
-            try {
-                markJobDone("generate-reports");
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            markJobDone("generate-reports");
         }
     }
 
@@ -158,7 +154,7 @@ public class JobManager {
      * Checks for any late return. If it detects a week late return it punishes the offending subscriber
      * by freezing their account for a month (30 days)
      */
-    public void checkForLateBorrows() {
+    public void checkForLateBorrows() throws SQLException {
         LocalDateTime date = getJobDate("check-borrows");
         LocalDateTime now = LocalDateTime.now();
 
@@ -175,8 +171,6 @@ public class JobManager {
                 while (rs.next()) {
                     SubscriberControl.freezeSubscriber(rs.getInt("borrow_subscriber_id"));
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
 
             // Make an entry in the history for being late
@@ -200,8 +194,6 @@ public class JobManager {
                 }
 
                 markJobDone("check-borrows");
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
         }
     }
@@ -212,15 +204,13 @@ public class JobManager {
      * @return Date
      * @throws SQLException
      */
-    public LocalDateTime getJobDate(String jobName) {
-        try (PreparedStatement ps = DBControl.prepareStatement("SELECT FROM job WHERE name = ?")) {
+    public LocalDateTime getJobDate(String jobName) throws SQLException {
+        try (PreparedStatement ps = DBControl.prepareStatement("SELECT * FROM job WHERE name = ?")) {
             ps.setString(1, jobName);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getTimestamp("date").toLocalDateTime();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
     }

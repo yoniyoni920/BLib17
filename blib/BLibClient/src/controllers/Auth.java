@@ -1,5 +1,6 @@
 package controllers;
 
+import entities.Subscriber;
 import entities.User;
 
 /**
@@ -22,6 +23,13 @@ public class Auth {
         }
 
         return instance;
+    }
+
+    public Subscriber getSubscriber() {
+        if (user instanceof Subscriber) {
+            return (Subscriber)user;
+        }
+        return null;
     }
 
     public User getUser() {

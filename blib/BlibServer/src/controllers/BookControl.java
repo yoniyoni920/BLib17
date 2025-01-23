@@ -371,8 +371,8 @@ public class BookControl {
     private static void updateSubOrderReady(int subscriberId, int bookId) {
         String query = "SELECT email, first_name, last_name, title FROM subscriber " +
             "JOIN user ON subscriber.user_id = user.id " +
-            "JOIN book_order ON book_order.subscriber_id = subscriber.id" +
-            "JOIN book on book.id = book_order.id" +
+            "JOIN book_order ON book_order.subscriber_id = subscriber.id " +
+            "JOIN book ON book.id = book_order.book_id " +
             "WHERE book_id = ? AND subscriber_id = ?";
 
         try(PreparedStatement sttm2 = DBControl.prepareStatement(query)){

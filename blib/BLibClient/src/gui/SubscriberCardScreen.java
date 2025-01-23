@@ -37,7 +37,6 @@ public class SubscriberCardScreen extends AbstractScreen {
 	@FXML private Label frozenText;
 	@FXML private HBox frozenBox;
 	@FXML private TableView<BookCopy> borrowedBooks;
-	@FXML private Label welcomeText;
 	@FXML private VBox borrowedBooksVBox;
 
 	private ObservableList<BookCopy> borrowedBooksObservableList;
@@ -85,8 +84,6 @@ public class SubscriberCardScreen extends AbstractScreen {
 
 		borrowedBooksVBox.setVisible(!isMe);
 		borrowedBooksVBox.setManaged(!isMe);
-
-		fadeInLabelTransition(welcomeText);
 
 		screenManager.getPrimaryStage().sizeToScene();
 	}
@@ -192,22 +189,5 @@ public class SubscriberCardScreen extends AbstractScreen {
 				erorrAlert.showAndWait();
 			}
 		}
-	}
-
-	/**
-	 * Performs a fade-in animation on the welcome label.
-	 * This method animates the opacity of the welcome text from 0 (invisible) to 1 (fully visible).
-	 *
-	 * @param welcomeText The label to apply the fade-in transition on.
-	 */
-	private void fadeInLabelTransition(Label welcomeText) {
-		welcomeText.setOpacity(0.0); // Start with the text invisible
-
-		// First Fade-In Transition (Welcome Message)
-		FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
-		fadeIn.setFromValue(0.0); // Start fully transparent
-		fadeIn.setToValue(1.0);   // Fade to fully visible
-		fadeIn.setCycleCount(1);
-		fadeIn.play();
 	}
 }

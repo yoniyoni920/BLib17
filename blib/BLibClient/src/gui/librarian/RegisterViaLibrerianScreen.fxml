@@ -25,7 +25,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Label styleClass="title-3" text="Subscriber Registration" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Label fx:id="titleLabel" styleClass="title-3" text="Subscriber Registration" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
       <VBox spacing="4.0">

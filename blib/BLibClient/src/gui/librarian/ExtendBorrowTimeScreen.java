@@ -25,9 +25,6 @@ import services.ClientUtils;
  * - Navigate back to the previous screen upon successful extension
  */
 public class ExtendBorrowTimeScreen extends AbstractScreen{
-	
-	@FXML
-	private Label welcomeText;
 	@FXML
 	private Label bookNameLabel;
 	@FXML
@@ -48,44 +45,25 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 		loadData(copy);
 		renderData(); 
 	}
-	
+
+	/**
+	 * Loads the book copy data into the screen's state.
+	 *
+	 * @param copy the book copy whose data is to be loaded
+	 */
 	private void loadData(BookCopy copy) {
 		this.copy = copy;
 	}
-	/**
-     * Loads the book copy data into the screen's state.
-     *
-     * @param copy the book copy whose data is to be loaded
-     */
-//    private void loadData(BookCopy copy) {
-//        this.copy = copy;
-//    }
 
     /**
      * Renders the loaded book copy data onto the screen.
      * Also triggers a fade-in transition for the welcome message.
      */
 	private void renderData() {
-		fadeInLabelTransition(welcomeText);
 		bookNameLabel.setText(copy.getBook().getTitle());
 		descriptionLabel.setText("Borrowed From " + copy.getLendDate() + " to " + copy.getReturnDate() );
 	}
 
-    /**
-     * Triggers a fade-in animation for the specified label.
-     *
-     * @param welcomeText the label to apply the fade-in animation to
-     */
-	private void fadeInLabelTransition(Label welcomeText) {
-        welcomeText.setOpacity(0.0); // Start with the text invisible
-
-        // First Fade-In Transition (Welcome Message)
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
-        fadeIn.setFromValue(0.0); // Start fully transparent
-        fadeIn.setToValue(1.0);   // Fade to fully visible
-        fadeIn.setCycleCount(1);
-        fadeIn.play();
-    }
     /**
      * Handles the extension of borrow time for the current book copy.
      * Validates the input, updates the return date, and sends the extension request to the server.

@@ -46,7 +46,8 @@ public class NotificationsScreen extends AbstractScreen {
     /**
      * Method executed when the screen starts. It initializes the data and configures the TableViews.
      */
-    public void onStart() {
+    @Override
+    public void openScreen(Object... args) {
         loadData();
         prepareTableView();
     }

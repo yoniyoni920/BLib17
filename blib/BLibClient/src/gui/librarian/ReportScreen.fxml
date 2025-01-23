@@ -22,11 +22,7 @@
     <children>
       <AnchorPane layoutX="18.0" layoutY="13.0" styleClass="underline" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="54.0" prefWidth="1010.0" styleClass="title-3" text="Reports" textAlignment="JUSTIFY" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                  <font>
-                      <Font name="System Bold" size="25.0" />
-                  </font>
-              </Label>
+            <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="54.0" prefWidth="1010.0" styleClass="title-3" text="Reports" textAlignment="JUSTIFY" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
             <ChoiceBox fx:id="reportDate" layoutX="738.0" layoutY="9.0" minHeight="10.0" onAction="#onChoseDate" prefHeight="42.0" prefWidth="174.0" />
             <Button layoutX="930.0" layoutY="9.0" mnemonicParsing="false" onAction="#closeScreen" text="Back" AnchorPane.rightAnchor="0.0">
                 <graphic>

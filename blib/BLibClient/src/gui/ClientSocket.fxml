@@ -12,11 +12,7 @@
    <children>
       <AnchorPane prefWidth="438.0" styleClass="underline">
          <children>
-            <Label layoutX="18.0" layoutY="12.0" prefHeight="66.0" prefWidth="414.0" styleClass="title-3" text="BLib Client Socket" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Label>
+            <Label fx:id="titleLabel" layoutX="18.0" layoutY="12.0" prefHeight="66.0" prefWidth="414.0" styleClass="title-3" text="BLib Client Socket" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
          </children>
       </AnchorPane>
       <VBox prefHeight="0.0" prefWidth="438.0">

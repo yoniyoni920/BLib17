@@ -17,7 +17,7 @@
    <children>
       <AnchorPane prefHeight="65.0" prefWidth="895.0" styleClass="underline">
          <children>
-            <Label fx:id="welcomeText" layoutX="18.0" layoutY="12.0" opacity="0.38" prefHeight="55.0" prefWidth="872.0" styleClass="title-3" text="Welcome Back, UserName " wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Label fx:id="titleLabel" layoutX="18.0" layoutY="12.0" opacity="0.38" prefHeight="55.0" prefWidth="872.0" styleClass="title-3" text="Welcome Back, UserName " wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <MenuButton fx:id="profilePicMenu" layoutX="827.0" layoutY="9.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="73.0" style="-fx-background-color: transparent;" textAlignment="RIGHT" textFill="#070707" textOverrun="CLIP" AnchorPane.rightAnchor="0.0">
               <items>
                 <MenuItem fx:id="infoMenuItem" mnemonicParsing="false" onAction="#openSubInfoScreen" text="Info" />

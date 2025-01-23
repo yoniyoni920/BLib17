@@ -18,7 +18,7 @@
    <children>
       <AnchorPane prefHeight="63.0" prefWidth="795.0" styleClass="underline">
          <children>
-            <Label fx:id="welcomeText" layoutX="2.0" layoutY="-2.0" prefHeight="52.0" prefWidth="321.0" styleClass="title-3" text="Settings" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Label fx:id="titleLabel" layoutX="2.0" layoutY="-2.0" prefHeight="52.0" prefWidth="321.0" styleClass="title-3" text="Settings" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <Button layoutX="693.0" layoutY="6.0" mnemonicParsing="false" onAction="#closeScreen" prefHeight="35.0" prefWidth="104.0" text="Back" AnchorPane.rightAnchor="0.0">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">

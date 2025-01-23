@@ -15,7 +15,7 @@
    <children>
       <AnchorPane prefHeight="62.0" prefWidth="438.0" styleClass="underline">
          <children>
-            <Label layoutY="11.0" prefHeight="25.0" prefWidth="438.0" styleClass="title-3" text="BLib Login" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="titleLabel" layoutY="11.0" prefHeight="25.0" prefWidth="438.0" styleClass="title-3" text="BLib Login" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="22.0" />
                </font>

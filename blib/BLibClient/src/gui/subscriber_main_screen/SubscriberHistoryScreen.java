@@ -16,23 +16,24 @@ import services.InterfaceUtils;
 
 import java.time.format.DateTimeFormatter;
 
-public class SubscriberHistoryScreen extends AbstractScreen{
+public class SubscriberHistoryScreen extends AbstractScreen {
 
 	public TableColumn<HistoryEntry, String> dateColumn;
 	public TableColumn<HistoryEntry, String> detailsColumn;
 	@FXML private Label welcomeText;
 	@FXML private TableView<HistoryEntry> historyTable;
 
+	private Subscriber subscriber;
 
-	private Subscriber subscriber ;
-	
-	public void onStart(Subscriber sub) {
-		fadeInLabelTransition(welcomeText);
-		loadSubscriber(sub);
+	@Override
+	public void openScreen(Object... args) {
+		loadSubscriber((Subscriber)args[0]);
 	}
-		/*
-		 * load Subscriber information to the scene
-		 */
+
+	/**
+	 * Load the subscriber's info
+	 * @param sub The subscriber to work with
+	 */
 	private void loadSubscriber(Subscriber sub) {
 		subscriber = sub;
 		historyTable.setItems(FXCollections.observableArrayList(sub.getHistory()));
@@ -70,16 +71,5 @@ public class SubscriberHistoryScreen extends AbstractScreen{
 			}
 			return new SimpleStringProperty(formattedAction);
 		});
-	}
-
-	private void fadeInLabelTransition(Label welcomeText) {
-		welcomeText.setOpacity(0.0); // Start with the text invisible
-
-	    // First Fade-In Transition (Welcome Message)
-	    FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
-	    fadeIn.setFromValue(0.0); // Start fully transparent
-	    fadeIn.setToValue(1.0);   // Fade to fully visible
-	    fadeIn.setCycleCount(1);
-	    fadeIn.play();
 	}
 }

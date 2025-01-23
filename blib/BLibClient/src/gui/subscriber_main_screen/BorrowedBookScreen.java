@@ -30,8 +30,6 @@ import services.InterfaceUtils;
  * 
  */
 public class BorrowedBookScreen extends AbstractScreen {
-    @FXML private Label welcomeText;
-
     @FXML private Label borrowDate;
     
     @FXML private Label returnDate;
@@ -66,7 +64,6 @@ public class BorrowedBookScreen extends AbstractScreen {
      * @param subscriber The subscriber who borrowed the book.
      */
     public void onStart(BookCopy copy , Subscriber subscriber) {
-        fadeInLabelTransition(welcomeText);
         loadData(copy , subscriber);
         renderData();
     }
@@ -164,20 +161,5 @@ public class BorrowedBookScreen extends AbstractScreen {
 
         return !msgFromServer.isError();
     }
-
-    /**
-     * Performs a fade-in animation on the welcome label.
-     * This method animates the opacity of the welcome text from 0 (invisible) to 1 (fully visible).
-     *
-     * @param welcomeText The label to apply the fade-in transition on.
-     */
-    private void fadeInLabelTransition(Label welcomeText) {
-        welcomeText.setOpacity(0.0); // Start with the text invisible
-        // First Fade-In Transition (Welcome Message)
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
-        fadeIn.setFromValue(0.0); // Start fully transparent
-        fadeIn.setToValue(1.0);   // Fade to fully visible
-        fadeIn.setCycleCount(1);
-        fadeIn.play();
     }
 }

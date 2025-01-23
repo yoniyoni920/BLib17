@@ -14,11 +14,7 @@
    <children>
       <AnchorPane styleClass="underline">
          <children>
-            <Label prefHeight="32.0" prefWidth="740.0" styleClass="title-3" text="BLib Server Console" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Label>
+            <Label fx:id="titleLabel" prefHeight="32.0" prefWidth="740.0" styleClass="title-3" text="BLib Server Console" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
             <Button layoutX="704.0" layoutY="9.0" mnemonicParsing="false" AnchorPane.rightAnchor="0.0" onAction="#openSettings">
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" onMouseClicked="#openSettings" pickOnBounds="true" preserveRatio="true">

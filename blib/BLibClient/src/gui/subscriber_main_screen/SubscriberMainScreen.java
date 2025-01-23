@@ -40,9 +40,6 @@ public class SubscriberMainScreen extends AbstractScreen {
     @FXML private HBox frozenBox;
 
     @FXML
-    private Label welcomeText;
-
-    @FXML
     private GridPane borrowedBooksGrid;
 
     @FXML
@@ -92,8 +89,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * Renders the data on the screen including the welcome message, borrowed books, and the count of borrowed books.
      */
     private void renderData() {
-        welcomeText.setText("Welcome back, " + subscriber.getName());
-        transitionPlayer(welcomeText);
+        titleLabel.setText("Welcome back, " + subscriber.getName());
         showBorrowedBooks();
 
         boolean isFrozen = subscriber.isFrozen();
@@ -124,8 +120,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSubscriberHistoryScreen(ActionEvent event) throws Exception {
-        SubscriberHistoryScreen screen = (SubscriberHistoryScreen) screenManager.openScreen("subscriber_main_screen/SubscriberHistoryScreen", "Subscriber History");
-        screen.onStart(subscriber);
+        screenManager.openScreen("subscriber_main_screen/SubscriberHistoryScreen", "Subscriber History", subscriber);
     }
 
     /**
@@ -189,33 +184,32 @@ public class SubscriberMainScreen extends AbstractScreen {
     /**
      * Plays a dynamic welcome text transition on the screen.
      * Includes fade-in and fade-out effects, changing the displayed message.
-     *
-     * @param welcomeText The welcome text label to animate.
      */
-    private void transitionPlayer(Label welcomeText) {
-        welcomeText.setOpacity(0.0); // Start with the text invisible
+    @Override
+    protected void fadeInTitle() {
+        titleLabel.setOpacity(0.0); // Start with the text invisible
 
         // First Fade-In Transition (Welcome Message)
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), welcomeText);
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), titleLabel);
         fadeIn.setFromValue(0.0); // Start fully transparent
         fadeIn.setToValue(1.0);   // Fade to fully visible
         fadeIn.setCycleCount(1);
 
         // Fade-Out Transition (Welcome Message)
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), welcomeText);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), titleLabel);
         fadeOut.setFromValue(1.0); // Start fully visible
         fadeOut.setToValue(0.0);   // Fade to fully transparent
         fadeOut.setCycleCount(1);
 
         // Second Fade-In Transition (My Books)
-        FadeTransition fadeInMyBooks = new FadeTransition(Duration.seconds(1), welcomeText);
+        FadeTransition fadeInMyBooks = new FadeTransition(Duration.seconds(1), titleLabel);
         fadeInMyBooks.setFromValue(0.0); // Start fully transparent
         fadeInMyBooks.setToValue(1.0);   // Fade to fully visible
         fadeInMyBooks.setCycleCount(1);
 
         // After fade-out, change the text and fade in "My Books"
         fadeOut.setOnFinished(event -> {
-            welcomeText.setText("My Books");
+            titleLabel.setText("My Books");
             fadeInMyBooks.play();
         });
 

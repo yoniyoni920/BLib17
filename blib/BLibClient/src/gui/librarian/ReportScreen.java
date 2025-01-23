@@ -38,7 +38,7 @@ import java.util.ResourceBundle;
  * - Update charts based on selected dates and filters
  * - Handle user interactions with the report screen
  */
-public class ReportScreen extends AbstractScreen implements Initializable {
+public class ReportScreen extends AbstractScreen {
     @FXML
     private LineChart<Integer, String> subscriberStatusChart;
 
@@ -77,15 +77,13 @@ public class ReportScreen extends AbstractScreen implements Initializable {
     private ContextMenu searchSubscribersContextMenu;
 
     boolean hasLoadedBorrowTImes = false;
+
     /**
-     * Initializes the report screen.
+     * Open the report screen.
      * Loads available report dates, sets default selection, and initializes charts.
-     *
-     * @param location  the location used to resolve relative paths for the root object
-     * @param resources the resources used to localize the root object
      */
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void openScreen(Object... args) {
         Message msg = ClientUtils.sendMessage(Action.GET_REPORT_DATES);
         if (!msg.isError()) {
             List<LocalDate> dates = (List<LocalDate>)msg.getObject();

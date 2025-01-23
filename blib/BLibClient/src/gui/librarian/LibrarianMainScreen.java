@@ -24,7 +24,6 @@ import java.util.List;
 
 public class LibrarianMainScreen extends AbstractScreen {
 	User user;
-	@FXML private Label nameTxt;
 	@FXML private TextField searchSubscribers;
 	@FXML private ContextMenu searchSubscribersContextMenu;
 	@FXML private Button notificationButton;
@@ -52,7 +51,7 @@ public class LibrarianMainScreen extends AbstractScreen {
      * @throws Exception If there is an error initializing the screen.
      */
 	public void startUp(User user) {
-		nameTxt.setText("Welcome, " + user.getName());
+		titleLabel.setText("Welcome, " + user.getName());
 		this.user = user;
 	}
     /**
@@ -128,7 +127,6 @@ public class LibrarianMainScreen extends AbstractScreen {
 	}
 	
 	public void openNotificationsScreen(ActionEvent event) throws IOException {
-		NotificationsScreen screen = (NotificationsScreen) screenManager.openScreen("librarian/NotificationsScreen", "Notifications");
-		screen.onStart();
+		screenManager.openScreen("librarian/NotificationsScreen", "Notifications");
 	}
 }

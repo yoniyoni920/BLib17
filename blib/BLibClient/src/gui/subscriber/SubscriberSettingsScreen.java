@@ -45,26 +45,14 @@ public class SubscriberSettingsScreen extends AbstractScreen {
 
     private Subscriber sub;
 
-    private boolean isUpdatedInfo = false;
-
     /**
      * Initializes the screen with the subscriber's information.
      * This method is called when the screen is loaded and the subscriber information is passed in.
-     *
-     * @param sub The subscriber whose information will be displayed and updated.
      */
-    public void onStart(Subscriber sub) {
-        loadData(sub);
+    @Override
+    public void openScreen(Object... args) {
+        this.sub = (Subscriber)args[0];
         renderData();
-    }
-
-    /**
-     * Loads the subscriber's information into the text fields.
-     *
-     * @param sub The subscriber whose information will be displayed in the text fields.
-     */
-    private void loadData(Subscriber sub) {
-        this.sub = sub;
     }
 
     /**
@@ -97,9 +85,6 @@ public class SubscriberSettingsScreen extends AbstractScreen {
             closeScreen(null);
             return;
         }
-
-        // Set the updated flag
-        isUpdatedInfo = true;
 
         // Construct the updated info list
         List<String> changedInfo = Arrays.asList(

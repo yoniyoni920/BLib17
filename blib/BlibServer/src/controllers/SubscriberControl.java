@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.HistoryAction;
 import entities.Subscriber;
 import entities.HistoryEntry;
 import entities.SubscriberStatusReport;
@@ -200,7 +201,7 @@ public class SubscriberControl {
 			st.setInt(2, subscriberId);
 
 			// Log into history
-			logIntoHistory(new HistoryEntry(subscriberId, "freeze"));
+			logIntoHistory(new HistoryEntry(subscriberId, HistoryAction.FREEZE_SUBSCRIBER));
 
 			return st.executeUpdate() == 1;
 		} catch (SQLException e) {
@@ -225,7 +226,7 @@ public class SubscriberControl {
 				HistoryEntry item = new HistoryEntry(
 					rs.getInt("subscriber_id"),
 					rs.getInt("id"),
-					rs.getString("action"),
+					HistoryAction.valueOf(rs.getString("action")),
 					rs.getTimestamp("date").toLocalDateTime()
 				);
 
@@ -266,7 +267,7 @@ public class SubscriberControl {
 				"VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement st = DBControl.prepareStatement(query)) {
-			st.setString(1, historyItem.getAction());
+			st.setString(1, historyItem.getAction().toString());
 			st.setInt(2, historyItem.getSubscriberId());
 			st.setObject(3, historyItem.getBookCopyId());
 			st.setObject(4, historyItem.getBookId());

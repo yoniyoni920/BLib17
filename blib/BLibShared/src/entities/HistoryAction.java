@@ -1,5 +1,13 @@
 package entities;
 
 public enum HistoryAction {
-
+    LOST_BOOK,
+    BORROW_BOOK,
+    LATE_RETURN,
+    FREEZE_SUBSCRIBER,
+    RETURN_BOOK,
+    LOGIN_SUBSCRIBER,
+    EXTEND_BORROW_SUBSCRIBER,
+    EXTEND_BORROW_LIBRARIAN,
+    ORDER_BOOK
 }

@@ -2,10 +2,8 @@ package controllers;
 
 import java.sql.*;
 
-import entities.HistoryEntry;
-import entities.Message;
-import entities.Subscriber;
-import entities.User;
+import entities.*;
+
 /*
  * The class handles login logic for users and subscribers.
  * It verifies credentials and returns the appropriate user type based on the role.
@@ -59,7 +57,7 @@ public class LoginControl {
 
 				SubscriberControl.logIntoHistory(new HistoryEntry(
 					rs.getInt("subscriber_id"),
-					"login"
+						HistoryAction.LOGIN_SUBSCRIBER
 				));
 
 				return subscriber;

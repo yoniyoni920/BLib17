@@ -197,7 +197,7 @@ public class BookControl {
 
             SubscriberControl.logIntoHistory(new HistoryEntry(
                 subscriberId,
-                "borrow",
+                HistoryAction.BORROW_BOOK,
                 bookCopyId,
                 date,
                 returnDate
@@ -304,7 +304,7 @@ public class BookControl {
             stt.setInt(2, bookId);
             stt.executeUpdate();
 
-            HistoryEntry entry = new HistoryEntry(subscriberId, "order");
+            HistoryEntry entry = new HistoryEntry(subscriberId, HistoryAction.ORDER_BOOK);
             entry.setBookId(bookId);
             SubscriberControl.logIntoHistory(entry);
 
@@ -424,7 +424,7 @@ public class BookControl {
                     ps2.executeUpdate();
 
                     SubscriberControl.logIntoHistory(
-                        new HistoryEntry(subscriberId, "return", bookCopyId)
+                        new HistoryEntry(subscriberId, HistoryAction.RETURN_BOOK, bookCopyId)
                     );
 
                     // Attempts to update the late entry to include an actual return date
@@ -468,7 +468,7 @@ public class BookControl {
                     st2.setInt(1, bookCopyId);
                     // Log this into the subscriber's history
                     SubscriberControl.logIntoHistory(
-                        new HistoryEntry(subscriberId, "lost", bookCopyId)
+                        new HistoryEntry(subscriberId, HistoryAction.LOST_BOOK, bookCopyId)
                     );
                     // Punish subscriber for losing the book
                     SubscriberControl.freezeSubscriber(subscriberId);
@@ -517,10 +517,10 @@ public class BookControl {
             // Add history entry
             HistoryEntry entry;
             if (userRequesting.getRole() == Role.LIBRARIAN) {
-                entry = new HistoryEntry(subId, "extend_by_librarian", id);
+                entry = new HistoryEntry(subId, HistoryAction.EXTEND_BORROW_LIBRARIAN, id);
                 entry.setLibrarianUserId(userRequesting.getId());
             } else {
-                entry = new HistoryEntry(subId, "extend_by_subscriber", id);
+                entry = new HistoryEntry(subId, HistoryAction.EXTEND_BORROW_SUBSCRIBER, id);
 
                 NotificationControl.saveNotification(
                     new Notification(

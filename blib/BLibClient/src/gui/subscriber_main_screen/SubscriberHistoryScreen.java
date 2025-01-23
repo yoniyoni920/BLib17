@@ -1,5 +1,6 @@
 package gui.subscriber_main_screen;
 
+import entities.HistoryAction;
 import entities.HistoryEntry;
 import entities.Subscriber;
 import gui.AbstractScreen;
@@ -43,31 +44,42 @@ public class SubscriberHistoryScreen extends AbstractScreen {
 		));
 		detailsColumn.setCellValueFactory(cellData -> {
 			HistoryEntry item = cellData.getValue();
-			String action = item.getAction();
+			HistoryAction action = item.getAction();
 			String formattedAction;
 
-			if (action.equals("lost")) {
-				formattedAction = String.format("Lost book named: %s", item.getBookName());
-			} else if (action.equals("borrow")) {
-				formattedAction = String.format("Borrowed book named: %s", item.getBookName());
-			} else if (action.equals("late")) {
-				formattedAction = String.format("Late for book return. Book name: %s", item.getBookName());
-			} else if (action.equals("freeze")) {
-				formattedAction = "Got frozen for 30 days for not returning a book for more than " +
-						"a week after the return date.";
-			} else if (action.equals("return")) {
-				formattedAction = String.format("Returned book named: %s", item.getBookName());
-			} else if (action.equals("login")) {
-				formattedAction = "Logged in";
-			} else if (action.equals("extend_by_subscriber")) {
-				formattedAction = String.format("Extended borrowing duration for book named: %s", item.getBookName());
-			} else if (action.equals("extend_by_librarian")) {
-				formattedAction = String.format("Librarian %s extended borrowing duration for book named: %s",
-						item.getLibrarianName(), item.getBookName());
-			} else if (action.equals("order")) {
-				formattedAction = String.format("Ordered book named: %s", item.getBookName());
-			} else {
-				formattedAction = "Unknown action: " + action;
+			switch (action) {
+				case LOST_BOOK:
+					formattedAction = String.format("Lost book named: %s", item.getBookName());
+					break;
+				case BORROW_BOOK:
+					formattedAction = String.format("Borrowed book named: %s", item.getBookName());
+					break;
+				case LATE_RETURN:
+					formattedAction = String.format("Late for book return. Book name: %s", item.getBookName());
+					break;
+				case FREEZE_SUBSCRIBER:
+					formattedAction = "Got frozen for 30 days for not returning a book for more than " +
+							"a week after the return date.";
+					break;
+				case RETURN_BOOK:
+					formattedAction = String.format("Returned book named: %s", item.getBookName());
+					break;
+				case LOGIN_SUBSCRIBER:
+					formattedAction = "Logged in";
+					break;
+				case EXTEND_BORROW_SUBSCRIBER:
+					formattedAction = String.format("Extended borrowing duration for book named: %s", item.getBookName());
+					break;
+				case EXTEND_BORROW_LIBRARIAN:
+					formattedAction = String.format("Librarian %s extended borrowing duration for book named: %s",
+							item.getLibrarianName(), item.getBookName());
+					break;
+				case ORDER_BOOK:
+					formattedAction = String.format("Ordered book named: %s", item.getBookName());
+					break;
+				default:
+					formattedAction = "Unknown action: " + action;
+					break;
 			}
 			return new SimpleStringProperty(formattedAction);
 		});

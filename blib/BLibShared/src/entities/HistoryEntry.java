@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class HistoryEntry implements Serializable {
 	private int id;
-	private String action;
+	private HistoryAction action;
 	private int subscriberId;
 	private LocalDateTime date;
 
@@ -18,7 +18,7 @@ public class HistoryEntry implements Serializable {
 	private String bookName;
 	private String librarianName;
 
-	public HistoryEntry(int subscriberId, String action, int bookCopyId, LocalDateTime date, LocalDateTime endDate) {
+	public HistoryEntry(int subscriberId, HistoryAction action, int bookCopyId, LocalDateTime date, LocalDateTime endDate) {
 		this.bookCopyId = bookCopyId;
 		this.subscriberId = subscriberId;
 		this.action = action;
@@ -26,21 +26,21 @@ public class HistoryEntry implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public HistoryEntry(int subscriberId, int id, String action, LocalDateTime date) {
+	public HistoryEntry(int subscriberId, int id, HistoryAction action, LocalDateTime date) {
 		this.subscriberId = subscriberId;
 		this.id = id;
 		this.action = action;
 		this.date = date;
 	}
 
-	public HistoryEntry(int subscriberId, String action, int bookCopyId) {
+	public HistoryEntry(int subscriberId, HistoryAction action, int bookCopyId) {
 		this.action = action;
 		this.subscriberId = subscriberId;
 		this.bookCopyId = bookCopyId;
 		date = LocalDateTime.now();
 	}
 
-	public HistoryEntry(int subscriberId, String action) {
+	public HistoryEntry(int subscriberId, HistoryAction action) {
 		this.action = action;
 		this.subscriberId = subscriberId;
 		date = LocalDateTime.now();
@@ -51,11 +51,11 @@ public class HistoryEntry implements Serializable {
 		return id + " " + action + " " + date;
 	}
 
-	public String getAction() {
+	public HistoryAction getAction() {
 		return action;
 	}
 
-	public void setAction(String action) {
+	public void setAction(HistoryAction action) {
 		this.action = action;
 	}
 

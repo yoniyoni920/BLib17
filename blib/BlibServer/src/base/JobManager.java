@@ -4,6 +4,7 @@ import controllers.BookControl;
 import controllers.CommunicationManager;
 import controllers.DBControl;
 import controllers.SubscriberControl;
+import entities.HistoryAction;
 import entities.HistoryEntry;
 
 import java.sql.*;
@@ -188,7 +189,7 @@ public class JobManager {
                 if (rs.next()) {
                     int id = rs.getInt("id");
                     SubscriberControl.logIntoHistory(
-                        new HistoryEntry(rs.getInt("borrow_subscriber_id"), "late", id)
+                        new HistoryEntry(rs.getInt("borrow_subscriber_id"), HistoryAction.LATE_RETURN, id)
                     );
 
                     String updateCopyAsLateQuery = "UPDATE book_copy SET is_late = 1 WHERE id = ?";

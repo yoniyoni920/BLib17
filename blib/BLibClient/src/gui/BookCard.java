@@ -2,20 +2,32 @@ package gui;
 
 import java.net.URISyntaxException;
 
+import base.Action;
+import controllers.Auth;
 import entities.Book;
+import entities.BookOrder;
+import entities.Message;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import services.ClientUtils;
+import services.InterfaceUtils;
 
 /**
  * The BookCard class is a controller for the book card UI component.
  * It handles setting book data and managing the visibility of extra details.
  */
 public class BookCard {
+    @FXML public Button orderButton;
+    Book book;
+
     @FXML
     private VBox vbox;
 	@FXML
@@ -64,5 +76,39 @@ public class BookCard {
         tooltip.setWrapText(true);
         tooltip.setWidth(200);
         Tooltip.install(vbox, tooltip);
+
+        orderButton.setVisible(Auth.getInstance().getSubscriber() != null && book.isCanOrder());
+
+        this.book = book;
+    }
+
+    public void orderBook(ActionEvent event) {
+        BookOrder order = new BookOrder(
+            Auth.getInstance().getSubscriber().getSubscriberId(),
+            book.getId()
+        );
+        ClientUtils.sendMessage(new Message(Action.ORDER_BOOK, order), message1 -> {
+            Alert orderResultAlert = new Alert(Alert.AlertType.INFORMATION);
+            if(message1.isError()) {
+                orderResultAlert.setAlertType(Alert.AlertType.ERROR);
+                orderResultAlert.setHeaderText("Ordering Error");
+                orderResultAlert.setContentText(message1.getObject().toString());
+            }
+            else {
+                BookOrder bookOrder1 = (BookOrder)message1.getObject();
+                if(bookOrder1.getOrderId() == -1){
+                    orderResultAlert.setAlertType(Alert.AlertType.INFORMATION);
+                    orderResultAlert.setHeaderText("Can't Order Book");
+                    orderResultAlert.setContentText("Book can't be ordered at the moment!");
+                }else {
+                    orderResultAlert.setAlertType(Alert.AlertType.INFORMATION);
+                    orderResultAlert.setHeaderText("Book Ordered Successfully");
+                    orderResultAlert.setContentText(String.format("%s has been ordered successfully and is expected to be available by %s",
+                             book.getTitle(), InterfaceUtils.formatDate(bookOrder1.getOrderDate())));
+                }
+                orderButton.setVisible(false);
+            }
+            orderResultAlert.show();
+        });
     }
 }

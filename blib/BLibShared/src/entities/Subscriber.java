@@ -16,12 +16,15 @@ public class Subscriber extends User implements Serializable {
 
 	private List<BookCopy> borrowedBooks;
 
+	private int subscriberId;
+
 	public Subscriber() {
 		super();
 	}
 
 	public Subscriber(
-		int id,
+		int subscriberId,
+		int userId,
 		String firstName,
 		String lastName,
 		String role,
@@ -30,7 +33,8 @@ public class Subscriber extends User implements Serializable {
 		String email,
 		LocalDate frozenUntil
 	) {
-		super(id, firstName, lastName, role, password);
+		super(userId, firstName, lastName, role, password);
+		this.subscriberId = subscriberId;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.frozenUntil = frozenUntil;
@@ -83,4 +87,12 @@ public class Subscriber extends User implements Serializable {
 	public String toString() {
 		return getName() + " (" + getId() + " )";
 	}
+
+    public int getSubscriberId() {
+        return subscriberId;
+    }
+
+    public void setSubscriberId(int subscriberId) {
+        this.subscriberId = subscriberId;
+    }
 }

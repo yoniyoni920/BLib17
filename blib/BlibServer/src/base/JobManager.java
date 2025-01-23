@@ -43,6 +43,16 @@ public class JobManager {
         generateReports();
         checkForLateBorrows();
         sendBookReturnReminders();
+        cancelOrders();
+    }
+
+    public void cancelOrders() throws SQLException {
+        LocalDateTime date = getJobDate("cancel-orders");
+        LocalDate now = LocalDate.now().withDayOfMonth(1);
+
+        if (date == null || ChronoUnit.DAYS.between(date, now) >= 1) {
+            BookControl.cancelLateOrders();
+        }
     }
 
     public void sendBookReturnReminders() throws SQLException {

@@ -43,7 +43,7 @@ public class SubscriberControl {
 
 	public static Subscriber getSubscriberById(int id) {
 		try {
-			String query = "SELECT * FROM subscriber JOIN user ON user.id=subscriber.user_id WHERE user_id=?";
+			String query = "SELECT *, user.* FROM subscriber JOIN user ON user.id=subscriber.user_id WHERE user_id=?";
 			try(PreparedStatement stt = DBControl.getConnection().prepareStatement(query)) {
 				stt.setInt(1,id);
 				ResultSet rs = stt.executeQuery();
@@ -74,6 +74,7 @@ public class SubscriberControl {
 
 		Subscriber sub = new Subscriber(
 			id,
+			rs.getInt("user_id"),
 			firstName,
 			lastName,
 			role,
@@ -91,7 +92,7 @@ public class SubscriberControl {
 	public static List<Subscriber> searchSubscribers(String search, String searchType) {
 		try {
 			if (searchType.equals("user_id") || searchType.equals("first_name") || searchType.equals("last_name")) {
-				String query = "SELECT * FROM subscriber JOIN user ON user.id=subscriber.user_id";
+				String query = "SELECT *, user.* FROM subscriber JOIN user ON user.id=subscriber.user_id";
 				if (searchType.equals("user_id")) {
 					query += " WHERE user_id = ?";
 				} else {

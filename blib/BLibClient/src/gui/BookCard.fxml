@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-
 
 <VBox fx:id="vbox" alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="383.0" prefWidth="188.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BookCard">
    <children>
-      <ImageView fx:id="bookImageView" fitHeight="299.0" fitWidth="199.0" pickOnBounds="true">
-         <image>
-            <Image url="@../resources/book_covers/batman.jpg" />
-         </image>
-      </ImageView>
+      <AnchorPane>
+         <children>
+            <ImageView fx:id="bookImageView" fitHeight="299.0" fitWidth="199.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../resources/book_covers/batman.jpg" />
+               </image>
+            </ImageView>
+            <Button fx:id="orderButton" contentDisplay="CENTER" layoutX="122.0" layoutY="255.0" mnemonicParsing="false" onAction="#orderBook" prefHeight="20.0" prefWidth="68.0" text="Order" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="4.0" />
+         </children>
+      </AnchorPane>
       <Label fx:id="titleLabel" alignment="CENTER" prefHeight="17.0" prefWidth="199.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Batman" />
-      <VBox prefHeight="58.0" prefWidth="600.0" spacing="4.0">
+      <VBox prefHeight="133.0" prefWidth="199.0" spacing="4.0">
          <children>
             <Label fx:id="authorLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="199.0" text="Bob Kane, Bill Finger" />
             <Label fx:id="genreLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="199.0" text="Superhero" />
@@ -22,4 +29,7 @@
          </children>
       </VBox>
    </children>
+   <padding>
+      <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+   </padding>
 </VBox>

@@ -66,6 +66,7 @@ public class BookControl {
                             if ((totalCopies - orders) > 0) { // Can we make an order?
                                 LocalDate originalDate = bookResult.getDate("min_return_date").toLocalDate();
                                 locationOrDate = "Available By: " + originalDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                                book.setCanOrder(true);
                             } else { // All copies are being ordered
                                 locationOrDate = "Unavailable";
                             }
@@ -90,9 +91,9 @@ public class BookControl {
      * @return The copy ID of the available copy.
      */
     public static int checkBookLendable(int bookId, int subscriberId) {
-        //check if ordered
+        //If ordered, return the
         if (subscriberId != 0) {
-            String query = "SELECT * FROM book_order WHERE book_id = ? AND subscriber_id = ?";
+            String query = "SELECT * FROM book_copy WHERE book_id = ? AND borrow_subscriber_id = ? AND is_waiting = 1";
             try (PreparedStatement stt = DBControl.prepareStatement(query)) {
                 stt.setInt(1, bookId);
                 stt.setInt(2, subscriberId);
@@ -107,8 +108,6 @@ public class BookControl {
                                 return rs1.getInt("id");
                             }
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
             } catch (Exception e) {
@@ -116,23 +115,13 @@ public class BookControl {
             }
         }
 
-        try (PreparedStatement stt = DBControl.prepareStatement(
-                "select (select count(book_order.book_id) from book_order where book_id = ?) as order_count," +
-                        " (select count(book_copy.book_id) from book_copy where book_id = ? and " +
-                        "return_date IS NULL) as available_copies," +
-                        "    (select book_copy.id from book_copy where book_id = ?" +
-                        " order by return_date limit 1) as available_copy_id")) {
+        // If one copy is free then we can lend it (otherwise it would've been occupied by an orderer)
+        String query = "SELECT id FROM book_copy WHERE borrow_subscriber_id IS NULL AND book_id = ?";
+        try (PreparedStatement stt = DBControl.prepareStatement(query)) {
             stt.setInt(1, bookId);
-            stt.setInt(2, bookId);
-            stt.setInt(3, bookId);
             ResultSet rs = stt.executeQuery();
             if (rs.next()) {
-                int copyId = rs.getInt("available_copy_id");
-                int orderCount = rs.getInt("order_count");
-                int availableCopies = rs.getInt("available_copies");
-                if (availableCopies > orderCount) {
-                    return copyId;
-                }
+                return rs.getInt("id");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -147,24 +136,30 @@ public class BookControl {
      * @return LocalDate representing the date book with be available or null if not orderable.
      */
     public static LocalDate checkBookOrderable(int bookId) {
-        try (PreparedStatement stt = DBControl.prepareStatement(
-                "select (select count(book_order.book_id) from book_order where book_id = ?) as order_count," +
-                        " (select count(book_copy.book_id) from book_copy where book_id = ?) as copy_count")) {
+        String query = "SELECT COUNT(bc.id) AS copies_count, COUNT(bo.id) AS order_count " +
+                "FROM book b " +
+                "LEFT JOIN book_copy bc ON bc.book_id = b.id " +
+                "LEFT JOIN book_order bo ON bo.book_id = b.id " +
+                "WHERE b.id = ? " +
+                "GROUP BY b.id;";
+
+        System.out.println(bookId);
+
+        try (PreparedStatement stt = DBControl.prepareStatement(query)) {
             stt.setInt(1, bookId);
-            stt.setInt(2, bookId);
             ResultSet rs = stt.executeQuery();
             if (rs.next()) {
-                if (rs.getInt("order_count") < rs.getInt("copy_count")) {
+                int orderCount = rs.getInt("order_count");
+                int copiesCount = rs.getInt("copies_count");
+                if ((copiesCount - orderCount) > 0) {
                     try (PreparedStatement stt2 = DBControl.prepareStatement(
-                            "select book_copy.return_date from book_copy where book_id = ? order by return_date limit 1 offset ?")) {
+                            "SELECT book_copy.return_date FROM book_copy WHERE book_id = ? ORDER BY return_date LIMIT 1 OFFSET ?")) {
                         stt2.setInt(1, bookId);
-                        stt2.setInt(2, rs.getInt("order_count"));
+                        stt2.setInt(2, orderCount);
                         ResultSet rs2 = stt2.executeQuery();
                         if (rs2.next()) {
                             return rs2.getDate("return_date").toLocalDate();
                         }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
                     }
                 }
             }
@@ -256,7 +251,7 @@ public class BookControl {
         List<BookCopy> borrowedBooks = new ArrayList<>();
         String query = "SELECT * FROM book_copy " +
                 "JOIN book ON book.id = book_copy.book_id " +
-                "WHERE borrow_subscriber_id = ?";
+                "WHERE borrow_subscriber_id = ? AND is_waiting = 0";
         try (PreparedStatement ps = DBControl.prepareStatement(query)) {
             ps.setInt(1, subscriberId);
             ResultSet rs = ps.executeQuery();
@@ -367,44 +362,68 @@ public class BookControl {
         }
     }
 
-    private static void updateSubOrderReady(int bookId){
-        try(PreparedStatement sttm2 = DBControl.prepareStatement(
-                "select email, first_name, last_name, title from " +
-                        "(subscriber join user on subscriber.user_id = user.id)" +
-                        " join (book_order join book on book_order.book_id = book.id)" +
-                        " on subscriber_id = subscriber.id where ordered_until = CURDATE() + 2 AND book_id = ?")){
+    /**
+     * Sends the subscriber a message to their email informing them that the order has arrived
+     * @param subscriberId
+     * @param bookId
+     */
+    private static void updateSubOrderReady(int subscriberId, int bookId) {
+        String query = "SELECT email, first_name, last_name, title FROM subscriber " +
+            "JOIN user ON subscriber.user_id = user.id " +
+            "JOIN book_order ON book_order.subscriber_id = subscriber.id" +
+            "JOIN book on book.id = book_order.id" +
+            "WHERE book_id = ? AND subscriber_id = ?";
+
+        try(PreparedStatement sttm2 = DBControl.prepareStatement(query)){
             sttm2.setInt(1, bookId);
             ResultSet rs = sttm2.executeQuery();
             if (rs.next()) {
+                String message = "Hello %s %s,<br>your ordered book '%s' is ready for pickup!<br>" +
+                        "If the book isn't picked up within 2 days, the order will be cancelled automatically.<br>";
+                String name = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String title = rs.getString("title");
+
                 CommunicationManager.sendMail(rs.getString("email"),
-                        rs.getString("title") + " Order", "Hi "
-                                + rs.getString("first_name") + " " + rs.getString("last_name")
-                        +",<br>Ordered book '" + rs.getString("title") + "' is ready for pickup.<br>" +
-                                "If the book isn't picked up in 2 days, the order will be canceled automatically.<br>" +
-                                "Blib Library.","Blib Orders");
+                    rs.getString("title") + " Order",
+                    String.format(message, name, lastName, title),
+                    "BLib Orders"
+                );
             }
         }catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private static void updateReturnForOrders(int bookCopyId) {
-        try (PreparedStatement stt = DBControl.prepareStatement("SELECT book_id from book_copy WHERE id = ?")){
-            stt.setInt(1, bookCopyId);
-            ResultSet rs = stt.executeQuery();
+    /**
+     * Gives the book copy to the subscriber that ordered it. It puts the book copy on waiting state.
+     * Waiting state means that they subscriber owns the copy, but not fully yet. They need to take it.
+     * @param bookId
+     * @param bookCopyId
+     * @throws SQLException
+     */
+    private static void onReturnHandleOrder(int bookId, int bookCopyId) throws SQLException {
+        String query = "SELECT * FROM book_order WHERE book_id = ? AND ordered_until IS NULL ORDER BY date LIMIT 1";
+        try (PreparedStatement ps = DBControl.prepareStatement(query)) {
+            ps.setInt(1, bookId);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int bookId = rs.getInt("book_id");
-                String updateQuery = "UPDATE book_order SET ordered_until = CURDATE() + 2 WHERE book_id = ? " +
-                        "AND ordered_until IS NULL order by date limit 1";
-
-                try (PreparedStatement sttm = DBControl.prepareStatement(updateQuery)) {
-                    sttm.setInt(1, bookId);
-                    sttm.execute();
-                    updateSubOrderReady(bookId);
+                int subscriberId = rs.getInt("subscriber_id");
+                int orderId = rs.getInt("id");
+                String updateQuery = "UPDATE book_order SET ordered_until = CURDATE() + 2 WHERE id = ?";
+                try (PreparedStatement ps2 = DBControl.prepareStatement(updateQuery)) {
+                    ps2.setInt(1, orderId);
+                    if (ps.executeUpdate() == 1) {
+                        String updateQuery2 = "UPDATE book_copy SET borrow_subscriber_id = ?, is_waiting = 1 WHERE id = ?";
+                        try (PreparedStatement ps3 = DBControl.prepareStatement(updateQuery2)) {
+                            ps3.setInt(1, subscriberId);
+                            ps3.setInt(2, bookCopyId);
+                            ps3.executeUpdate();
+                        }
+                        updateSubOrderReady(subscriberId, bookId);
+                    }
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
@@ -437,14 +456,12 @@ public class BookControl {
                         ps3.executeUpdate();
                     }
 
-                    updateReturnForOrders(bookCopyId);
+                    onReturnHandleOrder(rs.getInt("book_id"), bookCopyId);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
 
     /**
@@ -545,14 +562,14 @@ public class BookControl {
      */
     public static ArrayList<Map<String, Object>> getBooksForReturnReminder() {
         ArrayList<Map<String, Object>> records = new ArrayList<>();
-        String query = "select book.title, subscriber.email, subscriber.phone_number, user.first_name, last_name" +
-                " from (((book_copy join book on book_copy.book_id = book.id)" +
-                " join subscriber on borrow_subscriber_id = subscriber.id)" +
-                " join user on user_id = user.id) where return_date = ?";
+        String query = "SELECT title, email, phone_number, user.first_name, last_name FROM book_copy " +
+                "JOIN book ON book.id = book_id " +
+                "JOIN subscriber ON borrow_subscriber_id = subscriber.id " +
+                "JOIN user ON user_id = user.id " +
+                "WHERE DATEDIFF(return_date, NOW()) = 1";
 
-        try (PreparedStatement stmt = DBControl.prepareStatement(query)) {
-            stmt.setDate(1, Date.valueOf(LocalDate.now().plusDays(1)));
-            ResultSet rs = stmt.executeQuery();
+        try (Statement stmt = DBControl.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 Map<String, Object> record = new HashMap<>();
                 record.put("title", rs.getString("book.title"));
@@ -565,5 +582,41 @@ public class BookControl {
             e.printStackTrace();
         }
         return records;
+    }
+
+    public static void cancelLateOrders() {
+        // Remove the association of the subscriber from the copy
+        try (Statement st = DBControl.createStatement()) {
+            ResultSet rs = st.executeQuery("SELECT *, book_copy.id AS book_copy_id FROM book_order " +
+                    "LEFT JOIN book_copy ON book_copy.book_id = book_order.book_id AND book_copy.borrow_subscriber_id = book_order.subscriber_id " +
+                    "WHERE ordered_until < NOW()");
+
+            while (rs.next()) {
+                String deleteQuery = "UPDATE book_copy SET is_waiting = 0, borrow_subscriber_id " +
+                        "WHERE borrow_subscriber_id = ? AND book_id = ? LIMIT 1";
+
+                try (PreparedStatement st2 = DBControl.prepareStatement(deleteQuery)) {
+                    int bookId = rs.getInt("book_id");
+                    int bookCopyId = rs.getInt("book_copy_id");
+
+                    st2.setInt(1, rs.getInt("subscriber_id"));
+                    st2.setInt(2, bookId);
+
+                    if (st2.executeUpdate() == 1) {
+                        // Try giving the copy to the next order
+                        BookControl.onReturnHandleOrder(bookId, bookCopyId);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Delete them all in one swoop
+        try (Statement st = DBControl.createStatement()) {
+            st.executeUpdate("DELETE FROM book_order WHERE ordered_until < NOW()");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

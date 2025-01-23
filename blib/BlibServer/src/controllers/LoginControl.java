@@ -42,6 +42,7 @@ public class LoginControl {
 				Date date = rs.getDate("frozen_until");
 
 				Subscriber subscriber = new Subscriber(
+					rs.getInt("subscriber_id"),
 					id,
 					name,
 					lastName,

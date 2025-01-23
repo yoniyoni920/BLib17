@@ -18,6 +18,11 @@ public class BookOrder implements Serializable {
         this.untilDate = untilDate;
     }
 
+    public BookOrder(int subscriberId, int bookId) {
+        this.subscriberId = subscriberId;
+        this.bookId = bookId;
+    }
+
     public LocalDate getUntilDate() {
         return untilDate;
     }

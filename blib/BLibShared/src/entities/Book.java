@@ -12,7 +12,10 @@ public class Book implements Serializable {
   	private String location;
 	private String locationOrDate;
 
+	private boolean canOrder = false;
+
 	public Book(int id, String title, String authors, String genre, String description, String image, String location) {
+		this.id = id;
 		this.title = title;
 		this.authors = authors;
 		this.genre = genre;
@@ -78,4 +81,12 @@ public class Book implements Serializable {
 	public String toString() {
 		return title;
 	}
+
+    public boolean isCanOrder() {
+        return canOrder;
+    }
+
+    public void setCanOrder(boolean canOrder) {
+        this.canOrder = canOrder;
+    }
 }

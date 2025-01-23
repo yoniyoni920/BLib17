@@ -42,9 +42,9 @@ public class ScreenManager {
 		Parent root = loader.load();	
 		Scene scene = new Scene(root);
 		AbstractScreen screen = loader.getController();
+		screen.setScreenManager(this);
 		screen.openScreen(args);
 		screen.setScene(scene);
-		screen.setScreenManager(this);
 		screen.setTitle(title);
 		screens.add(screen);
 		setScreen(screen);

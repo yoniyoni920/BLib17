@@ -110,17 +110,13 @@ public class LibrarianMainScreen extends AbstractScreen {
      * It opens the SubscriberCardScreen and displays the selected subscriber's details.
      *
      * @param event The ActionEvent triggered by selecting a menu item.
-     * @throws IOException If there is an error opening the subscriber card screen.
      */
-	public void onChoseSubscriber(ActionEvent event) throws IOException {
-		SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("SubscriberCardScreen", "Subscriber Card");
-
+	public void onChoseSubscriber(ActionEvent event) {
 		try {
 			MenuItem item = (MenuItem)event.getTarget();
 			if (item != null) {
-				card.setData((Subscriber)item.getUserData(), false);
+				screenManager.openScreen("SubscriberCardScreen", "Subscriber Card", item.getUserData(), false);
 			}
-
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -40,6 +40,12 @@ public class SubscriberCardScreen extends AbstractScreen {
 	@FXML private VBox borrowedBooksVBox;
 
 	private ObservableList<BookCopy> borrowedBooksObservableList;
+
+	@Override
+	public void openScreen(Object...args) {
+		setData((Subscriber)args[0], (Boolean)args[1]);
+	}
+
     /**
      * Sets the subscriber data and configures the UI accordingly.
      *

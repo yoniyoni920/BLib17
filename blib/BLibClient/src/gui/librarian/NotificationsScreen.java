@@ -178,8 +178,7 @@ public class NotificationsScreen extends AbstractScreen {
      */
     public void openSubscriberCardScreen(int subscriberId) throws IOException {
         Subscriber subscriber = (Subscriber) ClientUtils.sendMessage(Action.GET_SUBSCRIBER_BY_ID, subscriberId).getObject();
-        SubscriberCardScreen screen = (SubscriberCardScreen) screenManager.openScreen("SubscriberCardScreen", "Subscriber Card");
-        screen.setData(subscriber, false);
+        screenManager.openScreen("SubscriberCardScreen", "Subscriber Card", subscriber, false);
     }
 
     /**

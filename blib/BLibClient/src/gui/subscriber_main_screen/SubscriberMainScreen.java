@@ -109,8 +109,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      * @throws Exception If an error occurs during screen opening.
      */
     public void openSubInfoScreen(ActionEvent event) throws Exception {
-        SubscriberCardScreen card = (SubscriberCardScreen)screenManager.openScreen("SubscriberCardScreen", "Subscriber Card");
-        card.setData(subscriber, true);
+        screenManager.openScreen("SubscriberCardScreen", "Subscriber Card", subscriber, true);
     }
 
     /**

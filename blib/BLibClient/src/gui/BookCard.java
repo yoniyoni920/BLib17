@@ -74,7 +74,7 @@ public class BookCard {
 
         Tooltip tooltip = new Tooltip(book.getDescription());
         tooltip.setWrapText(true);
-        tooltip.setWidth(200);
+        tooltip.setMaxWidth(500);
         Tooltip.install(vbox, tooltip);
 
         orderButton.setVisible(Auth.getInstance().getSubscriber() != null && book.isCanOrder());

@@ -33,7 +33,7 @@ public class BookControl {
                 "COUNT(bc.id) AS total_copies, " +
                 "COUNT(CASE WHEN bc.borrow_subscriber_id IS NOT NULL THEN 1 END) AS borrowed_copies, " +
                 "MIN(bc.return_date) AS min_return_date, " +
-                "COUNT(CASE WHEN bo.ordered_until IS NULL OR bo.ordered_until < NOW() THEN bo.id END) AS orders " +
+                "COUNT(bo.id) AS orders " +
                 "FROM book b " +
                 "LEFT JOIN book_copy bc ON bc.book_id = b.id " +
                 "LEFT JOIN book_order bo ON bo.book_id = b.id " +
@@ -239,7 +239,6 @@ public class BookControl {
                 String location = rs.getString("location");
                 return new Book(id, title, author, genre, description, image, location);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -50,8 +50,9 @@ public class JobManager {
         LocalDateTime date = getJobDate("cancel-orders");
         LocalDate now = LocalDate.now().withDayOfMonth(1);
 
-        if (date == null || ChronoUnit.DAYS.between(date, now) >= 1) {
+        if (date == null || ChronoUnit.MINUTES.between(date, now) >= 1) {
             BookControl.cancelLateOrders();
+            markJobDone("cancel-orders");
         }
     }
 
@@ -205,8 +206,9 @@ public class JobManager {
                     }
                 }
 
-                markJobDone("check-borrows");
             }
+
+            markJobDone("check-borrows");
         }
     }
 

@@ -85,6 +85,7 @@ public class SubscriberControl {
 		);
 
 		sub.setBorrowedBooks(BookControl.retrieveBorrowedBooks(id));
+		sub.setHistory(SubscriberControl.getSubscriberHistory(id));
 
 		return sub;
 	}

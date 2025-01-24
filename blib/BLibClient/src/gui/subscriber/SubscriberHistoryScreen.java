@@ -42,6 +42,8 @@ public class SubscriberHistoryScreen extends AbstractScreen {
 			HistoryAction action = item.getAction();
 			String formattedAction;
 
+			titleLabel.setText(String.format("%s's History", sub.getName()));
+
 			switch (action) {
 				case LOST_BOOK:
 					formattedAction = String.format("Lost book named: %s", item.getBookName());

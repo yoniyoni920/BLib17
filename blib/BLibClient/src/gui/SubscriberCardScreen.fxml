@@ -24,6 +24,15 @@
                         </ImageView>
                     </graphic>
                 </Button>
+            <Button layoutX="514.0" layoutY="11.0" mnemonicParsing="false" onAction="#openHistory" prefHeight="35.0" prefWidth="104.0" text="History">
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/resources/subscriber/history.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
             </children>
         </AnchorPane>
       <VBox spacing="8.0">

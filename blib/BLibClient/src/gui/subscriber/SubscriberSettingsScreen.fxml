@@ -23,7 +23,7 @@
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/resources/subscriber_main_screen_photos/goBackIcon.png" />
+                        <Image url="@/resources/subscriber/goBackIcon.png" />
                      </image></ImageView>
                </graphic></Button>
          </children>

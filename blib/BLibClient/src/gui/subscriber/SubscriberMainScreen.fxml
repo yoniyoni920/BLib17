@@ -28,7 +28,7 @@
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/resources/subscriber_main_screen_photos/user.png" />
+                        <Image url="@/resources/subscriber/user.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -37,7 +37,7 @@
                <graphic>
                   <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
                   	<image>
-                        <Image url="@/resources/subscriber_main_screen_photos/search.png" />
+                        <Image url="@/resources/subscriber/search.png" />
                      </image>
                </graphic>
             </Button>
@@ -47,7 +47,7 @@
            <children>
                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" style="fill: red;">
                    <image>
-                       <Image url="@/resources/subscriber_main_screen_photos/frozen.png" />
+                       <Image url="@/resources/subscriber/frozen.png" />
                    </image>
                </ImageView>
                <Label fx:id="frozenText" prefHeight="37.0" prefWidth="135.0" styleClass="danger" text="Frozen Until 9/9/9999" />

@@ -594,7 +594,7 @@ public class BookControl {
                     "WHERE ordered_until < NOW()");
 
             while (rs.next()) {
-                String deleteQuery = "UPDATE book_copy SET is_waiting = 0, borrow_subscriber_id " +
+                String deleteQuery = "UPDATE book_copy SET is_waiting = 0, borrow_subscriber_id = NULL " +
                         "WHERE borrow_subscriber_id = ? AND book_id = ? LIMIT 1";
 
                 try (PreparedStatement st2 = DBControl.prepareStatement(deleteQuery)) {

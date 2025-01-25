@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -134,15 +135,13 @@ public class BookControl {
      * @param bookId The ID of the book to check.
      * @return LocalDate representing the date book with be available or null if not orderable.
      */
-    public static LocalDate checkBookOrderable(int bookId) {
+    public static LocalDateTime checkBookOrderable(int bookId) {
         String query = "SELECT COUNT(bc.id) AS copies_count, COUNT(bo.id) AS order_count " +
                 "FROM book b " +
                 "LEFT JOIN book_copy bc ON bc.book_id = b.id " +
                 "LEFT JOIN book_order bo ON bo.book_id = b.id " +
                 "WHERE b.id = ? " +
                 "GROUP BY b.id;";
-
-        System.out.println(bookId);
 
         try (PreparedStatement stt = DBControl.prepareStatement(query)) {
             stt.setInt(1, bookId);
@@ -157,7 +156,7 @@ public class BookControl {
                         stt2.setInt(2, orderCount);
                         ResultSet rs2 = stt2.executeQuery();
                         if (rs2.next()) {
-                            return rs2.getDate("return_date").toLocalDate();
+                            return rs2.getTimestamp("return_date").toLocalDateTime();
                         }
                     }
                 }
@@ -181,11 +180,11 @@ public class BookControl {
 
             int subscriberId = bookCopy.getBorrowSubscriberId();
             int bookCopyId = bookCopy.getId();
-            LocalDate date = bookCopy.getLendDate();
-            LocalDate returnDate = bookCopy.getReturnDate();
+            LocalDateTime date = bookCopy.getLendDate();
+            LocalDateTime returnDate = bookCopy.getReturnDate();
 
-            stt.setDate(1, Date.valueOf(date));
-            stt.setDate(2, Date.valueOf(returnDate));
+            stt.setTimestamp(1, Timestamp.valueOf(date));
+            stt.setTimestamp(2, Timestamp.valueOf(returnDate));
             stt.setInt(3, subscriberId);
             stt.setInt(4, bookCopyId);
             stt.executeUpdate();
@@ -194,8 +193,8 @@ public class BookControl {
                 subscriberId,
                 HistoryAction.BORROW_BOOK,
                 bookCopyId,
-                date.atStartOfDay(),
-                returnDate.atStartOfDay()
+                date,
+                returnDate
             ));
             
             try (PreparedStatement stt2 = DBControl.prepareStatement(
@@ -260,8 +259,8 @@ public class BookControl {
                 int copyId = rs.getInt("id");
                 int bookId = rs.getInt("book_id");
                 int borrowSubscriberId = rs.getInt("borrow_subscriber_id");
-                LocalDate lendDate = rs.getDate("lend_date").toLocalDate();
-                LocalDate returnDate = rs.getDate("return_date").toLocalDate();
+                LocalDateTime lendDate = rs.getTimestamp("lend_date").toLocalDateTime();
+                LocalDateTime returnDate = rs.getTimestamp("return_date").toLocalDateTime();
                 BookCopy copy = new BookCopy(copyId, bookId, lendDate, returnDate, borrowSubscriberId);
 
                 // Book data
@@ -548,7 +547,7 @@ public class BookControl {
                     )
                 );
             }
-            entry.setEndDate(copy.getReturnDate().atStartOfDay());
+            entry.setEndDate(copy.getReturnDate());
             SubscriberControl.logIntoHistory(entry);
 
             return stmt.executeUpdate() == 1;

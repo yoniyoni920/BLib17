@@ -82,7 +82,7 @@ public class ClientMessageHandler {
         if (BookControl.checkBookLendable(bookOrder.getBookId(), bookOrder.getSubscriberId()) != 0) {
             return msg.errorReply("Book is lendable, Can't be ordered!");
         }
-        LocalDate orderable = BookControl.checkBookOrderable(bookOrder.getBookId());
+        LocalDateTime orderable = BookControl.checkBookOrderable(bookOrder.getBookId());
         if (orderable == null) {
             bookOrder.setOrderId(-1);
             return msg.reply(bookOrder);
@@ -100,7 +100,7 @@ public class ClientMessageHandler {
     public static Message lendBook(Message msg, ConnectionToClient client) {
         BookCopy bookCopy = (BookCopy)msg.getObject();
 
-        if (bookCopy.getLendDate().isBefore(LocalDate.now())) {
+        if (bookCopy.getLendDate().isBefore(LocalDateTime.now().minusWeeks(2))) {
             return msg.errorReply("Lend date is not valid!");
         }
 
@@ -123,7 +123,7 @@ public class ClientMessageHandler {
                     return msg.errorReply("Failed to lend book!");
                 }
             } else {
-                LocalDate orderableDate = BookControl.checkBookOrderable(bookCopy.getBookId());
+                LocalDateTime orderableDate = BookControl.checkBookOrderable(bookCopy.getBookId());
                 if (orderableDate != null) {
                     BookOrder bookOrder = new BookOrder(0, bookCopy.getBorrowSubscriberId(), bookCopy.getBookId(),
                             orderableDate, null);

@@ -35,8 +35,8 @@ public class LendBookScreen extends AbstractScreen {
             returnDatePicker.setDayCellFactory(param -> new DateCell() {
                 @Override
                 public void updateItem(LocalDate item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setDisable(item.isAfter(lendDatePicker.getValue().plusWeeks(2)) || item.isBefore(lendDatePicker.getValue()));
+                super.updateItem(item, empty);
+                setDisable(item.isAfter(lendDatePicker.getValue().plusWeeks(2)) || item.isBefore(lendDatePicker.getValue()));
                 }
             });
             returnDatePicker.setValue(lendDatePicker.getValue().plusWeeks(2));
@@ -44,13 +44,14 @@ public class LendBookScreen extends AbstractScreen {
         lendDatePicker.setDayCellFactory(param -> new DateCell() {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                setDisable(item.isBefore(LocalDate.now()));
+            super.updateItem(item, empty);
+            setDisable(item.isBefore(LocalDate.now()));
             }
         });
 
         lendDatePicker.setValue(LocalDate.now());
     }
+
     // Validate the entered book ID and fetch book details from the server
     public void bookTextFieldChanged(KeyEvent keyEvent) {
         ClientUtils.sendMessage(new Message(Action.GET_BOOK_BY_ID, bookIdTextField.getText()), message -> {
@@ -116,7 +117,7 @@ public class LendBookScreen extends AbstractScreen {
         }
 
         LocalTime now = LocalTime.now();
-        BookCopy sendCopy = new BookCopy(0, bookId, lendDatePicker.getValue(), returnDatePicker.getValue(), sub);
+        BookCopy sendCopy = new BookCopy(0, bookId, lendDatePicker.getValue().atTime(now), returnDatePicker.getValue().atTime(now), sub);
         Message msg = new Message(Action.LEND_BOOK, sendCopy);
         ClientUtils.sendMessage(msg, message -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

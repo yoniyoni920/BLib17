@@ -18,7 +18,8 @@ public class CommunicationManager {
 	 * @param senderName The name to be shown as the email from
 	 */
 	public static void sendMail(String to, String subject, String body, String senderName) {
-		final String token = "mlsn.d4074bb922cfb8f612862b99462eb3753b364d57bf01dae6c232d34e034f83da";
+		System.out.println("Sending mail to " + to);
+		final String token = "mlsn.a08cad3d63636fd35834cdbcae0a2346075f07c3432e942fecfefa1c168db331";
 		try {
 
 			URL url = new URL(emailServer);
@@ -32,7 +33,7 @@ public class CommunicationManager {
 			DataOutputStream wr = new DataOutputStream(http.getOutputStream());
 			OutputStreamWriter writer = new OutputStreamWriter(wr, StandardCharsets.UTF_8);
 			writer.write("{" +
-					"\"from\":{\"email\":\"Blib@trial-0r83ql39nzmlzw1j.mlsender.net\",\"name\":\"" + senderName.replace("\"", "'") + "\"}," +
+					"\"from\":{\"email\":\"Blib@luffyd.xyz\",\"name\":\"" + senderName.replace("\"", "'") + "\"}," +
 					"\"to\":[{\"email\":\"" + to.replace("\"", "'") + "\"}]," +
 					"\"subject\":\"" + subject.replace("\"", "'") + "\"," +
 					"\"html\":\"" + body.replace("\"", "'") + "\"" +

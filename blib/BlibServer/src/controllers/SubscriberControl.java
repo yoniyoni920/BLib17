@@ -214,7 +214,7 @@ public class SubscriberControl {
 	public static List<HistoryEntry> getSubscriberHistory(int subscriberId) {
 		String query = "SELECT *, book.title AS book_title, user.first_name AS librarian_name FROM subscriber_history " +
 				"LEFT JOIN book_copy ON book_copy.id = book_copy_id " +
-				"LEFT JOIN book ON book.id = book_copy.book_id " +
+				"LEFT JOIN book ON book.id = book_copy.book_id OR book.id = subscriber_history.book_id " +
 				"LEFT JOIN user ON user.id = librarian_user_id " +
 				"WHERE subscriber_id = ? " +
 				"ORDER BY date DESC";

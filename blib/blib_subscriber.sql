@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `blib` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `blib`;
 -- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
 --
 -- Host: localhost    Database: blib
@@ -26,14 +24,14 @@ DROP TABLE IF EXISTS `book`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `book` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(45) DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL,
   `authors` varchar(45) DEFAULT NULL,
   `genre` varchar(45) DEFAULT NULL,
   `description` varchar(1000) DEFAULT NULL,
   `image` varchar(100) DEFAULT NULL,
   `location` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +40,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'Superman',' John Byrne','Superhero','Born in England and raised in Canada, John Byrne discovered superheroes through The Adventures of Superman on television. After studying at the Alberta College of Art and Design, he broke into comics first with Skywald and then at Charlton, where he created the character Rog-2000. Following his tenure at Charlton, Byrne moved to Marvel, where his acclaimed runs on The Uncanny X-Men and The Fantastic Four soon made him one of the most popular artists in the industry. In 1986 he came to DC to revamp Superman from the ground up, and since then he has gone on to draw and/or write every major character at both DC and Marvel. ','superman.jpg','A'),(2,'Batman Vol. 1','Bob Kane, John Broome','Superhero','The Caped Crusader has never been stopped. Not by the Joker. Not by Two-Face. Not even by the entire Justice League. But now, Batman must face his most challenging foe ever - a hero who wants to save Gotham.. from the Batman. ','batman.jpg','B'),(3,'One Piece Vol. 1','Eichiro Oda','Shounen Jump','The One Piece is Real','luffy.jpg','C'),(4,'City of Orange','David Yoon','Sci-Fi','A man who can not remember his own name wakes up in an apocalyptic landscape, injured and alone. He has vague memories of life before, but he can\'t see it clearly and can\'t grasp how his current situation came to be. He must learn to survive by finding sources of water and foraging for food. Then he encounters a boy--and he realizes nothing is what he thought it was, neither the past nor the present. ','pic1.jpg','D'),(5,'The Let Them Theory','Mel Robbins','Motivation','A Life-Changing Tool Millions Of People Can\'t Stop Talking About','TheLetThemTheoryBookCover.jpg','E'),(6,'The Women','Kristin Hannah','Fiction','From the celebrated author of The Nightingale and The Four Winds comes Kristin Hannah\'s The Women—at once an intimate portrait of coming of age in a dangerous time and an epic tale of a nation divided','TheWomenBookCover.jpg','F'),(7,'The God of the Woods','Liz Moore','Fiction','When a teenager vanishes from her Adirondack summer camp, two worlds collide','TheGodOfTheWoodsBookCover.jpg','G'),(8,'The Unseen World','Liz Moore','Fiction','The moving story of a daughter’s quest to discover the truth about her beloved father’s hidden past.','TheUnseenWorldBookCover.jpg','H'),(9,'Chainsaw Man Vol. 1','Tatsuki Fujimoto','Shounen Jump','Denji\'s a poor young man who\'ll do anything for money, even hunting down Devils with his pet devil-dog Pochita. He\'s a simple man with simple dreams, drowning under a mountain of debt. But his sad life gets turned upside down when he\'s betrayed by someone he trusts. Now with the power of a Devil inside him, Denji\'s become a whole new man-Chainsaw Man! ','csm1.jpg','C');
+INSERT INTO `book` VALUES (1,'Superman',' John Byrne','Superhero','Born in England and raised in Canada, John Byrne discovered superheroes through The Adventures of Superman on television. After studying at the Alberta College of Art and Design, he broke into comics first with Skywald and then at Charlton, where he created the character Rog-2000. Following his tenure at Charlton, Byrne moved to Marvel, where his acclaimed runs on The Uncanny X-Men and The Fantastic Four soon made him one of the most popular artists in the industry. In 1986 he came to DC to revamp Superman from the ground up, and since then he has gone on to draw and/or write every major character at both DC and Marvel. ','superman.jpg','A'),(2,'Batman Vol. 1','Bob Kane, John Broome','Superhero','The Caped Crusader has never been stopped. Not by the Joker. Not by Two-Face. Not even by the entire Justice League. But now, Batman must face his most challenging foe ever - a hero who wants to save Gotham.. from the Batman. ','batman.jpg','B'),(3,'One Piece Vol. 1','Eichiro Oda','Shounen Jump','The One Piece is Real','luffy.jpg','C'),(4,'City of Orange','David Yoon','Sci-Fi','A man who can not remember his own name wakes up in an apocalyptic landscape, injured and alone. He has vague memories of life before, but he can\'t see it clearly and can\'t grasp how his current situation came to be. He must learn to survive by finding sources of water and foraging for food. Then he encounters a boy--and he realizes nothing is what he thought it was, neither the past nor the present. ','pic1.jpg','D'),(5,'The Let Them Theory','Mel Robbins','Motivation','A Life-Changing Tool Millions Of People Can\'t Stop Talking About','TheLetThemTheoryBookCover.jpg','E'),(6,'The Women','Kristin Hannah','Fiction','From the celebrated author of The Nightingale and The Four Winds comes Kristin Hannah\'s The Women—at once an intimate portrait of coming of age in a dangerous time and an epic tale of a nation divided','TheWomenBookCover.jpg','F'),(7,'The God of the Woods','Liz Moore','Fiction','When a teenager vanishes from her Adirondack summer camp, two worlds collide','TheGodOfTheWoodsBookCover.jpg','G'),(8,'The Unseen World','Liz Moore','Fiction','The moving story of a daughter’s quest to discover the truth about her beloved father’s hidden past.','TheUnseenWorldBookCover.jpg','H'),(9,'Chainsaw Man Vol. 1','Tatsuki Fujimoto','Shounen Jump','Denji\'s a poor young man who\'ll do anything for money, even hunting down Devils with his pet devil-dog Pochita. He\'s a simple man with simple dreams, drowning under a mountain of debt. But his sad life gets turned upside down when he\'s betrayed by someone he trusts. Now with the power of a Devil inside him, Denji\'s become a whole new man-Chainsaw Man! ','csm1.jpg','C'),(10,'The Amazing Spider-Man','Bob Harras','Superhero','Stan Lee breaks the fourth wall by ripping through the pages of a Spider-Man comic. He tells the reading audience that the Marvel Bullpen has asked him to narrate this month to tell stories about the past of the Marvel Universe. He then presents a story about Peter Parker\'s past, promising that this tale will reveal secrets that were known to himself and very few others before this moment... ','spiderman.jpg','A'),(11,'That Time I Got Reincarnated as a Slime, Vol. 1','Taiki Kawakami, Fuse, Mitz Vah','Isekai','As players of Monster Hunter and Dungeons & Dragons know, the slime is not exactly the king of the fantasy monsters. So when a 37-year-old Tokyo salaryman dies and wakes up in a world of dragons and magic, he\'s a little disappointed to find he\'s become a blind, boneless slime monster. ','slime.jpg','I'),(12,'The Understory','Saneh Sangsuk','Fiction','The lovable, yarnspinning monk Luang Paw Tien, now in his nineties, is the last person in his village to bear witness to the power and plenitude of the jungle before agrarian and then capitalist life took over his community. Nightly, he entertains the children of his village with tales from his younger years: his long pilgrimage to India, his mother’s dreams of a more stable life through agriculture, his proud huntsman father who resisted those dreams, and his love, who led him to pursue those dreams all over again. Sangsuk’s novel is a celebration of the oral tradition of storytelling and, above all else, a testament to the power of stories to entertain.','understory.jpg','F');
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,7 +64,7 @@ CREATE TABLE `book_copy` (
   KEY `bookId_idx` (`book_id`),
   KEY `subscriber_id_idx` (`borrow_subscriber_id`),
   CONSTRAINT `borrow_subscriber_id` FOREIGN KEY (`borrow_subscriber_id`) REFERENCES `subscriber` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +73,7 @@ CREATE TABLE `book_copy` (
 
 LOCK TABLES `book_copy` WRITE;
 /*!40000 ALTER TABLE `book_copy` DISABLE KEYS */;
-INSERT INTO `book_copy` VALUES (1,1,'2025-01-25 12:11:38','2025-02-08 12:11:38',3,0,0,0),(2,3,NULL,NULL,NULL,0,1,0),(3,1,NULL,NULL,NULL,0,0,0),(4,2,NULL,NULL,NULL,0,0,0),(5,2,NULL,NULL,NULL,0,1,0),(6,4,NULL,NULL,NULL,0,0,0),(7,5,NULL,NULL,NULL,0,0,0),(8,6,NULL,NULL,NULL,0,0,0),(9,7,NULL,NULL,NULL,0,0,0),(10,8,NULL,NULL,NULL,0,0,0),(11,9,NULL,NULL,NULL,0,0,0),(12,9,NULL,NULL,NULL,0,0,0);
+INSERT INTO `book_copy` VALUES (14,1,NULL,NULL,NULL,0,0,0),(15,1,NULL,NULL,NULL,0,0,0),(16,2,NULL,NULL,NULL,0,0,0),(17,2,NULL,NULL,NULL,0,0,0),(18,3,'2025-01-18 00:40:55','2025-02-01 00:40:55',3,0,0,0),(19,3,NULL,NULL,NULL,0,0,0),(20,4,NULL,NULL,NULL,0,0,0),(21,4,NULL,NULL,NULL,0,0,0),(22,5,NULL,NULL,NULL,0,0,0),(23,5,NULL,NULL,NULL,0,0,0),(24,6,NULL,NULL,NULL,0,0,0),(25,6,NULL,NULL,NULL,0,0,0),(26,7,NULL,NULL,NULL,0,0,0),(27,7,NULL,NULL,NULL,0,0,0),(28,8,NULL,NULL,NULL,0,0,0),(29,8,NULL,NULL,NULL,0,0,0),(30,9,NULL,NULL,NULL,0,0,0),(31,9,NULL,NULL,NULL,0,0,0),(32,10,NULL,NULL,NULL,0,0,0),(33,10,NULL,NULL,NULL,0,0,0),(34,10,'2025-01-04 00:40:29','2025-01-18 00:40:29',2,0,1,0),(35,11,'2025-01-15 00:45:29','2025-01-29 00:45:29',2,0,0,0),(36,12,'2025-01-16 00:43:22','2025-01-30 00:43:22',3,0,0,0);
 /*!40000 ALTER TABLE `book_copy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,7 +95,7 @@ CREATE TABLE `book_order` (
   KEY `book_id_idx` (`book_id`),
   CONSTRAINT `book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
   CONSTRAINT `subscriber` FOREIGN KEY (`subscriber_id`) REFERENCES `subscriber` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,6 +104,7 @@ CREATE TABLE `book_order` (
 
 LOCK TABLES `book_order` WRITE;
 /*!40000 ALTER TABLE `book_order` DISABLE KEYS */;
+INSERT INTO `book_order` VALUES (22,1,7,'2025-01-25 18:38:38','2025-01-27 00:00:00'),(23,1,12,'2025-01-26 01:04:15',NULL);
 /*!40000 ALTER TABLE `book_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,7 +127,7 @@ CREATE TABLE `borrow_report` (
   PRIMARY KEY (`id`),
   KEY `book_id_idx` (`book_id`),
   CONSTRAINT `book_id` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +136,7 @@ CREATE TABLE `borrow_report` (
 
 LOCK TABLES `borrow_report` WRITE;
 /*!40000 ALTER TABLE `borrow_report` DISABLE KEYS */;
-INSERT INTO `borrow_report` VALUES (9,1,3,'2024-12-04','2024-12-18',NULL,1,'2024-12-01');
+INSERT INTO `borrow_report` VALUES (23,1,14,'2024-11-29','2024-12-13',NULL,0,'2024-12-01'),(24,1,15,'2024-11-30','2024-12-14','2024-12-22',1,'2024-12-01'),(25,1,14,'2024-12-14','2024-12-28',NULL,0,'2024-12-01'),(26,1,15,'2024-12-22','2025-01-05',NULL,0,'2024-12-01');
 /*!40000 ALTER TABLE `borrow_report` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,7 +161,7 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
-INSERT INTO `job` VALUES (11,'2025-01-22 02:34:24','generate-reports'),(12,'2025-01-25 13:36:50','check-borrows'),(17,'2025-01-23 21:57:23','send-reminders'),(18,'2025-01-25 13:36:50','cancel-orders');
+INSERT INTO `job` VALUES (11,'2025-01-25 23:31:53','generate-reports'),(12,'2025-01-26 00:50:09','check-borrows'),(17,'2025-01-26 00:38:50','send-reminders'),(18,'2025-01-26 00:31:52','cancel-orders');
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -210,7 +209,7 @@ CREATE TABLE `subscriber` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `user_id_idx` (`user_id`),
   CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,7 +218,7 @@ CREATE TABLE `subscriber` (
 
 LOCK TABLES `subscriber` WRITE;
 /*!40000 ALTER TABLE `subscriber` DISABLE KEYS */;
-INSERT INTO `subscriber` VALUES (1,1,'0501234567','luffydafloffi@gmail.com','2025-01-10'),(2,5,'0521479856','shalom@gmail.com',NULL),(3,3,'0535201682','danielandro11@gmail.com',NULL),(4,4,'0508797841','ma@gmail.com','2025-01-10'),(5,6,'0508797111','elias@elias.elias',NULL);
+INSERT INTO `subscriber` VALUES (1,2,'0535201682','luffydafloffi@gmail.com',NULL),(2,3,'0521479856','daniel.rozentsvaig@e.braude.ac.il','2025-02-25'),(3,4,'0535201682','luffydafloffi@gmail.com',NULL),(4,5,'0508797841','danielandro11@gmail.com',NULL),(5,6,'0545699889','eliasfarah776@gmail.com',NULL),(6,7,'0535201682','luffydafloffi@gmail.com',NULL),(7,8,'0535201682','eliasfarah776@gmail.com',NULL);
 /*!40000 ALTER TABLE `subscriber` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,7 +231,7 @@ DROP TABLE IF EXISTS `subscriber_history`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscriber_history` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `action` varchar(45) NOT NULL,
+  `action` enum('LOST_BOOK','BORROW_BOOK','LATE_RETURN','FREEZE_SUBSCRIBER','RETURN_BOOK','LOGIN_SUBSCRIBER','EXTEND_BORROW_SUBSCRIBER','EXTEND_BORROW_LIBRARIAN','ORDER_BOOK') NOT NULL,
   `subscriber_id` int NOT NULL,
   `book_copy_id` int DEFAULT NULL,
   `book_id` int DEFAULT NULL,
@@ -240,7 +239,7 @@ CREATE TABLE `subscriber_history` (
   `end_date` datetime DEFAULT NULL,
   `librarian_user_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=285 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -249,7 +248,7 @@ CREATE TABLE `subscriber_history` (
 
 LOCK TABLES `subscriber_history` WRITE;
 /*!40000 ALTER TABLE `subscriber_history` DISABLE KEYS */;
-INSERT INTO `subscriber_history` VALUES (127,'FREEZE_SUBSCRIBER',3,NULL,NULL,'2024-11-03 00:00:00','2024-12-03 00:00:00',NULL),(128,'FREEZE_SUBSCRIBER',3,NULL,NULL,'2024-12-24 00:00:00','2025-01-23 00:00:00',NULL),(129,'BORROW_BOOK',3,1,NULL,'2024-12-03 00:00:00','2024-12-17 00:00:00',NULL),(130,'LATE_RETURN',3,1,NULL,'2024-12-17 00:00:00',NULL,NULL),(131,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-23 21:44:00',NULL,NULL),(132,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-23 21:45:51',NULL,NULL),(133,'BORROW_BOOK',3,2,NULL,'2025-01-23 00:00:00','2025-01-24 00:00:00',NULL),(134,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-23 21:47:44',NULL,NULL),(135,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 21:49:57',NULL,NULL),(136,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 21:54:30',NULL,NULL),(137,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 21:57:03',NULL,NULL),(138,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-23 21:58:43',NULL,NULL),(139,'ORDER_BOOK',3,NULL,4,'2025-01-23 21:58:51',NULL,NULL),(140,'RETURN_BOOK',1,6,NULL,'2025-01-23 21:59:03',NULL,NULL),(141,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-23 22:00:34',NULL,NULL),(142,'BORROW_BOOK',3,6,NULL,'2025-01-23 00:00:00','2025-02-06 00:00:00',NULL),(143,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 22:03:50',NULL,NULL),(144,'ORDER_BOOK',1,NULL,4,'2025-01-23 22:03:53',NULL,NULL),(145,'RETURN_BOOK',3,6,NULL,'2025-01-23 22:04:00',NULL,NULL),(146,'BORROW_BOOK',1,6,NULL,'2025-01-23 00:00:00','2025-02-06 00:00:00',NULL),(147,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-23 22:04:57',NULL,NULL),(148,'ORDER_BOOK',3,NULL,4,'2025-01-23 22:05:04',NULL,NULL),(149,'RETURN_BOOK',1,6,NULL,'2025-01-23 22:05:19',NULL,NULL),(150,'BORROW_BOOK',3,6,NULL,'2025-01-23 00:00:00','2025-02-06 00:00:00',NULL),(151,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 22:06:02',NULL,NULL),(152,'ORDER_BOOK',1,NULL,4,'2025-01-23 22:06:04',NULL,NULL),(153,'RETURN_BOOK',3,6,NULL,'2025-01-23 22:06:31',NULL,NULL),(154,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 22:07:02',NULL,NULL),(155,'BORROW_BOOK',1,6,NULL,'2025-01-23 00:00:00','2025-02-06 00:00:00',NULL),(156,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-23 22:07:31',NULL,NULL),(157,'ORDER_BOOK',3,NULL,4,'2025-01-23 22:07:34',NULL,NULL),(158,'RETURN_BOOK',1,6,NULL,'2025-01-23 22:07:48',NULL,NULL),(159,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 22:09:03',NULL,NULL),(160,'BORROW_BOOK',3,6,NULL,'2025-01-23 00:00:00','2025-02-06 00:00:00',NULL),(161,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 22:14:34',NULL,NULL),(162,'ORDER_BOOK',1,NULL,4,'2025-01-23 22:14:36',NULL,NULL),(163,'RETURN_BOOK',3,6,NULL,'2025-01-23 22:14:45',NULL,NULL),(164,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 22:15:42',NULL,NULL),(165,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-23 22:15:49',NULL,NULL),(166,'BORROW_BOOK',1,6,NULL,'2025-01-23 00:00:00','2025-02-06 00:00:00',NULL),(167,'ORDER_BOOK',3,NULL,4,'2025-01-23 22:16:13',NULL,NULL),(168,'RETURN_BOOK',1,6,NULL,'2025-01-23 22:16:15',NULL,NULL),(169,'BORROW_BOOK',3,6,NULL,'2025-01-23 00:00:00','2025-02-06 00:00:00',NULL),(170,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-23 22:18:50',NULL,NULL),(171,'ORDER_BOOK',1,NULL,4,'2025-01-23 22:18:53',NULL,NULL),(172,'RETURN_BOOK',3,6,NULL,'2025-01-23 22:18:57',NULL,NULL),(173,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-23 22:20:28',NULL,NULL),(174,'BORROW_BOOK',1,6,NULL,'2025-01-23 00:00:00','2025-02-06 00:00:00',NULL),(175,'ORDER_BOOK',3,NULL,4,'2025-01-23 22:21:03',NULL,NULL),(176,'RETURN_BOOK',1,6,NULL,'2025-01-23 22:21:08',NULL,NULL),(177,'LATE_RETURN',3,2,NULL,'2025-01-25 00:53:01',NULL,NULL),(178,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 00:53:12',NULL,NULL),(179,'ORDER_BOOK',1,NULL,3,'2025-01-25 00:53:25',NULL,NULL),(180,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 01:56:33',NULL,NULL),(181,'ORDER_BOOK',1,NULL,3,'2025-01-25 01:56:45',NULL,NULL),(182,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 02:01:00',NULL,NULL),(183,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 02:05:10',NULL,NULL),(184,'RETURN_BOOK',3,2,NULL,'2025-01-25 02:06:28',NULL,NULL),(185,'BORROW_BOOK',1,2,NULL,'2025-01-25 00:00:00','2025-02-08 00:00:00',NULL),(186,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 02:07:06',NULL,NULL),(187,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 12:08:11',NULL,NULL),(188,'RETURN_BOOK',1,5,NULL,'2025-01-25 12:08:31',NULL,NULL),(189,'BORROW_BOOK',3,1,NULL,'2025-01-25 12:11:38','2025-02-08 12:11:38',NULL),(190,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 12:11:47',NULL,NULL),(191,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-25 12:11:50',NULL,NULL),(192,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 12:23:48',NULL,NULL),(193,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 12:28:43',NULL,NULL),(194,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 12:28:45',NULL,NULL),(195,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 12:29:05',NULL,NULL),(196,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 12:29:25',NULL,NULL),(197,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 12:30:51',NULL,NULL),(198,'RETURN_BOOK',1,2,NULL,'2025-01-25 12:31:17',NULL,NULL),(199,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 12:33:02',NULL,NULL),(200,'BORROW_BOOK',1,3,NULL,'2025-01-25 12:33:17','2025-02-08 12:33:17',NULL),(201,'RETURN_BOOK',1,3,NULL,'2025-01-25 12:34:51',NULL,NULL),(202,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 12:36:54',NULL,NULL),(203,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 13:04:12',NULL,NULL);
+INSERT INTO `subscriber_history` VALUES (230,'BORROW_BOOK',1,14,NULL,'2024-11-29 15:30:03','2024-12-13 15:30:03',NULL),(231,'BORROW_BOOK',2,15,NULL,'2024-11-30 16:10:03','2024-12-14 16:10:03',NULL),(232,'LATE_RETURN',2,15,NULL,'2024-12-14 16:10:03','2024-12-22 16:00:03',NULL),(233,'LOGIN_SUBSCRIBER',2,NULL,NULL,'2024-11-29 15:10:03',NULL,NULL),(234,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2024-11-30 15:15:03',NULL,NULL),(237,'FREEZE_SUBSCRIBER',2,NULL,NULL,'2024-12-21 16:10:03','2024-01-20 16:10:03',NULL),(238,'ORDER_BOOK',3,NULL,1,'2024-12-12 12:30:03',NULL,NULL),(239,'BORROW_BOOK',3,14,NULL,'2024-12-14 15:20:00','2024-12-28 15:20:00',NULL),(240,'BORROW_BOOK',1,15,NULL,'2024-12-22 17:00:00','2025-01-05 17:00:00',NULL),(241,'RETURN_BOOK',1,14,NULL,'2024-12-13 11:30:03',NULL,NULL),(242,'RETURN_BOOK',2,15,NULL,'2024-12-22 16:00:03',NULL,NULL),(243,'RETURN_BOOK',3,14,NULL,'2024-12-27 15:20:00',NULL,NULL),(244,'RETURN_BOOK',1,15,NULL,'2025-01-05 13:00:00',NULL,NULL),(245,'LOGIN_SUBSCRIBER',1,NULL,NULL,'2025-01-25 23:26:47',NULL,NULL),(248,'BORROW_BOOK',3,18,NULL,'2025-01-18 00:40:55','2025-02-01 00:40:55',NULL),(249,'BORROW_BOOK',3,36,NULL,'2025-01-16 00:43:22','2025-01-30 00:43:22',NULL),(250,'LOGIN_SUBSCRIBER',2,NULL,NULL,'2025-01-26 00:43:33',NULL,NULL),(251,'BORROW_BOOK',2,35,NULL,'2025-01-15 00:45:29','2025-01-29 00:45:29',NULL),(252,'LATE_RETURN',2,34,NULL,'2025-01-26 00:48:37',NULL,NULL),(253,'FREEZE_SUBSCRIBER',2,NULL,NULL,'2025-01-26 00:50:10','2025-02-25 00:50:10',NULL),(254,'LOGIN_SUBSCRIBER',2,NULL,NULL,'2025-01-26 00:50:19',NULL,NULL),(267,'ORDER_BOOK',1,NULL,12,'2025-01-26 01:04:16',NULL,NULL),(284,'LOGIN_SUBSCRIBER',3,NULL,NULL,'2025-01-26 01:27:17',NULL,NULL);
 /*!40000 ALTER TABLE `subscriber_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,7 +268,7 @@ CREATE TABLE `subscriber_status_report` (
   PRIMARY KEY (`id`),
   KEY `subscriber_id_idx` (`subscriber_id`),
   CONSTRAINT `subscriber_id` FOREIGN KEY (`subscriber_id`) REFERENCES `subscriber` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -278,7 +277,7 @@ CREATE TABLE `subscriber_status_report` (
 
 LOCK TABLES `subscriber_status_report` WRITE;
 /*!40000 ALTER TABLE `subscriber_status_report` DISABLE KEYS */;
-INSERT INTO `subscriber_status_report` VALUES (11,'2024-12-03','2025-01-03','2024-12-01',1),(12,'2024-12-03','2025-01-03','2024-12-01',1);
+INSERT INTO `subscriber_status_report` VALUES (16,'2024-12-21','2024-01-20','2024-12-01',2);
 /*!40000 ALTER TABLE `subscriber_status_report` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -296,7 +295,7 @@ CREATE TABLE `user` (
   `password` varchar(45) NOT NULL,
   `role` enum('librarian','subscriber') DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -305,7 +304,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Daniel','Student','123','subscriber'),(2,'Safranit','Lol','321','librarian'),(3,'Luffy','D.Monkey','123','subscriber'),(4,'bery','hi','123','subscriber'),(5,'moti','lochim','123','subscriber'),(6,'Elias','Yes','elias','subscriber'),(7,'Helal','Hammoud','123','subscriber');
+INSERT INTO `user` VALUES (1,'Nico','Robin','321','librarian'),(2,'Daniel','Student','123','subscriber'),(3,'Moti',' Lochim','123','subscriber'),(4,'Luffy','D. Monkey','123','subscriber'),(5,'Berry','Tzakala','123','subscriber'),(6,'Elias','Saile','elias','subscriber'),(7,'Helal','Hammoud','123','subscriber'),(8,'Chopper','Tony tony','human','subscriber');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -318,4 +317,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-25 13:47:59
+-- Dump completed on 2025-01-26  1:29:48

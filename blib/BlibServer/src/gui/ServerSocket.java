@@ -21,7 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import ocsf.server.ConnectionToClient;
 
-/*
+/**
  * controller for ServerSocket.fxml
  */
 
@@ -32,9 +32,11 @@ public class ServerSocket extends AbstractScreen{
 	@FXML
 	private Label portWarning;
 
-	/*
-	* Creates Server with wanted port
-	*/
+	/**
+	 * Creates Server with wanted port
+	 * @param event
+	 * @throws Exception
+	 */
 	public void Create(ActionEvent event) throws Exception {
 		String port = Porttxt.getText();
 		portWarning.setVisible(false);

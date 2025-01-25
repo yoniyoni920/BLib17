@@ -15,7 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import ocsf.server.ConnectionToClient;
-/*
+
+/**
  * This class represents the GUI for managing server connections.
  * It listens for incoming client connections and displays their status in a table.
  */

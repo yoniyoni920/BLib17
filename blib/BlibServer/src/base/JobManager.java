@@ -46,6 +46,10 @@ public class JobManager {
         cancelOrders();
     }
 
+    /**
+     * This method cancels the order for the book
+     * @throws SQLException
+     */
     public void cancelOrders() throws SQLException {
         LocalDateTime date = getJobDate("cancel-orders");
         LocalDateTime now = LocalDateTime.now();
@@ -56,6 +60,10 @@ public class JobManager {
         }
     }
 
+    /**
+     * Sends reminder to return the book
+     * @throws SQLException
+     */
     public void sendBookReturnReminders() throws SQLException {
         LocalDateTime date = getJobDate("send-reminders");
         LocalDateTime now = LocalDateTime.now();
@@ -125,6 +133,10 @@ public class JobManager {
         }
     }
 
+    /**
+     * Generates borrow times to display on screen
+     * @param date
+     */
     public void generateBorrowTimesReport(LocalDate date) {
         String query = "SELECT borrow.*, book_copy.book_id, late.date AS late_date, late.end_date AS late_return_date " +
                 "FROM subscriber_history AS borrow " +
@@ -229,6 +241,11 @@ public class JobManager {
         return null;
     }
 
+    /**
+     * Marks a job as done by setting its date to the current time
+     * @param jobName
+     * @throws SQLException
+     */
     public void markJobDone(String jobName) throws SQLException {
         PreparedStatement st;
         if (getJobDate(jobName) == null) {

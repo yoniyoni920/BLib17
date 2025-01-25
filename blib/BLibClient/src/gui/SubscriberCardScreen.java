@@ -143,6 +143,11 @@ public class SubscriberCardScreen extends AbstractScreen {
 		return actionColumn;
 	}
 
+	/**
+	 * Return book from borrower.
+	 *
+	 * @param bookCopy
+	 */
 	private void onReturnBookPressed(BookCopy bookCopy) {
 		int bookCopyId = bookCopy.getId();
 		ClientUtils.sendMessage(new Message(Action.RETURN_BOOK, bookCopyId));
@@ -152,7 +157,7 @@ public class SubscriberCardScreen extends AbstractScreen {
 		borrowedBooks.refresh();
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setTitle("Returned Book Successfully");
-		alert.setHeaderText("The book returned successfully");
+		alert.setHeaderText("The book " + bookCopy.getBook().getTitle() + " returned successfully");
 		alert.showAndWait();
 	}
 

@@ -2,7 +2,7 @@ package entities;
 
 import java.io.Serializable;
 
-/*
+/**
  * User class has three uses: 
  * 1. if needed to be used for unlogged users 
  * 2. to be sent when user want to loggin
@@ -10,9 +10,7 @@ import java.io.Serializable;
  */
 
 public class User implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String lastName;

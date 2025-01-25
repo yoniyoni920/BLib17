@@ -82,6 +82,10 @@ public class BookCard {
         this.book = book;
     }
 
+    /**
+     * This function lets subscriber order
+     * @param event
+     */
     public void orderBook(ActionEvent event) {
         BookOrder order = new BookOrder(
             Auth.getInstance().getSubscriber().getSubscriberId(),

@@ -15,12 +15,13 @@ import entities.Subscriber;
 import entities.HistoryEntry;
 import entities.SubscriberStatusReport;
 
-/*
+/**
  * This class is the control  for Subscriber
  */
 public class SubscriberControl {
-	/*
+	/**
 	 * changes the information on the DB to input.
+	 * @param changedInfo
 	 */
 	public static void updateInfo(List<String> changedInfo) {
 		try (
@@ -42,6 +43,11 @@ public class SubscriberControl {
 		} 
 	}
 
+	/**
+	 * Returns the id of the subscriber
+	 * @param id
+	 * @return
+	 */
 	public static Subscriber getSubscriberById(int id) {
 		try {
 			String query = "SELECT *, user.* FROM subscriber JOIN user ON user.id=subscriber.user_id WHERE user_id=?";
@@ -91,6 +97,12 @@ public class SubscriberControl {
 		return sub;
 	}
 
+	/**
+	 * Returns a List of subscribers
+	 * @param search
+	 * @param searchType
+	 * @return
+	 */
 	public static List<Subscriber> searchSubscribers(String search, String searchType) {
 		try {
 			if (searchType.equals("user_id") || searchType.equals("first_name") || searchType.equals("last_name")) {
@@ -212,6 +224,11 @@ public class SubscriberControl {
         }
     }
 
+	/**
+	 * Returns a List of history actions of the subscriber
+	 * @param subscriberId
+	 * @return
+	 */
 	public static List<HistoryEntry> getSubscriberHistory(int subscriberId) {
 		String query = "SELECT *, book.title AS book_title, user.first_name AS librarian_name FROM subscriber_history " +
 				"LEFT JOIN book_copy ON book_copy.id = book_copy_id " +

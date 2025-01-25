@@ -11,7 +11,7 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/*
+/**
  * AbstractScreen is the base class for ScrenManager. 
  * help prevent code DRY-(Don't Repeat Yourself)
  */
@@ -62,6 +62,9 @@ public abstract class AbstractScreen implements Initializable {
 		screenManager.closeScreen();
 	}
 
+	/**
+	 * Animation
+	 */
 	protected void fadeInTitle() {
 		if (titleLabel == null) {
 			return;

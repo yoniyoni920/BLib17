@@ -1,5 +1,8 @@
 package entities;
 
+/**
+ * An ENUM contains all the subscriber's history actions and can be displayed for librarian and subscriber
+ */
 public enum HistoryAction {
     LOST_BOOK,
     BORROW_BOOK,

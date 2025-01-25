@@ -1,5 +1,8 @@
 package base;
 
+/**
+ * an ENUM for all the actions
+ */
 public enum Action {
     LOGIN,
     REGISTER,

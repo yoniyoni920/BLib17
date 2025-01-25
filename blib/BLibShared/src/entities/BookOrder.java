@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Saves all the information about an order of a book
+ */
 public class BookOrder implements Serializable {
     private int orderId;
     private int subscriberId;

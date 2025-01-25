@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-/*
+/**
  * Subscribers are the members of the library
  */
 public class Subscriber extends User implements Serializable {

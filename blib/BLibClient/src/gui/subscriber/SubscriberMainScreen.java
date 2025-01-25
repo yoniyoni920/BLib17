@@ -52,7 +52,9 @@ public class SubscriberMainScreen extends AbstractScreen {
 
     @Override
     public void openScreen(Object... args) {
-        onStart((Subscriber)args[0]);
+        Subscriber sub = (Subscriber)args[0];
+        titleLabel.setText("Welcome back, " + sub.getName());
+        onStart(sub);
     }
 
     /**
@@ -87,7 +89,6 @@ public class SubscriberMainScreen extends AbstractScreen {
      * Renders the data on the screen including the welcome message, borrowed books, and the count of borrowed books.
      */
     private void renderData() {
-        titleLabel.setText("Welcome back, " + subscriber.getName());
         showBorrowedBooks();
 
         boolean isFrozen = subscriber.isFrozen();

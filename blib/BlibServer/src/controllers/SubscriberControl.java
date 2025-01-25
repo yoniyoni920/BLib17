@@ -44,12 +44,35 @@ public class SubscriberControl {
 	}
 
 	/**
-	 * Returns the id of the subscriber
+	 * Returns a subscriber using their subscriber ID
+	 * @param id
+	 * @return
+	 */
+	public static Subscriber getSubscriberBySubscriberId(int id) {
+		String query = "SELECT user.*, subscriber.*, subscriber.id AS subscriber_id FROM user " +
+				"JOIN subscriber ON user.id=subscriber.user_id WHERE subscriber.id=?";
+
+		try(PreparedStatement stt = DBControl.getConnection().prepareStatement(query)) {
+			stt.setInt(1,id);
+			ResultSet rs = stt.executeQuery();
+			if(rs.next()) {
+				return getSubscriberFromResultSet(rs);
+			}
+		}  catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Returns a subscriber using their user ID
 	 * @param id
 	 * @return
 	 */
 	public static Subscriber getSubscriberById(int id) {
-		String query = "SELECT *, user.* FROM subscriber JOIN user ON user.id=subscriber.user_id WHERE user_id=?";
+		String query = "SELECT user.*, subscriber.*, subscriber.id AS subscriber_id FROM user " +
+				"JOIN subscriber ON user.id=subscriber.user_id WHERE user.id=?";
+
 		try(PreparedStatement stt = DBControl.getConnection().prepareStatement(query)) {
 			stt.setInt(1,id);
 			ResultSet rs = stt.executeQuery();
@@ -69,7 +92,7 @@ public class SubscriberControl {
 	 * @throws SQLException
 	 */
 	public static Subscriber getSubscriberFromResultSet(ResultSet rs) throws SQLException {
-		int id = rs.getInt("id");
+		int subscriberId = rs.getInt("subscriber_id");
 		String phoneNumber = rs.getString("phone_number");
 		String email = rs.getString("email");
 		Date frozenUntil = rs.getDate("frozen_until");
@@ -78,7 +101,7 @@ public class SubscriberControl {
 		String lastName = rs.getString("last_name");
 
 		Subscriber sub = new Subscriber(
-			id,
+			subscriberId,
 			rs.getInt("user_id"),
 			firstName,
 			lastName,
@@ -89,8 +112,9 @@ public class SubscriberControl {
 			frozenUntil != null ? frozenUntil.toLocalDate() : null
 		);
 
-		sub.setBorrowedBooks(BookControl.retrieveBorrowedBooks(id));
-		sub.setHistory(SubscriberControl.getSubscriberHistory(id));
+
+		sub.setBorrowedBooks(BookControl.retrieveBorrowedBooks(subscriberId));
+		sub.setHistory(SubscriberControl.getSubscriberHistory(subscriberId));
 
 		return sub;
 	}
@@ -103,7 +127,9 @@ public class SubscriberControl {
 	 */
 	public static List<Subscriber> searchSubscribers(String search, String searchType) {
 		if (searchType.equals("user_id") || searchType.equals("first_name") || searchType.equals("last_name")) {
-			String query = "SELECT *, user.* FROM subscriber JOIN user ON user.id=subscriber.user_id";
+			String query = "SELECT user.*, subscriber.*, subscriber.id AS subscriber_id FROM user " +
+					"JOIN subscriber ON user.id=subscriber.user_id";
+
 			if (searchType.equals("user_id")) {
 				query += " WHERE user_id = ?";
 			} else {

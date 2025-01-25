@@ -15,17 +15,19 @@ import java.time.LocalTime;
 
 public class LendBookScreen extends AbstractScreen {
     @FXML
-    TextField bookIdTextField;
+    private TextField bookIdTextField;
     @FXML
-    Label bookIdAlert;
+    private Label bookIdAlert;
     @FXML
-    Label userAlert;
+    private Label userAlert;
     @FXML
-    DatePicker returnDatePicker;
+    private DatePicker returnDatePicker;
     @FXML
-    DatePicker lendDatePicker;
+    private DatePicker lendDatePicker;
     @FXML
-    TextField subID;
+    private TextField subID;
+
+    private Subscriber subscriber;
 
     @Override
     public void openScreen(Object... args) {
@@ -80,8 +82,8 @@ public class LendBookScreen extends AbstractScreen {
                 userAlert.setTextFill(Color.RED);
                 userAlert.setVisible(true);
             } else {
-                Subscriber user = (Subscriber) message.getObject();
-                userAlert.setText(user.getName() + " " + user.getLastName());
+                subscriber = (Subscriber)message.getObject();
+                userAlert.setText(subscriber.toString());
                 userAlert.setTextFill(Color.DODGERBLUE);
                 userAlert.setVisible(true);
             }
@@ -127,7 +129,8 @@ public class LendBookScreen extends AbstractScreen {
         }
 
         LocalTime now = LocalTime.now();
-        BookCopy sendCopy = new BookCopy(0, bookId, lendDatePicker.getValue().atTime(now), returnDatePicker.getValue().atTime(now), sub);
+        BookCopy sendCopy = new BookCopy(0, bookId, lendDatePicker.getValue().atTime(now),
+                returnDatePicker.getValue().atTime(now), subscriber.getSubscriberId());
         Message msg = new Message(Action.LEND_BOOK, sendCopy);
         ClientUtils.sendMessage(msg, message -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -16,7 +16,7 @@
    <children>
       <AnchorPane prefHeight="64.0" prefWidth="442.0" styleClass="underline">
          <children>
-            <Label fx:id="titleLabel" layoutY="12.0" prefHeight="52.0" prefWidth="442.0" styleClass="title-3" text="Lend Book" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+            <Label fx:id="titleLabel" layoutY="12.0" prefHeight="52.0" prefWidth="442.0" styleClass="title-3" text="Lend Book" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <Button layoutX="326.0" layoutY="10.0" mnemonicParsing="false" onAction="#closeScreen" prefHeight="35.0" prefWidth="104.0" text="Back" AnchorPane.rightAnchor="0.0">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
@@ -30,7 +30,7 @@
       </AnchorPane>
       <VBox prefHeight="0.0" prefWidth="442.0" spacing="4.0">
          <children>
-            <Label text="Subscriber ID">
+            <Label text="Subscriber User ID">
                <VBox.margin>
                   <Insets bottom="5.0" right="5.0" top="5.0" />
                </VBox.margin></Label>

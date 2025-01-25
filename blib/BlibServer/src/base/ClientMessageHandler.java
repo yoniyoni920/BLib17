@@ -84,7 +84,7 @@ public class ClientMessageHandler {
      */
     public static Message orderBook(Message msg, ConnectionToClient client) {
         BookOrder bookOrder = (BookOrder) msg.getObject();
-        Subscriber subscriber = SubscriberControl.getSubscriberById(bookOrder.getSubscriberId());
+        Subscriber subscriber = SubscriberControl.getSubscriberBySubscriberId(bookOrder.getSubscriberId());
         if (subscriber == null || subscriber.isFrozen()) {
             return msg.errorReply("Subscriber is frozen or doesn't exist!");
         }
@@ -123,7 +123,7 @@ public class ClientMessageHandler {
             return msg.errorReply("Return date is not valid!");
         }
 
-        Subscriber subscriber = SubscriberControl.getSubscriberById(bookCopy.getBorrowSubscriberId());
+        Subscriber subscriber = SubscriberControl.getSubscriberBySubscriberId(bookCopy.getBorrowSubscriberId());
         if (subscriber == null || subscriber.isFrozen()) {
             return msg.errorReply("Subscriber is frozen or doesn't exist!");
         }

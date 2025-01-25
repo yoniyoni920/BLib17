@@ -20,7 +20,7 @@
             <Button fx:id="orderButton" contentDisplay="CENTER" layoutX="122.0" layoutY="255.0" mnemonicParsing="false" onAction="#orderBook" prefHeight="20.0" prefWidth="68.0" text="Order" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="4.0" />
          </children>
       </AnchorPane>
-      <Label fx:id="titleLabel" alignment="CENTER" prefHeight="17.0" prefWidth="199.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Batman" />
+      <Label fx:id="titleLabel" alignment="CENTER" prefHeight="17.0" prefWidth="199.0" style="-fx-font-size: 15; -fx-font-weight: bold;" text="Batman" />
       <VBox prefHeight="133.0" prefWidth="199.0" spacing="4.0">
          <children>
             <Label fx:id="authorLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="199.0" text="Bob Kane, Bill Finger" />

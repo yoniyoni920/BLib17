@@ -72,7 +72,7 @@ public class BookCard {
 	         System.out.println("Error loading image: " + image.getException().getMessage());
 	    }
 
-        Tooltip tooltip = new Tooltip(book.getDescription());
+        Tooltip tooltip = new Tooltip("Title: "+ book.getTitle() + "\nDescription: " + book.getDescription());
         tooltip.setWrapText(true);
         tooltip.setMaxWidth(500);
         Tooltip.install(vbox, tooltip);

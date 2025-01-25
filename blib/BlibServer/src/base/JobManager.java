@@ -48,9 +48,9 @@ public class JobManager {
 
     public void cancelOrders() throws SQLException {
         LocalDateTime date = getJobDate("cancel-orders");
-        LocalDate now = LocalDate.now().withDayOfMonth(1);
+        LocalDateTime now = LocalDateTime.now();
 
-        if (date == null || ChronoUnit.MINUTES.between(date, now) >= 1) {
+        if (date == null || ChronoUnit.HOURS.between(date, now) >= 1) {
             BookControl.cancelLateOrders();
             markJobDone("cancel-orders");
         }

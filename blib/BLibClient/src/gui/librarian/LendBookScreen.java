@@ -45,7 +45,7 @@ public class LendBookScreen extends AbstractScreen {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
             super.updateItem(item, empty);
-            setDisable(item.isBefore(LocalDate.now()));
+            setDisable(item.isBefore(LocalDate.now().minusWeeks(2)));
             }
         });
 

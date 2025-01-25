@@ -23,9 +23,10 @@ public class SubscriberControl {
 	 * changes the information on the DB to input.
 	 */
 	public static void updateInfo(List<String> changedInfo) {
-		try {
+		try (
 			PreparedStatement subscriberStatement = DBControl.prepareStatement("UPDATE subscriber SET phone_number = ?, email = ? WHERE user_id = ?");
-			PreparedStatement userStatement = DBControl.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, password = ? WHERE id = ?");
+			PreparedStatement userStatement = DBControl.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, password = ? WHERE id = ?")
+		) {
 			subscriberStatement.setString(1,changedInfo.get(3));
 			subscriberStatement.setString(2,changedInfo.get(4));
 			subscriberStatement.setString(3, changedInfo.get(0));

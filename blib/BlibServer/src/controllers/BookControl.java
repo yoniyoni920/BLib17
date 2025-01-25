@@ -318,10 +318,10 @@ public class BookControl {
     public static List<BorrowReport> getBorrowTimesReport(LocalDate date, Integer bookId) {
         String query;
         if (bookId == null) {
-            query = "SELECT *, book.* FROM borrow_report INNER JOIN book ON book.id = borrow_report.book_id " +
+            query = "SELECT *, book.* FROM borrow_report JOIN book ON book.id = borrow_report.book_id " +
                     "WHERE report_date = ?";
         } else {
-            query = "SELECT *, book.* FROM borrow_report INNER JOIN book ON book.id = borrow_report.book_id " +
+            query = "SELECT *, book.* FROM borrow_report JOIN book ON book.id = borrow_report.book_id " +
                     "WHERE report_date = ? AND book_id = ?";
         }
 

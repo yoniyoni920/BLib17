@@ -90,14 +90,14 @@ public class JobManager {
      */
     public void generateReports() throws SQLException {
         LocalDateTime date = getJobDate("generate-reports");
-        LocalDate nowMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
-        LocalDateTime now = LocalDateTime.now().withDayOfMonth(1);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDate lastMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
 
-        if (date == null || !date.getMonth().equals(now.getMonth())) {
+        if (date == null || ChronoUnit.DAYS.between(date, now) > 31 || !date.getMonth().equals(now.getMonth())) {
             // The moment that the next month enters, the last month "ends".
             // We want to also ensure that the report is generated in case the app isn't on by the 1st of the month.
-            generateSubscriberStatusReport(nowMonth);
-            generateBorrowTimesReport(nowMonth);
+            generateSubscriberStatusReport(lastMonth);
+            generateBorrowTimesReport(lastMonth);
 
             markJobDone("generate-reports");
         }
@@ -111,7 +111,7 @@ public class JobManager {
      */
     public void generateSubscriberStatusReport(LocalDate date) {
         String query = "SELECT * FROM subscriber_history " +
-                "WHERE action = 'freeze' AND (date >= ? OR end_date <= ?)";
+                "WHERE action = 'FREEZE_SUBSCRIBER' AND (date >= ? OR end_date <= ?)";
         try (PreparedStatement st = DBControl.prepareStatement(query)) {
             st.setObject(1, date);
             st.setObject(2, date);
@@ -138,20 +138,28 @@ public class JobManager {
      * @param date
      */
     public void generateBorrowTimesReport(LocalDate date) {
-        String query = "SELECT borrow.*, book_copy.book_id, late.date AS late_date, late.end_date AS late_return_date " +
+        String joinLate = "LEFT JOIN subscriber_history AS late ON " +
+                "late.book_copy_id = borrow.book_copy_id AND late.action = 'LATE_RETURN' " +
+                "AND late.date = borrow.end_date AND late.subscriber_id = borrow.subscriber_id ";
+
+        String query = "SELECT book_copy.book_id AS book_id, borrow.*, late.date AS late_date, late.end_date AS late_return_date " +
                 "FROM subscriber_history AS borrow " +
-                "INNER JOIN book_copy ON book_copy_id = book_copy.id " +
-                "LEFT JOIN subscriber_history AS late ON late.book_copy_id = borrow.book_copy_id AND late.action = 'late'" +
-                "WHERE borrow.action = 'borrow' AND borrow.date >= ? AND borrow.date <= ? ";
+                "JOIN book_copy ON book_copy_id = book_copy.id " +
+                joinLate +
+                "WHERE borrow.action = 'BORROW_BOOK' " +
+                "AND (MONTH(borrow.date) = MONTH(?) OR MONTH(borrow.end_date) = MONTH(?) OR MONTH(late.end_date) = MONTH(?)) ";
         try (PreparedStatement st = DBControl.prepareStatement(query)) {
-            st.setDate(1, Date.valueOf(date));
-            st.setDate(2, Date.valueOf(date.plusMonths(1).minusDays(1)));
+            Date sqlDate = Date.valueOf(date);
+            st.setDate(1, sqlDate);
+            st.setDate(2, sqlDate);
+            st.setDate(3, sqlDate);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 String query2 = "INSERT INTO borrow_report (book_id, book_copy_id, start_date, return_date, is_late, late_return_date, report_date) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
                 try (PreparedStatement st2 = DBControl.prepareStatement(query2)) {
+                    int bookId = rs.getInt("book_id");
                     st2.setInt(1, rs.getInt("book_id"));
                     st2.setInt(2, rs.getInt("book_copy_id"));
                     st2.setTimestamp(3, rs.getTimestamp("date"));

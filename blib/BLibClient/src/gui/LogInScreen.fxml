@@ -23,7 +23,7 @@
             <Button alignment="CENTER" layoutX="417.0" layoutY="11.0" minWidth="28.0" mnemonicParsing="false" onAction="#searchBooksScreen" prefHeight="41.0" prefWidth="40.0" AnchorPane.rightAnchor="0.0">
             <graphic>
                <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@/resources/subscriber_main_screen_photos/search.png" />
+                  <Image url="@/resources/subscriber/search.png" />
                </ImageView>
             </graphic>
             </Button>

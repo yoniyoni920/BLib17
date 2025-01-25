@@ -19,11 +19,20 @@
                     <graphic>
                         <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@/resources/subscriber_main_screen_photos/goBackIcon.png" />
+                                <Image url="@/resources/subscriber/goBackIcon.png" />
                             </image>
                         </ImageView>
                     </graphic>
                 </Button>
+            <Button layoutX="514.0" layoutY="11.0" mnemonicParsing="false" onAction="#openHistory" prefHeight="35.0" prefWidth="104.0" text="History">
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/resources/subscriber/history.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
             </children>
         </AnchorPane>
       <VBox spacing="8.0">
@@ -32,7 +41,7 @@
                <children>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" style="fill: red;">
                      <image>
-                        <Image url="@/resources/subscriber_main_screen_photos/frozen.png" />
+                        <Image url="@/resources/subscriber/frozen.png" />
                      </image>
                   </ImageView>
                   <Label fx:id="frozenText" prefHeight="37.0" prefWidth="135.0" styleClass="danger" text="Frozen Until 9/9/9999" />

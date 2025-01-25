@@ -21,7 +21,7 @@ public class ClientApplication extends Application {
      * @param args command-line arguments
      * @throws Exception if an error occurs during application launch
      */
-	public static void main(String args[]) throws Exception { 
+	public static void main(String args[]) {
 	    launch(args);  
 	}
 	

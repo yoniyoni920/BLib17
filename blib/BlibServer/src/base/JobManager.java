@@ -52,10 +52,11 @@ public class JobManager {
      */
     public void cancelOrders() throws SQLException {
         LocalDateTime date = getJobDate("cancel-orders");
-        LocalDate now = LocalDate.now().withDayOfMonth(1);
+        LocalDateTime now = LocalDateTime.now();
 
-        if (date == null || ChronoUnit.DAYS.between(date, now) >= 1) {
+        if (date == null || ChronoUnit.HOURS.between(date, now) >= 1) {
             BookControl.cancelLateOrders();
+            markJobDone("cancel-orders");
         }
     }
 
@@ -68,14 +69,16 @@ public class JobManager {
         LocalDateTime now = LocalDateTime.now();
 
         if (date == null || ChronoUnit.DAYS.between(date, now) >= 1) {
-            final String messageTemplate = "Hi %s,\nWe wanted to remind you that you have to return %s book to the library until tomorrow.\nBLib Library.";
-            final String htmlMessageTemplate ="Hi %s,<br>We wanted to remind you that you have to return %s book to the library until tomorrow.<br>BLib Library.";
+            final String messageTemplate ="Hi %s,<br>" +
+                    "We wanted to remind you that you have to return the book '%s' to the library by tomorrow.<br>" +
+                    "BLib Library.";
 
             ArrayList<Map<String, Object>> records = BookControl.getBooksForReturnReminder();
             for (Map<String, Object> record : records) {
-                CommunicationManager.sendSMS((String)record.get("phone_number"), String.format(messageTemplate, record.get("name"), record.get("title")));
                 CommunicationManager.sendMail((String) record.get("email"), String.format("Returning %s", record.get("title")),
-                        String.format(htmlMessageTemplate, record.get("name"), record.get("title")), "Blib Reminders");
+                        String.format(messageTemplate, record.get("name"), record.get("title")), "Blib Reminders");
+
+                CommunicationManager.sendSMS((String)record.get("phone_number"), String.format(messageTemplate.replace("<br>", "\n"), record.get("name"), record.get("title")));
 
                 markJobDone("send-reminders");
             }
@@ -215,8 +218,9 @@ public class JobManager {
                     }
                 }
 
-                markJobDone("check-borrows");
             }
+
+            markJobDone("check-borrows");
         }
     }
 

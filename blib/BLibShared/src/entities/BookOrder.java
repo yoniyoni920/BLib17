@@ -2,6 +2,7 @@ package entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Saves all the information about an order of a book
@@ -10,10 +11,10 @@ public class BookOrder implements Serializable {
     private int orderId;
     private int subscriberId;
     private int bookId;
-    private LocalDate orderDate;
-    private LocalDate untilDate;
+    private LocalDateTime orderDate;
+    private LocalDateTime untilDate;
 
-    public BookOrder(int orderId, int subscriberId, int bookId, LocalDate orderDate, LocalDate untilDate) {
+    public BookOrder(int orderId, int subscriberId, int bookId, LocalDateTime orderDate, LocalDateTime untilDate) {
         this.orderId = orderId;
         this.subscriberId = subscriberId;
         this.bookId = bookId;
@@ -26,19 +27,19 @@ public class BookOrder implements Serializable {
         this.bookId = bookId;
     }
 
-    public LocalDate getUntilDate() {
+    public LocalDateTime getUntilDate() {
         return untilDate;
     }
 
-    public void setUntilDate(LocalDate untilDate) {
+    public void setUntilDate(LocalDateTime untilDate) {
         this.untilDate = untilDate;
     }
 
-    public LocalDate getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
+    public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 

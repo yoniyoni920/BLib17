@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -134,15 +135,13 @@ public class BookControl {
      * @param bookId The ID of the book to check.
      * @return LocalDate representing the date book with be available or null if not orderable.
      */
-    public static LocalDate checkBookOrderable(int bookId) {
+    public static LocalDateTime checkBookOrderable(int bookId) {
         String query = "SELECT COUNT(bc.id) AS copies_count, COUNT(bo.id) AS order_count " +
                 "FROM book b " +
                 "LEFT JOIN book_copy bc ON bc.book_id = b.id " +
                 "LEFT JOIN book_order bo ON bo.book_id = b.id " +
                 "WHERE b.id = ? " +
                 "GROUP BY b.id;";
-
-        System.out.println(bookId);
 
         try (PreparedStatement stt = DBControl.prepareStatement(query)) {
             stt.setInt(1, bookId);
@@ -157,7 +156,7 @@ public class BookControl {
                         stt2.setInt(2, orderCount);
                         ResultSet rs2 = stt2.executeQuery();
                         if (rs2.next()) {
-                            return rs2.getDate("return_date").toLocalDate();
+                            return rs2.getTimestamp("return_date").toLocalDateTime();
                         }
                     }
                 }
@@ -176,15 +175,16 @@ public class BookControl {
      */
     public static boolean lendBookToSubscriber(BookCopy bookCopy) {
         try (PreparedStatement stt = DBControl.prepareStatement(
-                "UPDATE book_copy SET lend_date = ?, return_date = ?, borrow_subscriber_id = ? WHERE id = ?")) {
+                "UPDATE book_copy SET lend_date = ?, return_date = ?, borrow_subscriber_id = ?, is_waiting = 0" +
+                        " WHERE id = ?")) {
 
             int subscriberId = bookCopy.getBorrowSubscriberId();
             int bookCopyId = bookCopy.getId();
-            LocalDate date = bookCopy.getLendDate();
-            LocalDate returnDate = bookCopy.getReturnDate();
+            LocalDateTime date = bookCopy.getLendDate();
+            LocalDateTime returnDate = bookCopy.getReturnDate();
 
-            stt.setDate(1, Date.valueOf(date));
-            stt.setDate(2, Date.valueOf(returnDate));
+            stt.setTimestamp(1, Timestamp.valueOf(date));
+            stt.setTimestamp(2, Timestamp.valueOf(returnDate));
             stt.setInt(3, subscriberId);
             stt.setInt(4, bookCopyId);
             stt.executeUpdate();
@@ -193,8 +193,8 @@ public class BookControl {
                 subscriberId,
                 HistoryAction.BORROW_BOOK,
                 bookCopyId,
-                date.atStartOfDay(),
-                returnDate.atStartOfDay()
+                date,
+                returnDate
             ));
             
             try (PreparedStatement stt2 = DBControl.prepareStatement(
@@ -259,8 +259,8 @@ public class BookControl {
                 int copyId = rs.getInt("id");
                 int bookId = rs.getInt("book_id");
                 int borrowSubscriberId = rs.getInt("borrow_subscriber_id");
-                LocalDate lendDate = rs.getDate("lend_date").toLocalDate();
-                LocalDate returnDate = rs.getDate("return_date").toLocalDate();
+                LocalDateTime lendDate = rs.getTimestamp("lend_date").toLocalDateTime();
+                LocalDateTime returnDate = rs.getTimestamp("return_date").toLocalDateTime();
                 BookCopy copy = new BookCopy(copyId, bookId, lendDate, returnDate, borrowSubscriberId);
 
                 // Book data
@@ -370,12 +370,13 @@ public class BookControl {
     private static void updateSubOrderReady(int subscriberId, int bookId) {
         String query = "SELECT email, first_name, last_name, title FROM subscriber " +
             "JOIN user ON subscriber.user_id = user.id " +
-            "JOIN book_order ON book_order.subscriber_id = subscriber.id" +
-            "JOIN book on book.id = book_order.id" +
+            "JOIN book_order ON book_order.subscriber_id = subscriber.id " +
+            "JOIN book ON book.id = book_order.book_id " +
             "WHERE book_id = ? AND subscriber_id = ?";
 
         try(PreparedStatement sttm2 = DBControl.prepareStatement(query)){
             sttm2.setInt(1, bookId);
+            sttm2.setInt(2, subscriberId);
             ResultSet rs = sttm2.executeQuery();
             if (rs.next()) {
                 String message = "Hello %s %s,<br>your ordered book '%s' is ready for pickup!<br>" +
@@ -437,13 +438,10 @@ public class BookControl {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                String updateQuery = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
+                String updateQuery = "UPDATE book_copy SET borrow_subscriber_id = NULL, lend_date = NULL, return_date = NULL WHERE id = ?";
                 int subscriberId = rs.getInt("borrow_subscriber_id");
                 try (PreparedStatement ps2 = DBControl.prepareStatement(updateQuery)) {
-                    ps2.setNull(1, Types.INTEGER);
-                    ps2.setNull(2, java.sql.Types.DATE);
-                    ps2.setNull(3, java.sql.Types.DATE);
-                    ps2.setInt(4, bookCopyId);
+                    ps2.setInt(1, bookCopyId);
                     ps2.executeUpdate();
 
                     SubscriberControl.logIntoHistory(
@@ -550,7 +548,7 @@ public class BookControl {
                     )
                 );
             }
-            entry.setEndDate(copy.getReturnDate().atStartOfDay());
+            entry.setEndDate(copy.getReturnDate());
             SubscriberControl.logIntoHistory(entry);
 
             return stmt.executeUpdate() == 1;
@@ -596,10 +594,10 @@ public class BookControl {
         try (Statement st = DBControl.createStatement()) {
             ResultSet rs = st.executeQuery("SELECT *, book_copy.id AS book_copy_id FROM book_order " +
                     "LEFT JOIN book_copy ON book_copy.book_id = book_order.book_id AND book_copy.borrow_subscriber_id = book_order.subscriber_id " +
-                    "WHERE ordered_until < NOW()");
+                    "WHERE ordered_until + 2 < NOW()");
 
             while (rs.next()) {
-                String deleteQuery = "UPDATE book_copy SET is_waiting = 0, borrow_subscriber_id " +
+                String deleteQuery = "UPDATE book_copy SET is_waiting = 0, borrow_subscriber_id = NULL " +
                         "WHERE borrow_subscriber_id = ? AND book_id = ? LIMIT 1";
 
                 try (PreparedStatement st2 = DBControl.prepareStatement(deleteQuery)) {
@@ -621,7 +619,7 @@ public class BookControl {
 
         // Delete them all in one swoop
         try (Statement st = DBControl.createStatement()) {
-            st.executeUpdate("DELETE FROM book_order WHERE ordered_until < NOW()");
+            st.executeUpdate("DELETE FROM book_order WHERE ordered_until + 2 < NOW()");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

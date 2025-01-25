@@ -33,8 +33,8 @@ public class LendBookScreen extends AbstractScreen {
             returnDatePicker.setDayCellFactory(param -> new DateCell() {
                 @Override
                 public void updateItem(LocalDate item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setDisable(item.isAfter(lendDatePicker.getValue().plusWeeks(2)) || item.isBefore(lendDatePicker.getValue()));
+                super.updateItem(item, empty);
+                setDisable(item.isAfter(lendDatePicker.getValue().plusWeeks(2)) || item.isBefore(lendDatePicker.getValue()));
                 }
             });
             returnDatePicker.setValue(lendDatePicker.getValue().plusWeeks(2));
@@ -42,8 +42,8 @@ public class LendBookScreen extends AbstractScreen {
         lendDatePicker.setDayCellFactory(param -> new DateCell() {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                setDisable(item.isBefore(LocalDate.now()));
+            super.updateItem(item, empty);
+            setDisable(item.isBefore(LocalDate.now()));
             }
         });
 
@@ -51,7 +51,7 @@ public class LendBookScreen extends AbstractScreen {
     }
 
     /**
-     *  This function validate the entered book ID and fetch book details from the server
+     * This function validate the entered book ID and fetch book details from the server
      * @param keyEvent
      */
     public void bookTextFieldChanged(KeyEvent keyEvent) {
@@ -127,7 +127,7 @@ public class LendBookScreen extends AbstractScreen {
         }
 
         LocalTime now = LocalTime.now();
-        BookCopy sendCopy = new BookCopy(0, bookId, lendDatePicker.getValue(), returnDatePicker.getValue(), sub);
+        BookCopy sendCopy = new BookCopy(0, bookId, lendDatePicker.getValue().atTime(now), returnDatePicker.getValue().atTime(now), sub);
         Message msg = new Message(Action.LEND_BOOK, sendCopy);
         ClientUtils.sendMessage(msg, message -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -183,6 +183,7 @@ public class LendBookScreen extends AbstractScreen {
                     alert.setHeaderText("Lent Successfully");
                     alert.setContentText(bookIdAlert.getText() + " was lent successfully to " + userAlert.getText() + " with a return date of " + bookCopy.getReturnDate());
                     alert.showAndWait();
+                    closeScreen(null);
                 }
             }
         });

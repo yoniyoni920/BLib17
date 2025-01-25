@@ -9,6 +9,7 @@ import javafx.animation.FadeTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -200,5 +201,9 @@ public class SubscriberCardScreen extends AbstractScreen {
 				erorrAlert.showAndWait();
 			}
 		}
+	}
+
+    public void openHistory(ActionEvent event) throws IOException {
+		screenManager.openScreen("subscriber/SubscriberHistoryScreen", "Subscriber History", subscriber);
 	}
 }

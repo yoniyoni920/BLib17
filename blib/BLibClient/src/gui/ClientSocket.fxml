@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="321.0" prefWidth="502.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ClientSocket">
+<VBox prefHeight="378.0" prefWidth="502.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ClientSocket">
    <children>
       <AnchorPane prefWidth="438.0" styleClass="underline">
          <children>
-            <Label fx:id="titleLabel" layoutX="18.0" layoutY="12.0" prefHeight="66.0" prefWidth="414.0" styleClass="title-3" text="BLib Client Socket" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+            <Label fx:id="titleLabel" layoutX="18.0" layoutY="12.0" prefHeight="66.0" prefWidth="414.0" styleClass="title-3" text="BLib Client Socket" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
       <VBox prefHeight="0.0" prefWidth="438.0">

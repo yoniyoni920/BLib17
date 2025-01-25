@@ -434,13 +434,10 @@ public class BookControl {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                String updateQuery = "UPDATE book_copy SET borrow_subscriber_id = ?, lend_date = ?, return_date = ? WHERE id = ?";
+                String updateQuery = "UPDATE book_copy SET borrow_subscriber_id = NULL, lend_date = NULL, return_date = NULL WHERE id = ?";
                 int subscriberId = rs.getInt("borrow_subscriber_id");
                 try (PreparedStatement ps2 = DBControl.prepareStatement(updateQuery)) {
-                    ps2.setNull(1, Types.INTEGER);
-                    ps2.setNull(2, java.sql.Types.DATE);
-                    ps2.setNull(3, java.sql.Types.DATE);
-                    ps2.setInt(4, bookCopyId);
+                    ps2.setInt(1, bookCopyId);
                     ps2.executeUpdate();
 
                     SubscriberControl.logIntoHistory(
@@ -590,7 +587,7 @@ public class BookControl {
         try (Statement st = DBControl.createStatement()) {
             ResultSet rs = st.executeQuery("SELECT *, book_copy.id AS book_copy_id FROM book_order " +
                     "LEFT JOIN book_copy ON book_copy.book_id = book_order.book_id AND book_copy.borrow_subscriber_id = book_order.subscriber_id " +
-                    "WHERE ordered_until < NOW()");
+                    "WHERE ordered_until + 2 < NOW()");
 
             while (rs.next()) {
                 String deleteQuery = "UPDATE book_copy SET is_waiting = 0, borrow_subscriber_id = NULL " +
@@ -615,7 +612,7 @@ public class BookControl {
 
         // Delete them all in one swoop
         try (Statement st = DBControl.createStatement()) {
-            st.executeUpdate("DELETE FROM book_order WHERE ordered_until < NOW()");
+            st.executeUpdate("DELETE FROM book_order WHERE ordered_until + 2 < NOW()");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

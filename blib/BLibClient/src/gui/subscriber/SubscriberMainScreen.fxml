@@ -33,14 +33,27 @@
                   </ImageView>
                </graphic>
             </MenuButton>
-            <Button alignment="CENTER" layoutX="758.0" layoutY="16.0" minWidth="28.0" mnemonicParsing="false" onAction="#openSearchBooksScreen" prefHeight="41.0" prefWidth="44.0" AnchorPane.rightAnchor="84.0">
-               <graphic>
-                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
-                  	<image>
-                        <Image url="@/resources/subscriber/search.png" />
-                     </image>
-               </graphic>
-            </Button>
+            <HBox layoutX="717.0" layoutY="16.0" spacing="4.0">
+               <children>
+                  <Button alignment="CENTER" minWidth="28.0" mnemonicParsing="false" onAction="#reload" prefHeight="41.0" prefWidth="44.0">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
+                        	<image>
+                              <Image url="@/resources/subscriber/reload.png" />
+                          </image>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" minWidth="28.0" mnemonicParsing="false" onAction="#openSearchBooksScreen" prefHeight="41.0" prefWidth="44.0">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/resources/subscriber/search.png" />
+                            </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
        <HBox fx:id="frozenBox" prefHeight="20.0" prefWidth="166.0">

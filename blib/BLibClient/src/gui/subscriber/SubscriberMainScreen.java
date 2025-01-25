@@ -2,6 +2,8 @@ package gui.subscriber;
 
 import java.io.IOException;
 
+import base.Action;
+import com.sun.security.ntlm.Client;
 import controllers.Auth;
 import entities.BookCopy;
 import entities.Subscriber;
@@ -19,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
+import services.ClientUtils;
 import services.InterfaceUtils;
 
 /**
@@ -76,6 +79,7 @@ public class SubscriberMainScreen extends AbstractScreen {
      */
     private void loadData(Subscriber sub) {
         subscriber = sub;
+        this.borrowedBooks.clear();
         this.borrowedBooks.addAll(sub.getBorrowedBooks());
     }
     
@@ -219,6 +223,10 @@ public class SubscriberMainScreen extends AbstractScreen {
     public void logout(ActionEvent event) {
         Auth.getInstance().setUser(null); // Clear current user
         closeScreen(event);
+    }
+
+    public void reload() {
+        onStart((Subscriber)ClientUtils.sendMessage(Action.GET_SUBSCRIBER_BY_ID, subscriber.getId()).getObject());
     }
 }
 

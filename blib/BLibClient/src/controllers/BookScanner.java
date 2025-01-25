@@ -37,7 +37,7 @@ public class BookScanner {
 		Thread.sleep(1000);
 		
 		Random rn = new Random();
-		int BookID = rn.nextInt(8) + 1;
+		int BookID = rn.nextInt(9) + 1;
 		
 		return String.valueOf(BookID);
 	}

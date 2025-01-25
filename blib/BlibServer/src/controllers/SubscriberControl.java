@@ -234,11 +234,12 @@ public class SubscriberControl {
 
 		try (PreparedStatement st = DBControl.prepareStatement(query)) {
 			LocalDateTime now = LocalDateTime.now();
-			st.setTimestamp(1, Timestamp.valueOf(now.plusDays(30)));
+			LocalDateTime until = now.plusDays(30);
+			st.setTimestamp(1, Timestamp.valueOf(until));
 			st.setInt(2, subscriberId);
 
 			// Log into history
-			logIntoHistory(new HistoryEntry(subscriberId, HistoryAction.FREEZE_SUBSCRIBER));
+			logIntoHistory(new HistoryEntry(subscriberId, HistoryAction.FREEZE_SUBSCRIBER, now, until));
 
 			return st.executeUpdate() == 1;
 		} catch (SQLException e) {

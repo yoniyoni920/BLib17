@@ -22,7 +22,11 @@ public class HistoryEntry implements Serializable {
 	private String librarianName;
 
 	public HistoryEntry(int subscriberId, HistoryAction action, int bookCopyId, LocalDateTime date, LocalDateTime endDate) {
+		this(subscriberId, action, date, endDate);
 		this.bookCopyId = bookCopyId;
+	}
+
+	public HistoryEntry(int subscriberId, HistoryAction action, LocalDateTime date, LocalDateTime endDate) {
 		this.subscriberId = subscriberId;
 		this.action = action;
 		this.date = date;

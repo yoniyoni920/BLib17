@@ -448,10 +448,28 @@ public class BookControl {
                         new HistoryEntry(subscriberId, HistoryAction.RETURN_BOOK, bookCopyId)
                     );
 
+                    LocalDateTime returnDate = rs.getTimestamp("return_date").toLocalDateTime();
+                    LocalDateTime now = LocalDateTime.now();
+
+                    // If book was returned earlier than expected, set the return date as now
+                    if (now.isBefore(returnDate)) {
+                        String updateBorrowQuery = "UPDATE subscriber_history SET end_date = now() " +
+                                "WHERE book_copy_id = ? AND subscriber_id = ? AND end_date = ? " +
+                                "AND action = 'BORROW_BOOK' AND end_date IS NULL " +
+                                "ORDER BY date DESC LIMIT 1";
+                        try (PreparedStatement ps3 = DBControl.prepareStatement(updateBorrowQuery)) {
+                            ps3.setInt(1, bookCopyId);
+                            ps3.setInt(2, subscriberId);
+                            ps3.setTimestamp(3, Timestamp.valueOf(returnDate));
+                            ps3.executeUpdate();
+                        }
+                    }
+
                     // Attempts to update the late entry to include an actual return date
                     String updateLateQuery = "UPDATE subscriber_history SET end_date = now() " +
                             "WHERE book_copy_id = ? AND subscriber_id = ? " +
-                            "AND action = 'late' AND end_date IS NULL";
+                            "AND action = 'LATE_RETURN' AND end_date IS NULL " +
+                            "ORDER BY date DESC LIMIT 1";
                     try (PreparedStatement ps3 = DBControl.prepareStatement(updateLateQuery)) {
                         ps3.setInt(1, bookCopyId);
                         ps3.setInt(2, subscriberId);

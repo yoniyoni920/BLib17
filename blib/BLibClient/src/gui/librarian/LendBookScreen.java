@@ -10,10 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import services.ClientUtils;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 
 public class LendBookScreen extends AbstractScreen {
     @FXML
@@ -51,7 +49,11 @@ public class LendBookScreen extends AbstractScreen {
 
         lendDatePicker.setValue(LocalDate.now());
     }
-    // Validate the entered book ID and fetch book details from the server
+
+    /**
+     *  This function validate the entered book ID and fetch book details from the server
+     * @param keyEvent
+     */
     public void bookTextFieldChanged(KeyEvent keyEvent) {
         ClientUtils.sendMessage(new Message(Action.GET_BOOK_BY_ID, bookIdTextField.getText()), message -> {
             if (message.isError()) {
@@ -66,7 +68,11 @@ public class LendBookScreen extends AbstractScreen {
             }
         });
     }
-    // Validate the entered subscriber ID and fetch subscriber details from the server
+
+    /**
+     * This function validate the entered subscriber ID and fetch subscriber details from the server
+     * @param keyEvent
+     */
     public void userTextFieldChanged(KeyEvent keyEvent) {
         ClientUtils.sendMessage(new Message(Action.GET_SUBSCRIBER_BY_ID, subID.getText()), message -> {
             if (message.isError()) {
@@ -82,7 +88,9 @@ public class LendBookScreen extends AbstractScreen {
         });
     }
 
-    // Activates the book scanner to fetch the book ID
+    /**
+     * This function activates the book scanner to fetch the book ID
+     */
     public void activateScanner() {
         Thread thread = new Thread(() -> {
             Platform.runLater(() -> {
@@ -97,7 +105,10 @@ public class LendBookScreen extends AbstractScreen {
         });
         thread.start();
     }
-    // Submit the lending process
+
+    /**
+     * This function submits the lending process
+     */
     public void submitLend() {
         Integer sub = null, bookId = null;
         try {

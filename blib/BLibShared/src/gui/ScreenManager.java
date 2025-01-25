@@ -13,7 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-/*
+/**
  * Base code for presenting screen and controlling FXML files.
  * Helps keep the code DRY.
  */

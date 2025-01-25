@@ -3,6 +3,9 @@ package entities;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * Saves the information about the status report
+ */
 public class SubscriberStatusReport implements Serializable {
     private int subscriberId;
     private String name;

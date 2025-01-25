@@ -3,6 +3,9 @@ package entities;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * Saves the information about the borrow reports
+ */
 public class BorrowReport implements Serializable {
     private int bookId;
     private int bookCopyId;

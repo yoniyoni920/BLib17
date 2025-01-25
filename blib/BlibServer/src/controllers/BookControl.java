@@ -427,6 +427,10 @@ public class BookControl {
         }
     }
 
+    /**
+     * Returns the book, sets the dates and borrower's id as null
+     * @param bookCopyId
+     */
     public static void returnBook(int bookCopyId) {
         try (PreparedStatement ps = DBControl.prepareStatement("SELECT * FROM book_copy WHERE id = ?")) {
             ps.setInt(1, bookCopyId);
@@ -584,6 +588,9 @@ public class BookControl {
         return records;
     }
 
+    /**
+     * Cancels the order of a book if the subscriber does not take the book
+     */
     public static void cancelLateOrders() {
         // Remove the association of the subscriber from the copy
         try (Statement st = DBControl.createStatement()) {

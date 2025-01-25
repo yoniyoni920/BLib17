@@ -33,8 +33,11 @@ public class ClientMessageHandler {
         setupActions();
     }
 
-    /*
+    /**
      * Reads a message from a client and decides what to do with it
+     * @param msgFromClient
+     * @param client
+     * @return
      */
     public static Message handleMessage(Message msgFromClient, ConnectionToClient client) {
         Action actionName = msgFromClient.getAction();
@@ -73,6 +76,12 @@ public class ClientMessageHandler {
         actions.put(Action.UPDATE_NOTIFICATION_STATUS, ClientMessageHandler::updateNotificationStatus);
     }
 
+    /**
+     * Function to handle output from book control after ordering book
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message orderBook(Message msg, ConnectionToClient client) {
         BookOrder bookOrder = (BookOrder) msg.getObject();
         Subscriber subscriber = SubscriberControl.getSubscriberById(bookOrder.getSubscriberId());
@@ -97,6 +106,12 @@ public class ClientMessageHandler {
         }
     }
 
+    /**
+     * Function to handle output from book control after lending
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message lendBook(Message msg, ConnectionToClient client) {
         BookCopy bookCopy = (BookCopy)msg.getObject();
 
@@ -139,6 +154,9 @@ public class ClientMessageHandler {
 
     /**
      * Handles getting book by id
+     * @param msg
+     * @param client
+     * @return
      */
     public static Message getBookById(Message msg, ConnectionToClient client) {
 
@@ -156,6 +174,12 @@ public class ClientMessageHandler {
         }
     }
 
+    /**
+     * Handles getting subscriber by id
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message getSubscriberById(Message msg, ConnectionToClient client) {
         Integer subscriberId = null;
         try {
@@ -172,6 +196,9 @@ public class ClientMessageHandler {
 
     /**
      * Handles logging subscribers or librarians
+     * @param msg
+     * @param client
+     * @return
      */
     public static Message login(Message msg, ConnectionToClient client) {
         String[] args = (String[]) msg.getObject();
@@ -194,6 +221,12 @@ public class ClientMessageHandler {
         return msg.reply("Success");
     }
 
+    /**
+     * Handles output message from login control
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message RegisterSubscriber(Message msg, ConnectionToClient client) {
         String[] args = (String[]) msg.getObject();
         User user = LoginControl.register(args[0], args[1], args[2], args[3], args[4]);
@@ -204,46 +237,99 @@ public class ClientMessageHandler {
         }
     }
 
+    /**
+     * Handles borrow time reports output from book control
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message getBorrowTimesReport(Message msg, ConnectionToClient client) {
         Object[] params = (Object[]) msg.getObject();
         return msg.reply(BookControl.getBorrowTimesReport((LocalDate) params[0], (Integer)params[1]));
     }
 
+    /**
+     * Handles subscribe status report output from subscriber control
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message getSubscriberStatusReport(Message msg, ConnectionToClient client) {
         Object[] params = (Object[]) msg.getObject();
         return msg.reply(SubscriberControl.getSubscriberStatusReport((LocalDate)params[0], (Integer)params[1]));
     }
 
+    /**
+     * Gets report dates from subscriber control
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message getReportDates(Message msg, ConnectionToClient client) {
         return msg.reply(SubscriberControl.getReportDates());
     }
 
-    //handles retrieving the borrowed books for a specific subscriber
+    /**
+     * handles retrieving the borrowed books for a specific subscriber
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message retrieveBorrowedBooks(Message msg, ConnectionToClient client) {
         List<BookCopy> borrowedBooks = BookControl.retrieveBorrowedBooks((int) msg.getObject());
         return msg.reply(borrowedBooks);
     }
 
+    /**
+     * Gets books to display depending on search and search type.
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message searchBooks(Message msg, ConnectionToClient client) {
         String[] searchInfo = (String[]) msg.getObject();
         return msg.reply(BookControl.searchBooks(searchInfo[0], searchInfo[1]));
     }
 
+    /**
+     * Calls the book control to return the book
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message returnBook(Message msg, ConnectionToClient client) {
         int bookCopyId = (Integer) msg.getObject();
         BookControl.returnBook(bookCopyId);
         return msg.reply("Success");
     }
 
+    /**
+     * Gets subscriber/s from subscriber control
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message searchSubscribers(Message msg, ConnectionToClient client) {
         String[] searchInfo = (String[]) msg.getObject();
         return msg.reply(SubscriberControl.searchSubscribers(searchInfo[0], searchInfo[1]));
     }
 
+    /**
+     * Marks copy as lost
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message markBookCopyAsLost(Message msg, ConnectionToClient client) {
         return msg.reply(BookControl.markBookCopyAsLost((Integer) msg.getObject()));
     }
 
+    /**
+     * Extends the borrow time of a book
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message extendBorrowTime(Message msg, ConnectionToClient client) {
         if (BookControl.extendBorrowTime((BookCopy)msg.getObject(), msg.getUser())) {
             return msg.successReply();
@@ -252,6 +338,12 @@ public class ClientMessageHandler {
         }
     }
 
+    /**
+     * Updates notifications for librarian
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message updateNotificationStatus(Message msg, ConnectionToClient client) {
         @SuppressWarnings("unchecked")
         boolean successfullyUpdated = NotificationControl.updateNotificationStatus((List<Notification>) msg.getObject());
@@ -261,6 +353,12 @@ public class ClientMessageHandler {
         return msg.reply(successfullyUpdated);
     }
 
+    /**
+     * Retrieves notification from notification control
+     * @param msg
+     * @param client
+     * @return
+     */
     public static Message retrieveNotifications(Message msg, ConnectionToClient client) {
         List<Notification> notifications = NotificationControl.retrieveNotifications();
         if (notifications == null) {

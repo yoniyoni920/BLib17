@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Saves the notification information to display
+ */
 public class Notification implements Serializable{
 	private int id;
 	private int subscriberId;

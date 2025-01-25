@@ -5,9 +5,9 @@ import base.Action;
 import java.io.Serializable;
 
 public class Message implements Serializable{
-	/*
-	 * The idea Behind msg is that the first thing we need to know 
-	 * is :what do we want to do? aka. why are we sending the msg 
+	/**
+	 * The idea Behind msg is that the first thing we need to know
+	 * is :what do we want to do? aka. why are we sending the msg
 	 * to the server?
 	 * so there needs to be a String that will tell us that
 	 * There should also be one so that the server will be able to send a general
@@ -21,34 +21,40 @@ public class Message implements Serializable{
 	 * but 'error' allows to code to be more easily understood
 	 * and lastly we will need to add id for Serializable implementation:
 	 * needed in order to allow messages to be sent correctly between server and client
-	 * and the needed Entities for each corresponding action 
+	 * and the needed Entities for each corresponding action
 	 */
 	
 	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -129263669966691571L;
-	/* ------- Basic information -----*/
+	/** ------- Basic information -----*/
 	private static int idCounter; // For counting IDs automatically
 	private int id;
 	private Action action;
-	/* ------- Entities Sent-----*/
+	/** ------- Entities Sent-----*/
 	private Object object;
-	
-	// Whether this message is an error. object will be an object containing info about the error
+
+	/**
+	 * Whether this message is an error. object will be an object containing info about the error
+	 */
 	private boolean isError = false;
 
-	// Whether this message is a fatal error. Fatal errors simply show a dialog that something went really wrong
+	/**
+	 * Whether this message is a fatal error. Fatal errors simply show a dialog that something went really wrong
+	 */
 	private boolean isFatalError = false;
-	
-	// Handles awaiting the message
+
+	/**
+	 * Handles awaiting the message
+	 */
 	private boolean isAwaiting = false;
 
-	// The user that sends the message
+	/**
+	 * The user that sends the message
+	 */
 	private User user;
 
-	/* ------- Logic -------*/
+	/** ------- Logic -------*/
 	public Message() {
 		id = idCounter++;
 	}
@@ -105,7 +111,7 @@ public class Message implements Serializable{
 		return this;
 	}
 
-	/* ------- Getters & Setters -----*/
+	/** ------- Getters & Setters -----*/
 	public int getId() {
 		return id;
 	}

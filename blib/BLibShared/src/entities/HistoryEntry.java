@@ -3,6 +3,9 @@ package entities;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ *A class to hold each entry of the subscriber's history
+ */
 public class HistoryEntry implements Serializable {
 	private int id;
 	private HistoryAction action;

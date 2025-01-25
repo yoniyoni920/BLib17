@@ -2,6 +2,10 @@ package entities;
 
 import java.io.Serializable;
 
+/**
+ * This class represens the Book entity
+ * contains all the book's information
+ */
 public class Book implements Serializable {
 	private int id;
 	private String title;

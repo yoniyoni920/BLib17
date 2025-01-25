@@ -30,7 +30,7 @@ public class BookControl {
         List<Book> books = new ArrayList<>();
         if (searchType.equals("title") || searchType.equals("genre") || searchType.equals("description")) {
             String query = String.format("SELECT b.*," +
-                "COUNT(bc.id) AS total_copies, " +
+                "COUNT(CASE WHEN bc.is_lost = 0 THEN 1 END) AS total_copies, " +
                 "COUNT(CASE WHEN bc.borrow_subscriber_id IS NOT NULL THEN 1 END) AS borrowed_copies, " +
                 "MIN(bc.return_date) AS min_return_date, " +
                 "COUNT(bo.id) AS orders " +
@@ -116,7 +116,7 @@ public class BookControl {
         }
 
         // If one copy is free then we can lend it (otherwise it would've been occupied by an orderer)
-        String query = "SELECT id FROM book_copy WHERE borrow_subscriber_id IS NULL AND book_id = ?";
+        String query = "SELECT id FROM book_copy WHERE borrow_subscriber_id IS NULL AND is_lost = 0 AND book_id = ?";
         try (PreparedStatement stt = DBControl.prepareStatement(query)) {
             stt.setInt(1, bookId);
             ResultSet rs = stt.executeQuery();
@@ -479,7 +479,7 @@ public class BookControl {
             if (rs.next()) {
                 String upQuery = "UPDATE book_copy " +
                         "SET is_lost = 1, is_late = 0, borrow_subscriber_id = null, " +
-                        "order_subscriber_id = null, lend_date = NULL, return_date = NULL " +
+                        "lend_date = NULL, return_date = NULL " +
                         "WHERE id = ?";
 
                 int subscriberId = rs.getInt("borrow_subscriber_id");

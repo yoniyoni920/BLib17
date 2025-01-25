@@ -175,7 +175,7 @@ public class SubscriberCardScreen extends AbstractScreen {
 		alert.setTitle("Mark Book as Lost");
 		alert.setHeaderText("Are you sure?");
 		alert.setContentText("Marking the book copy as lost does the following extra things:\n" +
-			"1. Removes the book from the subscriber and cancels an order, if exists.\n" +
+			"1. Removes the book from the subscriber.\n" +
 			"2. Freezes the subscriber's account for 30 days.\n" +
 			"3. Logs the offense in their history."
 		);

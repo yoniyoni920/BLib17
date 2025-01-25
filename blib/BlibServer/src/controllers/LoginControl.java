@@ -37,12 +37,13 @@ public class LoginControl {
 
 			if (role.equals("subscriber")) {
 				// Get subscriber-specific values
+				int subcriberId = rs.getInt("subscriber_id");
 				String phoneNumber = rs.getString("phone_number");
 				String email = rs.getString("email");
 				Date date = rs.getDate("frozen_until");
 
 				Subscriber subscriber = new Subscriber(
-					rs.getInt("subscriber_id"),
+						subcriberId,
 					id,
 					name,
 					lastName,
@@ -53,12 +54,12 @@ public class LoginControl {
 					date != null ? date.toLocalDate() : null
 				);
 
-				subscriber.setHistory(SubscriberControl.getSubscriberHistory(id));
-				subscriber.setBorrowedBooks(BookControl.retrieveBorrowedBooks(id));
+				subscriber.setHistory(SubscriberControl.getSubscriberHistory(subcriberId));
+				subscriber.setBorrowedBooks(BookControl.retrieveBorrowedBooks(subcriberId));
 
 				SubscriberControl.logIntoHistory(new HistoryEntry(
-					rs.getInt("subscriber_id"),
-						HistoryAction.LOGIN_SUBSCRIBER
+					subcriberId,
+					HistoryAction.LOGIN_SUBSCRIBER
 				));
 
 				return subscriber;

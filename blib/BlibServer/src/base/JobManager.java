@@ -40,10 +40,12 @@ public class JobManager {
      * This method runs all jobs. It's called by a fixed-rate timer in the constructor
      */
     public void runJobs() throws SQLException {
+        System.out.println("Running jobs...");
         generateReports();
         checkForLateBorrows();
         sendBookReturnReminders();
         cancelOrders();
+        System.out.println("Finished Running jobs...");
     }
 
     /**
@@ -69,6 +71,7 @@ public class JobManager {
         LocalDateTime now = LocalDateTime.now();
 
         if (date == null || ChronoUnit.DAYS.between(date, now) >= 1) {
+            System.out.println("Running job: send-reminders");
             final String messageTemplate ="Hi %s,<br>" +
                     "We wanted to remind you that you have to return the book '%s' to the library by tomorrow.<br>" +
                     "BLib Library.";
@@ -79,9 +82,9 @@ public class JobManager {
                         String.format(messageTemplate, record.get("name"), record.get("title")), "Blib Reminders");
 
                 CommunicationManager.sendSMS((String)record.get("phone_number"), String.format(messageTemplate.replace("<br>", "\n"), record.get("name"), record.get("title")));
-
-                markJobDone("send-reminders");
             }
+
+            markJobDone("send-reminders");
         }
     }
 
@@ -94,6 +97,7 @@ public class JobManager {
         LocalDate lastMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
 
         if (date == null || ChronoUnit.DAYS.between(date, now) > 31 || !date.getMonth().equals(now.getMonth())) {
+            System.out.println("Running job: generate-reports");
             // The moment that the next month enters, the last month "ends".
             // We want to also ensure that the report is generated in case the app isn't on by the 1st of the month.
             generateSubscriberStatusReport(lastMonth);
@@ -192,6 +196,7 @@ public class JobManager {
         LocalDateTime now = LocalDateTime.now();
 
         if (date == null || ChronoUnit.HOURS.between(date, now) >= 1) {
+            System.out.println("Running job: check-borrows");
             // Punish week+ late returns
             String query = "SELECT book_copy.borrow_subscriber_id FROM book_copy " +
                     "LEFT JOIN subscriber AS s ON book_copy.borrow_subscriber_id = s.id " +

@@ -7,23 +7,28 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <VBox spacing="16.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ServerGUI">
    <children>
       <AnchorPane styleClass="underline">
          <children>
-            <Label fx:id="titleLabel" prefHeight="32.0" prefWidth="740.0" styleClass="title-3" text="BLib Server Console" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-            <Button layoutX="704.0" layoutY="9.0" mnemonicParsing="false" AnchorPane.rightAnchor="0.0" onAction="#openSettings">
-               <graphic>
-                  <ImageView fitHeight="22.0" fitWidth="22.0" onMouseClicked="#openSettings" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@/resources/settings-gear.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
+            <Label fx:id="titleLabel" prefHeight="32.0" prefWidth="740.0" styleClass="title-3" text="BLib Server Console" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <HBox layoutX="630.0" layoutY="9.0" spacing="4.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#runJobs" prefHeight="38.0" text="Run Jobs" />
+                  <Button mnemonicParsing="false" onAction="#openSettings">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" onMouseClicked="#openSettings" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/resources/settings-gear.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
       <Label text="Connections" />

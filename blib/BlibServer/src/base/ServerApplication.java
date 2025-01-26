@@ -23,8 +23,7 @@ public class ServerApplication extends Application {
 	private ServerGUI serverGUI;
 	private ScreenManager screenManager;
 	private LibraryServer libraryServer;
-
-	private String argPort;
+	private JobManager jobManager;
 
 	Timer timer;
 	 /**
@@ -80,7 +79,7 @@ public class ServerApplication extends Application {
 		 // Open the server console GUI
 		serverGUI = (ServerGUI)screenManager.openScreen("ServerGUI", "BLib Server Console"); // Get controller for communicating with it later
 		 // Start the job manager for background tasks
-		new JobManager(); // Start the job manager
+		jobManager = new JobManager(); // Start the job manager
 
 		timer = new Timer();
 		// Check every 2 seconds for connections. May be useful for the reports generation ^^
@@ -112,4 +111,8 @@ public class ServerApplication extends Application {
        System.exit(0);
        timer.cancel();     
 	}
+
+    public JobManager getJobManager() {
+        return jobManager;
+    }
 }

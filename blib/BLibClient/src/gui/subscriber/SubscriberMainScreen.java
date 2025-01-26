@@ -3,7 +3,6 @@ package gui.subscriber;
 import java.io.IOException;
 
 import base.Action;
-import com.sun.security.ntlm.Client;
 import controllers.Auth;
 import entities.BookCopy;
 import entities.Subscriber;

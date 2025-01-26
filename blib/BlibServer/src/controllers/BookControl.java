@@ -634,5 +634,12 @@ public class BookControl {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        // Delete them all in one swoop
+        try (Statement st = DBControl.createStatement()) {
+            st.executeUpdate("DELETE FROM book_order WHERE ordered_until < NOW()");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

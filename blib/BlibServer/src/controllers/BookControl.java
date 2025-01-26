@@ -612,13 +612,13 @@ public class BookControl {
         try (Statement st = DBControl.createStatement()) {
             ResultSet rs = st.executeQuery("SELECT *, book_copy.id AS book_copy_id FROM book_order " +
                     "LEFT JOIN book_copy ON book_copy.book_id = book_order.book_id AND book_copy.borrow_subscriber_id = book_order.subscriber_id " +
-                    "WHERE ordered_until + 2 < NOW()");
+                    "WHERE ordered_until < NOW()");
 
             while (rs.next()) {
-                String deleteQuery = "UPDATE book_copy SET is_waiting = 0, borrow_subscriber_id = NULL " +
+                String updateQuery = "UPDATE book_copy SET is_waiting = 0, borrow_subscriber_id = NULL " +
                         "WHERE borrow_subscriber_id = ? AND book_id = ? LIMIT 1";
 
-                try (PreparedStatement st2 = DBControl.prepareStatement(deleteQuery)) {
+                try (PreparedStatement st2 = DBControl.prepareStatement(updateQuery)) {
                     int bookId = rs.getInt("book_id");
                     int bookCopyId = rs.getInt("book_copy_id");
 
@@ -631,13 +631,6 @@ public class BookControl {
                     }
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Delete them all in one swoop
-        try (Statement st = DBControl.createStatement()) {
-            st.executeUpdate("DELETE FROM book_order WHERE ordered_until + 2 < NOW()");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

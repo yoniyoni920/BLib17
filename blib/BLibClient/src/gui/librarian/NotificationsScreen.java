@@ -145,10 +145,10 @@ public class NotificationsScreen extends AbstractScreen {
                     setText(null);
                 } else {
                     Notification notification = (Notification) getTableRow().getItem();
-                    Button subscriberCardBtn = new Button(notification.getSubscriberName() + "(" + notification.getSubscriberId() + ")");
+                    Button subscriberCardBtn = new Button(notification.getSubscriberName() + "(" + notification.getUserId() + ")");
                     subscriberCardBtn.setOnAction(event -> {
                         try {
-                            openSubscriberCardScreen(notification.getSubscriberId());
+                            openSubscriberCardScreen(notification.getUserId());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -172,11 +172,11 @@ public class NotificationsScreen extends AbstractScreen {
      * action. The data is then passed to the SubscriberCardScreen.
      * </p>
      * 
-     * @param subscriberId The ID of the subscriber to view.
+     * @param userId The user ID of the subscriber to view.
      * @throws IOException If an error occurs while opening the screen.
      */
-    public void openSubscriberCardScreen(int subscriberId) throws IOException {
-        Subscriber subscriber = (Subscriber) ClientUtils.sendMessage(Action.GET_SUBSCRIBER_BY_ID, subscriberId).getObject();
+    public void openSubscriberCardScreen(int userId) throws IOException {
+        Subscriber subscriber = (Subscriber) ClientUtils.sendMessage(Action.GET_SUBSCRIBER_BY_ID, userId).getObject();
         screenManager.openScreen("SubscriberCardScreen", "Subscriber Card", subscriber, false);
     }
 

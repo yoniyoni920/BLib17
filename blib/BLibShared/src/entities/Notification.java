@@ -9,16 +9,18 @@ import java.time.LocalDateTime;
 public class Notification implements Serializable{
 	private int id;
 	private int subscriberId;
+	private int userId;
 	private String subscriberName;
 	private String message;
 	private LocalDateTime date;
 	private boolean isNew;
 	
-	public Notification(int subscriberId, String message, LocalDateTime date, boolean isNew) {
+	public Notification(int subscriberId, int userId, String message, LocalDateTime date, boolean isNew) {
 		this.subscriberId = subscriberId;
+		this.userId = userId;
 		this.message = message;
-		this.date = date ;
-		this.isNew = isNew ;
+		this.date = date;
+		this.isNew = isNew;
 	}
 
 	public Notification(int subscriberId, String message) {
@@ -39,7 +41,15 @@ public class Notification implements Serializable{
 	public int getSubscriberId() {
 		return subscriberId ;
 	}
-	
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
 	public String getMessage() {
 		return message;
 	}

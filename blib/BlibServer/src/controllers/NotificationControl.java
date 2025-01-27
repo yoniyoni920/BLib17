@@ -31,6 +31,7 @@ public class NotificationControl {
             while (rs.next()) {
                 Notification notification = new Notification(
                     rs.getInt("subscriber_id"),
+                    rs.getInt("user_id"),
                     rs.getString("message"),
                     rs.getTimestamp("date").toLocalDateTime(),
                     rs.getBoolean("is_new")

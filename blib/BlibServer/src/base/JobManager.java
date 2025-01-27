@@ -80,7 +80,7 @@ public class JobManager {
             ArrayList<Map<String, Object>> records = BookControl.getBooksForReturnReminder();
             for (Map<String, Object> record : records) {
                 CommunicationManager.sendMail((String) record.get("email"), String.format("Returning %s", record.get("title")),
-                        String.format(messageTemplate, record.get("name"), record.get("title")), "Blib Reminders");
+                        String.format(messageTemplate, record.get("name"), record.get("title")), "BLib Reminders");
 
                 CommunicationManager.sendSMS((String)record.get("phone_number"), String.format(messageTemplate.replace("<br>", "\n"), record.get("name"), record.get("title")));
             }

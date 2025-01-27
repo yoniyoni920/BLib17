@@ -33,7 +33,7 @@ public class CommunicationManager {
 			DataOutputStream wr = new DataOutputStream(http.getOutputStream());
 			OutputStreamWriter writer = new OutputStreamWriter(wr, StandardCharsets.UTF_8);
 			writer.write("{" +
-					"\"from\":{\"email\":\"Blib@luffyd.xyz\",\"name\":\"" + senderName.replace("\"", "'") + "\"}," +
+					"\"from\":{\"email\":\"blib@luffyd.xyz\",\"name\":\"" + senderName.replace("\"", "'") + "\"}," +
 					"\"to\":[{\"email\":\"" + to.replace("\"", "'") + "\"}]," +
 					"\"subject\":\"" + subject.replace("\"", "'") + "\"," +
 					"\"html\":\"" + body.replace("\"", "'") + "\"" +

@@ -5,13 +5,11 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-import base.JobManager;
 import base.ServerApplication;
 import controllers.CommunicationManager;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -122,11 +120,14 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 	 * Forcibly runs jobs without having to wait an hour
 	 */
 	public void runJobs() {
-        try {
-            ServerApplication.getInstance().getJobManager().runJobs(true);
-        } catch (SQLException e) {
-			System.out.println("Couldn't run!");
-        }
+		Thread t = new Thread(() -> {
+			try {
+				ServerApplication.getInstance().getJobManager().runJobs(true);
+			} catch (SQLException e) {
+				System.out.println("Couldn't run!");
+			}
+		});
+		t.start();
     }
 
     /**

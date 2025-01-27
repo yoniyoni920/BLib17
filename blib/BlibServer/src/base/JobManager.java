@@ -28,7 +28,7 @@ public class JobManager {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 try {
-                    runJobs();
+                    runJobs(false);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -39,12 +39,12 @@ public class JobManager {
     /**
      * This method runs all jobs. It's called by a fixed-rate timer in the constructor
      */
-    public void runJobs() throws SQLException {
+    public void runJobs(boolean forced) throws SQLException {
         System.out.println("Running jobs...");
-        generateReports();
-        checkForLateBorrows();
-        sendBookReturnReminders();
-        cancelOrders();
+        generateReports(forced);
+        checkForLateBorrows(forced);
+        sendBookReturnReminders(forced);
+        cancelOrders(forced);
         System.out.println("Finished Running jobs...");
     }
 
@@ -52,11 +52,12 @@ public class JobManager {
      * This method cancels the order for the book
      * @throws SQLException
      */
-    public void cancelOrders() throws SQLException {
+    public void cancelOrders(boolean forced) throws SQLException {
         LocalDateTime date = getJobDate("cancel-orders");
         LocalDateTime now = LocalDateTime.now();
 
-        if (date == null || ChronoUnit.HOURS.between(date, now) >= 1) {
+        if (forced || date == null || ChronoUnit.HOURS.between(date, now) >= 1) {
+            System.out.println("Running job: cancel-orders");
             BookControl.cancelLateOrders();
             markJobDone("cancel-orders");
         }
@@ -66,11 +67,11 @@ public class JobManager {
      * Sends reminder to return the book
      * @throws SQLException
      */
-    public void sendBookReturnReminders() throws SQLException {
+    public void sendBookReturnReminders(boolean forced) throws SQLException {
         LocalDateTime date = getJobDate("send-reminders");
         LocalDateTime now = LocalDateTime.now();
 
-        if (date == null || ChronoUnit.DAYS.between(date, now) >= 1) {
+        if (forced || date == null || ChronoUnit.DAYS.between(date, now) >= 1) {
             System.out.println("Running job: send-reminders");
             final String messageTemplate ="Hi %s,<br>" +
                     "We wanted to remind you that you have to return the book '%s' to the library by tomorrow.<br>" +
@@ -91,12 +92,12 @@ public class JobManager {
     /**
      * Tries and generates a report at the end of each month (or start of each month)
      */
-    public void generateReports() throws SQLException {
+    public void generateReports(boolean forced) throws SQLException {
         LocalDateTime date = getJobDate("generate-reports");
         LocalDateTime now = LocalDateTime.now();
         LocalDate lastMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
 
-        if (date == null || ChronoUnit.DAYS.between(date, now) > 31 || !date.getMonth().equals(now.getMonth())) {
+        if (forced || date == null || ChronoUnit.DAYS.between(date, now) > 31 || !date.getMonth().equals(now.getMonth())) {
             System.out.println("Running job: generate-reports");
             // The moment that the next month enters, the last month "ends".
             // We want to also ensure that the report is generated in case the app isn't on by the 1st of the month.
@@ -191,11 +192,11 @@ public class JobManager {
      * Checks for any late return. If it detects a week late return it punishes the offending subscriber
      * by freezing their account for a month (30 days)
      */
-    public void checkForLateBorrows() throws SQLException {
+    public void checkForLateBorrows(boolean forced) throws SQLException {
         LocalDateTime date = getJobDate("check-borrows");
         LocalDateTime now = LocalDateTime.now();
 
-        if (date == null || ChronoUnit.HOURS.between(date, now) >= 1) {
+        if (forced || date == null || ChronoUnit.HOURS.between(date, now) >= 1) {
             System.out.println("Running job: check-borrows");
             // Punish week+ late returns
             String query = "SELECT book_copy.borrow_subscriber_id FROM book_copy " +

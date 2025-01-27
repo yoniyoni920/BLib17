@@ -123,7 +123,7 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 	 */
 	public void runJobs() {
         try {
-            ServerApplication.getInstance().getJobManager().runJobs();
+            ServerApplication.getInstance().getJobManager().runJobs(true);
         } catch (SQLException e) {
 			System.out.println("Couldn't run!");
         }

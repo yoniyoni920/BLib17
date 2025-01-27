@@ -1,7 +1,9 @@
 package gui.librarian;
 
+import entities.User;
 import gui.AbstractScreen;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -149,6 +151,17 @@ public class RegisterViaLibrerianScreen extends AbstractScreen {
 			
 			if(!msg.isError()) {
 				FnameErrorLabel.setVisible(false);
+
+				User newUser = (User)msg.getObject();
+
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setAlertType(Alert.AlertType.INFORMATION);
+				alert.setHeaderText("Registered Successfully!");
+				alert.setContentText(String.format("Registered new subscriber with name: %s and ID: %d",
+						newUser.getName(),
+						newUser.getId()));
+
+				alert.showAndWait();
 				closeScreen(null);
 			} else {
 				FnameErrorLabel.setText(msg.getObject() + "");

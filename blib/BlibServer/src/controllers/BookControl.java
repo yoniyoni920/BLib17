@@ -132,7 +132,7 @@ public class BookControl {
      * @return LocalDate representing the date book with be available or null if not orderable.
      */
     public static LocalDateTime checkBookOrderable(int bookId) {
-        String query = "SELECT COUNT(DISTINCT bc.id) AS copies_count, COUNT(DISTINCT bo.id) AS order_count " +
+        String query = "SELECT COUNT(CASE WHEN bc.is_lost = 0 THEN 1 END) AS copies_count, COUNT(DISTINCT bo.id) AS order_count " +
                 "FROM book b " +
                 "LEFT JOIN book_copy bc ON bc.book_id = b.id " +
                 "LEFT JOIN book_order bo ON bo.book_id = b.id " +
@@ -147,7 +147,9 @@ public class BookControl {
                 int copiesCount = rs.getInt("copies_count");
                 if ((copiesCount - orderCount) > 0) {
                     try (PreparedStatement stt2 = DBControl.prepareStatement(
-                            "SELECT book_copy.return_date FROM book_copy WHERE book_id = ? ORDER BY return_date LIMIT 1 OFFSET ?")) {
+                            "SELECT book_copy.return_date FROM book_copy WHERE " +
+                                    "book_id = ? AND is_lost = 0 " +
+                                    "ORDER BY return_date LIMIT 1 OFFSET ?")) {
                         stt2.setInt(1, bookId);
                         stt2.setInt(2, orderCount);
                         ResultSet rs2 = stt2.executeQuery();

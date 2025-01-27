@@ -115,7 +115,6 @@ public class SubscriberCardScreen extends AbstractScreen {
 					try {
 						onChangeDurationBookPressed(copies.get(getIndex()));
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				});

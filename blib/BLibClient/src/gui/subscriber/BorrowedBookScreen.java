@@ -127,7 +127,7 @@ public class BorrowedBookScreen extends AbstractScreen {
         if (!msgFromServer.isError()) {
             // Changing data and showing message
             borrowExtend.setVisible(false);
-            returnDate.setText(copy.getReturnDate().toString());
+            returnDate.setText(InterfaceUtils.formatDate(copy.getReturnDate()));
             int daysBetween = (int) ChronoUnit.DAYS.between(LocalDate.now(), copy.getReturnDate());
             daysLeft.setText(String.format("(%d Days Left)", daysBetween));
             alert.setHeaderText("Your Borrow Duration Successfully Extended");

@@ -9,6 +9,7 @@ import controllers.CommunicationManager;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -116,18 +117,61 @@ public class ServerGUI extends AbstractScreen implements Initializable {
 	}
 
 	/**
-	 * Forcibly runs jobs without having to wait an hour
+	 * Forcibly generate reports
 	 */
-	public void runJobs() {
+	public void runGenerateReports() {
 		Thread t = new Thread(() -> {
 			try {
-				ServerApplication.getInstance().getJobManager().runJobs(true);
+				ServerApplication.getInstance().getJobManager().generateReports(true);
 			} catch (SQLException e) {
 				System.out.println("Couldn't run!");
 			}
 		});
 		t.start();
-    }
+	}
+
+	/**
+	 * Forcibly check for late borrows
+	 */
+	public void runCheckLateBorrows() {
+		Thread t = new Thread(() -> {
+			try {
+				ServerApplication.getInstance().getJobManager().checkForLateBorrows(true);
+			} catch (SQLException e) {
+				System.out.println("Couldn't run!");
+			}
+		});
+		t.start();
+	}
+
+	/**
+	 * Forcibly sends book copy return reminders.
+	 * Warning: it is intended to only run once per day therefore it will try to send the message again if ran twice a day.
+	 */
+	public void runSendReminders() {
+		Thread t = new Thread(() -> {
+			try {
+				ServerApplication.getInstance().getJobManager().sendBookReturnReminders(true);
+			} catch (SQLException e) {
+				System.out.println("Couldn't run!");
+			}
+		});
+		t.start();
+	}
+
+	/**
+	 * Forcibly runs the cancel late orders job
+	 */
+	public void runCancelLateOrders() {
+		Thread t = new Thread(() -> {
+			try {
+				ServerApplication.getInstance().getJobManager().cancelOrders(true);
+			} catch (SQLException e) {
+				System.out.println("Couldn't run!");
+			}
+		});
+		t.start();
+	}
 
     /**
      * This function opens a new window with the server settings

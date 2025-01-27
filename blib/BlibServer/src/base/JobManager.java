@@ -19,7 +19,7 @@ import java.util.TimerTask;
 /**
  * This class handles managing jobs.
  * Jobs are tasks that repeat every some time.
- * We store the last time they got activated in the DB to know whether or not they need to be ran again.
+ * We store the last time they got activated in the DB to know whether they need to run again.
  * For example generating a report is done at the end of the month.
  * <br>
  * This idea is a reuse from an existing framework, Laravel.
@@ -30,7 +30,7 @@ public class JobManager {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 try {
-                    runJobs(false);
+                    runJobs();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -41,16 +41,14 @@ public class JobManager {
     /**
      * This method runs all jobs. It's called by a fixed-rate timer in the constructor
      * 
-     * @param forced Whether to run the jobs forcibly
-     * 
      * @throws SQLException
      */
-    public void runJobs(boolean forced) throws SQLException {
+    public void runJobs() throws SQLException {
         System.out.println("Running jobs...");
-        generateReports(forced);
-        checkForLateBorrows(forced);
-        sendBookReturnReminders(forced);
-        cancelOrders(forced);
+        generateReports(false);
+        checkForLateBorrows(false);
+        sendBookReturnReminders(false);
+        cancelOrders(false);
         System.out.println("Finished Running jobs...");
     }
 

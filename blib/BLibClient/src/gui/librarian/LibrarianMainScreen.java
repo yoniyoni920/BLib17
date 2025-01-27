@@ -1,19 +1,16 @@
 package gui.librarian;
 
 import base.Action;
-import entities.Book;
 import entities.Message;
 import entities.Subscriber;
 import entities.User;
 import gui.AbstractScreen;
-import gui.SubscriberCardScreen;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;

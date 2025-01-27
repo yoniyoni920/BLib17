@@ -9,7 +9,6 @@ import entities.Message;
 import entities.Notification;
 import entities.Subscriber;
 import gui.AbstractScreen;
-import gui.SubscriberCardScreen;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

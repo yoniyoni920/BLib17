@@ -5,7 +5,6 @@ import entities.BookCopy;
 import entities.Message;
 import entities.Subscriber;
 import gui.librarian.ExtendBorrowTimeScreen;
-import javafx.animation.FadeTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,12 +14,10 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 import services.ClientUtils;
 import services.InterfaceUtils;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 /**
  * Controller class for the SubscriberCard screen.

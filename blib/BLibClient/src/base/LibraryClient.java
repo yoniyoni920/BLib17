@@ -2,8 +2,6 @@ package base;
 
 import controllers.Auth;
 import entities.Message;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
 import ocsf.client.AbstractClient;
 
 import java.io.*;

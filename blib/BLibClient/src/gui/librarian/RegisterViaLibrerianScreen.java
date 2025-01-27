@@ -1,25 +1,16 @@
 package gui.librarian;
 
-import entities.User;
 import gui.AbstractScreen;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 
-
-
-import java.io.IOException;
-
 import base.Action;
-import base.ClientApplication;
 import entities.Message;
 
 import javafx.scene.control.PasswordField;
 
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import services.ClientUtils;
 
 

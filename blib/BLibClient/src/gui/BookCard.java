@@ -1,7 +1,5 @@
 package gui;
 
-import java.net.URISyntaxException;
-
 import base.Action;
 import controllers.Auth;
 import entities.Book;
@@ -15,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import services.ClientUtils;
 import services.InterfaceUtils;

@@ -3,38 +3,22 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import base.Action;
-import base.ClientApplication;
-import base.LibraryClient;
 import entities.Book;
 import entities.Message;
-import entities.Subscriber;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.InputEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import javafx.util.converter.FormatStringConverter;
 import services.ClientUtils;
 import services.InterfaceUtils;
 

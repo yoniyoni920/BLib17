@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -17,13 +16,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
 import services.ClientUtils;
 
-import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.ResourceBundle;
 
 
 /**

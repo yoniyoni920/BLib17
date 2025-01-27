@@ -136,7 +136,7 @@ public class JobManager {
         }
 
         String query = "SELECT * FROM subscriber_history " +
-                "WHERE action = 'FREEZE_SUBSCRIBER' AND (date >= ? OR end_date <= ?)";
+                "WHERE action = 'FREEZE_SUBSCRIBER' AND (MONTH(date) = MONTH(?) OR MONTH(end_date) = MONTH(?))";
         try (PreparedStatement st = DBControl.prepareStatement(query)) {
             st.setObject(1, date);
             st.setObject(2, date);

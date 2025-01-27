@@ -9,23 +9,28 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="364.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.librarian.LibrarianMainScreen">
    <children>
       <AnchorPane layoutX="64.0" prefHeight="36.0" prefWidth="750.0" styleClass="underline" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button layoutX="629.0" layoutY="7.0" mnemonicParsing="false" onAction="#closeScreen" styleClass="danger" text="Logout" AnchorPane.rightAnchor="3.0" />
-            <Label fx:id="titleLabel" prefHeight="47.0" prefWidth="448.0" styleClass="title-3" text="Welcome, Librarian Name" />
-            <Button fx:id="notificationsButton" layoutX="575.0" layoutY="7.0" mnemonicParsing="false" onAction="#openNotificationsScreen" style="-fx-background-color: transparent;">
-               <graphic>
-                  <ImageView fitHeight="22.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@/resources/librarian_screen/notificationIcon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
+            <Label fx:id="titleLabel" prefHeight="47.0" prefWidth="448.0" styleClass="title-3" text="Welcome, Librarian Name" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <HBox layoutX="580.0" layoutY="6.0" spacing="4.0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
+               <children>
+                  <Button fx:id="notificationsButton" mnemonicParsing="false" onAction="#openNotificationsScreen">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/resources/librarian_screen/notificationIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#closeScreen" prefHeight="38.0" styleClass="danger" text="Logout" />
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
       <TextField fx:id="searchSubscribers" layoutX="32.0" layoutY="116.0" minHeight="-Infinity" onKeyReleased="#searchSubscribers" prefHeight="49.0" prefWidth="700.0" promptText="Search for a Subscriber..." AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0">

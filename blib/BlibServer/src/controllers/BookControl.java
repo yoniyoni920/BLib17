@@ -33,7 +33,7 @@ public class BookControl {
                 "COUNT(CASE WHEN bc.is_lost = 0 THEN 1 END) AS total_copies, " +
                 "COUNT(CASE WHEN bc.borrow_subscriber_id IS NOT NULL THEN 1 END) AS borrowed_copies, " +
                 "MIN(bc.return_date) AS min_return_date, " +
-                "COUNT(bo.id) AS orders " +
+                "COUNT(DISTINCT bo.id) AS orders " +
                 "FROM book b " +
                 "LEFT JOIN book_copy bc ON bc.book_id = b.id " +
                 "LEFT JOIN book_order bo ON bo.book_id = b.id " +
@@ -61,7 +61,6 @@ public class BookControl {
                         Book book = new Book(id, title, authors, genre, description, image, location);
 
                         String locationOrDate = "Shelf " + location;
-                        //TODO: what if a book was returned and is waiting to be picked?
                         if ((totalCopies - borrowedCopies) == 0) {
                             if ((totalCopies - orders) > 0) { // Can we make an order?
                                 LocalDate originalDate = bookResult.getDate("min_return_date").toLocalDate();
@@ -136,7 +135,7 @@ public class BookControl {
      * @return LocalDate representing the date book with be available or null if not orderable.
      */
     public static LocalDateTime checkBookOrderable(int bookId) {
-        String query = "SELECT COUNT(bc.id) AS copies_count, COUNT(bo.id) AS order_count " +
+        String query = "SELECT COUNT(DISTINCT bc.id) AS copies_count, COUNT(DISTINCT bo.id) AS order_count " +
                 "FROM book b " +
                 "LEFT JOIN book_copy bc ON bc.book_id = b.id " +
                 "LEFT JOIN book_order bo ON bo.book_id = b.id " +

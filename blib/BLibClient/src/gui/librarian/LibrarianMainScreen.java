@@ -131,4 +131,8 @@ public class LibrarianMainScreen extends AbstractScreen {
 	public void openNotificationsScreen(ActionEvent event) throws IOException {
 		screenManager.openScreen("librarian/NotificationsScreen", "Notifications");
 	}
+
+    public void openSearch(ActionEvent event) throws IOException {
+		screenManager.openScreen("SearchBooksScreen", "Search Book");
+    }
 }

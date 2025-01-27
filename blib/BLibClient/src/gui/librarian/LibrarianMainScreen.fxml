@@ -19,7 +19,16 @@
             <Label fx:id="titleLabel" prefHeight="47.0" prefWidth="448.0" styleClass="title-3" text="Welcome, Librarian Name" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <HBox layoutX="580.0" layoutY="6.0" spacing="4.0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
                <children>
-                  <Button fx:id="notificationsButton" mnemonicParsing="false" onAction="#openNotificationsScreen">
+                  <Button mnemonicParsing="false" onAction="#openSearch">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/resources/subscriber/search.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="notificationsButton1" mnemonicParsing="false" onAction="#openNotificationsScreen">
                      <graphic>
                         <ImageView fitHeight="22.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                            <image>

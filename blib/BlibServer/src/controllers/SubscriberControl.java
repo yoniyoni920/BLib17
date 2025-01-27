@@ -183,36 +183,34 @@ public class SubscriberControl {
 	 * Returns a list of subscriber status report
 	 *
 	 * @param date The date of the report
-	 * @param subscriberId Filter report by subscriber
+	 * @param userId Filter report by subscriber
 	 * @return List of SubscriberStatusReport
 	 */
-	public static List<SubscriberStatusReport> getSubscriberStatusReport(LocalDate date, Integer subscriberId) {
-		String query = "SELECT subscriber_status_report.*, user.first_name FROM subscriber_status_report " +
+	public static List<SubscriberStatusReport> getSubscriberStatusReport(LocalDate date, Integer userId) {
+		String query = "SELECT subscriber_status_report.*, user.first_name, subscriber.user_id AS user_id FROM subscriber_status_report " +
 				"JOIN subscriber ON subscriber.id = subscriber_status_report.subscriber_id " +
 				"JOIN user ON subscriber.user_id = user.id " +
 				"WHERE report_date = ? ";
 
-		if (subscriberId != null) {
-			query += " AND subscriber_id = ?";
+		if (userId != null) {
+			query += " AND user_id = ?";
 		}
 
 		try (PreparedStatement st = DBControl.prepareStatement(query)) {
 			st.setObject(1, date);
-			if (subscriberId != null) {
-				st.setInt(2, subscriberId);
+			if (userId != null) {
+				st.setInt(2, userId);
 			}
 			ResultSet rs = st.executeQuery();
 			List<SubscriberStatusReport> list = new ArrayList<>();
 			while (rs.next()) {
 				list.add(new SubscriberStatusReport(
 					rs.getString("first_name"),
-					rs.getInt("subscriber_id"),
+					rs.getInt("user_id"),
 					rs.getDate("freeze_date").toLocalDate(),
 					rs.getDate("freeze_end_date").toLocalDate()
 				));
 			}
-
-			System.out.println(list.size());
 
 			return list;
 		}

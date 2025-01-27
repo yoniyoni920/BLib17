@@ -7,14 +7,14 @@ import java.time.LocalDate;
  * Saves the information about the status report
  */
 public class SubscriberStatusReport implements Serializable {
-    private int subscriberId;
+    private int userId;
     private String name;
     private LocalDate date;
     private LocalDate endDate;
 
-    public SubscriberStatusReport(String name, int subscriberId, LocalDate date, LocalDate endDate) {
+    public SubscriberStatusReport(String name, int userId, LocalDate date, LocalDate endDate) {
         this.name = name;
-        this.subscriberId = subscriberId;
+        this.userId = userId;
         this.date = date;
         this.endDate = endDate;
     }
@@ -27,8 +27,8 @@ public class SubscriberStatusReport implements Serializable {
         this.date = date;
     }
 
-    public int getSubscriberId() {
-        return subscriberId;
+    public int getUserIdId() {
+        return userId;
     }
 
     public LocalDate getEndDate() {

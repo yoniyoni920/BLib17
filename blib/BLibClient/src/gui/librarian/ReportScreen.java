@@ -323,7 +323,7 @@ public class ReportScreen extends AbstractScreen {
                     endD = 32; // Doesn't matter, just so it looks like it passes through the chart
                 }
 
-                String yVal = report.getName() + " (" + report.getSubscriberId() + ")";
+                String yVal = report.getName() + " (" + report.getUserIdId() + ")";
 
                 // Create XY for start->end freeze
                 XYChart.Data<Integer, String> startData = new XYChart.Data<>(startD, yVal);

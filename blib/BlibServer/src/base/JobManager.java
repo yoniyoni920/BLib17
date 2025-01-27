@@ -128,12 +128,22 @@ public class JobManager {
      * @param date The date of the report
      */
     public void generateSubscriberStatusReport(LocalDate date) {
+        // In case it was forced, delete so we don't have duplicates
+        String deleteCurrent = "DELETE FROM subscriber_status_report WHERE report_date = ?";
+        try (PreparedStatement st = DBControl.prepareStatement(deleteCurrent)) {
+            st.setObject(1, date);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         String query = "SELECT * FROM subscriber_history " +
                 "WHERE action = 'FREEZE_SUBSCRIBER' AND (date >= ? OR end_date <= ?)";
         try (PreparedStatement st = DBControl.prepareStatement(query)) {
             st.setObject(1, date);
             st.setObject(2, date);
             ResultSet rs = st.executeQuery();
+
             while (rs.next()) {
                 String query2 = "INSERT INTO subscriber_status_report (subscriber_id, freeze_date, freeze_end_date, report_date) " +
                         "VALUES (?, ?, ?, ?)";
@@ -156,6 +166,15 @@ public class JobManager {
      * @param date The date of the report
      */
     public void generateBorrowTimesReport(LocalDate date) {
+        // In case it was forced, delete so we don't have duplicates
+        String deleteCurrent = "DELETE FROM borrow_report WHERE report_date = ?";
+        try (PreparedStatement st = DBControl.prepareStatement(deleteCurrent)) {
+            st.setObject(1, date);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         String joinLate = "LEFT JOIN subscriber_history AS late ON " +
                 "late.book_copy_id = borrow.book_copy_id AND late.action = 'LATE_RETURN' " +
                 "AND late.date = borrow.end_date AND late.subscriber_id = borrow.subscriber_id ";

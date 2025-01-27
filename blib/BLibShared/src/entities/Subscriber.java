@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Subscribers are the members of the library
+ * A subscriber is a special type of user that can do many actions on the library such as borrowing and ordering.
  */
 public class Subscriber extends User implements Serializable {
 	private String phoneNumber;

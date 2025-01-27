@@ -25,6 +25,9 @@ public class Auth {
         return instance;
     }
 
+    /**
+     * @return The currently authenticated subscriber, if is one.
+     */
     public Subscriber getSubscriber() {
         if (user instanceof Subscriber) {
             return (Subscriber)user;
@@ -32,12 +35,17 @@ public class Auth {
         return null;
     }
 
+    /**
+     * @return The currently authenticated user
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * @param user The currently authenticated user
+     */
     public void setUser(User user) {
         this.user = user;
     }
-
 }

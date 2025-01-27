@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+/**
+ * Handles the decision of what to do with each Message incoming to the server
+ * This decouples that from the LibraryServer, letting it focus on one thing, being a server.
+ */
 public class ClientMessageHandler {
     /* ------- Logic -------*/
     // This codes handles how actions work

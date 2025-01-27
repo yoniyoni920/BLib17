@@ -18,7 +18,7 @@ import services.ClientUtils;
 * This class handles the registration of subscribers by librarians.
 * It provides functionality to validate user input, display error messages
 * for invalid or missing fields, and send registration requests to the server.
-* 
+* <br>
 * The class includes methods to initialize the screen with the librarian's name,
 * handle user registration, and close the registration screen.
 */

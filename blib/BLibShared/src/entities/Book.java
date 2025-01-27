@@ -3,7 +3,7 @@ package entities;
 import java.io.Serializable;
 
 /**
- * This class represens the Book entity
+ * This class represents the Book entity
  * contains all the book's information
  */
 public class Book implements Serializable {
@@ -13,7 +13,7 @@ public class Book implements Serializable {
 	private String genre;
 	private String description;
 	private String image;
-  	private String location;
+	private String location;
 	private String locationOrDate;
 
 	private boolean canOrder = false;
@@ -63,6 +63,10 @@ public class Book implements Serializable {
 
 	public String getLocation() {
 		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public void setLocationOrDate(String locationOrDate) {

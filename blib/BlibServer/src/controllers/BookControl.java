@@ -307,9 +307,9 @@ public class BookControl {
 
     /**
      * Returns borrow times report for a specific book
-     * @param date
-     * @param bookId
-     * @return
+     * @param date The date of the report (Should be of the format 2025-02-01)
+     * @param bookId Optional ID for filtering based on a book
+     * @return A list of borrow reports
      */
     public static List<BorrowReport> getBorrowTimesReport(LocalDate date, Integer bookId) {
         String query;
@@ -360,8 +360,8 @@ public class BookControl {
 
     /**
      * Sends the subscriber a message to their email informing them that the order has arrived
-     * @param subscriberId
-     * @param bookId
+     * @param subscriberId The subscriber that was waiting for the order
+     * @param bookId The book that was ordered and is now available
      */
     private static void updateSubOrderReady(int subscriberId, int bookId) {
         String query = "SELECT email, first_name, last_name, title FROM subscriber " +
@@ -395,8 +395,8 @@ public class BookControl {
     /**
      * Gives the book copy to the subscriber that ordered it. It puts the book copy on waiting state.
      * Waiting state means that they subscriber owns the copy, but not fully yet. They need to take it.
-     * @param bookId
-     * @param bookCopyId
+     * @param bookId The ID of the book that was returned
+     * @param bookCopyId The ID of the book copy that was returned
      * @throws SQLException
      */
     private static void onReturnHandleOrder(int bookId, int bookCopyId) throws SQLException {
@@ -426,7 +426,7 @@ public class BookControl {
 
     /**
      * Returns the book, sets the dates and borrower's id as null
-     * @param bookCopyId
+     * @param bookCopyId The ID of the book to return
      */
     public static void returnBook(int bookCopyId) {
         try (PreparedStatement ps = DBControl.prepareStatement("SELECT * FROM book_copy WHERE id = ?")) {
@@ -483,7 +483,7 @@ public class BookControl {
     /**
      * Marks a book as lost. This also automatically freezes the subscriber and makes a history point about that
      *
-     * @param bookCopyId
+     * @param bookCopyId The ID of the copy to mark as lost
      */
     public static boolean markBookCopyAsLost(int bookCopyId) {
         String query = "SELECT * FROM book_copy WHERE id = ? AND is_lost = 0 LIMIT 1";
@@ -517,7 +517,8 @@ public class BookControl {
 
     /**
      * Extends the borrowing duration of the book
-     * @param copy
+     * @param copy The copy to extend
+     * @param userRequesting The user that is requesting this extension (taken from the message usually).
      * @return whether the extension has succeeded
      */
     public static boolean extendBorrowTime(BookCopy copy, User userRequesting) {

@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 
 /**
  * AbstractScreen is the base class for ScrenManager. 
- * help prevent code DRY-(Don't Repeat Yourself)
+ * help prevent code DRY (Don't Repeat Yourself)
  */
 public abstract class AbstractScreen implements Initializable {
 	protected Scene scene;
@@ -63,7 +63,7 @@ public abstract class AbstractScreen implements Initializable {
 	}
 
 	/**
-	 * Animation
+	 * Plays an animation for the title when entering the screen
 	 */
 	protected void fadeInTitle() {
 		if (titleLabel == null) {

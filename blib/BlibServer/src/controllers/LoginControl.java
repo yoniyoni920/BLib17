@@ -4,7 +4,7 @@ import java.sql.*;
 
 import entities.*;
 
-/*
+/**
  * The class handles login logic for users and subscribers.
  * It verifies credentials and returns the appropriate user type based on the role.
  */

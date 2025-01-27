@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 public class ClientUtils {
     /**
      * Sends a message object to the server
-     * @param message
+     * @param message The message to send
      * @return Response message from server
      */
     public static Message sendMessage(Message message) {
@@ -23,7 +23,7 @@ public class ClientUtils {
 
     /**
      * Sends a message without an object and makes a Message object for you
-     * @param action
+     * @param action The action of the message
      * @return Response message from server
      */
     public static Message sendMessage(Action action) {
@@ -32,8 +32,8 @@ public class ClientUtils {
 
     /**
      * Sends a message and makes the Message object for you
-     * @param action
-     * @param object
+     * @param action The action of the message
+     * @param object The object to send in the message
      * @return Response message from server
      */
     public static Message sendMessage(Action action, Object object) {
@@ -46,8 +46,8 @@ public class ClientUtils {
      * <br>
      * A good example of this being utilized is in the search books pages, we want the user to open
      * the screen and instantly see the books instead of seeing "no books found".
-     * @param msg
-     * @param then
+     * @param msg The message to send
+     * @param then The function to run on response
      */
     public static void sendMessage(Message msg, Consumer<Message> then, boolean async) {
         if (async) {
@@ -60,8 +60,8 @@ public class ClientUtils {
     /**
      * Sends a message in a different thread, this is useful if you call this is many times and don't wish to slowdown
      * the UI thread.
-     * @param msg
-     * @param then
+     * @param msg The message to send
+     * @param then The function to run on response
      */
     public static void sendMessage(Message msg, Consumer<Message> then) {
         Thread t = new Thread(() -> {

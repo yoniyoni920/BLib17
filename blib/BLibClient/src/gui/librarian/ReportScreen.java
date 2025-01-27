@@ -26,7 +26,7 @@ import java.util.List;
  * It provides functionalities to display and interact with various reports such as:
  * - Borrow times for books
  * - Subscriber status over time
- *
+ * <br>
  * The class includes methods to:
  * - Initialize the screen with report dates and charts
  * - Search and select books for detailed borrow time reports

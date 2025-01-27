@@ -19,8 +19,10 @@ import java.util.TimerTask;
 /**
  * This class handles managing jobs.
  * Jobs are tasks that repeat every some time.
- *
+ * We store the last time they got activated in the DB to know whether or not they need to be ran again.
  * For example generating a report is done at the end of the month.
+ * <br>
+ * This idea is a reuse from an existing framework, Laravel.
  */
 public class JobManager {
     public JobManager() {

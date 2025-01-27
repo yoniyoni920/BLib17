@@ -12,8 +12,6 @@ import javafx.stage.Stage;
  * Base code for presenting screen and controlling FXML files.
  * Helps keep the code DRY.
  */
-
-
 public class ScreenManager {
 	private Stack<AbstractScreen> screens;
 	private Stage primaryStage;
@@ -75,6 +73,9 @@ public class ScreenManager {
 		primaryStage.sizeToScene();
 	}
 
+	/**
+	 * @return The current primary stage
+	 */
 	public Stage getPrimaryStage() {
 		return primaryStage;
 	}

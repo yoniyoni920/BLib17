@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
-
 import base.ServerApplication;
 import controllers.CommunicationManager;
 import javafx.collections.ObservableList;

@@ -158,12 +158,18 @@ public class SubscriberCardScreen extends AbstractScreen {
 		alert.showAndWait();
 	}
 
+	/**
+	 * Opens the extend borrow time screen for a book copy
+	 * @param bookCopy
+	 * @throws IOException
+	 */
 	private void onChangeDurationBookPressed(BookCopy bookCopy) throws IOException {
 		ExtendBorrowTimeScreen screen = (ExtendBorrowTimeScreen) screenManager
 				.openScreen("librarian/ExtendBorrowTimeScreen", "Extend Borrow Duration");
 		screen.onStart(bookCopy);
 	}
-	   /**
+
+	/**
      * Handles the action for marking a book as lost.
      * @param bookCopy The book copy to be marked as lost.
      */
@@ -200,6 +206,11 @@ public class SubscriberCardScreen extends AbstractScreen {
 		}
 	}
 
+	/**
+	 * Opens the history screen of the subscriber
+	 * @param event
+	 * @throws IOException
+	 */
     public void openHistory(ActionEvent event) throws IOException {
 		screenManager.openScreen("subscriber/SubscriberHistoryScreen", "Subscriber History", subscriber);
 	}

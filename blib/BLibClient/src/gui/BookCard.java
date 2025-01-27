@@ -37,6 +37,7 @@ public class BookCard {
     private Label genreLabel;
     @FXML
     private Label locationOrDateLabel;
+
     /**
      * Sets the visibility of the extra details (location or date) label.
      * 

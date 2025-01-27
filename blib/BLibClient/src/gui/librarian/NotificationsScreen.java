@@ -25,7 +25,7 @@ import services.InterfaceUtils;
  * the display of notifications for the librarian interface. It displays new
  * and all notifications in separate TableViews, allowing the user to interact
  * with the data and perform actions like viewing subscriber details.
- *
+ * <br>
  * This class extends {@code AbstractScreen} to integrate with the application's
  * screen management system.
  */

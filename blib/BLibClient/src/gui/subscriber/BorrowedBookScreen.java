@@ -23,7 +23,6 @@ import services.InterfaceUtils;
  * This class displays information about a borrowed book, including the book cover, title, borrow date,
  * return date, and whether the book is ordered by another subscriber. It also shows the number of days 
  * left before the book is due for return or indicates if the book is overdue.
- * 
  */
 public class BorrowedBookScreen extends AbstractScreen {
     @FXML private Label borrowDate;

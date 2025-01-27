@@ -6,12 +6,15 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+/**
+ * Handles communication mostly. Currently only Email and SMS.
+ */
 public class CommunicationManager {
 	public static String emailServer = "https://api.mailersend.com/v1/email";
 	public static String smsServer = "http://192.168.1.195:8090/SendSMS";
 
 	/**
-	 *	Function to send email using mailersend api
+	 * Function to send email using mailersend api
 	 * @param to Recipient email
 	 * @param subject Email subject
 	 * @param body Email body
@@ -62,7 +65,7 @@ public class CommunicationManager {
 	}
 
 	/**
-	 * This method sends an sms using a phone as a proxy using the application GSM sms
+	 * This method sends an SMS using a phone as a proxy using the application GSM sms
 	 * app: https://play.google.com/store/apps/details?id=com.gsmmodem&hl=en&pli=1
 	 * app helper: https://github.com/sadiqodho/GSM-Helper-Tool
 	 * user: root

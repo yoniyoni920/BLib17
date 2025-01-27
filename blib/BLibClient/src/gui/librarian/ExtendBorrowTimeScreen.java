@@ -99,7 +99,8 @@ public class ExtendBorrowTimeScreen extends AbstractScreen{
 			}
 		}
 	}
-	   /**
+
+	/**
      * Validates the user input for the number of extension days.
      * Ensures that the input is a valid integer and within the allowed range.
      * Displays error messages for invalid inputs.

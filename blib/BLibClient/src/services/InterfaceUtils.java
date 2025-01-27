@@ -13,6 +13,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * Utility functions useful for some situations on the UI
+ */
 public class InterfaceUtils {
     /**
      * Formats LocalDateTime to something more common in Israel

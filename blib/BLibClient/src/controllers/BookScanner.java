@@ -27,6 +27,7 @@ public class BookScanner {
 		}
 		return instance;
 	}
+
 	 /**
      * Simulates the scanning of a book. as the scanner supposed to be  an outer software were only simulating it.
      * 

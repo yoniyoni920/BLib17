@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This Class is the message handles between server and Client
- * extends AbstractClient class to facilitate server interaction.
+ * This class handles communication between server and client on the client side.
  */
 public class LibraryClient extends AbstractClient
 {

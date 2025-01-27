@@ -3,12 +3,8 @@ package entities;
 import java.io.Serializable;
 
 /**
- * User class has three uses: 
- * 1. if needed to be used for unlogged users 
- * 2. to be sent when user want to loggin
- * 3. to be a parent for librarian and Subscriber 
+ * A class that handles basically all needs of a user (subscriber & librarian)
  */
-
 public class User implements Serializable{
 
 	private static final long serialVersionUID = 1L;

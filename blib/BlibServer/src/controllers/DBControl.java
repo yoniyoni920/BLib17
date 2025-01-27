@@ -14,7 +14,7 @@ public class DBControl {
 
 	/**
 	 * Singleton for multiple connection prevention.
-	 * @return
+	 * @return The current instance of the DBControl
 	 */
 	public static DBControl getInstance() {
 		if (instance == null) {
@@ -24,8 +24,7 @@ public class DBControl {
 	}
 
 	/**
-	 * Returns intance of connection
-	 * @return
+	 * @return connection of the current instance
 	 */
 	public static Connection getConnection() {
 		return getInstance().connection;
@@ -43,8 +42,8 @@ public class DBControl {
 	}
 
 	/**
-	 * Creates the statements
-	 * @return
+	 * Creates an SQL statement
+	 * @return A new statement
 	 * @throws SQLException
 	 */
 	public static Statement createStatement() throws SQLException {
@@ -53,8 +52,8 @@ public class DBControl {
 
 	/**
 	 * Prepares the statements
-	 * @param sql
-	 * @return
+	 * @param sql The query to execute in the prepared statement
+	 * @return A new prepared statement
 	 * @throws SQLException
 	 */
 	public static PreparedStatement prepareStatement(String sql) throws SQLException {

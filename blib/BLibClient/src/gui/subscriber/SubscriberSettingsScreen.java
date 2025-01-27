@@ -21,7 +21,6 @@ import services.ClientUtils;
  * @author Helal Hammoud
  */
 public class SubscriberSettingsScreen extends AbstractScreen {
-    
     @FXML
     private TextField phoneTxtField;
     

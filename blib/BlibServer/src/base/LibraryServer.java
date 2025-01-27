@@ -3,12 +3,14 @@ package base;
 import entities.Message;
 import ocsf.server.*;
 
+/**
+ * This class handles communication between server and client on the server side.
+ */
 public class LibraryServer extends AbstractServer 
 {  
   /**
    * Constructs an instance of the LibraryServer. 
    * handles messages between: client - server
-   *                           server - DB.
    */
 	public LibraryServer(int port) 
 	{

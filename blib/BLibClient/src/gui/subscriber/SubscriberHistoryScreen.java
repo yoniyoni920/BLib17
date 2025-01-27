@@ -12,11 +12,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import services.InterfaceUtils;
 
+/**
+ * A screen that shows the history of a single subscriber
+ */
 public class SubscriberHistoryScreen extends AbstractScreen {
-
 	public TableColumn<HistoryEntry, String> dateColumn;
 	public TableColumn<HistoryEntry, String> detailsColumn;
-	@FXML private Label welcomeText;
 	@FXML private TableView<HistoryEntry> historyTable;
 
 	private Subscriber subscriber;

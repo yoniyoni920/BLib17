@@ -19,6 +19,9 @@ import services.ClientUtils;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The main screen of the librarian containing the essential tools for their job
+ */
 public class LibrarianMainScreen extends AbstractScreen {
 	User user;
 	@FXML private TextField searchSubscribers;
@@ -40,7 +43,8 @@ public class LibrarianMainScreen extends AbstractScreen {
 	public void RegisterSubscriber(ActionEvent event) throws Exception {
 		screenManager.openScreen("librarian/RegisterViaLibrerianScreen", "Register Subscriber");
 	}
-	   /**
+
+	/**
      * This method sets up the main screen with a welcome message 
      * that includes the librarian's name.
      *
@@ -51,6 +55,7 @@ public class LibrarianMainScreen extends AbstractScreen {
 		titleLabel.setText("Welcome, " + user.getName());
 		this.user = user;
 	}
+
     /**
      * This method navigates to the "Lend Book" screen.
      *
@@ -118,7 +123,12 @@ public class LibrarianMainScreen extends AbstractScreen {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
+	/**
+	 * Opens the notifications screens
+	 * @param event
+	 * @throws IOException
+	 */
 	public void openNotificationsScreen(ActionEvent event) throws IOException {
 		screenManager.openScreen("librarian/NotificationsScreen", "Notifications");
 	}

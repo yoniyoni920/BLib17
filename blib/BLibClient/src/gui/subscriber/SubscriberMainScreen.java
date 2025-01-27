@@ -1,7 +1,6 @@
 package gui.subscriber;
 
 import java.io.IOException;
-
 import base.Action;
 import controllers.Auth;
 import entities.BookCopy;
@@ -220,11 +219,18 @@ public class SubscriberMainScreen extends AbstractScreen {
         fadeIn.play();
     }
 
+    /**
+     * Handles clicking on logout button
+     * @param event
+     */
     public void logout(ActionEvent event) {
         Auth.getInstance().setUser(null); // Clear current user
         closeScreen(event);
     }
 
+    /**
+     * Handles clicking on reload button
+     */
     public void reload() {
         onStart((Subscriber)ClientUtils.sendMessage(Action.GET_SUBSCRIBER_BY_ID, subscriber.getId()).getObject());
     }

@@ -9,7 +9,6 @@ import javafx.scene.control.TextField;
 /**
  * controller for ServerSocket.fxml
  */
-
 public class ServerSocket extends AbstractScreen{
 	@FXML
 	private TextField Porttxt = null;

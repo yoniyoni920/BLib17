@@ -26,7 +26,6 @@ public class LibrarianMainScreen extends AbstractScreen {
 	User user;
 	@FXML private TextField searchSubscribers;
 	@FXML private ContextMenu searchSubscribersContextMenu;
-	@FXML private Button notificationButton;
 
 	@Override
 	public void openScreen(Object... args) {

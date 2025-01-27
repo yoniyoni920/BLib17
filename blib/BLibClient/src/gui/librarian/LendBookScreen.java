@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import services.ClientUtils;
+import services.InterfaceUtils;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -148,7 +150,8 @@ public class LendBookScreen extends AbstractScreen {
                     BookOrder bookOrder = (BookOrder) message.getObject();
                     alert.setAlertType(Alert.AlertType.CONFIRMATION);
                     alert.setHeaderText("Can't lend book");
-                    alert.setContentText(bookIdAlert.getText() + " isn't available until " + bookOrder.getOrderDate() + " would you like to order it?");
+                    alert.setContentText(bookIdAlert.getText() + " isn't available until " + InterfaceUtils.formatDate(bookOrder.getOrderDate())
+                            + " would you like to order it?");
                     alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
                     alert.showAndWait().ifPresent(buttonType -> {
                         if(buttonType == ButtonType.NO) return;
@@ -172,7 +175,7 @@ public class LendBookScreen extends AbstractScreen {
                                     orderResultAlert.setAlertType(Alert.AlertType.INFORMATION);
                                     orderResultAlert.setHeaderText("Book Ordered successfully");
                                     orderResultAlert.setContentText(bookIdAlert.getText() + " has been ordered for subscriber "
-                                            + userAlert.getText() + " and will be available on " + bookOrder1.getOrderDate());
+                                            + userAlert.getText() + " and will be available on " + InterfaceUtils.formatDate(bookOrder1.getOrderDate()));
                                 }
                             }
                             orderResultAlert.show();
@@ -184,7 +187,8 @@ public class LendBookScreen extends AbstractScreen {
                     BookCopy bookCopy = (BookCopy) message.getObject();
                     alert.setAlertType(Alert.AlertType.INFORMATION);
                     alert.setHeaderText("Lent Successfully");
-                    alert.setContentText(bookIdAlert.getText() + " was lent successfully to " + userAlert.getText() + " with a return date of " + bookCopy.getReturnDate());
+                    alert.setContentText(bookIdAlert.getText() + " was lent successfully to " + userAlert.getText() + " with a return date of " +
+                            InterfaceUtils.formatDate(bookCopy.getReturnDate()));
                     alert.showAndWait();
                     closeScreen(null);
                 }

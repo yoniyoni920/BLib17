@@ -20,6 +20,8 @@ public class LibraryClient extends AbstractClient
 	 *
 	 * @param host The server to connect to.
 	 * @param port The port number to connect on.
+	 * 
+	 * @throws IOException
 	 */
 	public LibraryClient(String host, int port) throws IOException {
 		super(host, port); //Call the superclass constructor
@@ -57,9 +59,10 @@ public class LibraryClient extends AbstractClient
 
 	/**
 	 * This method handles all data coming from the UI   
-	 * and Sends a message to the server & waits for a response.         
+	 * and sends a message to the server and waits for a response.         
 	 *
 	 * @param msgToServer The message from the UI.
+	 * @return The response from the server
 	 */
 	public Message sendMessageToServer(Message msgToServer) {
 		try {

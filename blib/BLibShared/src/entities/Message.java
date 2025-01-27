@@ -110,7 +110,9 @@ public class Message implements Serializable {
 		return this;
 	}
 
-	/** ------- Getters & Setters -----*/
+	
+	/* ------- Getters & Setters -----*/
+	
 	public int getId() {
 		return id;
 	}

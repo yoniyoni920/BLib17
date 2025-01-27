@@ -83,7 +83,7 @@ public class SubscriberControl {
 
 	/**
 	 * Returns an object of a subscriber using a ResultSet
-	 * @param rs
+	 * @param rs The result set that is a join of user and subscriber (must contain subscriber_id)
 	 * @return
 	 * @throws SQLException
 	 */
@@ -157,7 +157,7 @@ public class SubscriberControl {
 	 * Returns a list of dates in which a report has been generated.
 	 * Enough that there is a single case made in the report for it to count as a report
 	 * <br>
-	 * @return List<LocalDate>
+	 * @return A list of LocalDate
 	 */
 	public static List<LocalDate> getReportDates() {
 		// Could use any report type, both of them are generated at the same time
@@ -182,7 +182,9 @@ public class SubscriberControl {
 	/**
 	 * Returns a list of subscriber status report
 	 *
-	 * @return List<SubscriberStatusReport>
+	 * @param date The date of the report
+	 * @param subscriberId Filter report by subscriber
+	 * @return List of SubscriberStatusReport
 	 */
 	public static List<SubscriberStatusReport> getSubscriberStatusReport(LocalDate date, Integer subscriberId) {
 		String query = "SELECT subscriber_status_report.*, user.first_name FROM subscriber_status_report " +

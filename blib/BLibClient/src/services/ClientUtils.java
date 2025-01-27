@@ -48,6 +48,7 @@ public class ClientUtils {
      * the screen and instantly see the books instead of seeing "no books found".
      * @param msg The message to send
      * @param then The function to run on response
+     * @param async Whether to run this asynchronized or not
      */
     public static void sendMessage(Message msg, Consumer<Message> then, boolean async) {
         if (async) {

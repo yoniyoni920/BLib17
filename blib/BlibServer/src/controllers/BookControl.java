@@ -484,6 +484,7 @@ public class BookControl {
      * Marks a book as lost. This also automatically freezes the subscriber and makes a history point about that
      *
      * @param bookCopyId The ID of the copy to mark as lost
+     * @return Whether it succeeded
      */
     public static boolean markBookCopyAsLost(int bookCopyId) {
         String query = "SELECT * FROM book_copy WHERE id = ? AND is_lost = 0 LIMIT 1";

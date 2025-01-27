@@ -49,7 +49,6 @@ public class LibrarianMainScreen extends AbstractScreen {
      * that includes the librarian's name.
      *
      * @param user The user of the librarian.
-     * @throws Exception If there is an error initializing the screen.
      */
 	public void startUp(User user) {
 		titleLabel.setText("Welcome, " + user.getName());

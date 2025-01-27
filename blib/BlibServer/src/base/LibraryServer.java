@@ -11,6 +11,8 @@ public class LibraryServer extends AbstractServer
   /**
    * Constructs an instance of the LibraryServer. 
    * handles messages between: client - server
+   * 
+   * @param port The port to open the server on
    */
 	public LibraryServer(int port) 
 	{

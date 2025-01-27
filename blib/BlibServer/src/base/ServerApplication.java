@@ -29,7 +29,6 @@ public class ServerApplication extends Application {
      * It launches the JavaFX application.
      *
      * @param args Command-line arguments passed to the application
-     * @throws Exception if an error occurs during application launch
      */
 	public static void main(String args[]) {
 		launch(args);

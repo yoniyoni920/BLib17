@@ -3,7 +3,7 @@ package entities;
 import java.io.Serializable;
 
 /**
- * A class that handles basically all needs of a user (subscriber & librarian)
+ * A class that handles basically all needs of a user (subscriber and librarian)
  */
 public class User implements Serializable{
 

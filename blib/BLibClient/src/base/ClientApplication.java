@@ -19,7 +19,6 @@ public class ClientApplication extends Application {
      * The main entry point of the client.
      * 
      * @param args command-line arguments
-     * @throws Exception if an error occurs during application launch
      */
 	public static void main(String args[]) {
 	    launch(args);  
@@ -95,7 +94,7 @@ public class ClientApplication extends Application {
 	/**
 	 * Sends a Message object to the server. For convenience this is kept here.
 	 * However, you should use the utility methods instead of this directly.
-	 * @param msg
+	 * @param msg The message to send
 	 * @return Message response from the server
 	 */
 	public Message sendMessageToServer(Message msg) {

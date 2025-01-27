@@ -56,7 +56,6 @@ public abstract class AbstractScreen implements Initializable {
 	 * Closes the current screen and returns to the previous screen.
 	 *
 	 * @param event The action event triggered by the close button.
-	 * @throws Exception If an error occurs during screen closing.
 	 */
 	public void closeScreen(ActionEvent event) {
 		screenManager.closeScreen();

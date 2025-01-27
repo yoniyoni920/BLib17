@@ -66,8 +66,8 @@ public class CommunicationManager {
 
 	/**
 	 * This method sends an SMS using a phone as a proxy using the application GSM sms
-	 * app: https://play.google.com/store/apps/details?id=com.gsmmodem&hl=en&pli=1
-	 * app helper: https://github.com/sadiqodho/GSM-Helper-Tool
+	 * App: https://play.google.com/store/apps/details?id=com.gsmmodem
+	 * App helper: https://github.com/sadiqodho/GSM-Helper-Tool
 	 * user: root
 	 * password: Aa123456
 	 * the functionality works by sending a post request to the phone with basic authorization

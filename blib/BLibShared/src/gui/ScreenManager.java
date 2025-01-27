@@ -25,9 +25,10 @@ public class ScreenManager {
 	 * Receives screenName of a screen (gui/{screenName}.fxml), loads it and returns the AbstractScreen associated with it
 	 * AbstractScreen is basically a JavaFX controller
 	 * 
-	 * @param screenName
-	 * @param title
-	 * @return
+	 * @param screenName the name of the screen (gui/{screenName}.fxml)
+	 * @param title The title of the screen
+	 * @param args Optional argument for .openScreen
+	 * @return AbstractScreen of the controller object of the screen
 	 * @throws IOException
 	 */
 	public AbstractScreen openScreen(String screenName, String title, Object... args) throws IOException {

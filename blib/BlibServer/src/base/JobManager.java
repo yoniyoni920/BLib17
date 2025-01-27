@@ -40,6 +40,10 @@ public class JobManager {
 
     /**
      * This method runs all jobs. It's called by a fixed-rate timer in the constructor
+     * 
+     * @param forced Whether to run the jobs forcibly
+     * 
+     * @throws SQLException
      */
     public void runJobs(boolean forced) throws SQLException {
         System.out.println("Running jobs...");
@@ -51,7 +55,9 @@ public class JobManager {
     }
 
     /**
-     * This method cancels the order for the book
+     * This method cancels orders of books that are late for pickup
+     * 
+     * @param forced Whether to force this job
      * @throws SQLException
      */
     public void cancelOrders(boolean forced) throws SQLException {
@@ -67,6 +73,8 @@ public class JobManager {
 
     /**
      * Sends reminder to return the book
+     * 
+     * @param forced Whether to force this job
      * @throws SQLException
      */
     public void sendBookReturnReminders(boolean forced) throws SQLException {
@@ -93,6 +101,9 @@ public class JobManager {
 
     /**
      * Tries and generates a report at the end of each month (or start of each month)
+     * @param forced Whether to force this job
+     * 
+     * @throws SQLException
      */
     public void generateReports(boolean forced) throws SQLException {
         LocalDateTime date = getJobDate("generate-reports");
@@ -114,7 +125,7 @@ public class JobManager {
      * Generates a report for subscribers status
      * It fetches the data from the subscriber history, taking any freeze that either start after the month
      * or hasn't ended in the month (Basically what is relevant for the chart of the month)
-     * @param date
+     * @param date The date of the report
      */
     public void generateSubscriberStatusReport(LocalDate date) {
         String query = "SELECT * FROM subscriber_history " +
@@ -142,7 +153,7 @@ public class JobManager {
 
     /**
      * Generates borrow times to display on screen
-     * @param date
+     * @param date The date of the report
      */
     public void generateBorrowTimesReport(LocalDate date) {
         String joinLate = "LEFT JOIN subscriber_history AS late ON " +
@@ -193,6 +204,9 @@ public class JobManager {
     /**
      * Checks for any late return. If it detects a week late return it punishes the offending subscriber
      * by freezing their account for a month (30 days)
+     * 
+     * @param forced Whether to force this job
+     * @throws SQLException
      */
     public void checkForLateBorrows(boolean forced) throws SQLException {
         LocalDateTime date = getJobDate("check-borrows");
@@ -242,8 +256,8 @@ public class JobManager {
 
     /**
      * Returns the last time the job got executed. Null if it never was.
-     * @param jobName
-     * @return Date
+     * @param jobName The name of the job
+     * @return Date The last time this job was executed
      * @throws SQLException
      */
     public LocalDateTime getJobDate(String jobName) throws SQLException {
@@ -259,7 +273,7 @@ public class JobManager {
 
     /**
      * Marks a job as done by setting its date to the current time
-     * @param jobName
+     * @param jobName The name of the job
      * @throws SQLException
      */
     public void markJobDone(String jobName) throws SQLException {

@@ -39,9 +39,9 @@ public class ClientMessageHandler {
 
     /**
      * Reads a message from a client and decides what to do with it
-     * @param msgFromClient
-     * @param client
-     * @return
+     * @param msgFromClient The message to handle
+     * @param client The client that sent the message
+     * @return A reply to the message or error in case it can't be handled
      */
     public static Message handleMessage(Message msgFromClient, ConnectionToClient client) {
         Action actionName = msgFromClient.getAction();

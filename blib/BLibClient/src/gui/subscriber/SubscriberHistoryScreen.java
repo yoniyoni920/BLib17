@@ -1,7 +1,9 @@
 package gui.subscriber;
 
+import base.Action;
 import entities.HistoryAction;
 import entities.HistoryEntry;
+import entities.Message;
 import entities.Subscriber;
 import gui.AbstractScreen;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,7 +12,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import services.ClientUtils;
 import services.InterfaceUtils;
+
+import java.util.List;
 
 /**
  * A screen that shows the history of a single subscriber
@@ -32,6 +37,12 @@ public class SubscriberHistoryScreen extends AbstractScreen {
 	 * @param sub The subscriber to work with
 	 */
 	private void loadSubscriber(Subscriber sub) {
+		// Update history in case it's outdated
+		Message msg = ClientUtils.sendMessage(Action.GET_HISTORY, sub.getSubscriberId());
+		if (!msg.isError()) {
+			sub.setHistory((List<HistoryEntry>)msg.getObject());
+		}
+
 		subscriber = sub;
 		historyTable.setItems(FXCollections.observableArrayList(sub.getHistory()));
 

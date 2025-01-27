@@ -78,6 +78,7 @@ public class ClientMessageHandler {
         actions.put(Action.EXTEND_BORROW_TIME, ClientMessageHandler::extendBorrowTime);
         actions.put(Action.RETRIEVE_NOTIFICATIONS, ClientMessageHandler::retrieveNotifications);
         actions.put(Action.UPDATE_NOTIFICATION_STATUS, ClientMessageHandler::updateNotificationStatus);
+        actions.put(Action.GET_HISTORY, ClientMessageHandler::getSubscriberHistory);
     }
 
     /**
@@ -371,7 +372,15 @@ public class ClientMessageHandler {
         return msg.reply(notifications);
     }
 
-
+    /**
+     * @param msg
+     * @param client
+     * @return The history of the subscriber
+     */
+    public static Message getSubscriberHistory(Message msg, ConnectionToClient client) {
+        List<HistoryEntry> history = SubscriberControl.getSubscriberHistory((int)msg.getObject());
+        return msg.reply(history);
+    }
 }
 
 
